@@ -13,37 +13,26 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-#ifndef BMIC_TRANSPORT_H
-#define BMIC_TRANSPORT_H
-
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <transport/bmic_endpoint.h>
+#include <transport/bmic_endpoint_http.h>
+
 #include <common/gru_status.h>
 
-#include "bmic_data.h"
-#include "bmic_endpoint.h"
+int main(int argc, char** argv) {
+    bmic_endpoint_t ep;
+    gru_status_t status = {0};
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+    ep.username = (char *) argv[1];
+    ep.password = (char *) argv[2];
+    ep.url = (char *) argv[3];
+    bmic_data_t reply = {0};
 
+    bmic_endpoint_http_read(&ep, NULL, &reply, &status);
+    printf("%s\n", reply.data);
 
-typedef void(*bmic_transport_read)(bmic_endpoint_t *, bmic_data_t *payload,
-        bmic_data_t *data, gru_status_t *status);
-
-typedef void(*bmic_transport_write)(bmic_endpoint_t *, bmic_data_t *payload,
-        bmic_data_t *data, gru_status_t *status);
-
-typedef struct bmic_vtransport_t_ {
-    bmic_transport_read read;
-    bmic_transport_write write;
-} bmic_vtransport_t;
-
-
-#ifdef __cplusplus
+    return (EXIT_SUCCESS);
 }
-#endif
-
-#endif /* BMIC_TRANSPORT_H */
 

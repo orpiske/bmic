@@ -21,15 +21,17 @@
 
 #include <common/gru_status.h>
 
+#include <curl/curl.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void bmic_endpoint_http_read(bmic_endpoint_t *, bmi_data_t *payload, 
-        bmi_data_t *data, gru_status_t *status); 
+void bmic_endpoint_http_read(bmic_endpoint_t *, bmic_data_t *payload, 
+        bmic_data_t *data, gru_status_t *status); 
 
-void bmic_endpoint_http_write(bmic_endpoint_t *, bmi_data_t *payload, 
-        bmi_data_t *data, gru_status_t *status); 
+void bmic_endpoint_http_write(bmic_endpoint_t *, bmic_data_t *payload, 
+        bmic_data_t *data, gru_status_t *status); 
 
 
 #ifdef __cplusplus

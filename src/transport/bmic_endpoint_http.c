@@ -14,14 +14,79 @@
  limitations under the License.
  */
 #include "bmic_endpoint_http.h"
+#include "bmic_endpoint.h"
 
-void bmic_endpoint_http_read(bmic_endpoint_t *ep, bmi_data_t *payload, 
-        bmi_data_t *data, gru_status_t *status) 
+typedef struct bmic_reply_data_t_
 {
+    bmic_data_t *body;
+    gru_status_t *status;
+} bmic_reply_data_t;
 
+static size_t curl_callback(void *contents, size_t size, size_t nmemb, void *userp)
+{
+    size_t realsize = size * nmemb;
+    bmic_reply_data_t *p = (struct bmic_reply_data_t *) userp;
+
+    p->body->data = (char *) realloc(p->body->data, p->body->size + realsize + 1);
+
+    if (p->body->data == NULL) {
+        gru_status_set(p->status, GRU_FAILURE, 
+                       "Unable to allocate memory for reply data");
+
+        free(p->body->data);
+        return -1;
+    }
+
+
+    memcpy(&(p->body->data[p->body->size]), contents, realsize);
+    p->body->size += realsize;
+    ((char *) p->body->data)[p->body->size] = 0;
+
+    return realsize;
 }
 
-void bmic_endpoint_http_write(bmic_endpoint_t *ep, bmi_data_t *payload, 
-        bmi_data_t *data, gru_status_t *status)
+void bmic_endpoint_http_read(bmic_endpoint_t *ep, bmic_data_t *payload,
+                             bmic_data_t *data, gru_status_t *status)
+{
+    CURL *easy = NULL;
+
+    easy = curl_easy_init();
+    if (!easy) {
+        gru_status_set(status, GRU_FAILURE, "Unable to initialize CURL");
+
+        return;
+    }
+
+    curl_easy_setopt(easy, CURLOPT_URL, ep->url);
+
+    bmic_reply_data_t reply = {0};
+    reply.body = data;
+
+    if (ep->username != NULL) {
+        curl_easy_setopt(easy, CURLOPT_USERNAME, ep->username);
+    }
+
+    if (ep->password != NULL) {
+        curl_easy_setopt(easy, CURLOPT_PASSWORD, ep->password);
+    }
+
+
+    curl_easy_setopt(easy, CURLOPT_WRITEFUNCTION, curl_callback);
+    curl_easy_setopt(easy, CURLOPT_WRITEDATA, &reply);
+    curl_easy_setopt(easy, CURLOPT_USERAGENT, "bmic/0.0.1");
+
+    curl_easy_setopt(easy, CURLOPT_TIMEOUT, 5);
+
+    curl_easy_setopt(easy, CURLOPT_FOLLOWLOCATION, 1);
+
+    curl_easy_setopt(easy, CURLOPT_MAXREDIRS, 3);
+
+    CURLcode rcode = curl_easy_perform(easy);
+
+    return rcode;
+}
+
+void bmic_endpoint_http_write(bmic_endpoint_t *ep, bmic_data_t *payload,
+                              bmic_data_t *data, gru_status_t *status)
 {
 }

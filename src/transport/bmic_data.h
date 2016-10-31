@@ -20,10 +20,10 @@
 extern "C" {
 #endif
 
-typedef struct bmi_data_t_ {
+typedef struct bmic_data_t_ {
     size_t size;
     const void *data;
-} bmi_data_t;
+} bmic_data_t;
 
 
 #ifdef __cplusplus
