@@ -24,6 +24,7 @@ typedef struct bmic_endpoint_t_ {
     const char *url;
     const char *username; 
     const char *password;
+    void *handle;
 } bmic_endpoint_t;
 
 

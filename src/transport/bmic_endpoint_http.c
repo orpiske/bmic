@@ -22,6 +22,11 @@ typedef struct bmic_reply_data_t_
     gru_status_t *status;
 } bmic_reply_data_t;
 
+static inline CURL *bmic_curl_easy(bmic_endpoint_t *ep)
+{
+    return (CURL *) ep->handle;
+}
+
 static size_t curl_callback(void *contents, size_t size, size_t nmemb, void *userp)
 {
     size_t realsize = size * nmemb;
@@ -45,9 +50,7 @@ static size_t curl_callback(void *contents, size_t size, size_t nmemb, void *use
     return realsize;
 }
 
-void bmic_endpoint_http_read(bmic_endpoint_t *ep, bmic_data_t *payload,
-                             bmic_data_t *data, gru_status_t *status)
-{
+void bmic_endpoint_http_begin(bmic_endpoint_t *ep, gru_status_t *status) {
     CURL *easy = NULL;
 
     easy = curl_easy_init();
@@ -56,7 +59,27 @@ void bmic_endpoint_http_read(bmic_endpoint_t *ep, bmic_data_t *payload,
 
         return;
     }
+    
+    gru_status_reset(status);
+    ep->handle = easy;
+}
 
+void bmic_endpoint_http_terminate(bmic_endpoint_t *ep, gru_status_t *status) {
+    CURL *easy = bmic_curl_easy(ep);
+
+    curl_easy_cleanup(easy);
+    gru_status_reset(status);
+    
+    ep->handle = NULL;
+}
+
+
+// HTTP GET only
+void bmic_endpoint_http_read(bmic_endpoint_t *ep, bmic_data_t *payload,
+                             bmic_data_t *data, gru_status_t *status)
+{
+    CURL *easy = bmic_curl_easy(ep);
+    
     curl_easy_setopt(easy, CURLOPT_URL, ep->url);
 
     bmic_reply_data_t reply = {0};
@@ -86,7 +109,44 @@ void bmic_endpoint_http_read(bmic_endpoint_t *ep, bmic_data_t *payload,
     return rcode;
 }
 
+// POST + get reply
 void bmic_endpoint_http_write(bmic_endpoint_t *ep, bmic_data_t *payload,
                               bmic_data_t *data, gru_status_t *status)
 {
+    CURL *easy = bmic_curl_easy(ep);
+
+    curl_easy_setopt(easy, CURLOPT_URL, ep->url);
+
+    bmic_reply_data_t reply = {0};
+    reply.body = data;
+
+    if (ep->username != NULL) {
+        curl_easy_setopt(easy, CURLOPT_USERNAME, ep->username);
+    }
+
+    if (ep->password != NULL) {
+        curl_easy_setopt(easy, CURLOPT_PASSWORD, ep->password);
+    }
+    
+    struct curl_slist *headers = NULL;
+
+    headers = curl_slist_append(headers, "Accept: application/json");
+    headers = curl_slist_append(headers, "Content-Type: application/json");
+
+    curl_easy_setopt(easy, CURLOPT_CUSTOMREQUEST, "POST");
+    curl_easy_setopt(easy, CURLOPT_HTTPHEADER, headers);
+    curl_easy_setopt(easy, CURLOPT_POSTFIELDS, bmic_data_to_string(data));
+
+    curl_easy_setopt(easy, CURLOPT_WRITEDATA, &reply);
+    curl_easy_setopt(easy, CURLOPT_USERAGENT, "bmic/0.0.1");
+
+    curl_easy_setopt(easy, CURLOPT_TIMEOUT, 5);
+
+    curl_easy_setopt(easy, CURLOPT_FOLLOWLOCATION, 1);
+
+    curl_easy_setopt(easy, CURLOPT_MAXREDIRS, 3);
+
+    CURLcode rcode = curl_easy_perform(easy);
+
+    return rcode;
 }

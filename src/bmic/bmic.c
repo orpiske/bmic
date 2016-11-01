@@ -30,8 +30,17 @@ int main(int argc, char** argv) {
     ep.url = (char *) argv[3];
     bmic_data_t reply = {0};
 
+    
+    bmic_endpoint_http_begin(&ep, &status);
+    if (status.code != GRU_SUCCESS) {
+        printf("Unable to initialize HTTP endpoint: %s\n", status.message);
+        
+        return EXIT_FAILURE;
+    }
+    
     bmic_endpoint_http_read(&ep, NULL, &reply, &status);
     printf("%s\n", reply.data);
+    bmic_endpoint_http_terminate(&ep, &status);
 
     return (EXIT_SUCCESS);
 }

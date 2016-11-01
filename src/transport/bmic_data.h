@@ -25,6 +25,10 @@ typedef struct bmic_data_t_ {
     const void *data;
 } bmic_data_t;
 
+static inline const char *bmic_data_to_string(bmic_data_t *data) {
+    return (const char *) data->data;
+}
+
 
 #ifdef __cplusplus
 }

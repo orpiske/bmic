@@ -28,7 +28,7 @@
 extern "C" {
 #endif
 
-
+    
 typedef void(*bmic_transport_read)(bmic_endpoint_t *, bmic_data_t *payload,
         bmic_data_t *data, gru_status_t *status);
 
