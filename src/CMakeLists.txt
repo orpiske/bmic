@@ -10,12 +10,14 @@ add_library(
 	bmic SHARED
         transport/bmic_endpoint_http.c        
         transport/bmic_transport.c
+        format/bmic_json.c
 )
 
 target_link_libraries(
 	bmic
 	gru
         curl
+        json-c
 )
 
 install(TARGETS bmic
