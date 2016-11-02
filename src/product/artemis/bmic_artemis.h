@@ -13,35 +13,31 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-#ifndef BMIC_ENDPOINT_H
-#define BMIC_ENDPOINT_H
+#ifndef BMIC_ARTEMIS_H
+#define BMIC_ARTEMIS_H
 
+#include <common/gru_status.h>
 #include <common/gru_alloc.h>
 
 #include "common/bmic_credentials.h"
+#include "transport/bmic_transport.h"
+
+#include "management/common/bmic_handle.h"
+#include "management/discovery/bmic_discovery.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef struct bmic_endpoint_t_ {
-    const char *url;
-    bmic_credentials_t *credentials;
-    void *handle;
-} bmic_endpoint_t;
-
-bmic_endpoint_t *bmic_endpoint_init(const char *url, const char *username, 
-        const char *password, gru_status_t *status);
-
-void bmic_endpoint_destroy(bmic_endpoint_t **ep);
-
-void bmic_endpoint_set_credentials(bmic_endpoint_t *ep, 
-    bmic_credentials_t *credentials, gru_status_t *status);
-
+bmic_product_t *bmic_artemis_product(gru_status_t *status);
+const char *bmic_artemis_base_url(bmic_discovery_hint_t *hint);
+bmic_handle_t *bmic_artemis_init(const char *base_url, 
+                                 bmic_credentials_t *credentials, 
+                                 gru_status_t *status);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* BMIC_ENDPOINT_H */
+#endif /* BMIC_ARTEMIS_H */
 

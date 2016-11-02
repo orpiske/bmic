@@ -20,49 +20,42 @@
 
 #include <json-c/json.h>
 
-#include <transport/bmic_endpoint.h>
-#include <transport/bmic_endpoint_http.h>
-#include <format/bmic_json.h>
+#include "transport/bmic_endpoint.h"
+#include "transport/bmic_endpoint_http.h"
+#include "format/bmic_json.h"
 
+
+#include "management/common/bmic_product.h"
+#include "management/common/bmic_discovery_hint.h"
+#include "product/bmic_product_register.h"
 
 int main(int argc, char** argv)
 {
-    bmic_endpoint_t ep;
     gru_status_t status = {0};
-
-    ep.username = (char *) argv[1];
-    ep.password = (char *) argv[2];
-    ep.url = (char *) argv[3];
-    bmic_data_t reply = {0};
-
-
-    bmic_endpoint_http_begin(&ep, &status);
-    if (status.code != GRU_SUCCESS) {
-        printf("Unable to initialize HTTP endpoint: %s\n", status.message);
-
-        return EXIT_FAILURE;
-    }
-
-    bmic_endpoint_http_read(&ep, NULL, &reply, &status);
-    printf("%s\n", (char *) reply.data);
-    bmic_endpoint_http_terminate(&ep, &status);
-
-    bmic_json_t *json = bmic_json_init(reply.data, &status);
+    bmic_discovery_hint_t *hint = NULL; 
+    bmic_credentials_t *credentials = NULL;
     
-    if (status.code != GRU_SUCCESS) {
-        printf("Unable to initialize JSON data: %s\n", status.message);
-
-        return EXIT_FAILURE;
-    }
-
-    bmic_json_value_t value = {0};
+    bmic_product_registry_init(&status);
     
-    bmic_json_find_first(json, "QueueSize", &value);
-    printf("Queue size: %ld\n", value.data.number);
+    bmic_product_register(&status);
+    bmic_product_unregister();
     
-    bmic_json_find_first(json, "Name", &value);
-    printf("Name: %s\n", value.data.str);
-
+    /*
+    credentials = bmic_credentials_init((char *) argv[1], (char *) argv[2], 
+                                        &status); 
+             
+    
+    hint = bmic_discovery_hint_eval_addressing(argv[3], BMIC_PORT_UNKNOWN, 
+                                               &status);
+    
+    
+    
+    
+    
+    bmic_product_t *product = bmic_discovery_run(hint, credentials, &status);
+    */
+    bmic_product_registry_destroy();
+    
     return (EXIT_SUCCESS);
 }
 

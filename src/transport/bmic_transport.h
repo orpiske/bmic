@@ -35,10 +35,10 @@ typedef void(*bmic_transport_read)(bmic_endpoint_t *, bmic_data_t *payload,
 typedef void(*bmic_transport_write)(bmic_endpoint_t *, bmic_data_t *payload,
         bmic_data_t *data, gru_status_t *status);
 
-typedef struct bmic_vtransport_t_ {
+typedef struct bmic_transport_t_ {
     bmic_transport_read read;
     bmic_transport_write write;
-} bmic_vtransport_t;
+} bmic_transport_t;
 
 
 #ifdef __cplusplus

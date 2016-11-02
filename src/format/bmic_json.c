@@ -41,7 +41,7 @@ void bmic_json_destroy(bmic_json_t **json) {
         json_object_put(jobj);
     }
     
-    gru_dealloc(&json);
+    gru_dealloc((void **) json);
 }
 
 /**

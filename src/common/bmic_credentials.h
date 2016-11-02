@@ -13,35 +13,32 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-#ifndef BMIC_ENDPOINT_H
-#define BMIC_ENDPOINT_H
+#ifndef BMIC_CREDENTIALS_H
+#define BMIC_CREDENTIALS_H
 
+#include <common/gru_status.h>
 #include <common/gru_alloc.h>
-
-#include "common/bmic_credentials.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef struct bmic_endpoint_t_ {
-    const char *url;
-    bmic_credentials_t *credentials;
-    void *handle;
-} bmic_endpoint_t;
+typedef struct bmic_credentials_t_ {
+    char *username; 
+    char *password;
+} bmic_credentials_t;
 
-bmic_endpoint_t *bmic_endpoint_init(const char *url, const char *username, 
+bmic_credentials_t *bmic_credentials_init(const char *username, 
         const char *password, gru_status_t *status);
 
-void bmic_endpoint_destroy(bmic_endpoint_t **ep);
+bmic_credentials_t *bmic_credentials_clone(bmic_credentials_t *, gru_status_t *status);
 
-void bmic_endpoint_set_credentials(bmic_endpoint_t *ep, 
-    bmic_credentials_t *credentials, gru_status_t *status);
+void bmic_credentials_detroy(bmic_credentials_t **credentials);
 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* BMIC_ENDPOINT_H */
+#endif /* BMIC_CREDENTIALS_H */
 

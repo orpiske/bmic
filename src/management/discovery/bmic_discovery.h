@@ -13,35 +13,39 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-#ifndef BMIC_ENDPOINT_H
-#define BMIC_ENDPOINT_H
+#ifndef BMIC_DISCOVERY_H
+#define BMIC_DISCOVERY_H
 
 #include <common/gru_alloc.h>
+#include <common/gru_status.h>
 
 #include "common/bmic_credentials.h"
+
+
+#include "management/common/bmic_product.h"
+#include "management/common/bmic_discovery_hint.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef struct bmic_endpoint_t_ {
-    const char *url;
-    bmic_credentials_t *credentials;
-    void *handle;
-} bmic_endpoint_t;
 
-bmic_endpoint_t *bmic_endpoint_init(const char *url, const char *username, 
-        const char *password, gru_status_t *status);
 
-void bmic_endpoint_destroy(bmic_endpoint_t **ep);
-
-void bmic_endpoint_set_credentials(bmic_endpoint_t *ep, 
-    bmic_credentials_t *credentials, gru_status_t *status);
+/**
+ * Runs product discovery on the given hint
+ * @param hint A hint to find out details about the broker
+ * @param credentials Optional credentials used to query the broker
+ * @param status A status struct that will contain error data if the function failed
+ * @return The product information
+ */
+bmic_product_t *bmic_discovery_run(const bmic_discovery_hint_t *hint, 
+        bmic_credentials_t *credentials,
+        gru_status_t *status);
 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* BMIC_ENDPOINT_H */
+#endif /* BMIC_DISCOVERY_H */
 

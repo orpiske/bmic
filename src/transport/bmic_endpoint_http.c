@@ -85,12 +85,12 @@ void bmic_endpoint_http_read(bmic_endpoint_t *ep, bmic_data_t *payload,
     bmic_reply_data_t reply = {0};
     reply.body = data;
 
-    if (ep->username != NULL) {
-        curl_easy_setopt(easy, CURLOPT_USERNAME, ep->username);
+    if (ep->credentials->username != NULL) {
+        curl_easy_setopt(easy, CURLOPT_USERNAME, ep->credentials->username);
     }
 
-    if (ep->password != NULL) {
-        curl_easy_setopt(easy, CURLOPT_PASSWORD, ep->password);
+    if (ep->credentials->password != NULL) {
+        curl_easy_setopt(easy, CURLOPT_PASSWORD, ep->credentials->password);
     }
 
 
@@ -120,12 +120,12 @@ void bmic_endpoint_http_write(bmic_endpoint_t *ep, bmic_data_t *payload,
     bmic_reply_data_t reply = {0};
     reply.body = data;
 
-    if (ep->username != NULL) {
-        curl_easy_setopt(easy, CURLOPT_USERNAME, ep->username);
+    if (ep->credentials->username != NULL) {
+        curl_easy_setopt(easy, CURLOPT_USERNAME, ep->credentials->username);
     }
 
-    if (ep->password != NULL) {
-        curl_easy_setopt(easy, CURLOPT_PASSWORD, ep->password);
+    if (ep->credentials->password != NULL) {
+        curl_easy_setopt(easy, CURLOPT_PASSWORD, ep->credentials->password);
     }
     
     struct curl_slist *headers = NULL;
