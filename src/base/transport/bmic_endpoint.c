@@ -43,7 +43,7 @@ void bmic_endpoint_destroy(bmic_endpoint_t **ep) {
 }
 
 void bmic_endpoint_set_credentials(bmic_endpoint_t *ep, 
-    bmic_credentials_t *credentials, gru_status_t *status)
+    const bmic_credentials_t *credentials, gru_status_t *status)
 {
     if (!ep) {
         gru_status_set(status, GRU_FAILURE, "Invalid endpoint (null)");

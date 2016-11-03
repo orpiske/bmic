@@ -43,7 +43,7 @@ bmic_endpoint_t *bmic_endpoint_init(const char *url, const char *username,
 void bmic_endpoint_destroy(bmic_endpoint_t **ep);
 
 void bmic_endpoint_set_credentials(bmic_endpoint_t *ep, 
-    bmic_credentials_t *credentials, gru_status_t *status);
+    const bmic_credentials_t *credentials, gru_status_t *status);
 
 void bmic_endpoint_set_path(bmic_endpoint_t *ep, const char *path);
 void bmic_endpoint_reset_path(bmic_endpoint_t *ep);
