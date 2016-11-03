@@ -35,8 +35,8 @@ typedef bmic_handle_t *(*bmic_product_init_fn)(const char *base_url,
                                  gru_status_t *status);
 
 typedef struct bmic_product_t_ {
-    char *name;
-    char *version;
+    const char name[64];
+    const char version[16];
     
     bmic_product_base_url_fn base_url;
     bmic_product_init_fn product_init;

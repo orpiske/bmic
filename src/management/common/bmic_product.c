@@ -22,11 +22,9 @@ bmic_product_t *bmic_product_init(const char *name, const char *version,
     bmic_product_t *ret = gru_alloc(sizeof(bmic_product_t), status);
     gru_alloc_check(ret, NULL);
     
-    ret->name = NULL;
-    ret->version = NULL;
-        
-    asprintf(&ret->name, "%s", name);
-    asprintf(&ret->version, "%s", version);
+    
+    snprintf(ret->name, sizeof(ret->name) - 1, "%s", name);
+    snprintf(ret->version, sizeof(ret->name) - 1, "%s", version);
     
     return ret;
 }
@@ -39,10 +37,7 @@ void bmic_product_destroy(bmic_product_t **product) {
         return;
     }
     
-    //free(prod->name);
-    //free(prod->version);
-    
-    gru_dealloc((void **) product);
+    gru_dealloc(product);
 }
 
 void bmic_product_registry_init(gru_status_t *status) {
