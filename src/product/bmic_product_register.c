@@ -25,6 +25,16 @@ void bmic_product_register(gru_status_t *status) {
     if (status->code != GRU_SUCCESS) {
         return;
     }
+    
+    bmic_product_t *activemq = bmic_activemq_product(status);
+    if (!activemq) {
+        return;
+    }
+    
+    bmic_product_registry_add(activemq, status);
+    if (status->code != GRU_SUCCESS) {
+        return;
+    }
 }
 
 static void bmic_product_unregister_ex(const gru_node_t *node, void *data) {
