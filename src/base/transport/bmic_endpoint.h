@@ -23,9 +23,10 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
+    
 typedef struct bmic_endpoint_t_ {
     const char *url;
+    char *path;
     bmic_credentials_t *credentials;
     void *handle;
 } bmic_endpoint_t;
@@ -38,6 +39,8 @@ void bmic_endpoint_destroy(bmic_endpoint_t **ep);
 void bmic_endpoint_set_credentials(bmic_endpoint_t *ep, 
     bmic_credentials_t *credentials, gru_status_t *status);
 
+void bmic_endpoint_set_path(bmic_endpoint_t *ep, const char *path);
+void bmic_endpoint_reset_path(bmic_endpoint_t *ep);
 
 #ifdef __cplusplus
 }

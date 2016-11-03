@@ -73,14 +73,44 @@ void bmic_endpoint_http_terminate(bmic_endpoint_t *ep, gru_status_t *status) {
     ep->handle = NULL;
 }
 
+static char *bmic_endpoint_http_path_join(const bmic_endpoint_t *ep, 
+                                          CURL *easy,
+                                                gru_status_t *status) 
+{
+    char *full_url = NULL;
+    char *escaped_path = curl_easy_escape(easy, ep->path, 0);
+    int ret = asprintf(&full_url, "%s/%s", ep->url, escaped_path);
+
+    curl_free(escaped_path);
+    
+    if (ret == -1) {
+        gru_status_set(status, GRU_FAILURE, "Not enough memory to join URL path");
+        
+        return NULL;
+    }
+    
+    return full_url;
+}
+
+static void bmic_endpoint_http_path_cleanup(char **path) {
+    gru_dealloc_string(path);
+}
+
 
 // HTTP GET only
 void bmic_endpoint_http_read(const bmic_endpoint_t *ep, bmic_data_t *payload,
                              bmic_data_t *data, gru_status_t *status)
 {
     CURL *easy = bmic_curl_easy(ep);
+    char *full_path = bmic_endpoint_http_path_join(ep, easy, status);
     
-    curl_easy_setopt(easy, CURLOPT_URL, ep->url);
+    if (full_path == NULL) {
+        return;
+    }
+    
+    
+    curl_easy_setopt(easy, CURLOPT_URL, full_path);
+    
 
     bmic_reply_data_t reply = {0};
     reply.body = data;
@@ -105,7 +135,8 @@ void bmic_endpoint_http_read(const bmic_endpoint_t *ep, bmic_data_t *payload,
     curl_easy_setopt(easy, CURLOPT_MAXREDIRS, 3);
 
     CURLcode rcode = curl_easy_perform(easy);
-
+    bmic_endpoint_http_path_cleanup(&full_path);
+    
     return rcode;
 }
 
@@ -114,8 +145,13 @@ void bmic_endpoint_http_write(const bmic_endpoint_t *ep, bmic_data_t *payload,
                               bmic_data_t *data, gru_status_t *status)
 {
     CURL *easy = bmic_curl_easy(ep);
-
-    curl_easy_setopt(easy, CURLOPT_URL, ep->url);
+    char *full_path = bmic_endpoint_http_path_join(ep, easy, status);
+    
+    if (full_path == NULL) {
+        return;
+    }    
+    
+    curl_easy_setopt(easy, CURLOPT_URL, full_path);
 
     bmic_reply_data_t reply = {0};
     reply.body = data;
@@ -148,5 +184,6 @@ void bmic_endpoint_http_write(const bmic_endpoint_t *ep, bmic_data_t *payload,
 
     CURLcode rcode = curl_easy_perform(easy);
 
+    bmic_endpoint_http_path_cleanup(&full_path);
     return rcode;
 }

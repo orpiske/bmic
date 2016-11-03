@@ -35,6 +35,10 @@ void bmic_endpoint_destroy(bmic_endpoint_t **ep) {
         bmic_credentials_detroy(&e->credentials);
     }
     
+    if (e->path) {
+        gru_dealloc_string(&e->path);
+    }
+    
     gru_dealloc((void **) ep);
 }
 
@@ -52,4 +56,24 @@ void bmic_endpoint_set_credentials(bmic_endpoint_t *ep,
     }
     
     ep->credentials = bmic_credentials_clone(credentials, status);
+}
+
+
+void bmic_endpoint_set_path(bmic_endpoint_t *ep, const char *path) 
+{
+    if (ep->path != NULL) {
+        gru_dealloc_string(&ep->path);
+    }
+    
+    if (path == NULL) {
+        ep->path = NULL;
+        
+        return;
+    }
+    
+    asprintf(&ep->path, "%s", path);
+}
+
+void bmic_endpoint_reset_path(bmic_endpoint_t *ep) {
+    bmic_endpoint_set_path(ep, NULL);
 }
