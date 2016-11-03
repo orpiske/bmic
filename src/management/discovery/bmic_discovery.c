@@ -51,7 +51,7 @@ static bool bmic_try_init(bmic_product_t *product,
     return false;
 }
 
-static bmic_product_info_t *bmic_discovery_registry_initializer(const gru_list_t *list,
+static bmic_product_t *bmic_discovery_registry_initializer(const gru_list_t *list,
                                                                 bmic_handle_t **outhandle,
                                                                 bmic_discovery_pair_t *pair)
 {
