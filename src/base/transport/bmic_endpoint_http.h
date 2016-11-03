@@ -24,6 +24,8 @@
 
 #include <curl/curl.h>
 
+#define HTTP_STATUS_OK 200
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -32,10 +34,10 @@ void bmic_endpoint_http_begin(bmic_endpoint_t *ep, gru_status_t *status);
 void bmic_endpoint_http_terminate(bmic_endpoint_t *ep, gru_status_t *status);
 
 void bmic_endpoint_http_read(const bmic_endpoint_t *, bmic_data_t *payload, 
-        bmic_data_t *data, gru_status_t *status); 
+        bmic_data_t *data, bmic_endpoint_status_t *status); 
 
 void bmic_endpoint_http_write(const bmic_endpoint_t *, bmic_data_t *payload, 
-        bmic_data_t *data, gru_status_t *status); 
+        bmic_data_t *data, bmic_endpoint_status_t *status); 
 
 
 #ifdef __cplusplus

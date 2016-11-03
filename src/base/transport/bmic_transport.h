@@ -30,10 +30,10 @@ extern "C" {
 
     
 typedef void(*bmic_transport_read)(const bmic_endpoint_t *, bmic_data_t *payload,
-        bmic_data_t *data, gru_status_t *status);
+        bmic_data_t *data, bmic_endpoint_status_t *status);
 
 typedef void(*bmic_transport_write)(const bmic_endpoint_t *, bmic_data_t *payload,
-        bmic_data_t *data, gru_status_t *status);
+        bmic_data_t *data, bmic_endpoint_status_t *status);
 
 typedef struct bmic_transport_t_ {
     bmic_transport_read read;

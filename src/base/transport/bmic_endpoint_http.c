@@ -99,18 +99,16 @@ static void bmic_endpoint_http_path_cleanup(char **path) {
 
 // HTTP GET only
 void bmic_endpoint_http_read(const bmic_endpoint_t *ep, bmic_data_t *payload,
-                             bmic_data_t *data, gru_status_t *status)
+                             bmic_data_t *data, bmic_endpoint_status_t *epstatus)
 {
     CURL *easy = bmic_curl_easy(ep);
-    char *full_path = bmic_endpoint_http_path_join(ep, easy, status);
+    char *full_path = bmic_endpoint_http_path_join(ep, easy, epstatus->status);
     
     if (full_path == NULL) {
         return;
     }
     
-    
     curl_easy_setopt(easy, CURLOPT_URL, full_path);
-    
 
     bmic_reply_data_t reply = {0};
     reply.body = data;
@@ -122,7 +120,6 @@ void bmic_endpoint_http_read(const bmic_endpoint_t *ep, bmic_data_t *payload,
     if (ep->credentials->password != NULL) {
         curl_easy_setopt(easy, CURLOPT_PASSWORD, ep->credentials->password);
     }
-
 
     curl_easy_setopt(easy, CURLOPT_WRITEFUNCTION, curl_callback);
     curl_easy_setopt(easy, CURLOPT_WRITEDATA, &reply);
@@ -137,15 +134,25 @@ void bmic_endpoint_http_read(const bmic_endpoint_t *ep, bmic_data_t *payload,
     CURLcode rcode = curl_easy_perform(easy);
     bmic_endpoint_http_path_cleanup(&full_path);
     
-    return rcode;
+    if (rcode != CURLE_OK) {
+        gru_status_set(epstatus->status, GRU_FAILURE, 
+                       "Error while trying to read data: %s", curl_easy_strerror(rcode));
+    }
+    
+    curl_easy_getinfo (easy, CURLINFO_RESPONSE_CODE, &epstatus->epcode);
+    if (epstatus->epcode != HTTP_STATUS_OK) {
+        gru_status_set(epstatus->status, GRU_FAILURE, 
+                       "Unacceptable response from server (HTTP status %ld)", 
+                       epstatus->epcode);
+    }
 }
 
 // POST + get reply
 void bmic_endpoint_http_write(const bmic_endpoint_t *ep, bmic_data_t *payload,
-                              bmic_data_t *data, gru_status_t *status)
+                              bmic_data_t *data, bmic_endpoint_status_t *epstatus)
 {
     CURL *easy = bmic_curl_easy(ep);
-    char *full_path = bmic_endpoint_http_path_join(ep, easy, status);
+    char *full_path = bmic_endpoint_http_path_join(ep, easy, epstatus->status);
     
     if (full_path == NULL) {
         return;
@@ -183,7 +190,19 @@ void bmic_endpoint_http_write(const bmic_endpoint_t *ep, bmic_data_t *payload,
     curl_easy_setopt(easy, CURLOPT_MAXREDIRS, 3);
 
     CURLcode rcode = curl_easy_perform(easy);
-
     bmic_endpoint_http_path_cleanup(&full_path);
-    return rcode;
+    
+    if (rcode != CURLE_OK) {
+        gru_status_set(epstatus->status, GRU_FAILURE, 
+                       "Error while trying to write data: %s", curl_easy_strerror(rcode));
+    }
+    
+    curl_easy_getinfo (easy, CURLINFO_RESPONSE_CODE, &epstatus->epcode);
+    
+    curl_easy_getinfo (easy, CURLINFO_RESPONSE_CODE, &epstatus->epcode);
+    if (epstatus->epcode != HTTP_STATUS_OK) {
+        gru_status_set(epstatus->status, GRU_FAILURE, 
+                       "Unacceptable response from server (HTTP status %ld)", 
+                       epstatus->epcode);
+    }
 }

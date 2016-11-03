@@ -74,14 +74,17 @@ bmic_product_info_t *bmic_artemis_product_info(bmic_handle_t *handle,
     
     bmic_endpoint_set_path(handle->ep, 
                            "read/org.apache.activemq.artemis:brokerName=\"0.0.0.0\",module=Core,serviceType=Server,type=Broker/Version");
-    handle->transport.read(handle->ep, NULL, &reply, status);
-    printf("%s\n", (char *) reply.data);
-    return NULL;
+    
+    bmic_endpoint_status_t epstatus = {0};
+    epstatus.status = status;
+    
+    handle->transport.read(handle->ep, NULL, &reply, &epstatus);
+    // printf("%s\n", (char *) reply.data);
+    
     if (status->code != GRU_SUCCESS) {
         bmic_endpoint_reset_path(handle->ep);
         return NULL;
     }
-    
     
     bmic_endpoint_reset_path(handle->ep);
     
@@ -91,7 +94,8 @@ bmic_product_info_t *bmic_artemis_product_info(bmic_handle_t *handle,
     }
     
     bmic_json_value_t value = {0};
-    bmic_json_find_first(json, "Value", &value);
+    bmic_json_find_first(json, "value", &value);
+    
     if (value.type == STRING) {
         printf("Version: %s\n", value.data.str);
 
@@ -99,7 +103,7 @@ bmic_product_info_t *bmic_artemis_product_info(bmic_handle_t *handle,
         snprintf(ret->version, sizeof(ret->version), "%s", value.data.str); 
 
         return ret;
-    }   
+    }
     
     return NULL;
 }

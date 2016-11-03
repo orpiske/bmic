@@ -27,6 +27,7 @@
 
 #include "management/common/bmic_product.h"
 #include "management/common/bmic_discovery_hint.h"
+#include "management/discovery/bmic_discovery.h"
 #include "product/bmic_product_register.h"
 
 int main(int argc, char** argv)
