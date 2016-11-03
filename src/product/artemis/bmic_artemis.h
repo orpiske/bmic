@@ -27,7 +27,7 @@
 #include "management/common/bmic_handle.h"
 #include "management/discovery/bmic_discovery.h"
 
-
+#include "bmic_artemis_urls.h"
 
 #ifdef __cplusplus
 extern "C" {

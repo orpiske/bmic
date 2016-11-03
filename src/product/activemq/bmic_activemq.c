@@ -29,11 +29,11 @@ const char *bmic_activemq_base_url(bmic_discovery_hint_t *hint) {
     char *ret = NULL; 
     
     if (hint->hint_type == URL) {
-        asprintf(&ret, "%s/api/jolokia", 
+        asprintf(&ret, ACTIVEMQ_BASE_URL_HINT_URL, 
                  hint->content.url);
     }
     else {
-        asprintf(&ret, "http://%s:%i/api/jolokia", 
+        asprintf(&ret, ACTIVEMQ_BASE_URL_HINT_ADDRESSING, 
                  hint->content.addressing.hostname, 8161);
     }
     
@@ -69,8 +69,7 @@ bmic_product_info_t *bmic_activemq_product_info(bmic_handle_t *handle,
 {
     bmic_data_t reply = {0};
     
-    bmic_endpoint_set_path(handle->ep, 
-                           "read/org.apache.activemq:brokerName=localhost,type=Broker/BrokerVersion");
+    bmic_endpoint_set_path(handle->ep, ACTIVEMQ_PRODUCT_INFO_PATH);
     
     bmic_endpoint_status_t epstatus = {0};
     epstatus.status = status;

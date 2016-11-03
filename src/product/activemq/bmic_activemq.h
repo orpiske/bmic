@@ -27,6 +27,8 @@
 #include "management/common/bmic_handle.h"
 #include "management/discovery/bmic_discovery.h"
 
+#include "bmic_activemq_urls.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif

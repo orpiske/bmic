@@ -31,11 +31,11 @@ const char *bmic_artemis_base_url(bmic_discovery_hint_t *hint) {
     char *ret = NULL; 
     
     if (hint->hint_type == URL) {
-        asprintf(&ret, "%s/jolokia", 
+        asprintf(&ret, ARTEMIS_BASE_URL_HINT_URL, 
                  hint->content.url);
     }
     else {
-        asprintf(&ret, "http://%s:%i/jolokia", 
+        asprintf(&ret, ARTEMIS_BASE_URL_HINT_ADDRESSING, 
                  hint->content.addressing.hostname, 8161);
     }
     
@@ -72,8 +72,7 @@ bmic_product_info_t *bmic_artemis_product_info(bmic_handle_t *handle,
 {
     bmic_data_t reply = {0};
     
-    bmic_endpoint_set_path(handle->ep, 
-                           "read/org.apache.activemq.artemis:brokerName=\"0.0.0.0\",module=Core,serviceType=Server,type=Broker/Version");
+    bmic_endpoint_set_path(handle->ep, ARTEMIS_PRODUCT_INFO_PATH);
     
     bmic_endpoint_status_t epstatus = {0};
     epstatus.status = status;
