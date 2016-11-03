@@ -64,7 +64,7 @@ static bmic_product_t *bmic_discovery_registry_initializer(const gru_list_t *lis
     node = list->root;
 
     while (node) {
-        bmic_product_t *product = gru_node_get_data_ptr(bmic_product_t *, node);
+        bmic_product_t *product = gru_node_get_data_ptr(bmic_product_t, node);
 
         bool initialized = bmic_try_init(product, outhandle, pair);
 
