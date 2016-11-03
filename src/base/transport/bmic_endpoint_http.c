@@ -35,7 +35,7 @@ static inline CURL *bmic_curl_easy_const(const bmic_endpoint_t *ep)
 static size_t curl_callback(void *contents, size_t size, size_t nmemb, void *userp)
 {
     size_t realsize = size * nmemb;
-    bmic_reply_data_t *p = (struct bmic_reply_data_t *) userp;
+    bmic_reply_data_t *p = (bmic_reply_data_t *) userp;
 
     p->body->data = (char *) realloc(p->body->data, p->body->size + realsize + 1);
 
