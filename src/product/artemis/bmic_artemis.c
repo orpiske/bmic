@@ -50,7 +50,7 @@ bmic_handle_t *bmic_artemis_init(const char *base_url,
     
     handle->ep = bmic_endpoint_init(base_url, NULL, NULL, status);
     if (handle->ep == NULL) {
-        // bmic_artemis_destroy(&handle);
+        // bmic_artemis_destroy(&handle);  
         
         return NULL;
     }

@@ -15,9 +15,6 @@
  */
 #include "bmic_discovery.h"
 
-
-// typedef void(*handle_function_t)(const gru_node_t *, void *);
-
 typedef struct bmic_discovery_pair_t_ {
     bmic_discovery_hint_t *hint;
     bmic_credentials_t *credentials;
@@ -28,10 +25,14 @@ void bmic_try_init(const gru_node_t *node, void *data) {
     bmic_discovery_pair_t *pair = (bmic_discovery_pair_t *) data;
     
     const char *base_url = product->base_url(pair->hint);
-    
+       
+    gru_status_t status = {0};
     
     printf("Name: %s\n", product->name);
     printf("Base URL: %s\n", base_url);
+    product->product_init(base_url, pair->credentials, &status);
+    
+    
 }
 
 bmic_product_t *bmic_discovery_run(const bmic_discovery_hint_t *hint,

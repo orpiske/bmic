@@ -22,7 +22,7 @@ bmic_endpoint_t *bmic_endpoint_init(const char *url, const char *username,
     bmic_endpoint_t *ret = gru_alloc(sizeof(bmic_endpoint_t), status);
     gru_alloc_check(ret, NULL);
     
-    asprintf(ret->url, "%s", url);
+    asprintf(&ret->url, "%s", url);
     
     ret->credentials = bmic_credentials_init(username, password, status);
 }
