@@ -16,7 +16,7 @@
 #ifndef BMIC_HANDLE_H
 #define BMIC_HANDLE_H
 
-#include "transport/bmic_transport.h"
+#include "base/transport/bmic_transport.h"
 
 #ifdef __cplusplus
 extern "C" {

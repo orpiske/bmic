@@ -18,7 +18,7 @@
 
 #include <common/gru_alloc.h>
 
-#include "common/bmic_credentials.h"
+#include "base/common/bmic_credentials.h"
 
 #ifdef __cplusplus
 extern "C" {

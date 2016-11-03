@@ -19,11 +19,14 @@
 #include <common/gru_status.h>
 #include <common/gru_alloc.h>
 
-#include "common/bmic_credentials.h"
-#include "transport/bmic_transport.h"
+#include "base/common/bmic_credentials.h"
+#include "base/transport/bmic_transport.h"
+#include "base/transport/bmic_endpoint_http.h"
 
 #include "management/common/bmic_handle.h"
 #include "management/discovery/bmic_discovery.h"
+
+
 
 #ifdef __cplusplus
 extern "C" {

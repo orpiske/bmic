@@ -19,8 +19,7 @@
 #include <common/gru_alloc.h>
 #include <common/gru_status.h>
 
-#include "common/bmic_credentials.h"
-
+#include "base/common/bmic_credentials.h"
 
 #include "management/common/bmic_product.h"
 #include "management/common/bmic_discovery_hint.h"

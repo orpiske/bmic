@@ -14,7 +14,6 @@
  limitations under the License.
  */
 #include "bmic_discovery.h"
-#include "transport/bmic_endpoint.h"
 
 
 // typedef void(*handle_function_t)(const gru_node_t *, void *);

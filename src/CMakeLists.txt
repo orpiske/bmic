@@ -8,11 +8,11 @@ include_directories(.)
 
 add_library(
 	bmic SHARED
-        common/bmic_credentials.c
-        transport/bmic_endpoint.c   
-        transport/bmic_endpoint_http.c        
-        transport/bmic_transport.c
-        format/bmic_json.c
+        base/common/bmic_credentials.c
+        base/transport/bmic_endpoint.c   
+        base/transport/bmic_endpoint_http.c        
+        base/transport/bmic_transport.c
+        base/format/bmic_json.c
         management/common/bmic_discovery_hint.c        
         management/common/bmic_product.c
         management/discovery/bmic_discovery.c

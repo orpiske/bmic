@@ -14,9 +14,7 @@
  limitations under the License.
  */
 #include "bmic_artemis.h"
-#include "management/discovery/bmic_discovery.h"
-#include "management/common/bmic_handle.h"
-#include "transport/bmic_endpoint_http.h"
+
 
 bmic_product_t *bmic_artemis_product(gru_status_t *status) {
     bmic_product_t *ret = bmic_product_init("artemis", "1.x.x", status);

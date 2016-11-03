@@ -20,9 +20,9 @@
 
 #include <json-c/json.h>
 
-#include "transport/bmic_endpoint.h"
-#include "transport/bmic_endpoint_http.h"
-#include "format/bmic_json.h"
+#include "base/transport/bmic_endpoint.h"
+#include "base/transport/bmic_endpoint_http.h"
+#include "base/format/bmic_json.h"
 
 
 #include "management/common/bmic_product.h"
