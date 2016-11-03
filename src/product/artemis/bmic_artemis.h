@@ -22,6 +22,7 @@
 #include "base/common/bmic_credentials.h"
 #include "base/transport/bmic_transport.h"
 #include "base/transport/bmic_endpoint_http.h"
+#include "base/format/bmic_json.h"
 
 #include "management/common/bmic_handle.h"
 #include "management/discovery/bmic_discovery.h"
@@ -37,6 +38,9 @@ const char *bmic_artemis_base_url(bmic_discovery_hint_t *hint);
 bmic_handle_t *bmic_artemis_init(const char *base_url, 
                                  bmic_credentials_t *credentials, 
                                  gru_status_t *status);
+
+bmic_product_info_t *bmic_artemis_product_info(bmic_handle_t *handle, 
+        gru_status_t *status);
 
 #ifdef __cplusplus
 }

@@ -30,9 +30,12 @@ void bmic_try_init(const gru_node_t *node, void *data) {
     
     printf("Name: %s\n", product->name);
     printf("Base URL: %s\n", base_url);
-    product->product_init(base_url, pair->credentials, &status);
+    bmic_handle_t *handle = product->product_init(base_url, pair->credentials, &status);
+    bmic_product_info_t *info = product->product_info(handle, &status);
     
-    
+    if (info) {
+        printf("Obtained product version: %s\n", info->version);
+    }
 }
 
 bmic_product_t *bmic_discovery_run(const bmic_discovery_hint_t *hint,

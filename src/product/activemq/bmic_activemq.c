@@ -20,6 +20,7 @@ bmic_product_t *bmic_activemq_product(gru_status_t *status) {
 
     ret->base_url = bmic_activemq_base_url;
     ret->product_init = bmic_activemq_init;
+    ret->product_info = bmic_activemq_product_info;
     
     return ret;
 }
@@ -28,11 +29,11 @@ const char *bmic_activemq_base_url(bmic_discovery_hint_t *hint) {
     char *ret = NULL; 
     
     if (hint->hint_type == URL) {
-        asprintf(&ret, "%s/api/jolokia/list/org.apache.activemq ", 
+        asprintf(&ret, "%s/api/jolokia/", 
                  hint->content.url);
     }
     else {
-        asprintf(&ret, "http://%s:%i/api/jolokia/list/org.apache.activemq ", 
+        asprintf(&ret, "http://%s:%i/api/jolokia/", 
                  hint->content.addressing.hostname, 8161);
     }
     
@@ -61,4 +62,41 @@ bmic_handle_t *bmic_activemq_init(const char *base_url,
     handle->transport.write = bmic_endpoint_http_write;
     
     return handle;
+}
+
+bmic_product_info_t *bmic_activemq_product_info(bmic_handle_t *handle, 
+        gru_status_t *status)
+{
+    bmic_data_t reply = {0};
+    
+    bmic_endpoint_set_path(handle->ep, 
+                           "read/org.apache.activemq:brokerName=localhost,type=Broker/BrokerVersion");
+    handle->transport.read(handle->ep, NULL, &reply, status);
+    printf("%s\n", (char *) reply.data);
+    return NULL;
+    if (status->code != GRU_SUCCESS) {
+        bmic_endpoint_reset_path(handle->ep);
+        return NULL;
+    }
+    
+    
+    bmic_endpoint_reset_path(handle->ep);
+    
+    bmic_json_t *json = bmic_json_init(reply.data, &status);
+    if (json == NULL || status->code != GRU_SUCCESS) {
+        return NULL;
+    }
+    
+    bmic_json_value_t value = {0};
+    bmic_json_find_first(json, "Value", &value);
+    if (value.type == STRING) {
+        printf("Version: %s\n", value.data.str);
+
+        bmic_product_info_t *ret = gru_alloc(sizeof(bmic_product_t), status);
+        snprintf(ret->version, sizeof(ret->version), "%s", value.data.str); 
+
+        return ret;
+    }   
+    
+    return NULL;
 }

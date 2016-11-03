@@ -26,21 +26,29 @@
 extern "C" {
 #endif
 
-
+typedef struct bmic_product_info_t_ {
+    const char name[64];
+    const char version[16];
+} bmic_product_info_t;
 
 typedef const char *(*bmic_product_base_url_fn)(bmic_discovery_hint_t *hint);
 
 typedef bmic_handle_t *(*bmic_product_init_fn)(const char *base_url, 
                                  bmic_credentials_t *credentials, 
                                  gru_status_t *status);
+typedef bmic_product_info_t *(*bmic_product_info_fn)(bmic_handle_t *handle, 
+        gru_status_t *status);
 
 typedef struct bmic_product_t_ {
-    const char name[64];
-    const char version[16];
+    char name[64];
+    char version[16];
     
     bmic_product_base_url_fn base_url;
     bmic_product_init_fn product_init;
+    bmic_product_info_fn product_info;
 } bmic_product_t;
+
+
 
 bmic_product_t *bmic_product_init(const char *name, const char *version, 
         gru_status_t *status);

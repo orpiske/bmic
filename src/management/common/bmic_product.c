@@ -37,7 +37,7 @@ void bmic_product_destroy(bmic_product_t **product) {
         return;
     }
     
-    gru_dealloc(product);
+    gru_dealloc((void **)product);
 }
 
 void bmic_product_registry_init(gru_status_t *status) {
