@@ -48,7 +48,9 @@ int main(int argc, char** argv)
     hint = bmic_discovery_hint_eval_addressing(argv[3], BMIC_PORT_UNKNOWN, 
                                                &status);
     
-    bmic_product_t *product = bmic_discovery_run(hint, credentials, &status);
+    bmic_handle_t *handle = NULL;
+    bmic_product_t *product = bmic_discovery_run(hint, credentials, &handle, 
+                                                 &status);
     
     if (product != NULL) { 
         fprintf(stderr, "Product is %s\n", product->name);

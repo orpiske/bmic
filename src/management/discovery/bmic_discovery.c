@@ -21,27 +21,28 @@ typedef struct bmic_discovery_pair_t_
     bmic_credentials_t *credentials;
 } bmic_discovery_pair_t;
 
-static bool bmic_try_init(bmic_product_t *product, bmic_discovery_pair_t *pair)
+static bool bmic_try_init(bmic_product_t *product,
+                          bmic_handle_t **outhandle,
+                          bmic_discovery_pair_t *pair)
 {
     const char *base_url = product->base_url(pair->hint);
 
     gru_status_t status = {0};
 
-    // printf("Name: %s\n", product->name);
-    // printf("Base URL: %s\n", base_url);
     bmic_handle_t *handle = product->product_init(base_url, pair->credentials, &status);
     bmic_product_info_t *info = product->product_info(handle, &status);
 
     if (info) {
-        // printf("Obtained product version: %s\n", info->version);
+        *outhandle = handle;
         return true;
     }
 
+    // bmic_handle
     return false;
 }
 
-static bmic_product_info_t *bmic_discovery_registry_initializer(
-                                                                const gru_list_t *list,
+static bmic_product_info_t *bmic_discovery_registry_initializer(const gru_list_t *list,
+                                                                bmic_handle_t **outhandle,
                                                                 bmic_discovery_pair_t *pair)
 {
     gru_node_t *node = NULL;
@@ -55,7 +56,7 @@ static bmic_product_info_t *bmic_discovery_registry_initializer(
     while (node) {
         bmic_product_t *product = gru_node_get_data_ptr(bmic_product_t *, node);
 
-        bool initialized = bmic_try_init(product, pair);
+        bool initialized = bmic_try_init(product, outhandle, pair);
 
         if (initialized) {
             return product;
@@ -69,6 +70,7 @@ static bmic_product_info_t *bmic_discovery_registry_initializer(
 
 bmic_product_t *bmic_discovery_run(const bmic_discovery_hint_t *hint,
                                    bmic_credentials_t *credentials,
+                                   bmic_handle_t **outhandle,
                                    gru_status_t *status)
 {
     const gru_list_t *list = bmic_product_registry();
@@ -77,5 +79,5 @@ bmic_product_t *bmic_discovery_run(const bmic_discovery_hint_t *hint,
     pair.credentials = credentials;
     pair.hint = hint;
 
-    return bmic_discovery_registry_initializer(list, &pair);
+    return bmic_discovery_registry_initializer(list, outhandle, &pair);
 }

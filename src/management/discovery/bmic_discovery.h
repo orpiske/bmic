@@ -34,11 +34,14 @@ extern "C" {
  * Runs product discovery on the given hint
  * @param hint A hint to find out details about the broker
  * @param credentials Optional credentials used to query the broker
+ * @param if successfully discovered, will hold the handle that allow access to
+ * management interface
  * @param status A status struct that will contain error data if the function failed
  * @return The product information
  */
 bmic_product_t *bmic_discovery_run(const bmic_discovery_hint_t *hint, 
         bmic_credentials_t *credentials,
+        bmic_handle_t **outhandle,
         gru_status_t *status);
 
 
