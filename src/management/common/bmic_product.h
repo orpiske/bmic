@@ -27,8 +27,8 @@ extern "C" {
 #endif
 
 typedef struct bmic_product_info_t_ {
-    const char name[64];
-    const char version[16];
+    char name[64];
+    char version[16];
 } bmic_product_info_t;
 
 typedef const char *(*bmic_product_base_url_fn)(const bmic_discovery_hint_t *hint);
