@@ -19,11 +19,20 @@
 
 // typedef void(*handle_function_t)(const gru_node_t *, void *);
 
+typedef struct bmic_discovery_pair_t_ {
+    bmic_discovery_hint_t *hint;
+    bmic_credentials_t *credentials;
+} bmic_discovery_pair_t;
+
 void bmic_try_init(const gru_node_t *node, void *data) {
     bmic_product_t *product = gru_node_get_data_ptr(bmic_product_t *, node);
+    bmic_discovery_pair_t *pair = (bmic_discovery_pair_t *) data;
+    
+    const char *base_url = product->base_url(pair->hint);
     
     
     printf("Name: %s\n", product->name);
+    printf("Base URL: %s\n", base_url);
 }
 
 bmic_product_t *bmic_discovery_run(const bmic_discovery_hint_t *hint,
@@ -31,8 +40,12 @@ bmic_product_t *bmic_discovery_run(const bmic_discovery_hint_t *hint,
         gru_status_t *status) 
 {
     const gru_list_t *list = bmic_product_registry();
+    bmic_discovery_pair_t pair = {0};
     
-    gru_list_for_each(list, bmic_try_init, credentials);
+    pair.credentials = credentials;
+    pair.hint = hint;
+    
+    gru_list_for_each(list, bmic_try_init, &pair);
     
     return NULL;
 }
