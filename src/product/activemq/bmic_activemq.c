@@ -20,6 +20,7 @@ bmic_product_t *bmic_activemq_product(gru_status_t *status) {
 
     ret->base_url = bmic_activemq_base_url;
     ret->product_init = bmic_activemq_init;
+    ret->product_cleanup = bmic_activemq_cleanup;
     ret->product_info = bmic_activemq_product_info;
     
     return ret;
@@ -50,7 +51,7 @@ bmic_handle_t *bmic_activemq_init(const char *base_url,
     
     handle->ep = bmic_endpoint_init(base_url, NULL, NULL, status);
     if (handle->ep == NULL) {
-        // bmic_artemis_destroy(&handle);
+        bmic_activemq_cleanup(&handle);
         
         return NULL;
     }
@@ -62,6 +63,10 @@ bmic_handle_t *bmic_activemq_init(const char *base_url,
     handle->transport.write = bmic_endpoint_http_write;
     
     return handle;
+}
+
+void bmic_activemq_cleanup(bmic_handle_t **handle) {
+    bmic_handle_destroy(handle, bmic_endpoint_http_terminate);
 }
 
 bmic_product_info_t *bmic_activemq_product_info(bmic_handle_t *handle, 

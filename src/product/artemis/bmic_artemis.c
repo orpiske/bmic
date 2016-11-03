@@ -23,6 +23,7 @@ bmic_product_t *bmic_artemis_product(gru_status_t *status) {
     ret->base_url = bmic_artemis_base_url;
     ret->product_init = bmic_artemis_init;
     ret->product_info = bmic_artemis_product_info;
+    ret->product_cleanup = bmic_artemis_cleanup;
     
     return ret;
 }
@@ -52,7 +53,7 @@ bmic_handle_t *bmic_artemis_init(const char *base_url,
     
     handle->ep = bmic_endpoint_init(base_url, NULL, NULL, status);
     if (handle->ep == NULL) {
-        // bmic_artemis_destroy(&handle);  
+        bmic_artemis_cleanup(&handle);  
         
         return NULL;
     }
@@ -66,6 +67,10 @@ bmic_handle_t *bmic_artemis_init(const char *base_url,
     return handle;
 }
 
+
+void bmic_artemis_cleanup(bmic_handle_t **handle) {
+    bmic_handle_destroy(handle, bmic_endpoint_http_terminate);
+}
 
 bmic_product_info_t *bmic_artemis_product_info(bmic_handle_t *handle, 
         gru_status_t *status)

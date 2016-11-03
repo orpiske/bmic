@@ -38,6 +38,7 @@ const char *bmic_activemq_base_url(bmic_discovery_hint_t *hint);
 bmic_handle_t *bmic_activemq_init(const char *base_url, 
                                  bmic_credentials_t *credentials, 
                                  gru_status_t *status);
+void bmic_activemq_cleanup(bmic_handle_t **handle);
 
 bmic_product_info_t *bmic_activemq_product_info(bmic_handle_t *handle, 
         gru_status_t *status);

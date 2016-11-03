@@ -30,14 +30,23 @@ static bool bmic_try_init(bmic_product_t *product,
     gru_status_t status = {0};
 
     bmic_handle_t *handle = product->product_init(base_url, pair->credentials, &status);
+    if (!handle) {
+        gru_dealloc_string(&base_url);
+        return false;
+    }
+    
     bmic_product_info_t *info = product->product_info(handle, &status);
 
     if (info) {
         *outhandle = handle;
+        gru_dealloc(&info);
+        gru_dealloc_string(&base_url);
         return true;
     }
 
-    // bmic_handle
+    gru_dealloc(&info);
+    product->product_cleanup(&handle);
+    gru_dealloc_string(&base_url);
     return false;
 }
 

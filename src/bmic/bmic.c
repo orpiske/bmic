@@ -56,7 +56,8 @@ int main(int argc, char** argv)
         fprintf(stderr, "Product is %s\n", product->name);
         fprintf(stderr, "Product version is %s\n", product->version);
     }
-    
+
+    product->product_cleanup(&handle);
     bmic_product_unregister();
     bmic_product_registry_destroy();
     bmic_discovery_hint_destroy(&hint);

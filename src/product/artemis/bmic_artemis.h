@@ -38,6 +38,7 @@ const char *bmic_artemis_base_url(bmic_discovery_hint_t *hint);
 bmic_handle_t *bmic_artemis_init(const char *base_url, 
                                  bmic_credentials_t *credentials, 
                                  gru_status_t *status);
+void bmic_artemis_cleanup(bmic_handle_t **handle);
 
 bmic_product_info_t *bmic_artemis_product_info(bmic_handle_t *handle, 
         gru_status_t *status);

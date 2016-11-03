@@ -13,27 +13,25 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-#ifndef BMIC_HANDLE_H
-#define BMIC_HANDLE_H
+#include "bmic_handle.h"
 
-#include "base/transport/bmic_transport.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
+void bmic_handle_destroy(bmic_handle_t **handle, bmic_handle_ep_cleanup_fn cleanup) {
+    bmic_handle_t *h = *handle;
     
-typedef void (*bmic_handle_ep_cleanup_fn)(bmic_endpoint_t *ep, gru_status_t *status);
-
-typedef struct bmic_handle_t_ {
-    bmic_endpoint_t *ep;
-    bmic_transport_t transport;
-} bmic_handle_t;
-
-void bmic_handle_destroy(bmic_handle_t **handle, bmic_handle_ep_cleanup_fn cleanup);
-
-#ifdef __cplusplus
+    if (!h) {
+        return;
+    }
+    
+    if (h->ep) {
+        gru_status_t status = {0};
+        
+        cleanup(h->ep, &status);
+        if (status.code != GRU_SUCCESS) {
+            fprintf(stderr, "Failed to cleanup CURL handle\n");
+        }
+        
+        bmic_endpoint_destroy(&h->ep);
+    }
+        
+    gru_dealloc((void **) handle);
 }
-#endif
-
-#endif /* BMIC_HANDLE_H */
-
