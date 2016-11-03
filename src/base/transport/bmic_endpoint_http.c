@@ -75,7 +75,7 @@ void bmic_endpoint_http_terminate(bmic_endpoint_t *ep, gru_status_t *status) {
 
 
 // HTTP GET only
-void bmic_endpoint_http_read(bmic_endpoint_t *ep, bmic_data_t *payload,
+void bmic_endpoint_http_read(const bmic_endpoint_t *ep, bmic_data_t *payload,
                              bmic_data_t *data, gru_status_t *status)
 {
     CURL *easy = bmic_curl_easy(ep);
@@ -110,7 +110,7 @@ void bmic_endpoint_http_read(bmic_endpoint_t *ep, bmic_data_t *payload,
 }
 
 // POST + get reply
-void bmic_endpoint_http_write(bmic_endpoint_t *ep, bmic_data_t *payload,
+void bmic_endpoint_http_write(const bmic_endpoint_t *ep, bmic_data_t *payload,
                               bmic_data_t *data, gru_status_t *status)
 {
     CURL *easy = bmic_curl_easy(ep);

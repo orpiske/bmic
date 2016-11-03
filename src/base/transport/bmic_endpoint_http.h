@@ -31,10 +31,10 @@ extern "C" {
 void bmic_endpoint_http_begin(bmic_endpoint_t *ep, gru_status_t *status);
 void bmic_endpoint_http_terminate(bmic_endpoint_t *ep, gru_status_t *status);
 
-void bmic_endpoint_http_read(bmic_endpoint_t *, bmic_data_t *payload, 
+void bmic_endpoint_http_read(const bmic_endpoint_t *, bmic_data_t *payload, 
         bmic_data_t *data, gru_status_t *status); 
 
-void bmic_endpoint_http_write(bmic_endpoint_t *, bmic_data_t *payload, 
+void bmic_endpoint_http_write(const bmic_endpoint_t *, bmic_data_t *payload, 
         bmic_data_t *data, gru_status_t *status); 
 
 
