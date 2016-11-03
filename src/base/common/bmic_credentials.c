@@ -26,7 +26,7 @@ bmic_credentials_t *bmic_credentials_init(const char *username,
     return ret;
 }
 
-bmic_credentials_t *bmic_credentials_clone(bmic_credentials_t *other, gru_status_t *status) {
+bmic_credentials_t *bmic_credentials_clone(const bmic_credentials_t *other, gru_status_t *status) {
     bmic_credentials_t *ret = gru_alloc(sizeof(bmic_credentials_t), status);
     gru_alloc_check(ret, NULL);
     
@@ -43,12 +43,13 @@ void bmic_credentials_detroy(bmic_credentials_t **credentials) {
         return;
     }
     
+    
     if (c->username) {
-        free(c->username);
+        gru_dealloc_string(&c->username);
     }
     
     if (c->password) {
-        free(c->password);
+        gru_dealloc_string(&c->password);
     }
    
     gru_dealloc((void **) credentials);
