@@ -21,6 +21,7 @@ typedef struct bmic_discovery_pair_t_
     bmic_credentials_t *credentials;
 } bmic_discovery_pair_t;
 
+
 static bool bmic_try_init(bmic_product_t *product,
                           bmic_handle_t **outhandle,
                           bmic_discovery_pair_t *pair)
@@ -31,7 +32,7 @@ static bool bmic_try_init(bmic_product_t *product,
 
     bmic_handle_t *handle = product->product_init(base_url, pair->credentials, &status);
     if (!handle) {
-        gru_dealloc_string(&base_url);
+        gru_dealloc_string((char **) &base_url);
         return false;
     }
 
@@ -39,14 +40,14 @@ static bool bmic_try_init(bmic_product_t *product,
 
     if (info) {
         *outhandle = handle;
-        gru_dealloc(&info);
-        gru_dealloc_string(&base_url);
+        gru_dealloc((void **) &info);
+        gru_dealloc_string((char **) &base_url);
         return true;
     }
 
-    gru_dealloc(&info);
+    gru_dealloc((void **)&info);
     product->product_cleanup(&handle);
-    gru_dealloc_string(&base_url);
+    gru_dealloc_string((char **) &base_url);
     return false;
 }
 
