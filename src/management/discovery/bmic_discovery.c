@@ -20,7 +20,7 @@
 // typedef void(*handle_function_t)(const gru_node_t *, void *);
 
 void bmic_try_init(const gru_node_t *node, void *data) {
-    bmic_product_t *product = gru_node_get_data(bmic_product_t *, node);
+    bmic_product_t *product = gru_node_get_data_ptr(bmic_product_t *, node);
     
     
     printf("Name: %s\n", product->name);
