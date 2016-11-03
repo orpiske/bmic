@@ -38,9 +38,8 @@ int main(int argc, char** argv)
     bmic_product_registry_init(&status);
     
     bmic_product_register(&status);
-    bmic_product_unregister();
     
-    /*
+    
     credentials = bmic_credentials_init((char *) argv[1], (char *) argv[2], 
                                         &status); 
              
@@ -48,13 +47,17 @@ int main(int argc, char** argv)
     hint = bmic_discovery_hint_eval_addressing(argv[3], BMIC_PORT_UNKNOWN, 
                                                &status);
     
-    
-    
-    
-    
     bmic_product_t *product = bmic_discovery_run(hint, credentials, &status);
-    */
+    
+    if (product != NULL) { 
+        fprintf(stderr, "Product is %s\n", product->name);
+        fprintf(stderr, "Product version is %s\n", product->version);
+    }
+    
+    bmic_product_unregister();
     bmic_product_registry_destroy();
+    bmic_discovery_hint_destroy(&hint);
+    bmic_credentials_detroy(&credentials);
     
     return (EXIT_SUCCESS);
 }
