@@ -35,10 +35,10 @@ bmic_json_t *bmic_json_init(const char *data, gru_status_t *status) {
 }
 
 void bmic_json_destroy(bmic_json_t **json) {
-    json_object *jobj = &json;
+    bmic_json_t *jobj = *json;
 
-    if (jobj) {
-        json_object_put(jobj);
+    if (jobj && jobj->obj) {
+        json_object_put(jobj->obj);
     }
 
     gru_dealloc((void **) json);

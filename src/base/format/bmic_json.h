@@ -1,12 +1,12 @@
 /**
  Copyright 2016 Otavio Rodolfo Piske
- 
+
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
- 
+
  http://www.apache.org/licenses/LICENSE-2.0
- 
+
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -51,13 +51,13 @@ typedef struct bmic_json_value_t_ {
 } bmic_json_value_t;
 
 typedef struct bmic_json_t_ {
-    const json_object *obj;
+    json_object *obj;
 } bmic_json_t;
 
 bmic_json_t *bmic_json_init(const char *data, gru_status_t *status);
 void bmic_json_destroy(bmic_json_t **json);
 
-void bmic_json_find_first(const bmic_json_t *json, const char *keyname, 
+void bmic_json_find_first(const bmic_json_t *json, const char *keyname,
                           bmic_json_value_t *ret);
 
 #ifdef __cplusplus
@@ -65,4 +65,3 @@ void bmic_json_find_first(const bmic_json_t *json, const char *keyname,
 #endif
 
 #endif /* BMIC_FORMAT_JSON_H */
-
