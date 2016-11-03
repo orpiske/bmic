@@ -17,7 +17,7 @@
 
 typedef struct bmic_discovery_pair_t_
 {
-    bmic_discovery_hint_t *hint;
+     const bmic_discovery_hint_t *hint;
     bmic_credentials_t *credentials;
 } bmic_discovery_pair_t;
 

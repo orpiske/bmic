@@ -1,12 +1,12 @@
 /**
  Copyright 2016 Otavio Rodolfo Piske
- 
+
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
- 
+
  http://www.apache.org/licenses/LICENSE-2.0
- 
+
  Unless required by applicable law or agreed to in writing, software
  distributed under the License is distributed on an "AS IS" BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,29 +31,29 @@ typedef struct bmic_product_info_t_ {
     const char version[16];
 } bmic_product_info_t;
 
-typedef const char *(*bmic_product_base_url_fn)(bmic_discovery_hint_t *hint);
+typedef const char *(*bmic_product_base_url_fn)(const bmic_discovery_hint_t *hint);
 
-typedef bmic_handle_t *(*bmic_product_init_fn)(const char *base_url, 
-                                 bmic_credentials_t *credentials, 
+typedef bmic_handle_t *(*bmic_product_init_fn)(const char *base_url,
+                                 bmic_credentials_t *credentials,
                                  gru_status_t *status);
-typedef bmic_product_info_t *(*bmic_product_info_fn)(bmic_handle_t *handle, 
+typedef bmic_product_info_t *(*bmic_product_info_fn)(bmic_handle_t *handle,
         gru_status_t *status);
 typedef void(*bmic_product_cleanup_fn)(bmic_handle_t **handle);
 
 typedef struct bmic_product_t_ {
     char name[64];
     char version[16];
-    
+
     bmic_product_base_url_fn base_url;
     bmic_product_init_fn product_init;
     bmic_product_info_fn product_info;
     bmic_product_cleanup_fn product_cleanup;
-    
+
 } bmic_product_t;
 
 
 
-bmic_product_t *bmic_product_init(const char *name, const char *version, 
+bmic_product_t *bmic_product_init(const char *name, const char *version,
         gru_status_t *status);
 void bmic_product_destroy(bmic_product_t **product);
 
@@ -69,4 +69,3 @@ const gru_list_t *bmic_product_registry();
 #endif
 
 #endif /* BMIC_PRODUCT_H */
-

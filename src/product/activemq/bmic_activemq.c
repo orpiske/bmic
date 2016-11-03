@@ -26,7 +26,7 @@ bmic_product_t *bmic_activemq_product(gru_status_t *status) {
     return ret;
 }
 
-const char *bmic_activemq_base_url(bmic_discovery_hint_t *hint) {
+const char *bmic_activemq_base_url(const bmic_discovery_hint_t *hint) {
     char *ret = NULL;
 
     if (hint->hint_type == URL) {
