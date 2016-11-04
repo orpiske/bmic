@@ -49,7 +49,7 @@ int main(int argc, char** argv)
                                                &status);
     
     bmic_handle_t *handle = NULL;
-    bmic_product_t *product = bmic_discovery_run(hint, credentials, &handle, 
+    bmic_api_interface_t *product = bmic_discovery_run(hint, credentials, &handle, 
                                                  &status);
     
     if (product != NULL) { 
@@ -57,7 +57,7 @@ int main(int argc, char** argv)
         fprintf(stderr, "Product version is %s\n", product->version);
     }
 
-    product->product_cleanup(&handle);
+    product->api_cleanup(&handle);
     bmic_product_unregister();
     bmic_product_registry_destroy();
     bmic_discovery_hint_destroy(&hint);

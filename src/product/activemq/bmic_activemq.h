@@ -33,7 +33,7 @@
 extern "C" {
 #endif
 
-bmic_product_t *bmic_activemq_product(gru_status_t *status);
+bmic_api_interface_t *bmic_activemq_product(gru_status_t *status);
 const char *bmic_activemq_base_url(const bmic_discovery_hint_t *hint);
 bmic_handle_t *bmic_activemq_init(const char *base_url,
                                  bmic_credentials_t *credentials,

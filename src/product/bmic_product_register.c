@@ -16,7 +16,7 @@
 #include "bmic_product_register.h"
 
 void bmic_product_register(gru_status_t *status) {
-    bmic_product_t *artemis = bmic_artemis_product(status);
+    bmic_api_interface_t *artemis = bmic_artemis_product(status);
     if (!artemis) {
         return;
     }
@@ -26,7 +26,7 @@ void bmic_product_register(gru_status_t *status) {
         return;
     }
 
-    bmic_product_t *activemq = bmic_activemq_product(status);
+    bmic_api_interface_t *activemq = bmic_activemq_product(status);
     if (!activemq) {
         return;
     }
@@ -38,7 +38,7 @@ void bmic_product_register(gru_status_t *status) {
 }
 
 static void bmic_product_unregister_ex(const gru_node_t *node, void *data) {
-    bmic_product_t *product = gru_node_get_data_ptr(bmic_product_t, node);
+    bmic_api_interface_t *product = gru_node_get_data_ptr(bmic_api_interface_t, node);
 
     // printf("Unregistering: %s\n", product->name);
     bmic_product_destroy(&product);

@@ -31,35 +31,35 @@ typedef struct bmic_product_info_t_ {
     char version[16];
 } bmic_product_info_t;
 
-typedef const char *(*bmic_product_base_url_fn)(const bmic_discovery_hint_t *hint);
+typedef const char *(*bmic_management_url_fn)(const bmic_discovery_hint_t *hint);
 
-typedef bmic_handle_t *(*bmic_product_init_fn)(const char *base_url,
+typedef bmic_handle_t *(*bmic_management_api_init_fn)(const char *base_url,
                                  bmic_credentials_t *credentials,
                                  gru_status_t *status);
-typedef bmic_product_info_t *(*bmic_product_info_fn)(bmic_handle_t *handle,
+typedef bmic_product_info_t *(*bmic_management_api_info_fn)(bmic_handle_t *handle,
         gru_status_t *status);
-typedef void(*bmic_product_cleanup_fn)(bmic_handle_t **handle);
+typedef void(*bmic_management_api_cleanup_fn)(bmic_handle_t **handle);
 
-typedef struct bmic_product_t_ {
+typedef struct bmic_api_interface_t_ {
     char name[64];
     char version[16];
 
-    bmic_product_base_url_fn base_url;
-    bmic_product_init_fn product_init;
-    bmic_product_info_fn product_info;
-    bmic_product_cleanup_fn product_cleanup;
+    bmic_management_url_fn base_url;
+    bmic_management_api_init_fn api_init;
+    bmic_management_api_info_fn product_info;
+    bmic_management_api_cleanup_fn api_cleanup;
 
-} bmic_product_t;
+} bmic_api_interface_t;
 
 
 
-bmic_product_t *bmic_product_init(const char *name, const char *version,
+bmic_api_interface_t *bmic_product_init(const char *name, const char *version,
         gru_status_t *status);
-void bmic_product_destroy(bmic_product_t **product);
+void bmic_product_destroy(bmic_api_interface_t **product);
 
 void bmic_product_registry_init(gru_status_t *status);
 void bmic_product_registry_destroy();
-void bmic_product_registry_add(const bmic_product_t *product, gru_status_t *status);
+void bmic_product_registry_add(const bmic_api_interface_t *product, gru_status_t *status);
 
 const gru_list_t *bmic_product_registry();
 

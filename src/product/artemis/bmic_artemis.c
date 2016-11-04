@@ -17,13 +17,13 @@
 #include "base/format/bmic_json.h"
 
 
-bmic_product_t *bmic_artemis_product(gru_status_t *status) {
-    bmic_product_t *ret = bmic_product_init("artemis", "1.x.x", status);
+bmic_api_interface_t *bmic_artemis_product(gru_status_t *status) {
+    bmic_api_interface_t *ret = bmic_product_init("artemis", "1.x.x", status);
 
     ret->base_url = bmic_artemis_base_url;
-    ret->product_init = bmic_artemis_init;
+    ret->api_init = bmic_artemis_init;
     ret->product_info = bmic_artemis_product_info;
-    ret->product_cleanup = bmic_artemis_cleanup;
+    ret->api_cleanup = bmic_artemis_cleanup;
 
     return ret;
 }
@@ -104,7 +104,7 @@ bmic_product_info_t *bmic_artemis_product_info(bmic_handle_t *handle,
     if (value.type == STRING) {
         printf("Version: %s\n", value.data.str);
 
-        bmic_product_info_t *ret = gru_alloc(sizeof(bmic_product_t), status);
+        bmic_product_info_t *ret = gru_alloc(sizeof(bmic_api_interface_t), status);
         snprintf(ret->version, sizeof(ret->version), "%s", value.data.str);
 
         return ret;

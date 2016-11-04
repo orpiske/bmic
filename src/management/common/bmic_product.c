@@ -17,9 +17,9 @@
 
 static gru_list_t *registry = NULL;
 
-bmic_product_t *bmic_product_init(const char *name, const char *version, 
+bmic_api_interface_t *bmic_product_init(const char *name, const char *version, 
                                   gru_status_t *status) {
-    bmic_product_t *ret = gru_alloc(sizeof(bmic_product_t), status);
+    bmic_api_interface_t *ret = gru_alloc(sizeof(bmic_api_interface_t), status);
     gru_alloc_check(ret, NULL);
     
     
@@ -30,8 +30,8 @@ bmic_product_t *bmic_product_init(const char *name, const char *version,
 }
 
 
-void bmic_product_destroy(bmic_product_t **product) {
-    bmic_product_t *prod = *product;
+void bmic_product_destroy(bmic_api_interface_t **product) {
+    bmic_api_interface_t *prod = *product;
     
     if (!prod) {
         return;
@@ -61,7 +61,7 @@ void bmic_product_registry_destroy() {
 }
 
 
-void bmic_product_registry_add(const bmic_product_t *product, gru_status_t *status) {
+void bmic_product_registry_add(const bmic_api_interface_t *product, gru_status_t *status) {
     gru_list_append(registry, product);
 }
 

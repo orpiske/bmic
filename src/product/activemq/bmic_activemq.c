@@ -15,12 +15,12 @@
  */
 #include "bmic_activemq.h"
 
-bmic_product_t *bmic_activemq_product(gru_status_t *status) {
-    bmic_product_t *ret = bmic_product_init("activemq", "5.x.x", status);
+bmic_api_interface_t *bmic_activemq_product(gru_status_t *status) {
+    bmic_api_interface_t *ret = bmic_product_init("activemq", "5.x.x", status);
 
     ret->base_url = bmic_activemq_base_url;
-    ret->product_init = bmic_activemq_init;
-    ret->product_cleanup = bmic_activemq_cleanup;
+    ret->api_init = bmic_activemq_init;
+    ret->api_cleanup = bmic_activemq_cleanup;
     ret->product_info = bmic_activemq_product_info;
 
     return ret;
@@ -102,7 +102,7 @@ bmic_product_info_t *bmic_activemq_product_info(bmic_handle_t *handle,
     if (value.type == STRING) {
         printf("Version: %s\n", value.data.str);
 
-        bmic_product_info_t *ret = gru_alloc(sizeof(bmic_product_t), status);
+        bmic_product_info_t *ret = gru_alloc(sizeof(bmic_api_interface_t), status);
         snprintf(ret->version, sizeof(ret->version), "%s", value.data.str);
 
         return ret;

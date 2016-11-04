@@ -39,7 +39,7 @@ extern "C" {
  * @param status A status struct that will contain error data if the function failed
  * @return The product information
  */
-bmic_product_t *bmic_discovery_run(const bmic_discovery_hint_t *hint, 
+bmic_api_interface_t *bmic_discovery_run(const bmic_discovery_hint_t *hint, 
         bmic_credentials_t *credentials,
         bmic_handle_t **outhandle,
         gru_status_t *status);

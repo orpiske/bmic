@@ -22,7 +22,7 @@ typedef struct bmic_discovery_pair_t_
 } bmic_discovery_pair_t;
 
 
-static bool bmic_try_init(bmic_product_t *product,
+static bool bmic_try_init(bmic_api_interface_t *product,
                           bmic_handle_t **outhandle,
                           bmic_discovery_pair_t *pair)
 {
@@ -30,7 +30,7 @@ static bool bmic_try_init(bmic_product_t *product,
 
     gru_status_t status = {0};
 
-    bmic_handle_t *handle = product->product_init(base_url, pair->credentials, &status);
+    bmic_handle_t *handle = product->api_init(base_url, pair->credentials, &status);
     if (!handle) {
         gru_dealloc_string((char **) &base_url);
         return false;
@@ -46,12 +46,12 @@ static bool bmic_try_init(bmic_product_t *product,
     }
 
     gru_dealloc((void **)&info);
-    product->product_cleanup(&handle);
+    product->api_cleanup(&handle);
     gru_dealloc_string((char **) &base_url);
     return false;
 }
 
-static bmic_product_t *bmic_discovery_registry_initializer(const gru_list_t *list,
+static bmic_api_interface_t *bmic_discovery_registry_initializer(const gru_list_t *list,
                                                                 bmic_handle_t **outhandle,
                                                                 bmic_discovery_pair_t *pair)
 {
@@ -64,7 +64,7 @@ static bmic_product_t *bmic_discovery_registry_initializer(const gru_list_t *lis
     node = list->root;
 
     while (node) {
-        bmic_product_t *product = gru_node_get_data_ptr(bmic_product_t, node);
+        bmic_api_interface_t *product = gru_node_get_data_ptr(bmic_api_interface_t, node);
 
         bool initialized = bmic_try_init(product, outhandle, pair);
 
@@ -78,7 +78,7 @@ static bmic_product_t *bmic_discovery_registry_initializer(const gru_list_t *lis
     return NULL;
 }
 
-bmic_product_t *bmic_discovery_run(const bmic_discovery_hint_t *hint,
+bmic_api_interface_t *bmic_discovery_run(const bmic_discovery_hint_t *hint,
                                    bmic_credentials_t *credentials,
                                    bmic_handle_t **outhandle,
                                    gru_status_t *status)
