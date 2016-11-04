@@ -84,8 +84,6 @@ bmic_product_info_t *bmic_activemq_product_info(bmic_handle_t *handle,
     bmic_api_io_find_value(&reply, &value, "value", status);
 
     if (value.type == STRING) {
-        printf("Version: %s\n", value.data.str);
-
         bmic_product_info_t *ret = gru_alloc(sizeof(bmic_api_interface_t), status);
         snprintf(ret->version, sizeof(ret->version), "%s", value.data.str);
 
