@@ -41,7 +41,7 @@ static void bmic_product_unregister_ex(const gru_node_t *node, void *data) {
     bmic_api_interface_t *product = gru_node_get_data_ptr(bmic_api_interface_t, node);
 
     // printf("Unregistering: %s\n", product->name);
-    bmic_product_destroy(&product);
+    bmic_api_interface_destroy(&product);
 }
 
 

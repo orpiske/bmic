@@ -16,7 +16,7 @@
 #include "bmic_activemq.h"
 
 bmic_api_interface_t *bmic_activemq_product(gru_status_t *status) {
-    bmic_api_interface_t *ret = bmic_product_init("activemq", "5.x.x", status);
+    bmic_api_interface_t *ret = bmic_api_interface_new("activemq", "5.x.x", status);
 
     ret->base_url = bmic_activemq_base_url;
     ret->api_init = bmic_activemq_init;

@@ -18,7 +18,7 @@
 
 
 bmic_api_interface_t *bmic_artemis_product(gru_status_t *status) {
-    bmic_api_interface_t *ret = bmic_product_init("artemis", "1.x.x", status);
+    bmic_api_interface_t *ret = bmic_api_interface_new("artemis", "1.x.x", status);
 
     ret->base_url = bmic_artemis_base_url;
     ret->api_init = bmic_artemis_init;

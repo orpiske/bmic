@@ -53,9 +53,9 @@ typedef struct bmic_api_interface_t_ {
 
 
 
-bmic_api_interface_t *bmic_product_init(const char *name, const char *version,
+bmic_api_interface_t *bmic_api_interface_new(const char *name, const char *version,
         gru_status_t *status);
-void bmic_product_destroy(bmic_api_interface_t **product);
+void bmic_api_interface_destroy(bmic_api_interface_t **product);
 
 void bmic_product_registry_init(gru_status_t *status);
 void bmic_product_registry_destroy();
