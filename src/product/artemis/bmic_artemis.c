@@ -76,31 +76,15 @@ bmic_product_info_t *bmic_artemis_product_info(bmic_handle_t *handle,
         gru_status_t *status)
 {
     bmic_data_t reply = {0};
-
-    bmic_endpoint_set_path(handle->ep, ARTEMIS_PRODUCT_INFO_PATH);
-
-    bmic_endpoint_status_t epstatus = {0};
-    epstatus.status = status;
-
-    handle->transport.read(handle->ep, NULL, &reply, &epstatus);
-    // printf("%s\n", (char *) reply.data);
+    bmic_api_io_read(handle, ARTEMIS_PRODUCT_INFO_PATH, &reply, status);
 
     if (status->code != GRU_SUCCESS) {
-        bmic_endpoint_reset_path(handle->ep);
-        return NULL;
-    }
-
-    bmic_endpoint_reset_path(handle->ep);
-
-    bmic_json_t *json = bmic_json_init(reply.data, status);
-    if (json == NULL || status->code != GRU_SUCCESS) {
         return NULL;
     }
 
     bmic_json_value_t value = {0};
-    bmic_json_find_first(json, "value", &value);
-    bmic_json_destroy(&json);
-    
+    bmic_api_io_find_value(&reply, &value, "value", status);
+
     if (value.type == STRING) {
         printf("Version: %s\n", value.data.str);
 

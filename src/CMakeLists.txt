@@ -17,6 +17,7 @@ add_library(
         management/common/bmic_discovery_hint.c        
         management/common/bmic_product.c
         management/discovery/bmic_discovery.c
+        product/common/bmic_api_io.c
         product/artemis/bmic_artemis.c
         product/activemq/bmic_activemq.c
         product/bmic_product_register.c
