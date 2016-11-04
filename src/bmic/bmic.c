@@ -53,8 +53,17 @@ int main(int argc, char** argv)
                                                  &status);
     
     if (api != NULL) { 
-        fprintf(stderr, "Product is %s\n", api->name);
+        fprintf(stderr, "Product name is %s\n", api->name);
         fprintf(stderr, "API version is %s\n", api->version);
+        
+        bmic_product_info_t *info = api->product_info(handle, &status);
+        if (info) { 
+            if (status.code == GRU_SUCCESS) {
+                fprintf(stderr, "Product version is %s\n", info->version);
+            }
+        
+            gru_dealloc((void **)&info);
+        }
     }
 
     api->api_cleanup(&handle);
