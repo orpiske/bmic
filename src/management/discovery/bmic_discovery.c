@@ -17,26 +17,26 @@
 
 typedef struct bmic_discovery_pair_t_
 {
-     const bmic_discovery_hint_t *hint;
+    const bmic_discovery_hint_t *hint;
     bmic_credentials_t *credentials;
 } bmic_discovery_pair_t;
 
 
-static bool bmic_try_init(bmic_api_interface_t *product,
+static bool bmic_try_init(bmic_api_interface_t *api,
                           bmic_handle_t **outhandle,
                           bmic_discovery_pair_t *pair)
 {
-    const char *base_url = product->base_url(pair->hint);
+    const char *base_url = api->base_url(pair->hint);
 
     gru_status_t status = {0};
 
-    bmic_handle_t *handle = product->api_init(base_url, pair->credentials, &status);
+    bmic_handle_t *handle = api->api_init(base_url, pair->credentials, &status);
     if (!handle) {
         gru_dealloc_string((char **) &base_url);
         return false;
     }
 
-    bmic_product_info_t *info = product->product_info(handle, &status);
+    bmic_product_info_t *info = api->product_info(handle, &status);
 
     if (info) {
         *outhandle = handle;
@@ -46,7 +46,7 @@ static bool bmic_try_init(bmic_api_interface_t *product,
     }
 
     gru_dealloc((void **)&info);
-    product->api_cleanup(&handle);
+    api->api_cleanup(&handle);
     gru_dealloc_string((char **) &base_url);
     return false;
 }
@@ -64,12 +64,12 @@ static bmic_api_interface_t *bmic_discovery_registry_initializer(const gru_list_
     node = list->root;
 
     while (node) {
-        bmic_api_interface_t *product = gru_node_get_data_ptr(bmic_api_interface_t, node);
+        bmic_api_interface_t *api = gru_node_get_data_ptr(bmic_api_interface_t, node);
 
-        bool initialized = bmic_try_init(product, outhandle, pair);
+        bool initialized = bmic_try_init(api, outhandle, pair);
 
         if (initialized) {
-            return product;
+            return api;
         }
 
         node = node->next;
