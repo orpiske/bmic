@@ -46,6 +46,8 @@ void bmic_json_find_cond(const bmic_json_t *json, const char *keyname,
                          bmic_match_cond condition,
                          bmic_object_t *ret);
 
+void bmic_json_transform(const bmic_json_t *jobj, bmic_object_t *ret);
+
 #ifdef __cplusplus
 }
 #endif

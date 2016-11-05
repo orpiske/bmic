@@ -53,56 +53,70 @@ void bmic_json_destroy(bmic_json_t **json)
  * @param ret
  */
 static void bmic_json_find_first_cond_int(const json_object *jobj, const char *keyname,
-                                          bmic_match_cond condition, bmic_object_t *ret)
+                                          bmic_match_cond condition, bmic_object_t *parent_object)
 {
     enum json_type type;
 
     json_object_object_foreach((json_object *) jobj, key, val)
     {
+        // fprintf(stdout, "Running from %s\n", key);
         type = json_object_get_type(val);
 
         switch (type) {
-        case json_type_object:
-            bmic_json_find_first_cond_int(val, keyname, condition, ret);
-            ret->type = OBJECT; 
+        case json_type_object: {
+            fprintf(stdout, "Entering the object %s\n", key);
+            bmic_object_t *child = bmic_object_new(key, NULL);
+            bmic_json_find_first_cond_int(val, keyname, condition, child);
+            bmic_object_add_object(parent_object, child);
+            
             break;
+        }
         case json_type_array:
-            ret->type = ARRAY;
-            // TODO: implement arrays
+            fprintf(stdout, "Skipping the array %s\n", key);
             break;
         case json_type_null:
             if (condition(key, keyname) == 0) {
-                bmic_object_set_null(ret);
+                bmic_object_set_null(parent_object);
                 return;
             }
 
             break;
         case json_type_string:
+            //fprintf(stdout, "Setting string for %s\n", key);
             if (condition(key, keyname) == 0) {
-                bmic_object_set_string(ret, json_object_get_string(val));
+                bmic_object_set_string(parent_object, json_object_get_string(val));
                 
-                return;
+               return;
             }
 
             break;
         case json_type_int:
+            fprintf(stdout, "Int value for %s with value %d\n", key, 
+                    json_object_get_int(val));
+            
+            bmic_object_t *child2 = bmic_object_new(key, NULL);
+            
+            bmic_object_add_object(parent_object, child2);
+            
             if (condition(key, keyname) == 0) {
-                bmic_object_set_integer(ret, json_object_get_int(val));
+                bmic_object_set_integer(child2, json_object_get_int(val));
                 return;
             }
 
             break;
         case json_type_boolean:
+            fprintf(stdout, "Setting boolean for %s\n", key);
             if (condition(key, keyname) == 0) {
-                bmic_object_set_boolean(ret, json_object_get_boolean(val));
+                bmic_object_set_boolean(parent_object, json_object_get_boolean(val));
 
                 return;
             }
 
             break;
         case json_type_double:
+            fprintf(stdout, "Setting double for %s\n", key);
             if (condition(key, keyname) == 0) {
-                bmic_object_set_double(ret, json_object_get_double(val));
+                bmic_object_set_double(parent_object, json_object_get_double(val));
 
                 return;
             }
@@ -114,6 +128,7 @@ static void bmic_json_find_first_cond_int(const json_object *jobj, const char *k
         }
     }
 }
+
 
 /**
  * A DFS-like search over the json object
@@ -139,4 +154,73 @@ void bmic_json_find_cond(const bmic_json_t *json, const char *keyname,
                          bmic_object_t *ret)
 {
     return bmic_json_find_first_cond_int(json->obj, keyname, condition, ret);
+}
+
+
+/**
+ * A DFS-like search over the json object
+ * @param jobj
+ * @param keyname
+ * @param ret
+ */
+static void bmic_json_transform_int(const json_object *jobj, bmic_object_t *parent)
+{
+    enum json_type type;
+
+    json_object_object_foreach((json_object *) jobj, key, val)
+    {
+        type = json_object_get_type(val);
+
+        bmic_object_t *child = bmic_object_new(key, NULL);
+        switch (type) {
+        case json_type_object: {            
+            bmic_json_transform_int(val, child);
+            
+            break;
+        }
+        case json_type_array:
+
+            
+            for (int i = 0; i < json_object_array_length(val); i++) {
+                json_object *tmp = json_object_array_get_idx(val, i); 
+                                
+                bmic_object_t *element = bmic_object_new(key, NULL);
+                bmic_json_transform_int(tmp, element);
+                bmic_object_add_list_element(child, element);
+            }
+            
+
+            break;
+        case json_type_null:
+            bmic_object_set_null(parent);
+            
+            break;
+        case json_type_string:
+            bmic_object_set_string(child, json_object_get_string(val));
+            
+            break;
+        case json_type_int:
+            bmic_object_set_integer(child, json_object_get_int(val));
+            
+
+            break;
+        case json_type_boolean:
+            bmic_object_set_boolean(child, json_object_get_boolean(val));
+
+
+            break;
+        case json_type_double:
+            bmic_object_set_double(child, json_object_get_double(val));
+
+            break;
+        default:
+            break;
+        }
+        bmic_object_add_object(parent, child);
+    }
+}
+
+void bmic_json_transform(const bmic_json_t *jobj, bmic_object_t *ret) {
+    return bmic_json_transform_int(jobj->obj, ret);
+
 }
