@@ -50,10 +50,11 @@ typedef union bmic_value_t_ {
 
 typedef struct bmic_object_t_ {
     bmic_value_type_t type;
+    char *name;
     bmic_value_t data;
 } bmic_object_t;
 
-bmic_object_t *bmic_object_new(gru_status_t *status);
+bmic_object_t *bmic_object_new(const char *name, gru_status_t *status);
 void bmic_object_destroy(bmic_object_t **ptr);
 
 void bmic_object_set_string(bmic_object_t *obj, const char *value);
@@ -61,6 +62,8 @@ void bmic_object_set_integer(bmic_object_t *obj, int64_t value);
 void bmic_object_set_boolean(bmic_object_t *obj, bool value);
 void bmic_object_set_double(bmic_object_t *obj, double value);
 void bmic_object_set_null(bmic_object_t *obj);
+
+// void bmic_object_add_object()
 
 
 #ifdef __cplusplus
