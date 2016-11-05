@@ -68,6 +68,12 @@ void bmic_object_set_null(bmic_object_t *obj);
 void bmic_object_add_list_element(bmic_object_t *parent, bmic_object_t *element);
 void bmic_object_add_object(bmic_object_t *parent, bmic_object_t *child);
 
+const bmic_object_t *bmic_object_find_by_name(const bmic_object_t *parent, 
+        const char *name);
+
+// DEBUG
+void bmic_object_print(const bmic_object_t *parent);
+
 
 #ifdef __cplusplus
 }

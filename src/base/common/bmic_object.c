@@ -44,26 +44,27 @@ void bmic_object_destroy(bmic_object_t **ptr)
             free(obj->data.str);
         }
     }
-    
+
     if (obj->type == OBJECT) {
         // free all from obj->type.
         // obj->data.object
     }
-    
+
     if (obj->type == LIST) {
         // free all list elements
     }
 
     free(obj->name);
-    gru_dealloc((bmic_object_t **) ptr);
+    gru_dealloc((void **) ptr);
 }
 
-bool bmic_object_set_name(bmic_object_t *obj, const char *name) {
+bool bmic_object_set_name(bmic_object_t *obj, const char *name)
+{
     int rc = asprintf(&obj->name, "%s", name);
     if (rc == -1) {
         return false;
     }
-    
+
     return true;
 }
 
@@ -97,11 +98,12 @@ void bmic_object_set_null(bmic_object_t *obj)
     obj->data.str = NULL;
 }
 
-void bmic_object_add_list_element(bmic_object_t *parent, bmic_object_t *element) {
-    parent->type = LIST; 
-    
+void bmic_object_add_list_element(bmic_object_t *parent, bmic_object_t *element)
+{
+    parent->type = LIST;
+
     if (!parent->data.list) {
-        parent->data.list = gru_list_new(NULL); 
+        parent->data.list = gru_list_new(NULL);
         if (!parent->data.list) {
             fprintf(stderr, "Unable to create a new list storage for the element");
 
@@ -116,6 +118,8 @@ void bmic_object_add_object(bmic_object_t *parent, bmic_object_t *child)
 {
     parent->type = OBJECT;
 
+    printf("Adding %s to %s\n", child->name, parent->name);
+
     if (!parent->data.object) {
         parent->data.object = gru_tree_new(child);
         if (!parent->data.object) {
@@ -129,7 +133,101 @@ void bmic_object_add_object(bmic_object_t *parent, bmic_object_t *child)
     }
 }
 
-static void print(const void *obj1, const void *d2)
+static bool bmic_compare_list(const void *nodedata, const void *data, void *r)
+{
+    const bmic_object_t *nodeojb = (bmic_object_t *) nodedata;
+
+    const bmic_object_t *f = bmic_object_find_by_name(nodeojb, (const char *) data);
+    
+    if (f != NULL) {
+        return true;
+    }
+    
+    return false;
+}
+
+const bmic_object_t *bmic_object_find_by_name(const bmic_object_t *parent, const char *name)
+{
+    if (!parent) {
+        return NULL;
+    }
+
+    switch (parent->type) {
+    case DOUBLE:
+    case BOOLEAN:
+    case INTEGER:
+    case STRING:
+    case NULL_TYPE:
+    {
+        printf("Comparing %s with %s\n",
+               (parent->name == NULL ? "(null)" : parent->name), name);
+
+        if (parent->name == NULL) {
+            if (name == NULL) {
+                return parent;
+            }
+
+            return NULL;
+        }
+
+        if (strcmp(parent->name, name) == 0) {
+            return parent;
+        }
+
+        break;
+    }
+    case LIST:
+    {
+
+        printf("(L) Comparing %s with %s\n",
+               (parent->name == NULL ? "(null)" : parent->name), name);
+        
+        if (parent->name != NULL) {
+            if (strcmp(parent->name, name) == 0) {
+                return parent;
+            }
+        }
+
+        
+        return gru_list_get_item(parent->data.list, bmic_compare_list, name);
+    }
+    case OBJECT:
+    {
+
+        printf("(O) Comparing %s with %s\n",
+               (parent->name == NULL ? "(null)" : parent->name), name);
+
+        if (parent->name != NULL) {
+            if (strcmp(parent->name, name) == 0) {
+                return parent;
+            }
+        }
+
+        const gru_tree_node_t *tn = gru_tree_search(parent->data.object,
+                                                    bmic_compare_list, name);
+
+        if (tn) {
+            return (const bmic_object_t *) tn->data;
+        }
+        
+
+        break;
+    }
+    default:
+    {
+        return NULL;
+    }
+    }
+
+    return NULL;
+
+}
+
+/*****
+ * DEBUG STUFF 
+ */
+
+static void print(const void *obj1, void *d2)
 {
     bmic_object_t *obj = (bmic_object_t *) obj1;
 
@@ -137,10 +235,8 @@ static void print(const void *obj1, const void *d2)
     bmic_object_print(obj);
 }
 
-void bmic_object_print(bmic_object_t *parent)
+void bmic_object_print(const bmic_object_t *parent)
 {
-    gru_tree_node_t *tree = parent->data.object;
-
     switch (parent->type) {
     case STRING:
     {
@@ -149,7 +245,7 @@ void bmic_object_print(bmic_object_t *parent)
     }
     case INTEGER:
     {
-        printf("%s (int): %ld\n", parent->name, parent->data.number);
+        printf("%s (int): %i\n", parent->name, parent->data.number);
         break;
     }
     case BOOLEAN:
@@ -157,12 +253,17 @@ void bmic_object_print(bmic_object_t *parent)
         printf("Bool: %s\n", (parent->data.value ? "true" : "false"));
         break;
     }
+    case DOUBLE:
+    {
+        printf("Double: %.4f\n", parent->data.d);
+        break;
+    }
     case LIST:
     {
         printf("############################## List Begin ##############################\n");
         gru_list_for_each(parent->data.list, print, NULL);
         printf("############################## List End ##############################\n");
-        
+
         break;
     }
     case OBJECT:
@@ -182,3 +283,5 @@ void bmic_object_print(bmic_object_t *parent)
     }
 
 }
+
+
