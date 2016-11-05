@@ -15,12 +15,20 @@
  */
 #include "bmic_object.h"
 
-bmic_object_t *bmic_object_new(gru_status_t *status)
+bmic_object_t *bmic_object_new(const char *name, gru_status_t *status)
 {
     bmic_object_t *ret = gru_alloc(sizeof (bmic_object_t), status);
     gru_alloc_check(ret, NULL);
+    
+    assert(name != NULL);
 
     ret->type = NULL_TYPE;
+    int rc = asprintf(&ret->name, "%s", name);
+    if (rc == -1) {
+        bmic_object_destroy(&ret);
+        
+        return NULL;
+    }
 
     return ret;
 }
@@ -39,6 +47,7 @@ void bmic_object_destroy(bmic_object_t **ptr)
         }
     }
 
+    free(obj->name);
     gru_dealloc((bmic_object_t **) ptr);
 }
 
