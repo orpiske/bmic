@@ -29,7 +29,7 @@
 extern "C" {
 #endif
 
-typedef enum bmic_json_data_type_t_ {
+typedef enum bmic_value_type_t_ {
     INTEGER,
     STRING,
     BOOLEAN,
@@ -37,21 +37,21 @@ typedef enum bmic_json_data_type_t_ {
     NULL_TYPE,
     ARRAY,
     OBJECT,
-} bmic_json_data_type_t;
+} bmic_value_type_t;
 
-typedef union bmic_json_data_t_ {
+typedef union bmic_value_t_ {
     int64_t number;
     char *str;
     bool value;
     double d;
     gru_list_t *list;
     gru_tree_node_t *object;
-} bmic_json_data_t;
+} bmic_value_t;
 
-typedef struct bmic_json_value_t_ {
-    bmic_json_data_type_t type;
-    bmic_json_data_t data;
-} bmic_json_value_t;
+typedef struct bmic_object_t_ {
+    bmic_value_type_t type;
+    bmic_value_t data;
+} bmic_object_t;
 
 typedef struct bmic_json_t_ {
     json_object *obj;
@@ -63,10 +63,10 @@ bmic_json_t *bmic_json_init(const char *data, gru_status_t *status);
 void bmic_json_destroy(bmic_json_t **json);
 
 void bmic_json_find_first(const bmic_json_t *json, const char *keyname,
-                          bmic_json_value_t *ret);
+                          bmic_object_t *ret);
 void bmic_json_find_cond(const bmic_json_t *json, const char *keyname,
                          bmic_match_cond condition,
-                         bmic_json_value_t *ret);
+                         bmic_object_t *ret);
 
 #ifdef __cplusplus
 }

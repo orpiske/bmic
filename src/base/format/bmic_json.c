@@ -53,7 +53,7 @@ void bmic_json_destroy(bmic_json_t **json)
  * @param ret
  */
 static void bmic_json_find_first_cond_int(const json_object *jobj, const char *keyname,
-                                          bmic_match_cond condition, bmic_json_value_t *ret)
+                                          bmic_match_cond condition, bmic_object_t *ret)
 {
     enum json_type type;
 
@@ -128,21 +128,21 @@ static void bmic_json_find_first_cond_int(const json_object *jobj, const char *k
  * @param ret
  */
 static void bmic_json_find_first_int(const json_object *jobj, const char *keyname,
-                                     bmic_json_value_t *ret)
+                                     bmic_object_t *ret)
 {
     bmic_json_find_first_cond_int(jobj, keyname, strncmp, ret);
 
 }
 
 void bmic_json_find_first(const bmic_json_t *json, const char *keyname,
-                          bmic_json_value_t *ret)
+                          bmic_object_t *ret)
 {
     return bmic_json_find_first_int(json->obj, keyname, ret);
 }
 
 void bmic_json_find_cond(const bmic_json_t *json, const char *keyname,
                          bmic_match_cond condition,
-                         bmic_json_value_t *ret)
+                         bmic_object_t *ret)
 {
     return bmic_json_find_first_cond_int(json->obj, keyname, condition, ret);
 }

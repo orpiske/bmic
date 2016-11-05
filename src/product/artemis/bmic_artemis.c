@@ -82,7 +82,7 @@ bmic_product_info_t *bmic_artemis_product_info(bmic_handle_t *handle,
         return NULL;
     }
 
-    bmic_json_value_t value = {0};
+    bmic_object_t value = {0};
     bmic_api_io_find_value(&reply, &value, "value", status);
 
     if (value.type == STRING) {

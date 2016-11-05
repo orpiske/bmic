@@ -26,7 +26,7 @@ void bmic_api_io_read(bmic_handle_t *handle, const char *path,
 }
 
 void bmic_api_io_find_value(const bmic_data_t *reply, 
-                                     bmic_json_value_t *value, 
+                                     bmic_object_t *value, 
                                      const char *name,
                                      gru_status_t *status) {
     bmic_json_t *json = bmic_json_init(reply->data, status);
