@@ -15,10 +15,11 @@
  */
 #include "bmic_json.h"
 
-bmic_json_t *bmic_json_init(const char *data, gru_status_t *status) {
+bmic_json_t *bmic_json_init(const char *data, gru_status_t *status)
+{
     enum json_tokener_error jerr = json_tokener_success;
 
-    bmic_json_t *ret = gru_alloc(sizeof(bmic_json_t), status);
+    bmic_json_t *ret = gru_alloc(sizeof (bmic_json_t), status);
     gru_alloc_check(ret, NULL);
 
     json_object *json = json_tokener_parse_verbose(data, &jerr);
@@ -34,7 +35,8 @@ bmic_json_t *bmic_json_init(const char *data, gru_status_t *status) {
     return ret;
 }
 
-void bmic_json_destroy(bmic_json_t **json) {
+void bmic_json_destroy(bmic_json_t **json)
+{
     bmic_json_t *jobj = *json;
 
     if (jobj && jobj->obj) {
@@ -50,8 +52,8 @@ void bmic_json_destroy(bmic_json_t **json) {
  * @param keyname
  * @param ret
  */
-static void bmic_json_find_first_int(const json_object *jobj, const char *keyname,
-                          bmic_json_value_t *ret)
+static void bmic_json_find_first_cond_int(const json_object *jobj, const char *keyname,
+                                          bmic_match_cond condition, bmic_json_value_t *ret)
 {
     enum json_type type;
 
@@ -61,13 +63,15 @@ static void bmic_json_find_first_int(const json_object *jobj, const char *keynam
 
         switch (type) {
         case json_type_object:
-            bmic_json_find_first_int(val, keyname, ret);
+            bmic_json_find_first_cond_int(val, keyname, condition, ret);
+            ret->type = OBJECT; 
             break;
         case json_type_array:
+            ret->type = ARRAY;
             // TODO: implement arrays
             break;
         case json_type_null:
-            if (strcmp(key, keyname) == 0) {
+            if (condition(key, keyname) == 0) {
                 ret->type = NULL_TYPE;
                 ret->data.str = NULL;
 
@@ -76,7 +80,7 @@ static void bmic_json_find_first_int(const json_object *jobj, const char *keynam
 
             break;
         case json_type_string:
-            if (strcmp(key, keyname) == 0) {
+            if (condition(key, keyname) == 0) {
                 ret->type = STRING;
                 asprintf(&ret->data.str, "%s", json_object_get_string(val));
                 return;
@@ -84,7 +88,7 @@ static void bmic_json_find_first_int(const json_object *jobj, const char *keynam
 
             break;
         case json_type_int:
-            if (strcmp(key, keyname) == 0) {
+            if (condition(key, keyname) == 0) {
                 ret->type = INTEGER;
                 ret->data.number = json_object_get_int(val);
 
@@ -93,7 +97,7 @@ static void bmic_json_find_first_int(const json_object *jobj, const char *keynam
 
             break;
         case json_type_boolean:
-            if (strcmp(key, keyname) == 0) {
+            if (condition(key, keyname) == 0) {
                 ret->type = BOOLEAN;
                 ret->data.value = json_object_get_boolean(val);
 
@@ -102,7 +106,7 @@ static void bmic_json_find_first_int(const json_object *jobj, const char *keynam
 
             break;
         case json_type_double:
-            if (strcmp(key, keyname) == 0) {
+            if (condition(key, keyname) == 0) {
                 ret->type = DOUBLE;
                 ret->data.d = json_object_get_double(val);
 
@@ -117,9 +121,28 @@ static void bmic_json_find_first_int(const json_object *jobj, const char *keynam
     }
 }
 
+/**
+ * A DFS-like search over the json object
+ * @param jobj
+ * @param keyname
+ * @param ret
+ */
+static void bmic_json_find_first_int(const json_object *jobj, const char *keyname,
+                                     bmic_json_value_t *ret)
+{
+    bmic_json_find_first_cond_int(jobj, keyname, strncmp, ret);
+
+}
 
 void bmic_json_find_first(const bmic_json_t *json, const char *keyname,
                           bmic_json_value_t *ret)
 {
     return bmic_json_find_first_int(json->obj, keyname, ret);
+}
+
+void bmic_json_find_cond(const bmic_json_t *json, const char *keyname,
+                         bmic_match_cond condition,
+                         bmic_json_value_t *ret)
+{
+    return bmic_json_find_first_cond_int(json->obj, keyname, condition, ret);
 }

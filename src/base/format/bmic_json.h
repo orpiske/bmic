@@ -23,6 +23,7 @@
 #include <common/gru_alloc.h>
 #include <common/gru_status.h>
 #include <collection/gru_list.h>
+#include <collection/gru_tree.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -34,7 +35,8 @@ typedef enum bmic_json_data_type_t_ {
     BOOLEAN,
     DOUBLE,
     NULL_TYPE,
-    ARRAY
+    ARRAY,
+    OBJECT,
 } bmic_json_data_type_t;
 
 typedef union bmic_json_data_t_ {
@@ -43,6 +45,7 @@ typedef union bmic_json_data_t_ {
     bool value;
     double d;
     gru_list_t *list;
+    gru_tree_node_t *object;
 } bmic_json_data_t;
 
 typedef struct bmic_json_value_t_ {
@@ -54,11 +57,16 @@ typedef struct bmic_json_t_ {
     json_object *obj;
 } bmic_json_t;
 
+typedef int(*bmic_match_cond)(const char *keyname, const char *value);
+
 bmic_json_t *bmic_json_init(const char *data, gru_status_t *status);
 void bmic_json_destroy(bmic_json_t **json);
 
 void bmic_json_find_first(const bmic_json_t *json, const char *keyname,
                           bmic_json_value_t *ret);
+void bmic_json_find_cond(const bmic_json_t *json, const char *keyname,
+                         bmic_match_cond condition,
+                         bmic_json_value_t *ret);
 
 #ifdef __cplusplus
 }
