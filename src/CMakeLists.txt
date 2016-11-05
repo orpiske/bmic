@@ -9,6 +9,7 @@ include_directories(.)
 add_library(
 	bmic SHARED
         base/common/bmic_credentials.c
+        base/common/bmic_object.c
         base/transport/bmic_endpoint.c   
         base/transport/bmic_endpoint_http.c        
         base/transport/bmic_transport.c

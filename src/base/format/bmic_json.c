@@ -72,34 +72,29 @@ static void bmic_json_find_first_cond_int(const json_object *jobj, const char *k
             break;
         case json_type_null:
             if (condition(key, keyname) == 0) {
-                ret->type = NULL_TYPE;
-                ret->data.str = NULL;
-
+                bmic_object_set_null(ret);
                 return;
             }
 
             break;
         case json_type_string:
             if (condition(key, keyname) == 0) {
-                ret->type = STRING;
-                asprintf(&ret->data.str, "%s", json_object_get_string(val));
+                bmic_object_set_string(ret, json_object_get_string(val));
+                
                 return;
             }
 
             break;
         case json_type_int:
             if (condition(key, keyname) == 0) {
-                ret->type = INTEGER;
-                ret->data.number = json_object_get_int(val);
-
+                bmic_object_set_integer(ret, json_object_get_int(val));
                 return;
             }
 
             break;
         case json_type_boolean:
             if (condition(key, keyname) == 0) {
-                ret->type = BOOLEAN;
-                ret->data.value = json_object_get_boolean(val);
+                bmic_object_set_boolean(ret, json_object_get_boolean(val));
 
                 return;
             }
@@ -107,8 +102,7 @@ static void bmic_json_find_first_cond_int(const json_object *jobj, const char *k
             break;
         case json_type_double:
             if (condition(key, keyname) == 0) {
-                ret->type = DOUBLE;
-                ret->data.d = json_object_get_double(val);
+                bmic_object_set_double(ret, json_object_get_double(val));
 
                 return;
             }

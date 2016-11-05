@@ -22,36 +22,14 @@
 
 #include <common/gru_alloc.h>
 #include <common/gru_status.h>
-#include <collection/gru_list.h>
-#include <collection/gru_tree.h>
+
+
+#include "base/common/bmic_object.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef enum bmic_value_type_t_ {
-    INTEGER,
-    STRING,
-    BOOLEAN,
-    DOUBLE,
-    NULL_TYPE,
-    ARRAY,
-    OBJECT,
-} bmic_value_type_t;
-
-typedef union bmic_value_t_ {
-    int64_t number;
-    char *str;
-    bool value;
-    double d;
-    gru_list_t *list;
-    gru_tree_node_t *object;
-} bmic_value_t;
-
-typedef struct bmic_object_t_ {
-    bmic_value_type_t type;
-    bmic_value_t data;
-} bmic_object_t;
 
 typedef struct bmic_json_t_ {
     json_object *obj;
