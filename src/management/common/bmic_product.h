@@ -36,8 +36,8 @@ typedef struct bmic_product_info_t_ {
 
 
 typedef struct bmic_product_cap_t_ {
-    bmic_object_t *root;
-    bmic_object_t *capabilities;
+    const bmic_object_t *root;
+    const bmic_object_t *capabilities;
 } bmic_product_cap_t;
 
 typedef const char *(*bmic_management_url_fn)(const bmic_discovery_hint_t *hint);
@@ -49,7 +49,10 @@ typedef void(*bmic_management_api_cleanup_fn)(bmic_handle_t **handle);
 
 typedef bmic_product_info_t *(*bmic_management_api_info_fn)(bmic_handle_t *handle,
         gru_status_t *status);
-typedef bmic_product_cap_t *(*bmic_management_api_cap_fn)(bmic_handle_t *handle, 
+typedef const bmic_product_cap_t *(*bmic_management_api_cap_fn)(bmic_handle_t *handle, 
+        gru_status_t *status);
+typedef const bmic_object_t *(*bmic_management_api_cap_read_fn)(bmic_handle_t *handle,
+        const bmic_product_cap_t *capabilities, const char *name,
         gru_status_t *status);
 
 
@@ -63,6 +66,7 @@ typedef struct bmic_api_interface_t_ {
     
     bmic_management_api_info_fn product_info;
     bmic_management_api_cap_fn capabilities;
+    bmic_management_api_cap_read_fn cap_read;
 
 } bmic_api_interface_t;
 
