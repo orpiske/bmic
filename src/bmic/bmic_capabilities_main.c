@@ -21,8 +21,16 @@ typedef struct options_t_
     char password[OPT_MAX_STR_SIZE];
     char server[OPT_MAX_STR_SIZE];
     bool list;
+    bool readall;
     char read[OPT_MAX_STR_SIZE];
 } options_t;
+
+typedef struct cap_read_wrapper_t_ {
+    bmic_handle_t *handle; 
+    bmic_api_interface_t *api;
+    const bmic_product_cap_t *cap;
+    gru_status_t *status;
+} cap_read_wrapper_t;
 
 static void print_cap(const void *nodedata, void *payload)
 {
@@ -41,36 +49,36 @@ static void show_help()
     printf("\t-r\t--read=<str> read a capability/attribute from the server\n");
 }
 
-static void print_returned_object(const options_t *options, const bmic_object_t *obj)
+static void print_returned_object(const char *capname, const bmic_object_t *obj)
 {
     switch (obj->type) {
     case STRING:
     {
-        printf("The value for capability %s is: %s\n", options->read,
+        printf("The value for capability %s is: %s\n", capname,
                obj->data.str);
         break;
     }
     case INTEGER:
     {
-        printf("The value for capability %s is: %i\n", options->read,
+        printf("The value for capability %s is: %i\n", capname,
                obj->data.number);
         break;
     }
     case BOOLEAN:
     {
-        printf("The value for capability %s is: %s\n", options->read,
+        printf("The value for capability %s is: %s\n", capname,
                (obj->data.value ? "true" : "false"));
         break;
     }
     case DOUBLE:
     {
-        printf("The value for capability %s is: %.4f\n", options->read,
+        printf("The value for capability %s is: %.4f\n", capname,
                obj->data.d);
         break;
     }
     case NULL_TYPE:
     {
-        printf("The value for capability %s is: (null)\n", options->read);
+        printf("The value for capability %s is: (null)\n", capname);
         break;
     }
     case LIST:
@@ -81,6 +89,33 @@ static void print_returned_object(const options_t *options, const bmic_object_t 
         break;
     }
     }
+}
+
+void capabilities_do_read(bmic_handle_t *handle, 
+                       bmic_api_interface_t *api, const bmic_product_cap_t *cap, 
+                        const char *capname, gru_status_t *status)
+{
+    const bmic_object_t *obj = api->cap_read(handle, cap, capname,
+                                             status);
+
+    if (obj) {
+        print_returned_object(capname, obj);
+    }
+    else {
+        printf("Unable to read the capability %s (wrong cap, maybe?)\n",
+               capname);
+    }
+}
+
+static void capabilities_read(const void *nodedata, void *payload)
+{
+    const char *capname = (const char *) nodedata;
+    cap_read_wrapper_t *wrapper = (cap_read_wrapper_t *) payload;
+    
+    capabilities_do_read(wrapper->handle, wrapper->api, wrapper->cap, 
+                      capname, wrapper->status);
+    sleep(1);
+    
 }
 
 int capabilities_run(options_t *options)
@@ -143,15 +178,32 @@ int capabilities_run(options_t *options)
         }
     }
     else {
-        const bmic_object_t *obj = api->cap_read(handle, cap, options->read,
-                                                 &status);
+        if (options->readall) {
+            const gru_list_t *list = api->cap_all(handle, cap, &status);
 
-        if (obj) {
-            print_returned_object(options, obj);
+            if (list) {
+                printf("The following capabilities are available for the product:\n");
+                cap_read_wrapper_t wrapper; 
+                
+                wrapper.api = api;
+                wrapper.cap = cap;
+                wrapper.handle = handle;
+                wrapper.status = &status;
+                
+                gru_list_for_each(list, capabilities_read, &wrapper);
+            }
         }
         else {
-            printf("Unable to read the capability %s (wrong cap, maybe?)\n",
-                   options->read);
+            const bmic_object_t *obj = api->cap_read(handle, cap, options->read,
+                                                     &status);
+
+            if (obj) {
+                print_returned_object(options->read, obj);
+            }
+            else {
+                printf("Unable to read the capability %s (wrong cap, maybe?)\n",
+                       options->read);
+            }
         }
     }
 
@@ -172,6 +224,7 @@ int capabilities_main(int argc, char **argv)
     options_t options = {0};
 
     options.list = false;
+    options.readall = false;
 
     if (argc < 2) {
         show_help();
@@ -188,6 +241,7 @@ int capabilities_main(int argc, char **argv)
             { "server", true, 0, 's'},
             { "list", false, 0, 'l'},
             { "read", true, 0, 'r'},
+            { "read-all", false, 0, 'R'},
             { 0, 0, 0, 0}
         };
 
@@ -216,6 +270,9 @@ int capabilities_main(int argc, char **argv)
         case 'r':
             strncpy(options.read, optarg, sizeof (options.read) - 1);
             break;
+        case 'R':
+            options.readall = true;
+            break;
         case 'h':
             show_help();
             return EXIT_SUCCESS;
@@ -226,7 +283,7 @@ int capabilities_main(int argc, char **argv)
         }
     }
 
-    if (options.list == false && strlen(options.read) == 0) {
+    if (options.list == false && strlen(options.read) == 0 && options.readall == false) {
         fprintf(stderr, "Either -l (--list) or -r (--read) must be used\n");
 
         return EXIT_FAILURE;
