@@ -114,7 +114,6 @@ static void capabilities_read(const void *nodedata, void *payload)
     
     capabilities_do_read(wrapper->handle, wrapper->api, wrapper->cap, 
                       capname, wrapper->status);
-    sleep(1);
     
 }
 
