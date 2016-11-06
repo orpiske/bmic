@@ -59,6 +59,12 @@ bmic_object_t *bmic_object_new_root(gru_status_t *status)
     return ret;
 }
 
+static void bmic_object_destroy_element(const void *nodedata, void *data) {
+    bmic_object_t *obj = (bmic_object_t *) nodedata;
+
+    bmic_object_destroy(&obj);
+}
+
 void bmic_object_destroy(bmic_object_t **ptr)
 {
     bmic_object_t *obj = *ptr;
@@ -73,15 +79,22 @@ void bmic_object_destroy(bmic_object_t **ptr)
         }
     }
 
-    if (obj->type == OBJECT) {
-        // free all from obj->type.
-        // obj->data.object
-    }
-
     if (obj->type == LIST) {
-        // free all list elements
+        gru_list_for_each(obj->data.list, bmic_object_destroy_element, NULL);
+        
+        gru_list_destroy(&obj->data.list);
+    }
+    
+    if (obj->type == OBJECT) {
+        // ROOT element
+        if (obj->name == NULL) {
+            gru_tree_for_each(obj->self, bmic_object_destroy_element, NULL);
+            
+            gru_tree_destroy(&obj->self);
+        }
     }
 
+    obj->self = NULL;
     free(obj->name);
     gru_dealloc((void **) ptr);
 }
