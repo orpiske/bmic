@@ -199,9 +199,9 @@ void bmic_object_add_object(bmic_object_t *parent,
     bmic_object_set_path(child, "%s/%s", parent->path, child->name);
 }
 
-static bool bmic_compare_list(const void *nodedata, const void *data, void *r)
+static bool bmic_compare_name(const void *nodedata, const void *data, void *r)
 {
-    const bmic_object_t *nodeojb = (bmic_object_t *) nodedata;
+    const bmic_object_t *nodeobj = (bmic_object_t *) nodedata;
     
     if (nodedata == NULL) {
         if (data == NULL) {
@@ -211,8 +211,8 @@ static bool bmic_compare_list(const void *nodedata, const void *data, void *r)
         return false;
     }
     
-    if (nodeojb->name != NULL) {
-        if (strcmp(nodeojb->name, (const char *) data) == 0) {
+    if (nodeobj->name != NULL) {
+        if (strcmp(nodeobj->name, (const char *) data) == 0) {
             return true;
         }
     }
@@ -224,7 +224,7 @@ static bool bmic_compare_list(const void *nodedata, const void *data, void *r)
 const bmic_object_t *bmic_object_find_by_name(const bmic_object_t *parent, const char *name)
 {
     const gru_tree_node_t *tn = gru_tree_search(parent->self,
-                                                bmic_compare_list, name);
+                                                bmic_compare_name, name);
 
     if (tn) {
         return (const bmic_object_t *) tn->data;
@@ -233,6 +233,59 @@ const bmic_object_t *bmic_object_find_by_name(const bmic_object_t *parent, const
 
     return NULL;
 
+}
+
+static bool bmic_compare_path(const void *nodedata, const void *data, void *r)
+{
+    const bmic_object_t *nodeobj = (bmic_object_t *) nodedata;
+    
+    if (nodedata == NULL) {
+        if (data == NULL) {
+            return true;
+        }
+        
+        return false;
+    }
+    
+    if (nodeobj->path != NULL) {
+        if (strcmp(nodeobj->path, (const char *) data) == 0) {
+            return true;
+        }
+    }
+    
+    return false;
+
+}
+
+
+const bmic_object_t *bmic_object_find_by_path(const bmic_object_t *parent, 
+                                              const char *path)
+{
+    const gru_tree_node_t *tn = gru_tree_search(parent->self,
+                                                bmic_compare_path, path);
+
+    if (tn) {
+        return (const bmic_object_t *) tn->data;
+    }
+
+
+    return NULL;
+}
+
+
+const bmic_object_t *bmic_object_find(const bmic_object_t *parent, 
+                                compare_function_t compare,
+                                              void *data)
+{
+    const gru_tree_node_t *tn = gru_tree_search(parent->self,
+                                                compare, data);
+
+    if (tn) {
+        return (const bmic_object_t *) tn->data;
+    }
+
+
+    return NULL;
 }
 
 /*****

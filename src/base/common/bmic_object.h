@@ -73,11 +73,22 @@ void bmic_object_set_boolean(bmic_object_t *obj, bool value);
 void bmic_object_set_double(bmic_object_t *obj, double value);
 void bmic_object_set_null(bmic_object_t *obj);
 
+
+// Hierarchy manipulation
 void bmic_object_add_list_element(bmic_object_t *parent, bmic_object_t *element);
+void bmic_object_add_object(bmic_object_t *parent, bmic_object_t *child);
+
+// Path searching
+
 const bmic_object_t *bmic_object_find_by_name(const bmic_object_t *parent, 
         const char *name);
+const bmic_object_t *bmic_object_find_by_path(const bmic_object_t *parent, 
+                                              const char *path);
+const bmic_object_t *bmic_object_find(const bmic_object_t *parent, 
+                                compare_function_t compare,
+                                              void *data);
 
-void bmic_object_add_object(bmic_object_t *parent, bmic_object_t *child);
+
 
 // DEBUG
 void bmic_object_print(const bmic_object_t *parent);
