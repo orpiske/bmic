@@ -20,7 +20,7 @@
 #define ACTIVEMQ_BASE_URL_HINT_URL "%s/api/jolokia"
 #define ACTIVEMQ_BASE_URL_HINT_ADDRESSING "http://%s:%i/api/jolokia"
 #define ACTIVEMQ_PRODUCT_INFO_PATH "read/org.apache.activemq:brokerName=localhost,type=Broker/BrokerVersion"
-
+#define ACTIVEMQ_PRODUCT_CAPABILITIES "list/org.apache.activemq"
 
 
 
