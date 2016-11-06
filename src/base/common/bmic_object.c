@@ -15,16 +15,15 @@
  */
 #include "bmic_object.h"
 
-
 bmic_object_t *bmic_object_new(const char *name, gru_status_t *status)
 {
     bmic_object_t *ret = NULL;
 
     if (name == NULL) {
-        gru_status_set(status, GRU_FAILURE, 
+        gru_status_set(status, GRU_FAILURE,
                        "A child object must not have a null name");
     }
-    
+
     ret = gru_alloc(sizeof (bmic_object_t), status);
     gru_alloc_check(ret, NULL);
 
@@ -46,30 +45,79 @@ bmic_object_t *bmic_object_new_root(gru_status_t *status)
     ret->type = NULL_TYPE;
     if (!bmic_object_set_name(ret, NULL)) {
         gru_status_set(status, GRU_FAILURE, "Unable to set the root object name");
-        
+
         bmic_object_destroy(&ret);
         return NULL;
     }
-    
+
     if (!bmic_object_set_path(ret, "")) {
         gru_status_set(status, GRU_FAILURE, "Unable to set the root object path");
-        
+
         bmic_object_destroy(&ret);
         return NULL;
     }
-    
+
     ret->self = gru_tree_new(NULL);
     if (!ret) {
         bmic_object_destroy(&ret);
-        
+
         return NULL;
     }
-    
+
 
     return ret;
 }
 
-static void bmic_object_destroy_element(const void *nodedata, void *data) {
+bmic_object_t *bmic_object_clone(const bmic_object_t *other, gru_status_t *status)
+{
+    bmic_object_t *ret = bmic_object_new_root(status);
+
+    if (!ret) {
+        return NULL;
+    }
+
+    switch (other->type) {
+    case STRING:
+    {
+        bmic_object_set_string(ret, other->data.str);
+        break;
+    }
+    case INTEGER:
+    {
+        bmic_object_set_integer(ret, other->data.number);
+        break;
+    }
+    case BOOLEAN:
+    {
+        bmic_object_set_boolean(ret, other->data.value);
+        break;
+    }
+    case DOUBLE:
+    {
+        bmic_object_set_double(ret, other->data.d);
+        break;
+    }
+    case NULL_TYPE:
+    {
+        bmic_object_set_null(ret);
+        break;
+    }
+    case LIST:
+    case OBJECT:
+    default:
+    {
+        gru_status_set(status, GRU_FAILURE,
+                       "Cloning complex objects is not supported");
+        bmic_object_destroy(&ret);
+        return NULL;
+    }
+    }
+    
+    return ret;
+}
+
+static void bmic_object_destroy_element(const void *nodedata, void *data)
+{
     bmic_object_t *obj = (bmic_object_t *) nodedata;
 
     bmic_object_destroy(&obj);
@@ -91,15 +139,15 @@ void bmic_object_destroy(bmic_object_t **ptr)
 
     if (obj->type == LIST) {
         gru_list_for_each(obj->data.list, bmic_object_destroy_element, NULL);
-        
+
         gru_list_destroy(&obj->data.list);
     }
-    
+
     if (obj->type == OBJECT) {
         // ROOT element
         if (obj->name == NULL) {
             gru_tree_for_each(obj->self, bmic_object_destroy_element, NULL);
-            
+
             gru_tree_destroy(&obj->self);
         }
     }
@@ -123,17 +171,16 @@ bool bmic_object_set_path(bmic_object_t *obj, const char *path, ...)
 {
     va_list ap;
     va_start(ap, path);
-    
+
     int rc = vasprintf(&obj->path, path, ap);
     va_end(ap);
-    
+
     if (rc == -1) {
         return false;
     }
 
     return true;
 }
-
 
 void bmic_object_set_string(bmic_object_t *obj, const char *value)
 {
@@ -180,43 +227,43 @@ void bmic_object_add_list_element(bmic_object_t *parent, bmic_object_t *element)
 
     size_t pos = gru_list_count(parent->data.list);
     gru_list_append(parent->data.list, element);
-    
+
     bmic_object_set_path(element, "%s/%s[%i]", parent->path, element->name, pos);
 }
 
-void bmic_object_add_object(bmic_object_t *parent, 
-                              bmic_object_t *child)
+void bmic_object_add_object(bmic_object_t *parent,
+                            bmic_object_t *child)
 {
     parent->type = OBJECT;
-    
+
     child->self = gru_tree_add_child(parent->self, child);
     if (!child->self) {
         fprintf(stderr, "Unable to create a new tree storage for the child object");
 
         return;
     }
-    
+
     bmic_object_set_path(child, "%s/%s", parent->path, child->name);
 }
 
 static bool bmic_compare_name(const void *nodedata, const void *data, void *r)
 {
     const bmic_object_t *nodeobj = (bmic_object_t *) nodedata;
-    
+
     if (nodedata == NULL) {
         if (data == NULL) {
             return true;
         }
-        
+
         return false;
     }
-    
+
     if (nodeobj->name != NULL) {
         if (strcmp(nodeobj->name, (const char *) data) == 0) {
             return true;
         }
     }
-    
+
     return false;
 
 }
@@ -238,27 +285,26 @@ const bmic_object_t *bmic_object_find_by_name(const bmic_object_t *parent, const
 static bool bmic_compare_path(const void *nodedata, const void *data, void *r)
 {
     const bmic_object_t *nodeobj = (bmic_object_t *) nodedata;
-    
+
     if (nodedata == NULL) {
         if (data == NULL) {
             return true;
         }
-        
+
         return false;
     }
-    
+
     if (nodeobj->path != NULL) {
         if (strcmp(nodeobj->path, (const char *) data) == 0) {
             return true;
         }
     }
-    
+
     return false;
 
 }
 
-
-const bmic_object_t *bmic_object_find_by_path(const bmic_object_t *parent, 
+const bmic_object_t *bmic_object_find_by_path(const bmic_object_t *parent,
                                               const char *path)
 {
     const gru_tree_node_t *tn = gru_tree_search(parent->self,
@@ -272,10 +318,9 @@ const bmic_object_t *bmic_object_find_by_path(const bmic_object_t *parent,
     return NULL;
 }
 
-
-const bmic_object_t *bmic_object_find(const bmic_object_t *parent, 
-                                compare_function_t compare,
-                                              void *data)
+const bmic_object_t *bmic_object_find(const bmic_object_t *parent,
+                                      compare_function_t compare,
+                                      void *data)
 {
     const gru_tree_node_t *tn = gru_tree_search(parent->self,
                                                 compare, data);
@@ -295,13 +340,13 @@ const bmic_object_t *bmic_object_find(const bmic_object_t *parent,
 static void print(const void *obj1, void *d2)
 {
     const bmic_object_t *nodeojb = (bmic_object_t *) obj1;
-    
+
     if (nodeojb == NULL) {
         return;
     }
-    
+
     printf("Path: %s\n", nodeojb->path);
-    
+
     switch (nodeojb->type) {
     case STRING:
     {
@@ -315,7 +360,7 @@ static void print(const void *obj1, void *d2)
     }
     case BOOLEAN:
     {
-        printf("%s (bool): %s\n", nodeojb->name, 
+        printf("%s (bool): %s\n", nodeojb->name,
                (nodeojb->data.value ? "true" : "false"));
         break;
     }
@@ -336,7 +381,7 @@ static void print(const void *obj1, void *d2)
                 printf("Object: %s\n", nodeojb->name);
             }
         }
-        
+
         break;
     }
     case NULL_TYPE:
@@ -353,7 +398,7 @@ void bmic_object_print(const bmic_object_t *parent)
 {
 
     gru_tree_for_each(parent->self, print, NULL);
-    
+
 }
 
 

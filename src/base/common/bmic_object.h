@@ -61,6 +61,7 @@ typedef struct bmic_object_t_ {
 
 bmic_object_t *bmic_object_new(const char *name, gru_status_t *status);
 bmic_object_t *bmic_object_new_root(gru_status_t *status);
+bmic_object_t *bmic_object_clone(const bmic_object_t *other, gru_status_t *status);
 
 void bmic_object_destroy(bmic_object_t **ptr);
 
