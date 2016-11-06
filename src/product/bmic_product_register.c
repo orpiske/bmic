@@ -37,8 +37,8 @@ void bmic_product_register(gru_status_t *status) {
     }
 }
 
-static void bmic_product_unregister_ex(const gru_node_t *node, void *data) {
-    bmic_api_interface_t *product = gru_node_get_data_ptr(bmic_api_interface_t, node);
+static void bmic_product_unregister_ex(const void *nodedata, void *data) {
+    bmic_api_interface_t *product = (bmic_api_interface_t *) nodedata;
 
     // printf("Unregistering: %s\n", product->name);
     bmic_api_interface_destroy(&product);
