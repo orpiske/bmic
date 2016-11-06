@@ -40,12 +40,6 @@ typedef int(*bmic_match_cond)(const char *keyname, const char *value);
 bmic_json_t *bmic_json_init(const char *data, gru_status_t *status);
 void bmic_json_destroy(bmic_json_t **json);
 
-void bmic_json_find_first(const bmic_json_t *json, const char *keyname,
-                          bmic_object_t *ret);
-void bmic_json_find_cond(const bmic_json_t *json, const char *keyname,
-                         bmic_match_cond condition,
-                         bmic_object_t *ret);
-
 void bmic_json_transform(const bmic_json_t *jobj, bmic_object_t *ret);
 
 #ifdef __cplusplus
