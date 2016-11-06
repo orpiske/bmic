@@ -45,12 +45,15 @@ typedef union bmic_value_t_ {
     bool value;
     double d;
     gru_list_t *list;
-    gru_tree_node_t *object;
 } bmic_value_t;
 
 typedef struct bmic_object_t_ {
     bmic_value_type_t type;
     char *name;
+    /**
+     * A pointer to their position within the document tree
+     */
+    gru_tree_node_t *self;
     bmic_value_t data;
 } bmic_object_t;
 
@@ -66,10 +69,10 @@ void bmic_object_set_double(bmic_object_t *obj, double value);
 void bmic_object_set_null(bmic_object_t *obj);
 
 void bmic_object_add_list_element(bmic_object_t *parent, bmic_object_t *element);
-void bmic_object_add_object(bmic_object_t *parent, bmic_object_t *child);
-
 const bmic_object_t *bmic_object_find_by_name(const bmic_object_t *parent, 
         const char *name);
+
+void bmic_object_add_object(bmic_object_t *parent, bmic_object_t *child);
 
 // DEBUG
 void bmic_object_print(const bmic_object_t *parent);
