@@ -18,92 +18,33 @@
 
 #include <common/gru_status.h>
 
-#include <json-c/json.h>
-
-#include "base/transport/bmic_endpoint.h"
-#include "base/transport/bmic_endpoint_http.h"
-#include "base/format/bmic_json.h"
+#include "bmic_capabilities_main.h"
+#include "bmic_discovery_main.h"
 
 
-#include "management/common/bmic_product.h"
-#include "management/common/bmic_discovery_hint.h"
-#include "management/discovery/bmic_discovery.h"
-#include "product/bmic_product_register.h"
-
-#include "base/common/bmic_regex.h"
-
-void print_cap(const void *nodedata, void *payload)
-{
-     const char *cap = (const char *) nodedata;
-     printf("Capabilities: %s\n", cap);
+void show_help() {
+    printf("Usage: \n");
+    printf("\t\tdiscovery\tRun a discovery on the broker to find its type and version\n");
+    printf("\t\tcapabilities\tRead/write/list broker capabilities and attributes\n");
 }
-
 int main(int argc, char** argv)
 {
-    gru_status_t status = {0};
     
-    bmic_discovery_hint_t *hint = NULL; 
-    bmic_credentials_t *credentials = NULL;
-    
-    bmic_product_registry_init(&status);
-    
-    bmic_product_register(&status);
-    
-    
-    credentials = bmic_credentials_init((char *) argv[1], (char *) argv[2], 
-                                        &status); 
-             
-    hint = bmic_discovery_hint_eval_addressing(argv[3], BMIC_PORT_UNKNOWN, 
-                                               &status);
-    
-    bmic_handle_t *handle = NULL;
-    bmic_api_interface_t *api = bmic_discovery_run(hint, credentials, &handle, 
-                                                 &status);
-    
-    if (api != NULL) { 
-        fprintf(stderr, "Product name is %s\n", api->name);
-        fprintf(stderr, "API version is %s\n", api->version);
+     if (argc < 2) {
+        show_help();
         
-        bmic_product_info_t *info = api->product_info(handle, &status);
-        if (info) { 
-            if (status.code == GRU_SUCCESS) {
-                fprintf(stderr, "Product version is %s\n", info->version);
-            }
-        
-            gru_dealloc((void **)&info);
-        }
-    }
-    
-    const bmic_product_cap_t *cap = api->capabilities(handle, &status);
-    if (!cap) {
-        fprintf(stderr, "Unable to read capabilities: %s\n", status.message);
+        return EXIT_FAILURE;
     }
     else {
-        const bmic_object_t *version = api->cap_read(handle, cap, "BrokerVersion", &status);
-        
-        if (version) {
-            printf("Version (from cap): %s\n", version->data.str);
-        }
-        else {
-            printf("Unable to find the version (wrong cap, maybe?)\n");
+        if (strcmp(argv[1], "capabilities") == 0) {
+            return capabilities_main((argc - 1), &argv[1]);
         }
         
-        gru_list_t *list = api->cap_all(handle, cap, &status);
-        
-        if (list) {
-            printf("The following capabilities are available for the product:\n");
-            gru_list_for_each(list, print_cap, NULL);
+        if (strcmp(argv[1], "discovery") == 0) {
+            return discovery_main((argc - 1), &argv[1]);
         }
     }
     
-    
-
-    api->api_cleanup(&handle);
-    bmic_product_unregister();
-    bmic_product_registry_destroy();
-    bmic_discovery_hint_destroy(&hint);
-    bmic_credentials_detroy(&credentials);
-    
-    return (EXIT_SUCCESS);
+    return EXIT_SUCCESS;
 }
 
