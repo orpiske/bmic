@@ -19,6 +19,8 @@
 #include <common/gru_status.h>
 #include <collection/gru_list.h>
 
+#include "base/common/bmic_object.h"
+
 #include "bmic_handle.h"
 #include "bmic_discovery_hint.h"
 
@@ -31,8 +33,11 @@ typedef struct bmic_product_info_t_ {
     char version[16];
 } bmic_product_info_t;
 
+
+
 typedef struct bmic_product_cap_t_ {
-    gru_list_t *capabilities;
+    bmic_object_t *root;
+    bmic_object_t *capabilities;
 } bmic_product_cap_t;
 
 typedef const char *(*bmic_management_url_fn)(const bmic_discovery_hint_t *hint);

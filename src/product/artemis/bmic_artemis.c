@@ -16,8 +16,8 @@
 #include "bmic_artemis.h"
 #include "base/format/bmic_json.h"
 
-
-bmic_api_interface_t *bmic_artemis_product(gru_status_t *status) {
+bmic_api_interface_t *bmic_artemis_product(gru_status_t *status)
+{
     bmic_api_interface_t *ret = bmic_api_interface_new("artemis", "1.x.x", status);
 
     ret->base_url = bmic_artemis_base_url;
@@ -29,7 +29,8 @@ bmic_api_interface_t *bmic_artemis_product(gru_status_t *status) {
     return ret;
 }
 
-const char *bmic_artemis_base_url(const bmic_discovery_hint_t *hint) {
+const char *bmic_artemis_base_url(const bmic_discovery_hint_t *hint)
+{
     char *ret = NULL;
 
     if (hint->hint_type == URL) {
@@ -46,10 +47,11 @@ const char *bmic_artemis_base_url(const bmic_discovery_hint_t *hint) {
 
 bmic_handle_t *bmic_artemis_init(const char *base_url,
                                  bmic_credentials_t *credentials,
-                                 gru_status_t *status) {
+                                 gru_status_t *status)
+{
     bmic_handle_t *handle = NULL;
 
-    handle = gru_alloc(sizeof(bmic_handle_t), status);
+    handle = gru_alloc(sizeof (bmic_handle_t), status);
     gru_alloc_check(handle, NULL);
 
     handle->ep = bmic_endpoint_init(base_url, NULL, NULL, status);
@@ -68,13 +70,13 @@ bmic_handle_t *bmic_artemis_init(const char *base_url,
     return handle;
 }
 
-
-void bmic_artemis_cleanup(bmic_handle_t **handle) {
+void bmic_artemis_cleanup(bmic_handle_t **handle)
+{
     bmic_handle_destroy(handle, bmic_endpoint_http_terminate);
 }
 
 bmic_product_info_t *bmic_artemis_product_info(bmic_handle_t *handle,
-        gru_status_t *status)
+                                               gru_status_t *status)
 {
     bmic_data_t reply = {0};
     bmic_api_io_read(handle, ARTEMIS_PRODUCT_INFO_PATH, &reply, status);
@@ -82,7 +84,7 @@ bmic_product_info_t *bmic_artemis_product_info(bmic_handle_t *handle,
     if (status->code != GRU_SUCCESS) {
         return NULL;
     }
-   
+
     bmic_object_t *root = bmic_api_parse_json(reply.data, status);
     if (!root) {
         return NULL;
@@ -94,53 +96,71 @@ bmic_product_info_t *bmic_artemis_product_info(bmic_handle_t *handle,
     }
 
     if (value->type == STRING) {
-        bmic_product_info_t *ret = gru_alloc(sizeof(bmic_api_interface_t), status);
-        snprintf(ret->version, sizeof(ret->version), "%s", value->data.str);
+        bmic_product_info_t *ret = gru_alloc(sizeof (bmic_api_interface_t), status);
+        snprintf(ret->version, sizeof (ret->version), "%s", value->data.str);
 
         bmic_object_destroy(&root);
         return ret;
     }
 
-    err_exit:
+err_exit:
     bmic_object_destroy(&root);
     return NULL;
 }
 
-bmic_product_cap_t *bmic_artemis_product_capabilities(bmic_handle_t *handle,
-        gru_status_t *status)
+static bool bmic_artemis_management_path_compare(const void *nodedata,
+                                                 const void *data, void *r)
 {
+    const bmic_object_t *nodeobj = (bmic_object_t *) nodedata;
+
+    if (nodedata == NULL) {
+        return false;
+    }
+
+    // TODO: possibly evaluate using regex instead.
+
+    // Is type broker of service type server in the core module
+    char *cond1 = strstr(nodeobj->path, "module=Core,serviceType=Server,type=Broker");
+
+    if (cond1) {
+
+        // ... and starts w/ broker name
+        char *cond2 = strstr(nodeobj->path, "brokerName");
+        if (cond2) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+const bmic_product_cap_t *bmic_artemis_product_capabilities(bmic_handle_t *handle,
+                                                            gru_status_t *status)
+{
+    bmic_product_cap_t *ret = gru_alloc(sizeof (bmic_product_cap_t), status);
+    gru_alloc_check(ret, NULL);
+
     bmic_data_t reply = {0};
     bmic_api_io_read(handle, ARTEMIS_PRODUCT_CAPABILITIES, &reply, status);
 
     if (status->code != GRU_SUCCESS) {
+        gru_dealloc(&ret);
         return NULL;
     }
 
-    bmic_object_t *root = bmic_api_parse_json(reply.data, status);
-    if (!root) {
+    ret->root = bmic_api_parse_json(reply.data, status);
+    if (!ret->root) {
+        gru_dealloc(&ret);
         return NULL;
     }
-    
 
-    const bmic_object_t *version = bmic_object_find_by_name(root, "Version");
-    if (version) {
-        bmic_object_print(version);
+    ret->capabilities = bmic_object_find(ret->root,
+                                         bmic_artemis_management_path_compare,
+                                         NULL);
+    if (!ret->capabilities) {
+        bmic_object_destroy(&ret->root);
+        gru_dealloc(&ret);
     }
-    else {
-        printf("Version not found\n");
-    }
-    
-    // err_exit:
-    
 
-    if (version->type == STRING) {
-        bmic_product_info_t *ret = gru_alloc(sizeof(bmic_api_interface_t), status);
-        snprintf(ret->version, sizeof(ret->version), "%s", version->data.str);
-
-        // return ret;
-    }
-    
-    bmic_object_destroy(&root);
-
-    return NULL;
+    return ret;
 }

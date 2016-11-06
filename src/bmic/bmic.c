@@ -44,7 +44,6 @@ int main(int argc, char** argv)
     credentials = bmic_credentials_init((char *) argv[1], (char *) argv[2], 
                                         &status); 
              
-    
     hint = bmic_discovery_hint_eval_addressing(argv[3], BMIC_PORT_UNKNOWN, 
                                                &status);
     
@@ -65,6 +64,8 @@ int main(int argc, char** argv)
             gru_dealloc((void **)&info);
         }
     }
+    
+    api->capabilities(handle, &status);
 
     api->api_cleanup(&handle);
     bmic_product_unregister();
