@@ -50,6 +50,8 @@ typedef union bmic_value_t_ {
 typedef struct bmic_object_t_ {
     bmic_value_type_t type;
     char *name;
+    char *path;
+    
     /**
      * A pointer to their position within the document tree
      */
@@ -63,6 +65,7 @@ bmic_object_t *bmic_object_new_root(gru_status_t *status);
 void bmic_object_destroy(bmic_object_t **ptr);
 
 bool bmic_object_set_name(bmic_object_t *obj, const char *name);
+bool bmic_object_set_path(bmic_object_t *obj, const char *path, ...);
 
 void bmic_object_set_string(bmic_object_t *obj, const char *value);
 void bmic_object_set_integer(bmic_object_t *obj, int32_t value);

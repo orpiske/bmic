@@ -15,6 +15,7 @@
  */
 #include "bmic_object.h"
 
+
 bmic_object_t *bmic_object_new(const char *name, gru_status_t *status)
 {
     bmic_object_t *ret = NULL;
@@ -29,10 +30,10 @@ bmic_object_t *bmic_object_new(const char *name, gru_status_t *status)
 
     ret->type = NULL_TYPE;
     if (!bmic_object_set_name(ret, name)) {
+        gru_status_set(status, GRU_FAILURE, "Unable to set the object name");
         bmic_object_destroy(&ret);
         return NULL;
     }
-    
 
     return ret;
 }
@@ -44,6 +45,15 @@ bmic_object_t *bmic_object_new_root(gru_status_t *status)
 
     ret->type = NULL_TYPE;
     if (!bmic_object_set_name(ret, NULL)) {
+        gru_status_set(status, GRU_FAILURE, "Unable to set the root object name");
+        
+        bmic_object_destroy(&ret);
+        return NULL;
+    }
+    
+    if (!bmic_object_set_path(ret, "")) {
+        gru_status_set(status, GRU_FAILURE, "Unable to set the root object path");
+        
         bmic_object_destroy(&ret);
         return NULL;
     }
@@ -109,6 +119,22 @@ bool bmic_object_set_name(bmic_object_t *obj, const char *name)
     return true;
 }
 
+bool bmic_object_set_path(bmic_object_t *obj, const char *path, ...)
+{
+    va_list ap;
+    va_start(ap, path);
+    
+    int rc = vasprintf(&obj->path, path, ap);
+    va_end(ap);
+    
+    if (rc == -1) {
+        return false;
+    }
+
+    return true;
+}
+
+
 void bmic_object_set_string(bmic_object_t *obj, const char *value)
 {
     obj->type = STRING;
@@ -152,7 +178,10 @@ void bmic_object_add_list_element(bmic_object_t *parent, bmic_object_t *element)
         }
     }
 
+    size_t pos = gru_list_count(parent->data.list);
     gru_list_append(parent->data.list, element);
+    
+    bmic_object_set_path(element, "%s/%s[%i]", parent->path, element->name, pos);
 }
 
 void bmic_object_add_object(bmic_object_t *parent, 
@@ -166,6 +195,8 @@ void bmic_object_add_object(bmic_object_t *parent,
 
         return;
     }
+    
+    bmic_object_set_path(child, "%s/%s", parent->path, child->name);
 }
 
 static bool bmic_compare_list(const void *nodedata, const void *data, void *r)
@@ -215,6 +246,8 @@ static void print(const void *obj1, void *d2)
     if (nodeojb == NULL) {
         return;
     }
+    
+    printf("Path: %s\n", nodeojb->path);
     
     switch (nodeojb->type) {
     case STRING:

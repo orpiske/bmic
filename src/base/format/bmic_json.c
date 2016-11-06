@@ -62,6 +62,7 @@ static void bmic_json_transform_int(const json_object *jobj, bmic_object_t *pare
 
         bmic_object_t *child = bmic_object_new(key, NULL);
         bmic_object_add_object(parent, child);
+        
         switch (type) {
         case json_type_object: {            
             bmic_json_transform_int(val, child);
@@ -78,8 +79,10 @@ static void bmic_json_transform_int(const json_object *jobj, bmic_object_t *pare
                 
                 bmic_object_add_object(child, element);
                 
-                bmic_json_transform_int(tmp, element);
                 bmic_object_add_list_element(child, element);
+                
+                bmic_json_transform_int(tmp, element);
+                
             }
             
 
