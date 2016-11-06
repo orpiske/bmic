@@ -25,6 +25,7 @@ bmic_api_interface_t *bmic_artemis_product(gru_status_t *status)
     ret->api_cleanup = bmic_artemis_cleanup;
     ret->capabilities = bmic_artemis_product_capabilities;
     ret->cap_read = bmic_artemis_product_cap_read;
+    ret->cap_all = bmic_artemis_product_cap_all;
 
     return ret;
 }
@@ -202,4 +203,37 @@ const bmic_object_t *bmic_artemis_product_cap_read(bmic_handle_t *handle,
 err_exit:
     bmic_object_destroy(&root);
     return NULL;
+}
+
+
+void bmic_artemis_add_attr(const void *nodedata, void *payload)
+{
+     const bmic_object_t *nodeobj = (bmic_object_t *) nodedata;
+
+    if (nodeobj->type == OBJECT) {
+        if (nodeobj->name && strcmp(nodeobj->name, "attr") != 0) {
+            gru_list_t *list = (gru_list_t *) payload;
+            
+            gru_list_append(list, nodeobj->name);
+        }
+    }
+
+}
+
+
+
+const gru_list_t *bmic_artemis_product_cap_all(bmic_handle_t *handle,
+                                                const bmic_product_cap_t *cap, gru_status_t *status)
+{
+    const bmic_object_t *attributes = bmic_object_find_regex(cap->capabilities,
+                                                             ARTEMIS_CORE_CAP_ATTRIBUTES,
+                                                             REG_SEARCH_PATH);
+    gru_list_t *ret = gru_list_new(status);
+    gru_alloc_check(ret, NULL);
+    
+    
+    gru_tree_for_each(attributes->self,
+                      bmic_artemis_add_attr, ret);
+
+    return ret;
 }

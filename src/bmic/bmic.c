@@ -32,6 +32,12 @@
 
 #include "base/common/bmic_regex.h"
 
+void print_cap(const void *nodedata, void *payload)
+{
+     const char *cap = (const char *) nodedata;
+     printf("Capabilities: %s\n", cap);
+}
+
 int main(int argc, char** argv)
 {
     gru_status_t status = {0};
@@ -73,7 +79,7 @@ int main(int argc, char** argv)
         fprintf(stderr, "Unable to read capabilities: %s\n", status.message);
     }
     else {
-        const bmic_object_t *version = api->cap_read(handle, cap, "Version", &status);
+        const bmic_object_t *version = api->cap_read(handle, cap, "BrokerVersion", &status);
         
         if (version) {
             printf("Version (from cap): %s\n", version->data.str);
@@ -81,7 +87,16 @@ int main(int argc, char** argv)
         else {
             printf("Unable to find the version (wrong cap, maybe?)\n");
         }
+        
+        gru_list_t *list = api->cap_all(handle, cap, &status);
+        
+        if (list) {
+            printf("The following capabilities are available for the product:\n");
+            gru_list_for_each(list, print_cap, NULL);
+        }
     }
+    
+    
 
     api->api_cleanup(&handle);
     bmic_product_unregister();

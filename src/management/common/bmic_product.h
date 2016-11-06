@@ -55,6 +55,9 @@ typedef const bmic_object_t *(*bmic_management_api_cap_read_fn)(bmic_handle_t *h
         const bmic_product_cap_t *capabilities, const char *name,
         gru_status_t *status);
 
+typedef const gru_list_t *(*bmic_management_product_cap_all_fn)(bmic_handle_t *handle,
+        const bmic_product_cap_t *cap, gru_status_t *status);
+
 
 typedef struct bmic_api_interface_t_ {
     char name[64];
@@ -67,6 +70,7 @@ typedef struct bmic_api_interface_t_ {
     bmic_management_api_info_fn product_info;
     bmic_management_api_cap_fn capabilities;
     bmic_management_api_cap_read_fn cap_read;
+    bmic_management_product_cap_all_fn cap_all;
 
 } bmic_api_interface_t;
 

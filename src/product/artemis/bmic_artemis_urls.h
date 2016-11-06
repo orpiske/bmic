@@ -23,6 +23,7 @@
 #define ARTEMIS_PRODUCT_CAPABILITIES "list/org.apache.activemq.artemis"
 
 #define ARTEMIS_CAPABILITIES_KEY_REGEX "(brokerName=)([a-z0-9\\.\"])*(,module=Core,serviceType=Server,type=Broker)"
+#define ARTEMIS_CORE_CAP_ATTRIBUTES "(brokerName=)([a-z0-9\\.\"])*(,module=Core,serviceType=Server,type=Broker\\/attr$)"
 
 #endif /* BMIC_ARTEMIS_URLS_H */
 

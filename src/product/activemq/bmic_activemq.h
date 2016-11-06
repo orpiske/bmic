@@ -54,6 +54,9 @@ const bmic_object_t *bmic_activemq_product_cap_read(bmic_handle_t *handle,
         gru_status_t *status);
 
 
+const gru_list_t *bmic_activemq_product_cap_all(bmic_handle_t *handle,
+        const bmic_product_cap_t *cap, gru_status_t *status);
+
 #ifdef __cplusplus
 }
 #endif

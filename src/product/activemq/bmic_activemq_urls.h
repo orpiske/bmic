@@ -23,6 +23,7 @@
 #define ACTIVEMQ_PRODUCT_CAPABILITIES "list/org.apache.activemq"
 
 #define ACTIVEMQ_CAPABILITIES_KEY_REGEX "(brokerName=)([a-z0-9\\.])*(,type=Broker)"
+#define ACTIVEMQ_CORE_CAP_ATTRIBUTES "(brokerName=)([a-z0-9\\.])*(,type=Broker\\/attr$)"
 
 #endif /* BMIC_ACTIVEMQ_URLS_H */
 
