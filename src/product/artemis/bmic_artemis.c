@@ -108,32 +108,6 @@ err_exit:
     return NULL;
 }
 
-static bool bmic_artemis_management_path_compare(const void *nodedata,
-                                                 const void *data, void *r)
-{
-    const bmic_object_t *nodeobj = (bmic_object_t *) nodedata;
-
-    if (nodedata == NULL) {
-        return false;
-    }
-
-    // TODO: possibly evaluate using regex instead.
-
-    // Is type broker of service type server in the core module
-    char *cond1 = strstr(nodeobj->path, "module=Core,serviceType=Server,type=Broker");
-
-    if (cond1) {
-
-        // ... and starts w/ broker name
-        char *cond2 = strstr(nodeobj->path, "brokerName");
-        if (cond2) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 const bmic_product_cap_t *bmic_artemis_product_capabilities(bmic_handle_t *handle,
                                                             gru_status_t *status)
 {
@@ -144,26 +118,28 @@ const bmic_product_cap_t *bmic_artemis_product_capabilities(bmic_handle_t *handl
     bmic_api_io_read(handle, ARTEMIS_PRODUCT_CAPABILITIES, &reply, status);
 
     if (status->code != GRU_SUCCESS) {
-        gru_dealloc((void **)&ret);
+        gru_dealloc((void **) &ret);
+        return NULL;
+    }
+
+
+    bmic_object_t *root = bmic_api_parse_json(reply.data, status);
+    if (!root) {
+        gru_dealloc((void **) &ret);
         return NULL;
     }
 
     
-    bmic_object_t *root = bmic_api_parse_json(reply.data, status);
-    if (!root) {
-        gru_dealloc((void **)&ret);
-        return NULL;
-    }
+    const bmic_object_t *capabilities = bmic_object_find_regex(root,
+                                                               ARTEMIS_CAPABILITIES_KEY_REGEX,
+                                                               REG_SEARCH_NAME);
 
-    const bmic_object_t *capabilities = bmic_object_find(root,
-                                         bmic_artemis_management_path_compare,
-                                         NULL);
     if (!capabilities) {
         gru_status_set(status, GRU_FAILURE, "Capabilities not found");
-        
+
         bmic_object_destroy(&root);
-        gru_dealloc((void **)&ret);
-        
+        gru_dealloc((void **) &ret);
+
         return NULL;
     }
 
@@ -172,38 +148,37 @@ const bmic_product_cap_t *bmic_artemis_product_capabilities(bmic_handle_t *handl
     return ret;
 }
 
-const char *format_path(const char *op, const bmic_product_cap_t *cap, 
+const char *format_path(const char *op, const bmic_product_cap_t *cap,
                         const char *capname, gru_status_t *status)
 {
-    char *ret; 
-    
-    int rc = asprintf(&ret, "%s/org.apache.activemq.artemis:%s/%s", 
-             op, cap->capabilities->name, capname);
-    
+    char *ret;
+
+    int rc = asprintf(&ret, "%s/org.apache.activemq.artemis:%s/%s",
+                      op, cap->capabilities->name, capname);
+
     if (rc == -1) {
         gru_status_set(status, GRU_FAILURE, "Not enough memory to format capabilities path");
-        
+
         return NULL;
     }
-    
+
     return ret;
 }
 
-
 const bmic_object_t *bmic_artemis_product_cap_read(bmic_handle_t *handle,
-        const bmic_product_cap_t *cap, const char *name,
-        gru_status_t *status) 
+                                                   const bmic_product_cap_t *cap, const char *name,
+                                                   gru_status_t *status)
 {
-    
+
     bmic_data_t reply = {0};
-    
+
     const char *path = format_path("read", cap, name, status);
     if (!path) {
         return NULL;
     }
-    
+
     bmic_api_io_read(handle, path, &reply, status);
-    gru_dealloc_string((char **)&path);
+    gru_dealloc_string((char **) &path);
 
     if (status->code != GRU_SUCCESS) {
         return NULL;
@@ -218,8 +193,8 @@ const bmic_object_t *bmic_artemis_product_cap_read(bmic_handle_t *handle,
     if (!value) {
         goto err_exit;
     }
-    
-    bmic_object_t *ret = bmic_object_clone(value, status); 
+
+    bmic_object_t *ret = bmic_object_clone(value, status);
     bmic_object_destroy(&root);
 
     return ret;

@@ -22,7 +22,7 @@
 #define ACTIVEMQ_PRODUCT_INFO_PATH "read/org.apache.activemq:brokerName=localhost,type=Broker/BrokerVersion"
 #define ACTIVEMQ_PRODUCT_CAPABILITIES "list/org.apache.activemq"
 
-
+#define ACTIVEMQ_CAPABILITIES_KEY_REGEX "(brokerName=)([a-z0-9\\.])*(,type=Broker)"
 
 #endif /* BMIC_ACTIVEMQ_URLS_H */
 

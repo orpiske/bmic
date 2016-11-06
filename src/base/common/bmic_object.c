@@ -112,7 +112,7 @@ bmic_object_t *bmic_object_clone(const bmic_object_t *other, gru_status_t *statu
         return NULL;
     }
     }
-    
+
     return ret;
 }
 
@@ -327,6 +327,77 @@ const bmic_object_t *bmic_object_find(const bmic_object_t *parent,
 
     if (tn) {
         return (const bmic_object_t *) tn->data;
+    }
+
+
+    return NULL;
+}
+
+static bool bmic_object_regex_name(const void *nodedata,
+                                   const void *regex, void *r)
+{
+    const bmic_object_t *nodeobj = (bmic_object_t *) nodedata;
+
+    if (nodedata == NULL) {
+        return false;
+    }
+
+    // TODO: possibly evaluate using regex instead.
+
+    gru_status_t status = {0};
+    bool match = bmic_match(nodeobj->name, (const char *) regex, &status);
+
+    // TODO: improve the error handling here
+    if (status.code == GRU_FAILURE) {
+        fprintf(stderr, "%s\n", status.message);
+    }
+
+
+    return match;
+}
+
+static bool bmic_object_regex_path(const void *nodedata,
+                                   const void *regex, void *r)
+{
+    const bmic_object_t *nodeobj = (bmic_object_t *) nodedata;
+
+    if (nodedata == NULL) {
+        return false;
+    }
+
+    // TODO: possibly evaluate using regex instead.
+
+    gru_status_t status = {0};
+    bool match = bmic_match(nodeobj->path, (const char *) regex, &status);
+
+    // TODO: improve the error handling here
+    if (status.code == GRU_FAILURE) {
+        fprintf(stderr, "%s\n", status.message);
+    }
+
+
+    return match;
+}
+
+const bmic_object_t *bmic_object_find_regex(const bmic_object_t *parent,
+                                            const char *regex, int flags)
+{
+    if (flags & REG_SEARCH_PATH) {
+        const gru_tree_node_t *ret = gru_tree_search(parent->self,
+                                                     bmic_object_regex_path, regex);
+
+        if (ret != NULL) {
+            return (const bmic_object_t *) ret->data;
+        }
+    }
+
+    if (flags & REG_SEARCH_NAME) {
+        const gru_tree_node_t *ret = gru_tree_search(parent->self,
+                                                     bmic_object_regex_name, regex);
+
+        if (ret != NULL) {
+            return (const bmic_object_t *) ret->data;
+        }
     }
 
 

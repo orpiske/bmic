@@ -24,6 +24,9 @@
 #include <collection/gru_list.h>
 #include <collection/gru_tree.h>
 
+#define REG_SEARCH_NAME 1
+#define REG_SEARCH_PATH 2
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -89,7 +92,8 @@ const bmic_object_t *bmic_object_find(const bmic_object_t *parent,
                                 compare_function_t compare,
                                               void *data);
 
-
+const bmic_object_t *bmic_object_find_regex(const bmic_object_t *parent, 
+                                const char *regex, int flags);
 
 // DEBUG
 void bmic_object_print(const bmic_object_t *parent);

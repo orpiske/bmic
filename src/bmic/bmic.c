@@ -30,9 +30,12 @@
 #include "management/discovery/bmic_discovery.h"
 #include "product/bmic_product_register.h"
 
+#include "base/common/bmic_regex.h"
+
 int main(int argc, char** argv)
 {
     gru_status_t status = {0};
+    
     bmic_discovery_hint_t *hint = NULL; 
     bmic_credentials_t *credentials = NULL;
     
@@ -65,7 +68,20 @@ int main(int argc, char** argv)
         }
     }
     
-    api->capabilities(handle, &status);
+    const bmic_product_cap_t *cap = api->capabilities(handle, &status);
+    if (!cap) {
+        fprintf(stderr, "Unable to read capabilities: %s\n", status.message);
+    }
+    else {
+        const bmic_object_t *version = api->cap_read(handle, cap, "Version", &status);
+        
+        if (version) {
+            printf("Version (from cap): %s\n", version->data.str);
+        }
+        else {
+            printf("Unable to find the version (wrong cap, maybe?)\n");
+        }
+    }
 
     api->api_cleanup(&handle);
     bmic_product_unregister();

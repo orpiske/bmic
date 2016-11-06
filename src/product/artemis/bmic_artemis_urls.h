@@ -22,5 +22,7 @@
 #define ARTEMIS_PRODUCT_INFO_PATH "read/org.apache.activemq.artemis:brokerName=\"0.0.0.0\",module=Core,serviceType=Server,type=Broker/Version"
 #define ARTEMIS_PRODUCT_CAPABILITIES "list/org.apache.activemq.artemis"
 
+#define ARTEMIS_CAPABILITIES_KEY_REGEX "(brokerName=)([a-z0-9\\.\"])*(,module=Core,serviceType=Server,type=Broker)"
+
 #endif /* BMIC_ARTEMIS_URLS_H */
 
