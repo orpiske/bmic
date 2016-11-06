@@ -17,14 +17,41 @@
 
 bmic_object_t *bmic_object_new(const char *name, gru_status_t *status)
 {
-    bmic_object_t *ret = gru_alloc(sizeof (bmic_object_t), status);
-    gru_alloc_check(ret, NULL);
+    bmic_object_t *ret = NULL;
 
-    assert(name != NULL);
+    if (name == NULL) {
+        gru_status_set(status, GRU_FAILURE, 
+                       "A child object must not have a null name");
+    }
+    
+    ret = gru_alloc(sizeof (bmic_object_t), status);
+    gru_alloc_check(ret, NULL);
 
     ret->type = NULL_TYPE;
     if (!bmic_object_set_name(ret, name)) {
         bmic_object_destroy(&ret);
+        return NULL;
+    }
+    
+
+    return ret;
+}
+
+bmic_object_t *bmic_object_new_root(gru_status_t *status)
+{
+    bmic_object_t *ret = gru_alloc(sizeof (bmic_object_t), status);
+    gru_alloc_check(ret, NULL);
+
+    ret->type = NULL_TYPE;
+    if (!bmic_object_set_name(ret, NULL)) {
+        bmic_object_destroy(&ret);
+        return NULL;
+    }
+    
+    ret->self = gru_tree_new(NULL);
+    if (!ret) {
+        bmic_object_destroy(&ret);
+        
         return NULL;
     }
     
