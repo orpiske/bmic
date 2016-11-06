@@ -31,14 +31,22 @@ typedef struct bmic_product_info_t_ {
     char version[16];
 } bmic_product_info_t;
 
+typedef struct bmic_product_cap_t_ {
+    gru_list_t *capabilities;
+} bmic_product_cap_t;
+
 typedef const char *(*bmic_management_url_fn)(const bmic_discovery_hint_t *hint);
 
 typedef bmic_handle_t *(*bmic_management_api_init_fn)(const char *base_url,
                                  bmic_credentials_t *credentials,
                                  gru_status_t *status);
+typedef void(*bmic_management_api_cleanup_fn)(bmic_handle_t **handle);
+
 typedef bmic_product_info_t *(*bmic_management_api_info_fn)(bmic_handle_t *handle,
         gru_status_t *status);
-typedef void(*bmic_management_api_cleanup_fn)(bmic_handle_t **handle);
+typedef bmic_product_cap_t *(*bmic_management_api_cap_fn)(bmic_handle_t *handle, 
+        gru_status_t *status);
+
 
 typedef struct bmic_api_interface_t_ {
     char name[64];
@@ -46,8 +54,10 @@ typedef struct bmic_api_interface_t_ {
 
     bmic_management_url_fn base_url;
     bmic_management_api_init_fn api_init;
-    bmic_management_api_info_fn product_info;
     bmic_management_api_cleanup_fn api_cleanup;
+    
+    bmic_management_api_info_fn product_info;
+    bmic_management_api_cap_fn capabilities;
 
 } bmic_api_interface_t;
 
