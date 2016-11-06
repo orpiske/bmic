@@ -159,8 +159,12 @@ const bmic_product_cap_t *bmic_artemis_product_capabilities(bmic_handle_t *handl
                                          bmic_artemis_management_path_compare,
                                          NULL);
     if (!capabilities) {
+        gru_status_set(status, GRU_FAILURE, "Capabilities not found");
+        
         bmic_object_destroy(&root);
         gru_dealloc((void **)&ret);
+        
+        return NULL;
     }
 
     ret->root = root;
