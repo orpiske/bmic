@@ -14,7 +14,6 @@
  limitations under the License.
  */
 #include "bmic_artemis.h"
-#include "base/format/bmic_json.h"
 
 bmic_api_interface_t *bmic_artemis_product(gru_status_t *status)
 {
@@ -25,6 +24,7 @@ bmic_api_interface_t *bmic_artemis_product(gru_status_t *status)
     ret->product_info = bmic_artemis_product_info;
     ret->api_cleanup = bmic_artemis_cleanup;
     ret->capabilities = bmic_artemis_product_capabilities;
+    ret->cap_read = bmic_artemis_product_cap_read;
 
     return ret;
 }
@@ -144,23 +144,83 @@ const bmic_product_cap_t *bmic_artemis_product_capabilities(bmic_handle_t *handl
     bmic_api_io_read(handle, ARTEMIS_PRODUCT_CAPABILITIES, &reply, status);
 
     if (status->code != GRU_SUCCESS) {
-        gru_dealloc(&ret);
+        gru_dealloc((void **)&ret);
         return NULL;
     }
 
-    ret->root = bmic_api_parse_json(reply.data, status);
-    if (!ret->root) {
-        gru_dealloc(&ret);
+    
+    bmic_object_t *root = bmic_api_parse_json(reply.data, status);
+    if (!root) {
+        gru_dealloc((void **)&ret);
         return NULL;
     }
 
-    ret->capabilities = bmic_object_find(ret->root,
+    const bmic_object_t *capabilities = bmic_object_find(root,
                                          bmic_artemis_management_path_compare,
                                          NULL);
-    if (!ret->capabilities) {
-        bmic_object_destroy(&ret->root);
-        gru_dealloc(&ret);
+    if (!capabilities) {
+        bmic_object_destroy(&root);
+        gru_dealloc((void **)&ret);
     }
 
+    ret->root = root;
+    ret->capabilities = capabilities;
     return ret;
+}
+
+const char *format_path(const char *op, const bmic_product_cap_t *cap, 
+                        const char *capname, gru_status_t *status)
+{
+    char *ret; 
+    
+    int rc = asprintf(&ret, "%s/org.apache.activemq.artemis:%s/%s", 
+             op, cap->capabilities->name, capname);
+    
+    if (rc == -1) {
+        gru_status_set(status, GRU_FAILURE, "Not enough memory to format capabilities path");
+        
+        return NULL;
+    }
+    
+    return ret;
+}
+
+
+const bmic_object_t *bmic_artemis_product_cap_read(bmic_handle_t *handle,
+        const bmic_product_cap_t *cap, const char *name,
+        gru_status_t *status) 
+{
+    
+    bmic_data_t reply = {0};
+    
+    const char *path = format_path("read", cap, name, status);
+    if (!path) {
+        return NULL;
+    }
+    
+    bmic_api_io_read(handle, path, &reply, status);
+    gru_dealloc_string((char **)&path);
+
+    if (status->code != GRU_SUCCESS) {
+        return NULL;
+    }
+
+    bmic_object_t *root = bmic_api_parse_json(reply.data, status);
+    if (!root) {
+        return NULL;
+    }
+
+    const bmic_object_t *value = bmic_object_find_by_name(root, "value");
+    if (!value) {
+        goto err_exit;
+    }
+    
+    bmic_object_t *ret = bmic_object_clone(value, status); 
+    bmic_object_destroy(&root);
+
+    return ret;
+
+err_exit:
+    bmic_object_destroy(&root);
+    return NULL;
 }
