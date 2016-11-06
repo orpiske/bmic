@@ -25,17 +25,20 @@ void bmic_api_io_read(bmic_handle_t *handle, const char *path,
     bmic_endpoint_reset_path(handle->ep);
 }
 
-void bmic_api_io_find_value(const bmic_data_t *reply, 
-                                     bmic_object_t *value, 
-                                     const char *name,
-                                     gru_status_t *status) {
-    bmic_json_t *json = bmic_json_init(reply->data, status);
-    if (json == NULL || status->code != GRU_SUCCESS) {
-        goto err_exit;
+bmic_object_t *bmic_api_parse_json(const char *str, gru_status_t *status) {
+    bmic_object_t *root = bmic_object_new_root(status);
+    if (!root) {
+        return NULL;
     }
     
-    bmic_json_find_first(json, name, value);
+    bmic_json_t *json = bmic_json_init(str, status);
+    if (json == NULL || status->code != GRU_SUCCESS) {
+        bmic_object_destroy(&root);
+        return NULL;
+    }
     
-    err_exit:
+    bmic_json_transform(json, root);
     bmic_json_destroy(&json);
+    
+    return root;
 }

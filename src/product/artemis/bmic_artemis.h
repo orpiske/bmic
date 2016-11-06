@@ -44,6 +44,8 @@ void bmic_artemis_cleanup(bmic_handle_t **handle);
 
 bmic_product_info_t *bmic_artemis_product_info(bmic_handle_t *handle,
         gru_status_t *status);
+bmic_product_cap_t *bmic_artemis_product_capabilities(bmic_handle_t *handle,
+        gru_status_t *status);
 
 #ifdef __cplusplus
 }

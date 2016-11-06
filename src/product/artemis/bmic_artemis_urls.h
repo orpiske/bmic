@@ -20,6 +20,7 @@
 #define ARTEMIS_BASE_URL_HINT_URL "%s/jolokia"
 #define ARTEMIS_BASE_URL_HINT_ADDRESSING "http://%s:%i/jolokia"
 #define ARTEMIS_PRODUCT_INFO_PATH "read/org.apache.activemq.artemis:brokerName=\"0.0.0.0\",module=Core,serviceType=Server,type=Broker/Version"
+#define ARTEMIS_PRODUCT_CAPABILITIES "list/org.apache.activemq.artemis"
 
 #endif /* BMIC_ARTEMIS_URLS_H */
 

@@ -24,6 +24,7 @@ bmic_api_interface_t *bmic_artemis_product(gru_status_t *status) {
     ret->api_init = bmic_artemis_init;
     ret->product_info = bmic_artemis_product_info;
     ret->api_cleanup = bmic_artemis_cleanup;
+    ret->capabilities = bmic_artemis_product_capabilities;
 
     return ret;
 }
@@ -81,16 +82,65 @@ bmic_product_info_t *bmic_artemis_product_info(bmic_handle_t *handle,
     if (status->code != GRU_SUCCESS) {
         return NULL;
     }
+   
+    bmic_object_t *root = bmic_api_parse_json(reply.data, status);
+    if (!root) {
+        return NULL;
+    }
 
-    bmic_object_t value = {0};
-    bmic_api_io_find_value(&reply, &value, "value", status);
+    const bmic_object_t *value = bmic_object_find_by_name(root, "value");
+    if (!value) {
+        goto err_exit;
+    }
 
-    if (value.type == STRING) {
+    if (value->type == STRING) {
         bmic_product_info_t *ret = gru_alloc(sizeof(bmic_api_interface_t), status);
-        snprintf(ret->version, sizeof(ret->version), "%s", value.data.str);
+        snprintf(ret->version, sizeof(ret->version), "%s", value->data.str);
 
+        bmic_object_destroy(&root);
         return ret;
     }
+
+    err_exit:
+    bmic_object_destroy(&root);
+    return NULL;
+}
+
+bmic_product_cap_t *bmic_artemis_product_capabilities(bmic_handle_t *handle,
+        gru_status_t *status)
+{
+    bmic_data_t reply = {0};
+    bmic_api_io_read(handle, ARTEMIS_PRODUCT_CAPABILITIES, &reply, status);
+
+    if (status->code != GRU_SUCCESS) {
+        return NULL;
+    }
+
+    bmic_object_t *root = bmic_api_parse_json(reply.data, status);
+    if (!root) {
+        return NULL;
+    }
+    
+
+    const bmic_object_t *version = bmic_object_find_by_name(root, "Version");
+    if (version) {
+        bmic_object_print(version);
+    }
+    else {
+        printf("Version not found\n");
+    }
+    
+    // err_exit:
+    
+
+    if (version->type == STRING) {
+        bmic_product_info_t *ret = gru_alloc(sizeof(bmic_api_interface_t), status);
+        snprintf(ret->version, sizeof(ret->version), "%s", version->data.str);
+
+        // return ret;
+    }
+    
+    bmic_object_destroy(&root);
 
     return NULL;
 }
