@@ -49,6 +49,39 @@ static void show_help()
     printf("\t-r\t--read=<str> read a capability/attribute from the server\n");
 }
 
+static void print_returned_from_list(const void *ptr, const void *payload) {
+    bmic_object_t *obj = (bmic_object_t *) ptr;
+    const char *capname = (const char *) payload;
+    
+    switch (obj->type) {
+    case STRING:
+    {
+        printf("\t%s\n", obj->data.str);
+        break;
+    }
+    case INTEGER:
+    {
+        printf("\t%i\n", obj->data.number);
+        break;
+    }
+    case BOOLEAN:
+    {
+        printf("%s\n", (obj->data.value ? "true" : "false"));
+        break;
+    }
+    case DOUBLE:
+    {
+        printf("%.4f\n", obj->data.d);
+        break;
+    }
+    default: {
+         printf("Unexpected complex object type was returned\n");
+        break;
+    }
+    }
+
+}
+
 static void print_returned_object(const char *capname, const bmic_object_t *obj)
 {
     switch (obj->type) {
@@ -81,7 +114,11 @@ static void print_returned_object(const char *capname, const bmic_object_t *obj)
         printf("The value for capability %s is: (null)\n", capname);
         break;
     }
-    case LIST:
+    case LIST: {
+        printf("The values for capability %s are:\n", capname);
+        gru_list_for_each(obj->data.list, print_returned_from_list, capname);
+        break;
+    }
     case OBJECT:
     default:
     {

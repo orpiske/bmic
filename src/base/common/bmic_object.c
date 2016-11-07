@@ -180,6 +180,7 @@ bmic_object_t *bmic_object_clone(const bmic_object_t *other, gru_status_t *statu
     }
     case LIST: {
         gru_list_for_each(other->data.list, copy, ret);
+        break;
     }
     case OBJECT:
     default:
