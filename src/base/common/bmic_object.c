@@ -73,6 +73,21 @@ static void print(const void *obj1, void *d2)
 }
 
 
+static void copy(const void *obj1, void *destptr)
+{
+    const bmic_object_t *nodeojb = (bmic_object_t *) obj1;
+    const bmic_object_t *dest = (bmic_object_t *) destptr;
+
+    if (nodeojb == NULL) {
+        return;
+    }
+    
+    gru_status_t status = {0};
+    bmic_object_t *cloned = bmic_object_clone(nodeojb, &status);
+    bmic_object_add_list_element(dest, cloned);
+    
+}
+
 bmic_object_t *bmic_object_new(const char *name, gru_status_t *status)
 {
     bmic_object_t *ret = NULL;
@@ -164,9 +179,8 @@ bmic_object_t *bmic_object_clone(const bmic_object_t *other, gru_status_t *statu
         break;
     }
     case LIST: {
-        gru_list_for_each(other->data.list, print, NULL);
+        gru_list_for_each(other->data.list, copy, ret);
     }
-        
     case OBJECT:
     default:
     {
