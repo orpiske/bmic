@@ -15,6 +15,64 @@
  */
 #include "bmic_object.h"
 
+static void print(const void *obj1, void *d2)
+{
+    const bmic_object_t *nodeojb = (bmic_object_t *) obj1;
+
+    if (nodeojb == NULL) {
+        return;
+    }
+
+    printf("Path: %s\n", nodeojb->path);
+
+    switch (nodeojb->type) {
+    case STRING:
+    {
+        printf("%s (string): %s\n", nodeojb->name, nodeojb->data.str);
+        break;
+    }
+    case INTEGER:
+    {
+        printf("%s (int): %i\n", nodeojb->name, nodeojb->data.number);
+        break;
+    }
+    case BOOLEAN:
+    {
+        printf("%s (bool): %s\n", nodeojb->name,
+               (nodeojb->data.value ? "true" : "false"));
+        break;
+    }
+    case DOUBLE:
+    {
+        printf("%s (double): %.4f\n", nodeojb->name, nodeojb->data.d);
+        break;
+    }
+    case LIST:
+    {
+        gru_list_for_each(nodeojb->data.list, print, NULL);
+        break;
+    }
+    case OBJECT:
+    {
+        if (nodeojb) {
+            if (nodeojb->name) {
+                printf("Object: %s\n", nodeojb->name);
+            }
+        }
+
+        break;
+    }
+    case NULL_TYPE:
+    {
+        printf("%s (null)\n", nodeojb->name);
+
+        break;
+    }
+
+    }
+}
+
+
 bmic_object_t *bmic_object_new(const char *name, gru_status_t *status)
 {
     bmic_object_t *ret = NULL;
@@ -33,6 +91,9 @@ bmic_object_t *bmic_object_new(const char *name, gru_status_t *status)
         bmic_object_destroy(&ret);
         return NULL;
     }
+    
+    ret->data.list = NULL;
+    ret->data.str = NULL;
 
     return ret;
 }
@@ -102,7 +163,10 @@ bmic_object_t *bmic_object_clone(const bmic_object_t *other, gru_status_t *statu
         bmic_object_set_null(ret);
         break;
     }
-    case LIST:
+    case LIST: {
+        gru_list_for_each(other->data.list, print, NULL);
+    }
+        
     case OBJECT:
     default:
     {
@@ -225,6 +289,7 @@ void bmic_object_add_list_element(bmic_object_t *parent, bmic_object_t *element)
         }
     }
 
+    element->self = gru_tree_add_child(parent->self, element);
     size_t pos = gru_list_count(parent->data.list);
     gru_list_append(parent->data.list, element);
 
@@ -408,62 +473,6 @@ const bmic_object_t *bmic_object_find_regex(const bmic_object_t *parent,
  * DEBUG STUFF 
  */
 
-static void print(const void *obj1, void *d2)
-{
-    const bmic_object_t *nodeojb = (bmic_object_t *) obj1;
-
-    if (nodeojb == NULL) {
-        return;
-    }
-
-    printf("Path: %s\n", nodeojb->path);
-
-    switch (nodeojb->type) {
-    case STRING:
-    {
-        printf("%s (string): %s\n", nodeojb->name, nodeojb->data.str);
-        break;
-    }
-    case INTEGER:
-    {
-        printf("%s (int): %i\n", nodeojb->name, nodeojb->data.number);
-        break;
-    }
-    case BOOLEAN:
-    {
-        printf("%s (bool): %s\n", nodeojb->name,
-               (nodeojb->data.value ? "true" : "false"));
-        break;
-    }
-    case DOUBLE:
-    {
-        printf("%s (double): %.4f\n", nodeojb->name, nodeojb->data.d);
-        break;
-    }
-    case LIST:
-    {
-        gru_list_for_each(nodeojb->data.list, print, NULL);
-        break;
-    }
-    case OBJECT:
-    {
-        if (nodeojb) {
-            if (nodeojb->name) {
-                printf("Object: %s\n", nodeojb->name);
-            }
-        }
-
-        break;
-    }
-    case NULL_TYPE:
-    {
-        printf("%s (null)\n", nodeojb->name);
-
-        break;
-    }
-
-    }
-}
 
 void bmic_object_print(const bmic_object_t *parent)
 {
