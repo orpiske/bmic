@@ -196,10 +196,10 @@ const bmic_object_t *bmic_activemq_product_cap_read(bmic_handle_t *handle,
         goto err_exit;
     }
 
-    bmic_object_t *ret = bmic_object_clone(value, status);
+    // bmic_object_t *ret = bmic_object_clone(value, status);
     bmic_object_destroy(&root);
 
-    return ret;
+    return value;
 
 err_exit:
     bmic_object_destroy(&root);

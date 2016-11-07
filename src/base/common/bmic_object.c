@@ -68,25 +68,10 @@ static void print(const void *obj1, void *d2)
 
         break;
     }
-
     }
 }
 
 
-static void copy(const void *obj1, void *destptr)
-{
-    const bmic_object_t *nodeojb = (bmic_object_t *) obj1;
-    const bmic_object_t *dest = (bmic_object_t *) destptr;
-
-    if (nodeojb == NULL) {
-        return;
-    }
-    
-    gru_status_t status = {0};
-    bmic_object_t *cloned = bmic_object_clone(nodeojb, &status);
-    bmic_object_add_list_element(dest, cloned);
-    
-}
 
 bmic_object_t *bmic_object_new(const char *name, gru_status_t *status)
 {
@@ -144,56 +129,7 @@ bmic_object_t *bmic_object_new_root(gru_status_t *status)
     return ret;
 }
 
-bmic_object_t *bmic_object_clone(const bmic_object_t *other, gru_status_t *status)
-{
-    bmic_object_t *ret = bmic_object_new_root(status);
 
-    if (!ret) {
-        return NULL;
-    }
-
-    switch (other->type) {
-    case STRING:
-    {
-        bmic_object_set_string(ret, other->data.str);
-        break;
-    }
-    case INTEGER:
-    {
-        bmic_object_set_integer(ret, other->data.number);
-        break;
-    }
-    case BOOLEAN:
-    {
-        bmic_object_set_boolean(ret, other->data.value);
-        break;
-    }
-    case DOUBLE:
-    {
-        bmic_object_set_double(ret, other->data.d);
-        break;
-    }
-    case NULL_TYPE:
-    {
-        bmic_object_set_null(ret);
-        break;
-    }
-    case LIST: {
-        gru_list_for_each(other->data.list, copy, ret);
-        break;
-    }
-    case OBJECT:
-    default:
-    {
-        gru_status_set(status, GRU_FAILURE,
-                       "Cloning complex objects is not supported");
-        bmic_object_destroy(&ret);
-        return NULL;
-    }
-    }
-
-    return ret;
-}
 
 static void bmic_object_destroy_element(const void *nodedata, void *data)
 {
