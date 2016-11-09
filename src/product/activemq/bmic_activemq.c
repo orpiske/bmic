@@ -203,7 +203,7 @@ const bmic_exchange_t *bmic_activemq_product_cap_read(bmic_handle_t *handle,
     ret->data_ptr = value;
     ret->type = EX_CAP_ENTRY;
 
-    return value;
+    return ret;
 
 err_exit:
     bmic_object_destroy(&root);

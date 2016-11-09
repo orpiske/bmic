@@ -131,16 +131,20 @@ void capabilities_do_read(bmic_handle_t *handle,
                        bmic_api_interface_t *api, const bmic_exchange_t *cap, 
                         const char *capname, gru_status_t *status)
 {
-    const bmic_object_t *obj = api->cap_read(handle, cap, capname,
+    const bmic_exchange_t *obj = api->cap_read(handle, cap, capname,
                                              status);
 
     if (obj) {
-        print_returned_object(capname, obj);
+        print_returned_object(capname, obj->data_ptr);
+        
+        bmic_exchange_destroy(&obj);
     }
     else {
         printf("Unable to read the capability %s (wrong cap, maybe?)\n",
                capname);
     }
+    
+    
 }
 
 static void capabilities_read(const void *nodedata, void *payload)
