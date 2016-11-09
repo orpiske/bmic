@@ -115,13 +115,16 @@ static void print_returned_object(const char *capname, const bmic_object_t *obj)
     }
     case LIST: {
         printf("The values for capability %s are:\n", capname);
-        gru_list_for_each(obj->data.list, print_returned_from_list, capname);
+        // gru_list_for_each(obj->data.list, print_returned_from_list, capname);
+        //gru_tree_for_each_child(obj->self, print_returned_from_list, capname); 
+        bmic_object_for_each_child(obj, print_returned_from_list, capname);
         break;
     }
     case OBJECT:
     default:
     {
-        gru_tree_for_each(obj->self, print_returned_from_list, capname); 
+        // gru_tree_for_each(obj->self, print_returned_from_list, capname); 
+        bmic_object_for_each(obj, print_returned_from_list, capname);
         break;
     }
     }
