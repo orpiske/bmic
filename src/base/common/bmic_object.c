@@ -104,12 +104,7 @@ bmic_object_t *bmic_object_new_root(gru_status_t *status)
     gru_alloc_check(ret, NULL);
 
     ret->type = NULL_TYPE;
-    if (!bmic_object_set_name(ret, NULL)) {
-        gru_status_set(status, GRU_FAILURE, "Unable to set the root object name");
-
-        bmic_object_destroy(&ret);
-        return NULL;
-    }
+    ret->name = NULL;
 
     if (!bmic_object_set_path(ret, "")) {
         gru_status_set(status, GRU_FAILURE, "Unable to set the root object path");
