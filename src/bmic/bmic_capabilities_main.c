@@ -49,9 +49,8 @@ static void show_help()
     printf("\t-r\t--read=<str> read a capability/attribute from the server\n");
 }
 
-static void print_returned_from_list(const void *ptr, const void *payload) {
+static void print_returned_from_list(const void *ptr, void *payload) {
     bmic_object_t *obj = (bmic_object_t *) ptr;
-    const char *capname = (const char *) payload;
     
     switch (obj->type) {
     case STRING:
@@ -115,16 +114,14 @@ static void print_returned_object(const char *capname, const bmic_object_t *obj)
     }
     case LIST: {
         printf("The values for capability %s are:\n", capname);
-        // gru_list_for_each(obj->data.list, print_returned_from_list, capname);
-        //gru_tree_for_each_child(obj->self, print_returned_from_list, capname); 
-        bmic_object_for_each_child(obj, print_returned_from_list, capname);
+
+        bmic_object_for_each_child(obj, print_returned_from_list, (void *)capname);
         break;
     }
     case OBJECT:
     default:
     {
-        // gru_tree_for_each(obj->self, print_returned_from_list, capname); 
-        bmic_object_for_each(obj, print_returned_from_list, capname);
+        bmic_object_for_each(obj, print_returned_from_list, (void *)capname);
         break;
     }
     }
