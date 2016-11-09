@@ -28,7 +28,7 @@ typedef struct options_t_
 typedef struct cap_read_wrapper_t_ {
     bmic_handle_t *handle; 
     bmic_api_interface_t *api;
-    const bmic_product_cap_t *cap;
+    const bmic_exchange_t *cap;
     gru_status_t *status;
 } cap_read_wrapper_t;
 
@@ -129,7 +129,7 @@ static void print_returned_object(const char *capname, const bmic_object_t *obj)
 }
 
 void capabilities_do_read(bmic_handle_t *handle, 
-                       bmic_api_interface_t *api, const bmic_product_cap_t *cap, 
+                       bmic_api_interface_t *api, const bmic_exchange_t *cap, 
                         const char *capname, gru_status_t *status)
 {
     const bmic_object_t *obj = api->cap_read(handle, cap, capname,
@@ -197,7 +197,7 @@ int capabilities_run(options_t *options)
     }
 
 
-    const bmic_product_cap_t *cap = api->capabilities(handle, &status);
+    const bmic_exchange_t *cap = api->capabilities(handle, &status);
     if (!cap) {
         fprintf(stderr, "Unable to load capabilities: %s\n", status.message);
 

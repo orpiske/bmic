@@ -33,12 +33,16 @@ typedef struct bmic_product_info_t_ {
     char version[16];
 } bmic_product_info_t;
 
+typedef enum bmic_exchange_type_t_ {
+    EX_CAP_LIST,
+    EX_CAP_ONLY,
+} bmic_exchange_type_t;
 
-
-typedef struct bmic_product_cap_t_ {
+typedef struct bmic_exchange_t_ {
+    bmic_exchange_type_t *type;
     const bmic_object_t *root;
-    const bmic_object_t *capabilities;
-} bmic_product_cap_t;
+    const bmic_object_t *data_ptr;
+} bmic_exchange_t;
 
 typedef const char *(*bmic_management_url_fn)(const bmic_discovery_hint_t *hint);
 
@@ -49,14 +53,14 @@ typedef void(*bmic_management_api_cleanup_fn)(bmic_handle_t **handle);
 
 typedef bmic_product_info_t *(*bmic_management_api_info_fn)(bmic_handle_t *handle,
         gru_status_t *status);
-typedef const bmic_product_cap_t *(*bmic_management_api_cap_fn)(bmic_handle_t *handle, 
+typedef const bmic_exchange_t *(*bmic_management_api_cap_fn)(bmic_handle_t *handle, 
         gru_status_t *status);
 typedef const bmic_object_t *(*bmic_management_api_cap_read_fn)(bmic_handle_t *handle,
-        const bmic_product_cap_t *capabilities, const char *name,
+        const bmic_exchange_t *capabilities, const char *name,
         gru_status_t *status);
 
 typedef const gru_list_t *(*bmic_management_product_cap_all_fn)(bmic_handle_t *handle,
-        const bmic_product_cap_t *cap, gru_status_t *status);
+        const bmic_exchange_t *cap, gru_status_t *status);
 
 
 typedef struct bmic_api_interface_t_ {

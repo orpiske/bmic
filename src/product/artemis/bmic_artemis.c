@@ -109,10 +109,10 @@ err_exit:
     return NULL;
 }
 
-const bmic_product_cap_t *bmic_artemis_product_capabilities(bmic_handle_t *handle,
+const bmic_exchange_t *bmic_artemis_product_capabilities(bmic_handle_t *handle,
                                                             gru_status_t *status)
 {
-    bmic_product_cap_t *ret = gru_alloc(sizeof (bmic_product_cap_t), status);
+    bmic_exchange_t *ret = gru_alloc(sizeof (bmic_exchange_t), status);
     gru_alloc_check(ret, NULL);
 
     bmic_data_t reply = {0};
@@ -145,17 +145,17 @@ const bmic_product_cap_t *bmic_artemis_product_capabilities(bmic_handle_t *handl
     }
 
     ret->root = root;
-    ret->capabilities = capabilities;
+    ret->data_ptr = capabilities;
     return ret;
 }
 
-const char *format_path(const char *op, const bmic_product_cap_t *cap,
+const char *format_path(const char *op, const bmic_exchange_t *cap,
                         const char *capname, gru_status_t *status)
 {
     char *ret;
 
     int rc = asprintf(&ret, "%s/org.apache.activemq.artemis:%s/%s",
-                      op, cap->capabilities->name, capname);
+                      op, cap->data_ptr->name, capname);
 
     if (rc == -1) {
         gru_status_set(status, GRU_FAILURE, "Not enough memory to format capabilities path");
@@ -167,7 +167,7 @@ const char *format_path(const char *op, const bmic_product_cap_t *cap,
 }
 
 const bmic_object_t *bmic_artemis_product_cap_read(bmic_handle_t *handle,
-                                                   const bmic_product_cap_t *cap, const char *name,
+                                                   const bmic_exchange_t *cap, const char *name,
                                                    gru_status_t *status)
 {
 
@@ -222,9 +222,9 @@ void bmic_artemis_add_attr(const void *nodedata, void *payload)
 
 
 const gru_list_t *bmic_artemis_product_cap_all(bmic_handle_t *handle,
-                                                const bmic_product_cap_t *cap, gru_status_t *status)
+                                                const bmic_exchange_t *cap, gru_status_t *status)
 {
-    const bmic_object_t *attributes = bmic_object_find_regex(cap->capabilities,
+    const bmic_object_t *attributes = bmic_object_find_regex(cap->data_ptr,
                                                              ARTEMIS_CORE_CAP_ATTRIBUTES,
                                                              REG_SEARCH_PATH);
     gru_list_t *ret = gru_list_new(status);
