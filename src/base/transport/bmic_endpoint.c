@@ -39,6 +39,10 @@ void bmic_endpoint_destroy(bmic_endpoint_t **ep) {
     if (e->path) {
         gru_dealloc_string(&e->path);
     }
+    
+    if (e->url) {
+        gru_dealloc_string(&e->url);
+    }
 
     gru_dealloc((void **) ep);
 }
