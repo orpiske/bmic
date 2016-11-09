@@ -102,9 +102,9 @@ static void bmic_json_transform_int(const json_object *jobj, bmic_object_t *pare
                 json_object *tmp = json_object_array_get_idx(val, i);
                 bmic_object_t *element = bmic_object_new(key, NULL);
 
-                enum json_type arr_type = json_object_get_type(tmp);
                 bmic_object_add_list_element(child, element);
                 
+                enum json_type arr_type = json_object_get_type(tmp);
                 if (arr_type == json_type_object) {
                     bmic_json_transform_int(tmp, element);
                 }
