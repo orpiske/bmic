@@ -91,7 +91,7 @@ void bmic_product_registry_add(const bmic_api_interface_t *product, gru_status_t
 const gru_list_t *bmic_product_registry();
 
 static inline void bmic_exchange_destroy(bmic_exchange_t **ptr) {
-    bmic_object_destroy(&(*ptr)->root);
+    bmic_object_destroy((bmic_object_t **) &(*ptr)->root);
     gru_dealloc((void **) ptr);
 }
 
