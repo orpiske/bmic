@@ -49,7 +49,7 @@ static void print(const void *obj1, void *d2)
     }
     case LIST:
     {
-        gru_tree_for_each_child(nodeojb, print, NULL);
+        gru_tree_for_each_child(nodeojb->self, print, NULL);
         break;
     }
     case OBJECT:
