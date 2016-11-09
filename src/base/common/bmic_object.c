@@ -158,6 +158,7 @@ void bmic_object_destroy(bmic_object_t **ptr)
 
     obj->self = NULL;
     free(obj->name);
+    free(obj->path);
     gru_dealloc((void **) ptr);
 }
 
