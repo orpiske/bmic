@@ -231,6 +231,11 @@ void bmic_object_add_list_element(bmic_object_t *parent, bmic_object_t *element)
 {
     parent->type = LIST;
 
+    /*
+     * TODO: this code can, probably, go away. It should be able to handle child
+     * elements from the tree itself, after all they are also added as child to 
+     * the tree.
+     */
     if (!parent->data.list) {
         parent->data.list = gru_list_new(NULL);
         if (!parent->data.list) {
@@ -418,6 +423,18 @@ const bmic_object_t *bmic_object_find_regex(const bmic_object_t *parent,
 
 
     return NULL;
+}
+
+void bmic_object_for_each(const bmic_object_t *obj, tree_callback_fn callback, 
+        void *payload) 
+{
+    gru_tree_for_each(obj->self, callback, payload);
+}
+
+void bmic_object_for_each_child(const bmic_object_t *obj, tree_callback_fn callback, 
+        void *payload)
+{
+    gru_tree_for_each_child(obj->self, callback, payload);
 }
 
 /*****

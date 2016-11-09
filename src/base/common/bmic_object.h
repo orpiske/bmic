@@ -94,6 +94,13 @@ const bmic_object_t *bmic_object_find(const bmic_object_t *parent,
 const bmic_object_t *bmic_object_find_regex(const bmic_object_t *parent, 
                                 const char *regex, int flags);
 
+// Navigates within the object tree
+void bmic_object_for_each(const bmic_object_t *obj, tree_callback_fn callback, 
+        void *payload);
+
+void bmic_object_for_each_child(const bmic_object_t *obj, tree_callback_fn callback, 
+        void *payload);
+
 // DEBUG
 void bmic_object_print(const bmic_object_t *parent);
 

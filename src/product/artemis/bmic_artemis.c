@@ -241,8 +241,7 @@ const gru_list_t *bmic_artemis_product_cap_all(bmic_handle_t *handle,
     gru_alloc_check(ret, NULL);
     
     
-    gru_tree_for_each(attributes->self,
-                      bmic_artemis_add_attr, ret);
+    bmic_object_for_each(attributes, bmic_artemis_add_attr, ret);
 
     return ret;
 }
