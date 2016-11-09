@@ -35,7 +35,7 @@ typedef struct bmic_product_info_t_ {
 
 typedef enum bmic_exchange_type_t_ {
     EX_CAP_LIST,
-    EX_CAP_ONLY,
+    EX_CAP_ENTRY,
 } bmic_exchange_type_t;
 
 typedef struct bmic_exchange_t_ {
@@ -55,7 +55,7 @@ typedef bmic_product_info_t *(*bmic_management_api_info_fn)(bmic_handle_t *handl
         gru_status_t *status);
 typedef const bmic_exchange_t *(*bmic_management_api_cap_fn)(bmic_handle_t *handle, 
         gru_status_t *status);
-typedef const bmic_object_t *(*bmic_management_api_cap_read_fn)(bmic_handle_t *handle,
+typedef const bmic_exchange_t *(*bmic_management_api_cap_read_fn)(bmic_handle_t *handle,
         const bmic_exchange_t *capabilities, const char *name,
         gru_status_t *status);
 

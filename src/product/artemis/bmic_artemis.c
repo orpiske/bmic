@@ -119,15 +119,13 @@ const bmic_exchange_t *bmic_artemis_product_capabilities(bmic_handle_t *handle,
     bmic_api_io_read(handle, ARTEMIS_PRODUCT_CAPABILITIES, &reply, status);
 
     if (status->code != GRU_SUCCESS) {
-        gru_dealloc((void **) &ret);
-        return NULL;
+        goto err_exit;
     }
 
 
     bmic_object_t *root = bmic_api_parse_json(reply.data, status);
     if (!root) {
-        gru_dealloc((void **) &ret);
-        return NULL;
+        goto err_exit;
     }
 
     
@@ -137,16 +135,20 @@ const bmic_exchange_t *bmic_artemis_product_capabilities(bmic_handle_t *handle,
 
     if (!capabilities) {
         gru_status_set(status, GRU_FAILURE, "Capabilities not found");
-
         bmic_object_destroy(&root);
-        gru_dealloc((void **) &ret);
-
-        return NULL;
+        
+        goto err_exit;
     }
 
     ret->root = root;
     ret->data_ptr = capabilities;
+    ret->type = EX_CAP_LIST;
+        
     return ret;
+    
+    err_exit:
+    gru_dealloc((void **) &ret);
+    return NULL;
 }
 
 const char *format_path(const char *op, const bmic_exchange_t *cap,
@@ -166,36 +168,44 @@ const char *format_path(const char *op, const bmic_exchange_t *cap,
     return ret;
 }
 
-const bmic_object_t *bmic_artemis_product_cap_read(bmic_handle_t *handle,
-                                                   const bmic_exchange_t *cap, const char *name,
+const bmic_exchange_t *bmic_artemis_product_cap_read(bmic_handle_t *handle,
+                                                   const bmic_exchange_t *cap, 
+                                                     const char *name,
                                                    gru_status_t *status)
 {
 
+    bmic_exchange_t *ret = gru_alloc(sizeof (bmic_exchange_t), status);
+    gru_alloc_check(ret, NULL);
+    
     bmic_data_t reply = {0};
 
     const char *path = format_path("read", cap, name, status);
     if (!path) {
-        return NULL;
+        goto err_exit;
     }
 
     bmic_api_io_read(handle, path, &reply, status);
     gru_dealloc_string((char **) &path);
 
     if (status->code != GRU_SUCCESS) {
-        return NULL;
+        goto err_exit;
     }
 
     bmic_object_t *root = bmic_api_parse_json(reply.data, status);
     if (!root) {
-        return NULL;
+        goto err_exit;
     }
 
     const bmic_object_t *value = bmic_object_find_by_name(root, "value");
     if (!value) {
+        bmic_object_destroy(&root);
+        
         goto err_exit;
     }
 
-    bmic_object_destroy(&root);
+    ret->root = root;
+    ret->data_ptr = value;
+    ret->type = EX_CAP_ENTRY;
 
     return value;
 

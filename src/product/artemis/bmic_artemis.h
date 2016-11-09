@@ -47,7 +47,7 @@ bmic_product_info_t *bmic_artemis_product_info(bmic_handle_t *handle,
 const bmic_exchange_t *bmic_artemis_product_capabilities(bmic_handle_t *handle,
         gru_status_t *status);
 
-const bmic_object_t *bmic_artemis_product_cap_read(bmic_handle_t *handle,
+const bmic_exchange_t *bmic_artemis_product_cap_read(bmic_handle_t *handle,
         const bmic_exchange_t *capabilities, const char *name,
         gru_status_t *status);
 
