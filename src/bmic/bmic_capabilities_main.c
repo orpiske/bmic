@@ -213,7 +213,9 @@ int capabilities_run(options_t *options)
         if (list) {
             printf("The following capabilities are available for the product:\n");
             gru_list_for_each(list, print_cap, NULL);
+            gru_list_destroy(&list);
         }
+        
     }
     else {
         if (options->readall) {
@@ -229,7 +231,9 @@ int capabilities_run(options_t *options)
                 wrapper.status = &status;
                 
                 gru_list_for_each(list, capabilities_read, &wrapper);
+                gru_list_destroy(&list);
             }
+            
         }
         else {
             const bmic_object_t *obj = api->cap_read(handle, cap, options->read,
@@ -242,10 +246,11 @@ int capabilities_run(options_t *options)
                 printf("Unable to read the capability %s (wrong cap, maybe?)\n",
                        options->read);
             }
+            bmic_object_destroy(&obj);
         }
     }
 
-
+    bmic_exchange_destroy(&cap);
     api->api_cleanup(&handle);
     bmic_product_unregister();
     bmic_product_registry_destroy();
