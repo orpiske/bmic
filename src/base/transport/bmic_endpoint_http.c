@@ -58,13 +58,15 @@ static size_t curl_callback(void *contents, size_t size, size_t nmemb, void *use
 void bmic_endpoint_http_begin(bmic_endpoint_t *ep, gru_status_t *status) {
     CURL *easy = NULL;
 
+    curl_global_init(CURL_GLOBAL_DEFAULT);
+    
     easy = curl_easy_init();
     if (!easy) {
         gru_status_set(status, GRU_FAILURE, "Unable to initialize CURL");
 
         return;
     }
-
+    
     gru_status_reset(status);
     ep->handle = easy;
 }
@@ -73,8 +75,10 @@ void bmic_endpoint_http_terminate(bmic_endpoint_t *ep, gru_status_t *status) {
     CURL *easy = bmic_curl_easy(ep);
 
     curl_easy_cleanup(easy);
+    curl_global_cleanup();
+    
     gru_status_reset(status);
-
+    
     ep->handle = NULL;
 }
 
