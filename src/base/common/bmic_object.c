@@ -49,7 +49,7 @@ static void print(const void *obj1, void *d2)
     }
     case LIST:
     {
-        gru_list_for_each(nodeojb->data.list, print, NULL);
+        gru_tree_for_each_child(nodeojb, print, NULL);
         break;
     }
     case OBJECT:
@@ -92,8 +92,8 @@ bmic_object_t *bmic_object_new(const char *name, gru_status_t *status)
         return NULL;
     }
     
-    ret->data.list = NULL;
     ret->data.str = NULL;
+    ret->self = NULL;
 
     return ret;
 }
@@ -152,13 +152,7 @@ void bmic_object_destroy(bmic_object_t **ptr)
         }
     }
 
-    if (obj->type == LIST) {
-        gru_list_for_each(obj->data.list, bmic_object_destroy_element, NULL);
-
-        gru_list_destroy(&obj->data.list);
-    }
-
-    if (obj->type == OBJECT) {
+    if (obj->type == OBJECT || obj->type == LIST) {
         // ROOT element
         if (obj->name == NULL) {
             gru_tree_for_each(obj->self, bmic_object_destroy_element, NULL);
@@ -230,25 +224,16 @@ void bmic_object_set_null(bmic_object_t *obj)
 void bmic_object_add_list_element(bmic_object_t *parent, bmic_object_t *element)
 {
     parent->type = LIST;
-
-    /*
-     * TODO: this code can, probably, go away. It should be able to handle child
-     * elements from the tree itself, after all they are also added as child to 
-     * the tree.
-     */
-    if (!parent->data.list) {
-        parent->data.list = gru_list_new(NULL);
-        if (!parent->data.list) {
-            fprintf(stderr, "Unable to create a new list storage for the element");
-
-            return;
-        }
-    }
+    
+    uint32_t pos = gru_tree_count_children(parent->self);
 
     element->self = gru_tree_add_child(parent->self, element);
-    size_t pos = gru_list_count(parent->data.list);
-    gru_list_append(parent->data.list, element);
+    if (!element->self) {
+        fprintf(stderr, "Unable to create a new tree storage for the child object");
 
+        return;
+    }
+    
     bmic_object_set_path(element, "%s/%s[%i]", parent->path, element->name, pos);
 }
 
@@ -300,7 +285,6 @@ const bmic_object_t *bmic_object_find_by_name(const bmic_object_t *parent, const
 
 
     return NULL;
-
 }
 
 static bool bmic_compare_path(const void *nodedata, const void *data, void *r)
@@ -385,8 +369,6 @@ static bool bmic_object_regex_path(const void *nodedata,
     if (nodedata == NULL) {
         return false;
     }
-
-    // TODO: possibly evaluate using regex instead.
 
     gru_status_t status = {0};
     bool match = bmic_match(nodeobj->path, (const char *) regex, &status);

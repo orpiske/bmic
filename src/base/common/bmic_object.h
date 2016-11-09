@@ -47,7 +47,6 @@ typedef union bmic_value_t_ {
     char *str;
     bool value;
     double d;
-    gru_list_t *list;
 } bmic_value_t;
 
 typedef struct bmic_object_t_ {

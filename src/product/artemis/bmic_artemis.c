@@ -197,6 +197,7 @@ const bmic_exchange_t *bmic_artemis_product_cap_read(bmic_handle_t *handle,
     }
 
     const bmic_object_t *value = bmic_object_find_by_name(root, "value");
+    printf("%d values found\n", gru_tree_count_children(value->self));
     if (!value) {
         bmic_object_destroy(&root);
         
