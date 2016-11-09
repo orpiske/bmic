@@ -75,7 +75,6 @@ static void print_returned_from_list(const void *ptr, const void *payload) {
         break;
     }
     default: {
-         printf("Unexpected complex object type was returned\n");
         break;
     }
     }
@@ -122,7 +121,7 @@ static void print_returned_object(const char *capname, const bmic_object_t *obj)
     case OBJECT:
     default:
     {
-        printf("Unexpected complex object type was returned\n");
+        gru_tree_for_each(obj->self, print_returned_from_list, capname); 
         break;
     }
     }
