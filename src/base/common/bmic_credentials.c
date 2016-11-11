@@ -20,18 +20,31 @@ bmic_credentials_t *bmic_credentials_init(const char *username,
     bmic_credentials_t *ret = gru_alloc(sizeof(bmic_credentials_t), status);
     gru_alloc_check(ret, NULL);
     
-    asprintf(&ret->username, "%s", username);
-    asprintf(&ret->password, "%s", password);
+    
+    if (username != NULL) { 
+        asprintf(&ret->username, "%s", username);
+    }
+    
+    if (password != NULL) { 
+        asprintf(&ret->password, "%s", password);
+    }
     
     return ret;
 }
 
 bmic_credentials_t *bmic_credentials_clone(const bmic_credentials_t *other, gru_status_t *status) {
+    assert(other != NULL);
+    
     bmic_credentials_t *ret = gru_alloc(sizeof(bmic_credentials_t), status);
     gru_alloc_check(ret, NULL);
     
-    asprintf(&ret->username, "%s", other->username);
-    asprintf(&ret->password, "%s", other->password);
+    if (other->username != NULL) { 
+        asprintf(&ret->username, "%s", other->username);
+    }
+    
+    if (other->password != NULL) { 
+        asprintf(&ret->password, "%s", other->password);
+    }
     
     return ret;
 }

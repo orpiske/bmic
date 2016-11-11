@@ -16,6 +16,8 @@
 #ifndef BMIC_CREDENTIALS_H
 #define BMIC_CREDENTIALS_H
 
+#include <assert.h>
+
 #include <common/gru_status.h>
 #include <common/gru_alloc.h>
 
