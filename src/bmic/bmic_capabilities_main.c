@@ -34,8 +34,10 @@ typedef struct cap_read_wrapper_t_ {
 
 static void print_cap(const void *nodedata, void *payload)
 {
-    const char *cap = (const char *) nodedata;
-    printf("-\t %s\n", cap);
+    const bmic_cap_info_t *info = (bmic_cap_info_t *) nodedata;
+    
+    printf("-\t%s\t\t\t%s\t\t\t%s\n", info->name, (info->write ? "rw" : "ro"), 
+           info->description);
 }
 
 static void show_help()

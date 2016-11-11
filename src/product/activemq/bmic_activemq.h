@@ -21,6 +21,7 @@
 
 #include "base/common/bmic_credentials.h"
 #include "base/common/bmic_regex.h"
+#include "base/common/bmic_cap_info.h"
 #include "base/transport/bmic_transport.h"
 #include "base/transport/bmic_endpoint_http.h"
 #include "base/format/bmic_json.h"

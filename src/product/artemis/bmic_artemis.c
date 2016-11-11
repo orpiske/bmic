@@ -215,11 +215,21 @@ err_exit:
     return NULL;
 }
 
-typedef struct bmic_add_attr_payload_t_ {
-    gru_list_t *list;
-    gru_status_t *status;
-} bmic_add_attr_payload_t;
 
+/*
+ "attr": {
+        "ManagementAddress": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "Attribute exposed for management"
+        },
+        "JournalMinFiles": {
+          "rw": false,
+          "type": "int",
+          "desc": "Attribute exposed for management"
+        },
+
+ */
 
 static void bmic_artemis_add_attr(const void *nodedata, void *payload)
 {
@@ -229,8 +239,30 @@ static void bmic_artemis_add_attr(const void *nodedata, void *payload)
 
     if (nodeobj->type == OBJECT) {
         if (nodeobj->name && strcmp(nodeobj->name, "attr") != 0) {
+            bmic_cap_info_t *info = bmic_cap_info_new(pl->status);
             
-            gru_list_append(pl->list, nodeobj->name);
+            if (!info) {
+                return;
+            }
+            
+            bmic_cap_info_set_name(info, nodeobj->name);
+            
+            bmic_object_t *rw = bmic_object_find_by_name(nodeobj, "rw");
+            if (rw && rw->type == BOOLEAN) {
+                bmic_cap_info_set_write(info, rw->data.value);
+            }
+            
+            bmic_object_t *type = bmic_object_find_by_name(nodeobj, "type");
+            if (type && type->type == STRING) {
+                bmic_cap_info_set_typename(info, type->data.str);
+            }
+            
+            bmic_object_t *desc = bmic_object_find_by_name(nodeobj, "desc");
+            if (desc && desc->type == STRING) {
+                bmic_cap_info_set_description(info, desc->data.str);
+            }
+            
+            gru_list_append(pl->list, info);
         }
     }
 
