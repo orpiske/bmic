@@ -46,14 +46,35 @@ void bmic_artemis_cleanup(bmic_handle_t **handle);
 
 bmic_product_info_t *bmic_artemis_product_info(bmic_handle_t *handle,
         gru_status_t *status);
-const bmic_exchange_t *bmic_artemis_product_capabilities(bmic_handle_t *handle,
+
+/**
+ * Load all available management/attribute capabilites
+ * @param handle 
+ * @param status
+ */
+const bmic_exchange_t *bmic_artemis_load_capabilities(bmic_handle_t *handle,
         gru_status_t *status);
 
-const bmic_exchange_t *bmic_artemis_product_cap_read(bmic_handle_t *handle,
+/**
+ * Read a single an attribute from the MI
+ * @param handle
+ * @param capabilities
+ * @param name
+ * @param status
+ * @return 
+ */
+const bmic_exchange_t *bmic_artemis_attribute_read(bmic_handle_t *handle,
         const bmic_exchange_t *capabilities, const char *name,
         gru_status_t *status);
 
-const gru_list_t *bmic_artemis_product_cap_all(bmic_handle_t *handle,
+/**
+ * Get a list of all available broker attributes and their metadata
+ * @param handle
+ * @param cap
+ * @param status
+ * @return 
+ */
+const gru_list_t *bmic_artemis_attribute_list(bmic_handle_t *handle,
         const bmic_exchange_t *cap, gru_status_t *status);
 
 #ifdef __cplusplus

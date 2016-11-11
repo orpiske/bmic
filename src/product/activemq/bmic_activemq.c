@@ -23,9 +23,9 @@ bmic_api_interface_t *bmic_activemq_product(gru_status_t *status)
     ret->api_init = bmic_activemq_init;
     ret->api_cleanup = bmic_activemq_cleanup;
     ret->product_info = bmic_activemq_product_info;
-    ret->capabilities = bmic_activemq_product_capabilities;
-    ret->cap_read = bmic_activemq_product_cap_read;
-    ret->cap_all = bmic_activemq_product_cap_all;
+    ret->load_capabilities = bmic_activemq_load_capabilities;
+    ret->attribute_read = bmic_activemq_attribute_read;
+    ret->attribute_list = bmic_activemq_attribute_list;
 
     return ret;
 }
@@ -109,7 +109,7 @@ err_exit:
     return NULL;
 }
 
-const bmic_exchange_t *bmic_activemq_product_capabilities(bmic_handle_t *handle,
+const bmic_exchange_t *bmic_activemq_load_capabilities(bmic_handle_t *handle,
                                                              gru_status_t *status)
 {
     bmic_exchange_t *ret = gru_alloc(sizeof (bmic_exchange_t), status);
@@ -205,7 +205,7 @@ static void bmic_activemq_read_attributes(const bmic_object_t *obj,
     }
 }
 
-const bmic_exchange_t *bmic_activemq_product_cap_read(bmic_handle_t *handle,
+const bmic_exchange_t *bmic_activemq_attribute_read(bmic_handle_t *handle,
                                                     const bmic_exchange_t *cap, const char *name,
                                                     gru_status_t *status)
 {
@@ -291,7 +291,7 @@ static void bmic_activemq_add_attr(const void *nodedata, void *payload)
 
 }
 
-const gru_list_t *bmic_activemq_product_cap_all(bmic_handle_t *handle,
+const gru_list_t *bmic_activemq_attribute_list(bmic_handle_t *handle,
                                                 const bmic_exchange_t *cap, gru_status_t *status)
 {
     const bmic_object_t *attributes = bmic_object_find_regex(cap->data_ptr,

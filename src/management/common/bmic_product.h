@@ -61,11 +61,11 @@ typedef bmic_product_info_t *(*bmic_management_api_info_fn)(bmic_handle_t *handl
         gru_status_t *status);
 typedef const bmic_exchange_t *(*bmic_management_api_cap_fn)(bmic_handle_t *handle, 
         gru_status_t *status);
-typedef const bmic_exchange_t *(*bmic_management_api_cap_read_fn)(bmic_handle_t *handle,
+typedef const bmic_exchange_t *(*bmic_management_api_attr_read_fn)(bmic_handle_t *handle,
         const bmic_exchange_t *capabilities, const char *name,
         gru_status_t *status);
 
-typedef const gru_list_t *(*bmic_management_product_cap_all_fn)(bmic_handle_t *handle,
+typedef const gru_list_t *(*bmic_management_api_attr_list_fn)(bmic_handle_t *handle,
         const bmic_exchange_t *cap, gru_status_t *status);
 
 
@@ -78,9 +78,9 @@ typedef struct bmic_api_interface_t_ {
     bmic_management_api_cleanup_fn api_cleanup;
     
     bmic_management_api_info_fn product_info;
-    bmic_management_api_cap_fn capabilities;
-    bmic_management_api_cap_read_fn cap_read;
-    bmic_management_product_cap_all_fn cap_all;
+    bmic_management_api_cap_fn load_capabilities;
+    bmic_management_api_attr_read_fn attribute_read;
+    bmic_management_api_attr_list_fn attribute_list;
 
 } bmic_api_interface_t;
 

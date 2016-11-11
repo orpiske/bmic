@@ -48,15 +48,16 @@ void bmic_activemq_cleanup(bmic_handle_t **handle);
 bmic_product_info_t *bmic_activemq_product_info(bmic_handle_t *handle,
         gru_status_t *status);
 
-const bmic_exchange_t *bmic_activemq_product_capabilities(bmic_handle_t *handle,
+// Load all capabilites from MI
+const bmic_exchange_t *bmic_activemq_load_capabilities(bmic_handle_t *handle,
         gru_status_t *status);
 
-const bmic_exchange_t *bmic_activemq_product_cap_read(bmic_handle_t *handle,
+const bmic_exchange_t *bmic_activemq_attribute_read(bmic_handle_t *handle,
         const bmic_exchange_t *capabilities, const char *name,
         gru_status_t *status);
 
 
-const gru_list_t *bmic_activemq_product_cap_all(bmic_handle_t *handle,
+const gru_list_t *bmic_activemq_attribute_list(bmic_handle_t *handle,
         const bmic_exchange_t *cap, gru_status_t *status);
 
 #ifdef __cplusplus

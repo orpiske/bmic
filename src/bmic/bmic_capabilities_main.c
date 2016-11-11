@@ -149,7 +149,7 @@ void capabilities_do_read(bmic_handle_t *handle,
                        bmic_api_interface_t *api, const bmic_exchange_t *cap, 
                         const char *capname, gru_status_t *status)
 {
-    const bmic_exchange_t *obj = api->cap_read(handle, cap, capname,
+    const bmic_exchange_t *obj = api->attribute_read(handle, cap, capname,
                                              status);
 
     if (obj) {
@@ -219,7 +219,7 @@ int capabilities_run(options_t *options)
     }
 
 
-    const bmic_exchange_t *cap = api->capabilities(handle, &status);
+    const bmic_exchange_t *cap = api->load_capabilities(handle, &status);
     if (!cap) {
         fprintf(stderr, "Unable to load capabilities: %s\n", status.message);
 
@@ -228,7 +228,7 @@ int capabilities_run(options_t *options)
 
 
     if (options->list) {
-        const gru_list_t *list = api->cap_all(handle, cap, &status);
+        const gru_list_t *list = api->attribute_list(handle, cap, &status);
 
         if (list) {
             printf("\n  %-35s %-5s %-15s %s\n", "NAME", "MODE", "TYPE", "DESCRIPTION");
@@ -240,7 +240,7 @@ int capabilities_run(options_t *options)
     }
     else {
         if (options->readall) {
-            const gru_list_t *list = api->cap_all(handle, cap, &status);
+            const gru_list_t *list = api->attribute_list(handle, cap, &status);
 
             if (list) {
                 cap_read_wrapper_t wrapper; 
@@ -257,7 +257,7 @@ int capabilities_run(options_t *options)
             
         }
         else {
-            const bmic_exchange_t *obj = api->cap_read(handle, cap, options->read,
+            const bmic_exchange_t *obj = api->attribute_read(handle, cap, options->read,
                                                      &status);
 
             if (obj) {
