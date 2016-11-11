@@ -32,10 +32,8 @@ typedef struct cap_read_wrapper_t_ {
     gru_status_t *status;
 } cap_read_wrapper_t;
 
-static void print_cap(const void *nodedata, void *payload)
+static void print_cap_info(const bmic_cap_info_t *info)
 {
-    const bmic_cap_info_t *info = (bmic_cap_info_t *) nodedata;
-    
     const char *typename_short = NULL;
     
     if (strstr(info->typename, "java.lang.String")) {
@@ -56,6 +54,12 @@ static void print_cap(const void *nodedata, void *payload)
            info->description);
 }
 
+static void print_cap(const void *nodedata, void *payload)
+{
+    const bmic_cap_info_t *info = (bmic_cap_info_t *) nodedata;
+    print_cap_info(info);
+}
+
 static void show_help()
 {
     printf("Usage: ");
@@ -73,22 +77,22 @@ static void print_returned_from_list(const void *ptr, void *payload) {
     switch (obj->type) {
     case STRING:
     {
-        printf("\t%s\n", obj->data.str);
+        printf(" \\_ %s\n", obj->data.str);
         break;
     }
     case INTEGER:
     {
-        printf("\t%i\n", obj->data.number);
+        printf(" \\_ %i\n", obj->data.number);
         break;
     }
     case BOOLEAN:
     {
-        printf("%s\n", (obj->data.value ? "true" : "false"));
+        printf(" \\_ %s\n", (obj->data.value ? "true" : "false"));
         break;
     }
     case DOUBLE:
     {
-        printf("%.4f\n", obj->data.d);
+        printf(" \\_ %.4f\n", obj->data.d);
         break;
     }
     default: {
@@ -103,35 +107,31 @@ static void print_returned_object(const char *capname, const bmic_object_t *obj)
     switch (obj->type) {
     case STRING:
     {
-        printf("The value for capability %s is: %s\n", capname,
-               obj->data.str);
+        printf(" \\_ %s\n", obj->data.str);
         break;
     }
     case INTEGER:
     {
-        printf("The value for capability %s is: %i\n", capname,
-               obj->data.number);
+        printf(" \\_ %i\n", obj->data.number);
         break;
     }
     case BOOLEAN:
     {
-        printf("The value for capability %s is: %s\n", capname,
-               (obj->data.value ? "true" : "false"));
+        printf(" \\_ %s\n", (obj->data.value ? "true" : "false"));
         break;
     }
     case DOUBLE:
     {
-        printf("The value for capability %s is: %.4f\n", capname,
-               obj->data.d);
+        printf(" \\_  %.4f\n", obj->data.d);
         break;
     }
     case NULL_TYPE:
     {
-        printf("The value for capability %s is: (null)\n", capname);
+        printf(" \\_  (null)\n");
         break;
     }
     case LIST: {
-        printf("The values for capability %s are:\n", capname);
+        printf("\n");
 
         bmic_object_for_each_child(obj, print_returned_from_list, (void *)capname);
         break;
@@ -153,6 +153,8 @@ void capabilities_do_read(bmic_handle_t *handle,
                                              status);
 
     if (obj) {
+        // printf("\n");
+        print_cap_info(obj->payload.capinfo);
         print_returned_object(capname, obj->data_ptr);
         
         bmic_exchange_destroy((bmic_exchange_t **) &obj);
@@ -167,7 +169,6 @@ void capabilities_do_read(bmic_handle_t *handle,
 
 static void capabilities_read(const void *nodedata, void *payload)
 {
-    // const char *capname = (const char *) nodedata;
     const bmic_cap_info_t *info = (bmic_cap_info_t *) nodedata;
     cap_read_wrapper_t *wrapper = (cap_read_wrapper_t *) payload;
     
@@ -250,6 +251,7 @@ int capabilities_run(options_t *options)
                 wrapper.handle = handle;
                 wrapper.status = &status;
                 
+                printf("\n  %-35s %-5s %-15s %s\n", "NAME", "MODE", "TYPE", "DESCRIPTION");
                 gru_list_for_each(list, capabilities_read, &wrapper);
                 gru_list_destroy((gru_list_t **)&list);
             }
@@ -260,6 +262,8 @@ int capabilities_run(options_t *options)
                                                      &status);
 
             if (obj) {
+                printf("\n  %-35s %-5s %-15s %s\n", "NAME", "MODE", "TYPE", "DESCRIPTION");
+                print_cap_info(obj->payload.capinfo);
                 print_returned_object(options->read, obj->data_ptr);
             }
             else {

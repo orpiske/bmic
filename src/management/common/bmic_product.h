@@ -20,6 +20,7 @@
 #include <collection/gru_list.h>
 
 #include "base/common/bmic_object.h"
+#include "base/common/bmic_cap_info.h"
 
 #include "bmic_handle.h"
 #include "bmic_discovery_hint.h"
@@ -38,10 +39,15 @@ typedef enum bmic_exchange_type_t_ {
     EX_CAP_ENTRY,
 } bmic_exchange_type_t;
 
+typedef union bmic_exchange_payload_t_ {
+    const bmic_cap_info_t *capinfo;
+} bmic_exchange_payload_t;
+
 typedef struct bmic_exchange_t_ {
     bmic_exchange_type_t type;
     const bmic_object_t *root;
     const bmic_object_t *data_ptr;
+    bmic_exchange_payload_t payload;
 } bmic_exchange_t;
 
 typedef const char *(*bmic_management_url_fn)(const bmic_discovery_hint_t *hint);

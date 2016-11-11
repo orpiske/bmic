@@ -168,6 +168,45 @@ const char *format_path(const char *op, const bmic_exchange_t *cap,
     return ret;
 }
 
+const char *bmic_artermis_cap_attr_path(bmic_object_t *obj, const char *name, 
+                                        gru_status_t *status) {
+    char *ret;
+
+    int rc = asprintf(&ret, "/value/%s/attr/%s", obj->name, name);
+
+    if (rc == -1) {
+        gru_status_set(status, GRU_FAILURE, "Not enough memory to format capabilities path");
+
+        return NULL;
+    }
+
+    return ret;
+}
+
+/**
+ * Given a node of attributes, read them into the info object
+ * @param obj
+ * @param info
+ */
+static void bmic_artemis_read_attributes(const bmic_object_t *obj,
+                                         bmic_cap_info_t *info)
+{
+    bmic_object_t *rw = bmic_object_find_by_name(obj, "rw");
+    if (rw && rw->type == BOOLEAN) {
+        bmic_cap_info_set_write(info, rw->data.value);
+    }
+
+    bmic_object_t *type = bmic_object_find_by_name(obj, "type");
+    if (type && type->type == STRING) {
+        bmic_cap_info_set_typename(info, type->data.str);
+    }
+
+    bmic_object_t *desc = bmic_object_find_by_name(obj, "desc");
+    if (desc && desc->type == STRING) {
+        bmic_cap_info_set_description(info, desc->data.str);
+    }
+}
+
 const bmic_exchange_t *bmic_artemis_product_cap_read(bmic_handle_t *handle,
                                                    const bmic_exchange_t *cap, 
                                                      const char *name,
@@ -203,10 +242,27 @@ const bmic_exchange_t *bmic_artemis_product_cap_read(bmic_handle_t *handle,
         
         goto err_exit;
     }
+    
+    
+    const char *rev = bmic_artermis_cap_attr_path( cap->data_ptr, name, status);
+    
+    const bmic_object_t *value_attributes = bmic_object_find_by_path(cap->data_ptr, 
+                                                                     rev);    
+    gru_dealloc_string(&rev);
+    
+    bmic_cap_info_t *info = bmic_cap_info_new(status);
+            
+    if (!info) {
+        return;
+    }
+
+    bmic_cap_info_set_name(info, name);
+    bmic_artemis_read_attributes(value_attributes, info);
 
     ret->root = root;
     ret->data_ptr = value;
     ret->type = EX_CAP_ENTRY;
+    ret->payload.capinfo = info;
 
     return ret;
 
@@ -230,21 +286,7 @@ static void bmic_artemis_add_attr(const void *nodedata, void *payload)
             }
             
             bmic_cap_info_set_name(info, nodeobj->name);
-            
-            bmic_object_t *rw = bmic_object_find_by_name(nodeobj, "rw");
-            if (rw && rw->type == BOOLEAN) {
-                bmic_cap_info_set_write(info, rw->data.value);
-            }
-            
-            bmic_object_t *type = bmic_object_find_by_name(nodeobj, "type");
-            if (type && type->type == STRING) {
-                bmic_cap_info_set_typename(info, type->data.str);
-            }
-            
-            bmic_object_t *desc = bmic_object_find_by_name(nodeobj, "desc");
-            if (desc && desc->type == STRING) {
-                bmic_cap_info_set_description(info, desc->data.str);
-            }
+            bmic_artemis_read_attributes(nodeobj, info);
             
             gru_list_append(pl->list, info);
         }
