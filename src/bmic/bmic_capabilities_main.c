@@ -36,7 +36,23 @@ static void print_cap(const void *nodedata, void *payload)
 {
     const bmic_cap_info_t *info = (bmic_cap_info_t *) nodedata;
     
-    printf("-\t%s\t\t\t%s\t\t\t%s\n", info->name, (info->write ? "rw" : "ro"), 
+    const char *typename_short = NULL;
+    
+    if (strstr(info->typename, "java.lang.String")) {
+        typename_short = "string";
+    }
+    else {
+        if (strstr(info->typename, "Object")) {
+           typename_short = "object";
+        }
+        else { 
+            typename_short = info->typename;
+        }
+    
+    }
+    
+    printf("- %-35s %-5s %-15s %s\n", info->name, 
+           (info->write ? "rw" : "ro"), typename_short,
            info->description);
 }
 
@@ -214,7 +230,8 @@ int capabilities_run(options_t *options)
         const gru_list_t *list = api->cap_all(handle, cap, &status);
 
         if (list) {
-            printf("The following capabilities are available for the product:\n");
+            printf("\n  %-35s %-5s %-15s %s\n", "NAME", "MODE", "TYPE", "DESCRIPTION");
+            
             gru_list_for_each(list, print_cap, NULL);
             gru_list_destroy((gru_list_t **)&list);
         }
