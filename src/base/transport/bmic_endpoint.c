@@ -19,6 +19,8 @@
 bmic_endpoint_t *bmic_endpoint_init(const char *url, const char *username,
         const char *password, gru_status_t *status)
 {
+    assert(url != NULL);
+    
     bmic_endpoint_t *ret = gru_alloc(sizeof(bmic_endpoint_t), status);
     gru_alloc_check(ret, NULL);
 
@@ -66,6 +68,8 @@ void bmic_endpoint_set_credentials(bmic_endpoint_t *ep,
 
 void bmic_endpoint_set_path(bmic_endpoint_t *ep, const char *path)
 {
+    assert(ep != NULL);
+    
     if (ep->path != NULL) {
         gru_dealloc_string(&ep->path);
     }

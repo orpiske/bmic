@@ -100,6 +100,8 @@ bmic_object_t *bmic_object_new(const char *name, gru_status_t *status)
 
 bmic_object_t *bmic_object_new_root(gru_status_t *status)
 {
+    assert(status != NULL);
+    
     bmic_object_t *ret = gru_alloc(sizeof (bmic_object_t), status);
     gru_alloc_check(ret, NULL);
 
@@ -164,6 +166,8 @@ void bmic_object_destroy(bmic_object_t **ptr)
 
 bool bmic_object_set_name(bmic_object_t *obj, const char *name)
 {
+    assert(obj != NULL);
+    
     int rc = asprintf(&obj->name, "%s", name);
     if (rc == -1) {
         return false;
@@ -174,6 +178,8 @@ bool bmic_object_set_name(bmic_object_t *obj, const char *name)
 
 bool bmic_object_set_path(bmic_object_t *obj, const char *path, ...)
 {
+    assert(obj != NULL);
+    
     va_list ap;
     va_start(ap, path);
 
@@ -189,36 +195,48 @@ bool bmic_object_set_path(bmic_object_t *obj, const char *path, ...)
 
 void bmic_object_set_string(bmic_object_t *obj, const char *value)
 {
+    assert(obj != NULL && value != NULL);
+    
     obj->type = STRING;
     asprintf(&obj->data.str, "%s", value);
 }
 
 void bmic_object_set_integer(bmic_object_t *obj, int32_t value)
 {
+    assert(obj != NULL);
+    
     obj->type = INTEGER;
     obj->data.number = value;
 }
 
 void bmic_object_set_boolean(bmic_object_t *obj, bool value)
 {
+    assert(obj != NULL);
+    
     obj->type = BOOLEAN;
     obj->data.value = value;
 }
 
 void bmic_object_set_double(bmic_object_t *obj, double value)
 {
+    assert(obj != NULL);
+    
     obj->type = DOUBLE;
     obj->data.d = value;
 }
 
 void bmic_object_set_null(bmic_object_t *obj)
 {
+    assert(obj != NULL);
+    
     obj->type = NULL_TYPE;
     obj->data.str = NULL;
 }
 
 void bmic_object_add_list_element(bmic_object_t *parent, bmic_object_t *element)
 {
+    assert(parent != NULL && element != NULL);
+    
     parent->type = LIST;
     
     uint32_t pos = gru_tree_count_children(parent->self);
@@ -236,6 +254,9 @@ void bmic_object_add_list_element(bmic_object_t *parent, bmic_object_t *element)
 void bmic_object_add_object(bmic_object_t *parent,
                             bmic_object_t *child)
 {
+    
+    assert(parent != NULL && child != NULL);
+    
     parent->type = OBJECT;
 
     child->self = gru_tree_add_child(parent->self, child);
@@ -272,6 +293,8 @@ static bool bmic_compare_name(const void *nodedata, const void *data, void *r)
 
 const bmic_object_t *bmic_object_find_by_name(const bmic_object_t *parent, const char *name)
 {
+    assert(parent != NULL && name != NULL);
+    
     const gru_tree_node_t *tn = gru_tree_search(parent->self,
                                                 bmic_compare_name, name);
 
@@ -308,6 +331,8 @@ static bool bmic_compare_path(const void *nodedata, const void *data, void *r)
 const bmic_object_t *bmic_object_find_by_path(const bmic_object_t *parent,
                                               const char *path)
 {
+    assert(parent != NULL && path != NULL);
+    
     const gru_tree_node_t *tn = gru_tree_search(parent->self,
                                                 bmic_compare_path, path);
 
@@ -323,6 +348,8 @@ const bmic_object_t *bmic_object_find(const bmic_object_t *parent,
                                       compare_function_t compare,
                                       void *data)
 {
+    assert(parent != NULL);
+    
     const gru_tree_node_t *tn = gru_tree_search(parent->self,
                                                 compare, data);
 
@@ -381,6 +408,8 @@ static bool bmic_object_regex_path(const void *nodedata,
 const bmic_object_t *bmic_object_find_regex(const bmic_object_t *parent,
                                             const char *regex, int flags)
 {
+    assert(parent != NULL && regex != NULL);
+    
     if (flags & REG_SEARCH_PATH) {
         const gru_tree_node_t *ret = gru_tree_search(parent->self,
                                                      bmic_object_regex_path, regex);
@@ -406,12 +435,16 @@ const bmic_object_t *bmic_object_find_regex(const bmic_object_t *parent,
 void bmic_object_for_each(const bmic_object_t *obj, tree_callback_fn callback, 
         void *payload) 
 {
+    assert(obj != NULL);
+    
     gru_tree_for_each(obj->self, callback, payload);
 }
 
 void bmic_object_for_each_child(const bmic_object_t *obj, tree_callback_fn callback, 
         void *payload)
 {
+    assert(obj != NULL);
+    
     gru_tree_for_each_child(obj->self, callback, payload);
 }
 

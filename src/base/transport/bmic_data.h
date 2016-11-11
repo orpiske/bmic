@@ -16,6 +16,8 @@
 #ifndef BMIC_DATA_H
 #define BMIC_DATA_H
 
+#include <assert.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -26,6 +28,8 @@ typedef struct bmic_data_t_ {
 } bmic_data_t;
 
 static inline const char *bmic_data_to_string(bmic_data_t *data) {
+    assert(data != NULL);
+    
     return (const char *) data->data;
 }
 

@@ -110,6 +110,8 @@ static void bmic_endpoint_http_path_cleanup(char **path) {
 void bmic_endpoint_http_read(const bmic_endpoint_t *ep, bmic_data_t *payload,
                              bmic_data_t *data, bmic_endpoint_status_t *epstatus)
 {
+    assert(ep != NULL);
+    
     CURL *easy = bmic_curl_easy_const(ep);
     char *full_path = bmic_endpoint_http_path_join(ep, easy, epstatus->status);
 
@@ -160,6 +162,8 @@ void bmic_endpoint_http_read(const bmic_endpoint_t *ep, bmic_data_t *payload,
 void bmic_endpoint_http_write(const bmic_endpoint_t *ep, bmic_data_t *payload,
                               bmic_data_t *data, bmic_endpoint_status_t *epstatus)
 {
+    assert(ep != NULL);
+    
     CURL *easy = bmic_curl_easy_const(ep);
     char *full_path = bmic_endpoint_http_path_join(ep, easy, epstatus->status);
 

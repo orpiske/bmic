@@ -17,6 +17,7 @@
 #define BMIC_FORMAT_JSON_H
 
 #include <stdbool.h>
+#include <assert.h>
 
 #include <json-c/json.h>
 

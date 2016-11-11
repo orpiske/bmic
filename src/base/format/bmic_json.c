@@ -130,6 +130,8 @@ static void bmic_json_transform_int(const json_object *jobj, bmic_object_t *pare
 
 void bmic_json_transform(const bmic_json_t *jobj, bmic_object_t *ret)
 {
+    assert(jobj != NULL && ret != NULL);
+    
     return bmic_json_transform_int(jobj->obj, ret);
 
 }
