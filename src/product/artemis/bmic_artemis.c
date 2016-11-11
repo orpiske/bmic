@@ -215,22 +215,6 @@ err_exit:
     return NULL;
 }
 
-
-/*
- "attr": {
-        "ManagementAddress": {
-          "rw": false,
-          "type": "java.lang.String",
-          "desc": "Attribute exposed for management"
-        },
-        "JournalMinFiles": {
-          "rw": false,
-          "type": "int",
-          "desc": "Attribute exposed for management"
-        },
-
- */
-
 static void bmic_artemis_add_attr(const void *nodedata, void *payload)
 {
      const bmic_object_t *nodeobj = (bmic_object_t *) nodedata;
