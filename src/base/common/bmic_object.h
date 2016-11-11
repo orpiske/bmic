@@ -24,6 +24,8 @@
 #include <collection/gru_list.h>
 #include <collection/gru_tree.h>
 
+#include "bmic_cap_value.h"
+
 #define REG_SEARCH_NAME 1
 #define REG_SEARCH_PATH 2
 
@@ -32,15 +34,6 @@
 extern "C" {
 #endif
 
-typedef enum bmic_value_type_t_ {
-    INTEGER,
-    STRING,
-    BOOLEAN,
-    DOUBLE,
-    NULL_TYPE,
-    LIST,
-    OBJECT,
-} bmic_value_type_t;
 
 typedef union bmic_value_t_ {
     int32_t number;
