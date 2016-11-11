@@ -17,6 +17,7 @@
 #define BMIC_OBJECT_H
 
 #include <stdbool.h>
+#include <assert.h>
 
 #include <common/gru_alloc.h>
 #include <common/gru_status.h>
