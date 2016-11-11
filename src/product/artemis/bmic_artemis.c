@@ -251,9 +251,8 @@ const bmic_exchange_t *bmic_artemis_attribute_read(bmic_handle_t *handle,
     gru_dealloc_string((char **)&rev);
     
     bmic_cap_info_t *info = bmic_cap_info_new(status);
-            
     if (!info) {
-        return;
+        goto err_exit;
     }
 
     bmic_cap_info_set_name(info, name);
