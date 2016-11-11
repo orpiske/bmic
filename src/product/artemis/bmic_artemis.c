@@ -215,22 +215,26 @@ err_exit:
     return NULL;
 }
 
+typedef struct bmic_add_attr_payload_t_ {
+    gru_list_t *list;
+    gru_status_t *status;
+} bmic_add_attr_payload_t;
+
 
 void bmic_artemis_add_attr(const void *nodedata, void *payload)
 {
      const bmic_object_t *nodeobj = (bmic_object_t *) nodedata;
+     bmic_payload_add_attr_t *pl = 
+             (bmic_payload_add_attr_t *) payload;
 
     if (nodeobj->type == OBJECT) {
         if (nodeobj->name && strcmp(nodeobj->name, "attr") != 0) {
-            gru_list_t *list = (gru_list_t *) payload;
             
-            gru_list_append(list, nodeobj->name);
+            gru_list_append(pl->list, nodeobj->name);
         }
     }
 
 }
-
-
 
 const gru_list_t *bmic_artemis_product_cap_all(bmic_handle_t *handle,
                                                 const bmic_exchange_t *cap, gru_status_t *status)
@@ -241,8 +245,13 @@ const gru_list_t *bmic_artemis_product_cap_all(bmic_handle_t *handle,
     gru_list_t *ret = gru_list_new(status);
     gru_alloc_check(ret, NULL);
     
+    bmic_payload_add_attr_t payload = {
+        .list = ret,
+        .status = status,
+    };
     
-    bmic_object_for_each(attributes, bmic_artemis_add_attr, ret);
+    
+    bmic_object_for_each(attributes, bmic_artemis_add_attr, &payload);
 
     return ret;
 }

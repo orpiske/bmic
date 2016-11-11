@@ -20,6 +20,7 @@
 #include <common/gru_alloc.h>
 
 #include "base/common/bmic_credentials.h"
+#include "base/common/bmic_cap_info.h"
 #include "base/transport/bmic_transport.h"
 #include "base/transport/bmic_endpoint_http.h"
 #include "base/format/bmic_json.h"
@@ -28,6 +29,7 @@
 #include "management/discovery/bmic_discovery.h"
 
 #include "product/common/bmic_api_io.h"
+#include "product/common/bmic_internal_payloads.h"
 
 #include "bmic_artemis_urls.h"
 

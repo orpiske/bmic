@@ -29,6 +29,7 @@
 #include "management/discovery/bmic_discovery.h"
 
 #include "product/common/bmic_api_io.h"
+#include "product/common/bmic_internal_payloads.h"
 
 #include "bmic_activemq_urls.h"
 
