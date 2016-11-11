@@ -22,6 +22,28 @@ bmic_cap_info_t *bmic_cap_info_new(gru_status_t *status) {
     return ret;
 }
 
+void bmic_cap_info_destroy(bmic_cap_info_t **ptr) {
+    bmic_cap_info_t *obj = *ptr;
+    
+    if (obj == NULL) {
+        return;
+    }
+    
+    if (obj->name != NULL) {
+        gru_dealloc_string(&obj->name);
+    }
+    
+    if (obj->description != NULL) {
+        gru_dealloc_string(obj->description);
+    }
+    
+    if (obj->typename != NULL) {
+        gru_dealloc_string(obj->typename);
+    }
+    
+    gru_dealloc((void **) ptr);
+}
+
 void bmic_cap_info_set_name(bmic_cap_info_t *cap, const char *name) {
     assert(cap != NULL);
     
@@ -42,6 +64,8 @@ void bmic_cap_info_set_write(bmic_cap_info_t *cap, bool write) {
     
     cap->write = write;
 }
+
+
 void bmic_cap_info_set_typename(bmic_cap_info_t *cap, const char *typename) {
     assert(cap != NULL);
     
@@ -50,21 +74,3 @@ void bmic_cap_info_set_typename(bmic_cap_info_t *cap, const char *typename) {
     }
 }
 
-void bmic_cap_info_destroy(bmic_cap_info_t **ptr) {
-    bmic_cap_info_t *obj = *ptr;
-    
-    if (obj == NULL) {
-        return;
-    }
-    
-    if (obj->name != NULL) {
-        gru_dealloc_string(&obj->name);
-    }
-    
-    if (obj->description != NULL) {
-        gru_dealloc_string(obj->description);
-    }
-    
-    
-    gru_dealloc((void **) ptr);
-}
