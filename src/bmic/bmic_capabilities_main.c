@@ -153,7 +153,6 @@ void capabilities_do_read(bmic_handle_t *handle,
                                              status);
 
     if (obj) {
-        // printf("\n");
         print_cap_info(obj->payload.capinfo);
         print_returned_object(capname, obj->data_ptr);
         
