@@ -167,11 +167,12 @@ void capabilities_do_read(bmic_handle_t *handle,
 
 static void capabilities_read(const void *nodedata, void *payload)
 {
-    const char *capname = (const char *) nodedata;
+    // const char *capname = (const char *) nodedata;
+    const bmic_cap_info_t *info = (bmic_cap_info_t *) nodedata;
     cap_read_wrapper_t *wrapper = (cap_read_wrapper_t *) payload;
     
     capabilities_do_read(wrapper->handle, wrapper->api, wrapper->cap, 
-                      capname, wrapper->status);
+                      info->name, wrapper->status);
     
 }
 
@@ -242,7 +243,6 @@ int capabilities_run(options_t *options)
             const gru_list_t *list = api->cap_all(handle, cap, &status);
 
             if (list) {
-                printf("The following capabilities are available for the product:\n");
                 cap_read_wrapper_t wrapper; 
                 
                 wrapper.api = api;
