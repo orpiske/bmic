@@ -211,7 +211,7 @@ err_exit:
 }
 
 
-void bmic_activemq_add_attr(const void *nodedata, void *payload)
+static void bmic_activemq_add_attr(const void *nodedata, void *payload)
 {
      const bmic_object_t *nodeobj = (bmic_object_t *) nodedata;
      bmic_payload_add_attr_t *pl = 

@@ -221,7 +221,7 @@ typedef struct bmic_add_attr_payload_t_ {
 } bmic_add_attr_payload_t;
 
 
-void bmic_artemis_add_attr(const void *nodedata, void *payload)
+static void bmic_artemis_add_attr(const void *nodedata, void *payload)
 {
      const bmic_object_t *nodeobj = (bmic_object_t *) nodedata;
      bmic_payload_add_attr_t *pl = 
