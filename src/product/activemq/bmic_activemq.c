@@ -166,7 +166,7 @@ const char *format_activemq_path(const char *op, const bmic_exchange_t *cap,
     return ret;
 }
 
-const char *bmic_activemq_cap_attr_path(bmic_object_t *obj, const char *name, 
+const char *bmic_activemq_cap_attr_path(const bmic_object_t *obj, const char *name, 
                                         gru_status_t *status) {
     char *ret;
 
@@ -189,17 +189,17 @@ const char *bmic_activemq_cap_attr_path(bmic_object_t *obj, const char *name,
 static void bmic_activemq_read_attributes(const bmic_object_t *obj,
                                          bmic_cap_info_t *info)
 {
-    bmic_object_t *rw = bmic_object_find_by_name(obj, "rw");
+    const bmic_object_t *rw = bmic_object_find_by_name(obj, "rw");
     if (rw && rw->type == BOOLEAN) {
         bmic_cap_info_set_write(info, rw->data.value);
     }
 
-    bmic_object_t *type = bmic_object_find_by_name(obj, "type");
+    const bmic_object_t *type = bmic_object_find_by_name(obj, "type");
     if (type && type->type == STRING) {
         bmic_cap_info_set_typename(info, type->data.str);
     }
 
-    bmic_object_t *desc = bmic_object_find_by_name(obj, "desc");
+    const bmic_object_t *desc = bmic_object_find_by_name(obj, "desc");
     if (desc && desc->type == STRING) {
         bmic_cap_info_set_description(info, desc->data.str);
     }
@@ -243,7 +243,7 @@ const bmic_exchange_t *bmic_activemq_attribute_read(bmic_handle_t *handle,
     const bmic_object_t *value_attributes = bmic_object_find_by_path(cap->data_ptr, 
                                                                      rev); 
     
-    gru_dealloc_string(&rev);
+    gru_dealloc_string((char **)&rev);
     bmic_cap_info_t *info = bmic_cap_info_new(status);
             
     if (!info) {
