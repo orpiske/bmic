@@ -152,22 +152,17 @@ err_exit:
     return NULL;
 }
 
-const char *format_path(const char *op, const bmic_object_t *obj,
+
+
+static const char *format_path(const char *op, const bmic_object_t *obj,
                         const char *capname, gru_status_t *status)
 {
-    char *ret;
-
-    int rc = asprintf(&ret, "%s/org.apache.activemq.artemis:%s/%s",
-                      op, obj->name, capname);
-
-    if (rc == -1) {
-        gru_status_set(status, GRU_FAILURE, "Not enough memory to format capabilities path");
-
-        return NULL;
-    }
-
-    return ret;
+    return bmic_path_formatter(op, obj->name, "org.apache.activemq.artemis",
+                               capname, status);
 }
+
+
+
 
 const char *bmic_artermis_cap_attr_path(const bmic_object_t *obj, const char *name,
                                         gru_status_t *status)
@@ -313,7 +308,66 @@ const gru_list_t *bmic_artemis_attribute_list(bmic_handle_t *handle,
 
     return ret;
 }
+///////////////////////////
 
+/**
+ * Given an hierarchy (tree) of capabilities it navigates through it and tries
+ * to find the capability that matches the given regex
+ * @param root The root object
+ * @param regex_fmt The regex to match 
+ * @param flags The regex flags 
+ * @param status The status object
+ * @param ap A previously initialized va_list
+ * @return The first object that matches the regex or NULL if not found (status
+ * will be properly set in this case)
+ */
+static const bmic_object_t *bmic_finder_varg(const bmic_object_t *root,
+                                                          const char *regex_fmt, 
+                                                          int flags,
+                                                          gru_status_t *status,
+                                                          va_list ap) {
+    const char *regex;
+
+    // Build the regex
+    int rc = vasprintf(&regex, regex_fmt, ap);
+    if (rc == -1) {
+        gru_status_set(status, GRU_FAILURE, 
+                       "Unable to format the matching regex");
+        
+        return NULL;
+    }
+    
+    // ... And uses it to find the matching node in the capability tree
+    const bmic_object_t *ptr = bmic_object_find_regex(root, regex, flags);
+    free(regex);
+    if (!ptr) {
+        gru_status_set(status, GRU_FAILURE, "Unable to find the capabilities");
+    }
+    
+    return ptr;
+}
+
+static const bmic_object_t *bmic_api_io_read_attribute(bmic_handle_t *handle,
+                                                       const bmic_object_t *root, 
+                                                       const bmic_object_t *capabilities,
+                                                       const char *attr_name,
+                                                        gru_status_t *status)
+{
+    bmic_data_t reply = {0};
+    const char *path = format_path("read", capabilities, attr_name, status);
+    if (!path) {
+        return NULL;
+    }
+
+    bmic_api_io_read(handle, path, &reply, status);
+    gru_dealloc_string((char **) &path);
+
+    if (status->code != GRU_SUCCESS) {
+        return NULL;
+    }
+
+    return bmic_api_parse_json(reply.data, status);
+}
 
 static const bmic_exchange_t *bmic_artemis_read(bmic_handle_t *handle,
                                                           const bmic_object_t *root,
@@ -328,53 +382,30 @@ static const bmic_exchange_t *bmic_artemis_read(bmic_handle_t *handle,
     gru_alloc_check(ret, NULL);
 
     bmic_data_t reply = {0};
-
-    const char *regex;
+    
     va_list ap;
-
     va_start(ap, regex_fmt);
-    int rc = vasprintf(&regex, regex_fmt, ap);
+    const bmic_object_t *capabilities = bmic_finder_varg(root, regex_fmt, 
+                                                                    flags,
+                                                                    status,
+                                                                    ap);
     va_end(ap);
-    
-    if (rc == -1) {
-        gru_status_set(status, GRU_FAILURE, 
-                       "Unable to format the matching regex");
-        
-        return NULL;
-    }
-    printf("Using search regex: %s\n", regex);
-    
-    const bmic_object_t *capabilities = bmic_object_find_regex(root,
-                                                               regex,
-                                                               flags);
-    free(regex);
+       
     if (!capabilities) {
-        gru_status_set(status, GRU_FAILURE, "Unable to find the capabilities");
-        
         return NULL;
     }
 
-    const char *path = format_path("read", capabilities, attr_name, status);
-    if (!path) {
-        goto err_exit;
-    }
-
-    bmic_api_io_read(handle, path, &reply, status);
-    gru_dealloc_string((char **) &path);
-
-    if (status->code != GRU_SUCCESS) {
-        goto err_exit;
-    }
-
-    bmic_object_t *root = bmic_api_parse_json(reply.data, status);
+    bmic_object_t *reply_obj = bmic_api_io_read_attribute(handle, root, 
+                                                          capabilities, attr_name, 
+                                                          status);
     if (!root) {
         goto err_exit;
     }
 
-    const bmic_object_t *value = bmic_object_find_by_name(root, "value");
+    const bmic_object_t *value = bmic_object_find_by_name(reply_obj, "value");
 
     if (!value) {
-        bmic_object_destroy(&root);
+        bmic_object_destroy(&reply_obj);
 
         goto err_exit;
     }
@@ -382,7 +413,7 @@ static const bmic_exchange_t *bmic_artemis_read(bmic_handle_t *handle,
 
     const char *rev = bmic_artermis_cap_attr_path(capabilities, attr_name, status);
 
-    const bmic_object_t *value_attributes = bmic_object_find_by_path(cap->root,
+    const bmic_object_t *value_attributes = bmic_object_find_by_path(root,
                                                                      rev);
     gru_dealloc_string((char **) &rev);
 
@@ -394,7 +425,7 @@ static const bmic_exchange_t *bmic_artemis_read(bmic_handle_t *handle,
     bmic_cap_info_set_name(info, attr_name);
     bmic_artemis_read_attributes(value_attributes, info);
 
-    ret->root = root;
+    ret->root = reply_obj;
     ret->data_ptr = value;
     ret->type = EX_CAP_ENTRY;
     ret->payload.capinfo = info;
