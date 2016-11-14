@@ -77,6 +77,18 @@ const bmic_exchange_t *bmic_artemis_attribute_read(bmic_handle_t *handle,
 const gru_list_t *bmic_artemis_attribute_list(bmic_handle_t *handle,
         const bmic_exchange_t *cap, gru_status_t *status);
 
+/**
+ * Read a single an attribute from the MI
+ * @param handle
+ * @param capabilities
+ * @param name
+ * @param status
+ * @return 
+ */
+const bmic_exchange_t *bmic_artemis_queue_attribute_read(bmic_handle_t *handle,
+        const bmic_exchange_t *capabilities, const char *name,
+        gru_status_t *status, const char *queue);
+
 #ifdef __cplusplus
 }
 #endif

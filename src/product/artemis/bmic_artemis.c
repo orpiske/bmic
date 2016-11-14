@@ -26,6 +26,7 @@ bmic_api_interface_t *bmic_artemis_product(gru_status_t *status)
     ret->load_capabilities = bmic_artemis_load_capabilities;
     ret->attribute_read = bmic_artemis_attribute_read;
     ret->attribute_list = bmic_artemis_attribute_list;
+    ret->queue_attribute_read = bmic_artemis_queue_attribute_read;
 
     return ret;
 }
@@ -110,7 +111,7 @@ err_exit:
 }
 
 const bmic_exchange_t *bmic_artemis_load_capabilities(bmic_handle_t *handle,
-                                                            gru_status_t *status)
+                                                      gru_status_t *status)
 {
     bmic_exchange_t *ret = gru_alloc(sizeof (bmic_exchange_t), status);
     gru_alloc_check(ret, NULL);
@@ -128,7 +129,7 @@ const bmic_exchange_t *bmic_artemis_load_capabilities(bmic_handle_t *handle,
         goto err_exit;
     }
 
-    
+
     const bmic_object_t *capabilities = bmic_object_find_regex(root,
                                                                ARTEMIS_CAPABILITIES_KEY_REGEX,
                                                                REG_SEARCH_NAME);
@@ -136,28 +137,28 @@ const bmic_exchange_t *bmic_artemis_load_capabilities(bmic_handle_t *handle,
     if (!capabilities) {
         gru_status_set(status, GRU_FAILURE, "Capabilities not found");
         bmic_object_destroy(&root);
-        
+
         goto err_exit;
     }
 
     ret->root = root;
     ret->data_ptr = capabilities;
     ret->type = EX_CAP_LIST;
-        
+
     return ret;
-    
-    err_exit:
+
+err_exit:
     gru_dealloc((void **) &ret);
     return NULL;
 }
 
-const char *format_path(const char *op, const bmic_exchange_t *cap,
+const char *format_path(const char *op, const bmic_object_t *obj,
                         const char *capname, gru_status_t *status)
 {
     char *ret;
 
     int rc = asprintf(&ret, "%s/org.apache.activemq.artemis:%s/%s",
-                      op, cap->data_ptr->name, capname);
+                      op, obj->name, capname);
 
     if (rc == -1) {
         gru_status_set(status, GRU_FAILURE, "Not enough memory to format capabilities path");
@@ -168,8 +169,9 @@ const char *format_path(const char *op, const bmic_exchange_t *cap,
     return ret;
 }
 
-const char *bmic_artermis_cap_attr_path(const bmic_object_t *obj, const char *name, 
-                                        gru_status_t *status) {
+const char *bmic_artermis_cap_attr_path(const bmic_object_t *obj, const char *name,
+                                        gru_status_t *status)
+{
     char *ret;
 
     int rc = asprintf(&ret, "/value/%s/attr/%s", obj->name, name);
@@ -208,17 +210,16 @@ static void bmic_artemis_read_attributes(const bmic_object_t *obj,
 }
 
 const bmic_exchange_t *bmic_artemis_attribute_read(bmic_handle_t *handle,
-                                                   const bmic_exchange_t *cap, 
-                                                     const char *name,
+                                                   const bmic_exchange_t *cap,
+                                                   const char *name,
                                                    gru_status_t *status)
 {
 
     bmic_exchange_t *ret = gru_alloc(sizeof (bmic_exchange_t), status);
     gru_alloc_check(ret, NULL);
-    
-    bmic_data_t reply = {0};
 
-    const char *path = format_path("read", cap, name, status);
+    bmic_data_t reply = {0};
+    const char *path = format_path("read", cap->data_ptr, name, status);
     if (!path) {
         goto err_exit;
     }
@@ -239,17 +240,17 @@ const bmic_exchange_t *bmic_artemis_attribute_read(bmic_handle_t *handle,
 
     if (!value) {
         bmic_object_destroy(&root);
-        
+
         goto err_exit;
     }
-    
-    
+
+
     const char *rev = bmic_artermis_cap_attr_path(cap->data_ptr, name, status);
-    
-    const bmic_object_t *value_attributes = bmic_object_find_by_path(cap->data_ptr, 
-                                                                     rev);    
-    gru_dealloc_string((char **)&rev);
-    
+
+    const bmic_object_t *value_attributes = bmic_object_find_by_path(cap->data_ptr,
+                                                                     rev);
+    gru_dealloc_string((char **) &rev);
+
     bmic_cap_info_t *info = bmic_cap_info_new(status);
     if (!info) {
         goto err_exit;
@@ -272,21 +273,21 @@ err_exit:
 
 static void bmic_artemis_add_attr(const void *nodedata, void *payload)
 {
-     const bmic_object_t *nodeobj = (bmic_object_t *) nodedata;
-     bmic_payload_add_attr_t *pl = 
-             (bmic_payload_add_attr_t *) payload;
+    const bmic_object_t *nodeobj = (bmic_object_t *) nodedata;
+    bmic_payload_add_attr_t *pl =
+            (bmic_payload_add_attr_t *) payload;
 
     if (nodeobj->type == OBJECT) {
         if (nodeobj->name && strcmp(nodeobj->name, "attr") != 0) {
             bmic_cap_info_t *info = bmic_cap_info_new(pl->status);
-            
+
             if (!info) {
                 return;
             }
-            
+
             bmic_cap_info_set_name(info, nodeobj->name);
             bmic_artemis_read_attributes(nodeobj, info);
-            
+
             gru_list_append(pl->list, info);
         }
     }
@@ -294,21 +295,123 @@ static void bmic_artemis_add_attr(const void *nodedata, void *payload)
 }
 
 const gru_list_t *bmic_artemis_attribute_list(bmic_handle_t *handle,
-                                                const bmic_exchange_t *cap, gru_status_t *status)
+                                              const bmic_exchange_t *cap, gru_status_t *status)
 {
     const bmic_object_t *attributes = bmic_object_find_regex(cap->data_ptr,
                                                              ARTEMIS_CORE_CAP_ATTRIBUTES,
                                                              REG_SEARCH_PATH);
     gru_list_t *ret = gru_list_new(status);
     gru_alloc_check(ret, NULL);
-    
+
     bmic_payload_add_attr_t payload = {
         .list = ret,
         .status = status,
     };
-    
-    
+
+
     bmic_object_for_each(attributes, bmic_artemis_add_attr, &payload);
 
     return ret;
+}
+
+
+static const bmic_exchange_t *bmic_artemis_read(bmic_handle_t *handle,
+                                                          const bmic_object_t *root,
+                                                          const char *attr_name,
+                                                          gru_status_t *status,
+                                                          int flags,
+                                                          const char *regex_fmt,
+                                                          ...)
+{
+
+    bmic_exchange_t *ret = gru_alloc(sizeof (bmic_exchange_t), status);
+    gru_alloc_check(ret, NULL);
+
+    bmic_data_t reply = {0};
+
+    const char *regex;
+    va_list ap;
+
+    va_start(ap, regex_fmt);
+    int rc = vasprintf(&regex, regex_fmt, ap);
+    va_end(ap);
+    
+    if (rc == -1) {
+        gru_status_set(status, GRU_FAILURE, 
+                       "Unable to format the matching regex");
+        
+        return NULL;
+    }
+    printf("Using search regex: %s\n", regex);
+    
+    const bmic_object_t *capabilities = bmic_object_find_regex(root,
+                                                               regex,
+                                                               flags);
+    free(regex);
+    if (!capabilities) {
+        gru_status_set(status, GRU_FAILURE, "Unable to find the capabilities");
+        
+        return NULL;
+    }
+
+    const char *path = format_path("read", capabilities, attr_name, status);
+    if (!path) {
+        goto err_exit;
+    }
+
+    bmic_api_io_read(handle, path, &reply, status);
+    gru_dealloc_string((char **) &path);
+
+    if (status->code != GRU_SUCCESS) {
+        goto err_exit;
+    }
+
+    bmic_object_t *root = bmic_api_parse_json(reply.data, status);
+    if (!root) {
+        goto err_exit;
+    }
+
+    const bmic_object_t *value = bmic_object_find_by_name(root, "value");
+
+    if (!value) {
+        bmic_object_destroy(&root);
+
+        goto err_exit;
+    }
+
+
+    const char *rev = bmic_artermis_cap_attr_path(capabilities, attr_name, status);
+
+    const bmic_object_t *value_attributes = bmic_object_find_by_path(cap->root,
+                                                                     rev);
+    gru_dealloc_string((char **) &rev);
+
+    bmic_cap_info_t *info = bmic_cap_info_new(status);
+    if (!info) {
+        goto err_exit;
+    }
+
+    bmic_cap_info_set_name(info, attr_name);
+    bmic_artemis_read_attributes(value_attributes, info);
+
+    ret->root = root;
+    ret->data_ptr = value;
+    ret->type = EX_CAP_ENTRY;
+    ret->payload.capinfo = info;
+
+    return ret;
+
+err_exit:
+    bmic_object_destroy(&root);
+    return NULL;
+}
+
+
+const bmic_exchange_t *bmic_artemis_queue_attribute_read(bmic_handle_t *handle,
+        const bmic_exchange_t *capabilities, const char *name,
+        gru_status_t *status, const char *queue)
+{
+    return bmic_artemis_read(handle, capabilities->root, name, status, 
+                             REG_SEARCH_NAME, ARTEMIS_QUEUE_CAPABILITES_REGEX, 
+                             queue);
 }
