@@ -34,9 +34,7 @@
 #include "product/common/bmic_finder.h"
 
 #include "bmic_artemis_urls.h"
-
-#define ARTEMIS_READ "read"
-#define ARTMIS_BASE_PKG "org.apache.activemq.artemis"
+#include "bmic_artemis_mi.h"
 
 #ifdef __cplusplus
 extern "C" {
