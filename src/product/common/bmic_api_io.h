@@ -29,10 +29,26 @@
 extern "C" {
 #endif
 
+/**
+ * @file Internal API stuff
+ */
 
+/**
+ * Lower level IO from the management interface
+ * @param handle the BMIC handle for the interface
+ * @param path the path within the interface
+ * @param reply the storage for the reply
+ * @param status the status for the I/O call
+ */
 void bmic_api_io_read(bmic_handle_t *handle, const char *path,
                                     bmic_data_t *reply, gru_status_t *status);
 
+/**
+ * Parses a JSON text data and transform into a bmic_object_t
+ * @param str The JSON text data
+ * @param status the status for the parsing
+ * @return A pointer to a new object of type bmic_object_t
+ */
 bmic_object_t *bmic_api_parse_json(const char *str, gru_status_t *status);
 
 #ifdef __cplusplus
