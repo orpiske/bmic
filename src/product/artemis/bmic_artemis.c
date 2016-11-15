@@ -176,62 +176,8 @@ const bmic_exchange_t *bmic_artemis_attribute_read(bmic_handle_t *handle,
                                                    const char *name,
                                                    gru_status_t *status)
 {
-
-    bmic_exchange_t *ret = gru_alloc(sizeof (bmic_exchange_t), status);
-    gru_alloc_check(ret, NULL);
-
-    bmic_data_t reply = {0};
-    const char *path = handle->path_formatter(ARTEMIS_READ, cap->data_ptr->name,
-                                              ARTMIS_BASE_PKG, name, status);
-    if (!path) {
-        goto err_exit;
-    }
-
-    bmic_api_io_read(handle, path, &reply, status);
-    gru_dealloc_string((char **) &path);
-
-    if (status->code != GRU_SUCCESS) {
-        goto err_exit;
-    }
-
-    bmic_object_t *root = bmic_api_parse_json(reply.data, status);
-    if (!root) {
-        goto err_exit;
-    }
-
-    const bmic_object_t *value = bmic_object_find_by_name(root, "value");
-
-    if (!value) {
-        bmic_object_destroy(&root);
-
-        goto err_exit;
-    }
-
-
-    const char *rev = bmic_artermis_cap_attr_path(cap->data_ptr, name, status);
-
-    const bmic_object_t *value_attributes = bmic_object_find_by_path(cap->data_ptr,
-                                                                     rev);
-    gru_dealloc_string((char **) &rev);
-
-    bmic_cap_info_t *info = bmic_cap_info_new(status);
-    if (!info) {
-        goto err_exit;
-    }
-
-    bmic_cap_info_set_name(info, name);
-    bmic_artemis_mi_translate_attr(value_attributes, info);
-
-    ret->root = root;
-    ret->data_ptr = value;
-    ret->type = EX_CAP_ENTRY;
-    ret->payload.capinfo = info;
-
-    return ret;
-
-err_exit:
-    bmic_object_destroy(&root);
-    return NULL;
+    return bmic_artemis_mi_read(handle, cap->root, name, status,
+                             REG_SEARCH_NAME, ARTEMIS_CAPABILITIES_KEY_REGEX);
 }
 
 static void bmic_artemis_add_attr(const void *nodedata, void *payload)
