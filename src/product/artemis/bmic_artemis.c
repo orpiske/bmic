@@ -153,7 +153,6 @@ err_exit:
     return NULL;
 }
 
-
 const char *bmic_artermis_cap_attr_path(const bmic_object_t *obj, const char *name,
                                         gru_status_t *status)
 {
@@ -302,14 +301,13 @@ const gru_list_t *bmic_artemis_attribute_list(bmic_handle_t *handle,
 ///////////////////////////
 
 static const bmic_object_t *bmic_api_io_read_attribute(bmic_handle_t *handle,
-                                                       const bmic_object_t *root, 
                                                        const bmic_object_t *capabilities,
                                                        const char *attr_name,
-                                                        gru_status_t *status)
+                                                       gru_status_t *status)
 {
     bmic_data_t reply = {0};
-   
-    const char *path = handle->path_formatter(ARTEMIS_READ, capabilities->name, 
+
+    const char *path = handle->path_formatter(ARTEMIS_READ, capabilities->name,
                                               ARTMIS_BASE_PKG, attr_name, status);
 
     bmic_api_io_read(handle, path, &reply, status);
@@ -322,62 +320,116 @@ static const bmic_object_t *bmic_api_io_read_attribute(bmic_handle_t *handle,
     return bmic_api_parse_json(reply.data, status);
 }
 
+static const bmic_cap_info_t *bmic_artermis_read_attribute_metadata(
+                                                                    const bmic_object_t *capabilities, const char *attr_name,
+                                                                    gru_status_t *status)
+{
+    /*
+     * Gets the path to the attribute???
+     * 
+     * ie.: /value/address=\"test.performance.queue\",brokerName=\"0.0.0.0\",module=Core,name=\"test.performance.queue\",serviceType=Queue,type=Broker/attr/MessageCount
+     * 
+     */
+    const char *rev = bmic_artermis_cap_attr_path(capabilities, attr_name, status);
+    if (!rev) {
+        return NULL;
+    }
+
+
+    /*
+     * Read the attributes of the value itself (ie.: whether it's rw, type, desc)
+     */
+    const bmic_object_t *value_attributes = bmic_object_find_by_path(capabilities,
+                                                                     rev);
+    gru_dealloc_string((char **) &rev);
+    if (!value_attributes) {
+        gru_status_set(status, GRU_FAILURE,
+                       "Unable to find a capability/attribute named %s", attr_name);
+
+        return NULL;
+    }
+
+    /*
+     * Read the attributes (ie.: whether it's rw, type, desc) of the value 
+     * (ie.: attributes of the requested capability/attribute) and put them 
+     * into the bmic_cap_info_t * object
+     */
+    bmic_cap_info_t *info = bmic_cap_info_new(status);
+    if (!info) {
+        gru_status_set(status, GRU_FAILURE,
+                       "Unable to allocate memory for the capability metadata",
+                       attr_name);
+
+        return NULL;
+    }
+
+    bmic_cap_info_set_name(info, attr_name);
+    bmic_artemis_read_attributes(value_attributes, info);
+    return info;
+}
+
 static const bmic_exchange_t *bmic_artemis_read(bmic_handle_t *handle,
-                                                          const bmic_object_t *root,
-                                                          const char *attr_name,
-                                                          gru_status_t *status,
-                                                          int flags,
-                                                          const char *regex_fmt,
-                                                          ...)
+                                                const bmic_object_t *root,
+                                                const char *attr_name,
+                                                gru_status_t *status,
+                                                int flags,
+                                                const char *regex_fmt,
+                                                ...)
 {
 
     bmic_exchange_t *ret = gru_alloc(sizeof (bmic_exchange_t), status);
     gru_alloc_check(ret, NULL);
 
-    bmic_data_t reply = {0};
-    
     va_list ap;
     va_start(ap, regex_fmt);
-    const bmic_object_t *capabilities = bmic_finder_varg(root, regex_fmt, 
-                                                                    flags,
-                                                                    status,
-                                                                    ap);
+
+    /*
+     *  First, resolve the root of the capability (and whether it even exist ...
+     * 
+     * ie.: read the previous returned capability tree and finds the pointer 
+     * to the node respective to the matching parameters (regex + flag)
+     */
+    const bmic_object_t *capabilities = bmic_finder_varg(root, regex_fmt,
+                                                         flags,
+                                                         status,
+                                                         ap);
     va_end(ap);
-       
+
     if (!capabilities) {
         return NULL;
     }
 
-    bmic_object_t *reply_obj = bmic_api_io_read_attribute(handle, root, 
-                                                          capabilities, attr_name, 
+    bmic_cap_info_t *info = bmic_artermis_read_attribute_metadata(capabilities, 
+                                                               attr_name, status);
+
+    ////////////////////////////    
+    /*
+     * Uses the resolved capability (only uses the name, actually) to read the 
+     * data from the BMIC.
+     */
+    bmic_object_t *reply_obj = bmic_api_io_read_attribute(handle, capabilities,
+                                                          attr_name,
                                                           status);
-    if (!root) {
+    if (!reply_obj) {
         goto err_exit;
     }
 
+    /*
+     * Gets the value children of the response object to transform it 
+     */
     const bmic_object_t *value = bmic_object_find_by_name(reply_obj, "value");
 
     if (!value) {
+        // No REPLY?
         bmic_object_destroy(&reply_obj);
 
         goto err_exit;
     }
+    ////////////////////////////    
 
-
-    const char *rev = bmic_artermis_cap_attr_path(capabilities, attr_name, status);
-
-    const bmic_object_t *value_attributes = bmic_object_find_by_path(root,
-                                                                     rev);
-    gru_dealloc_string((char **) &rev);
-
-    bmic_cap_info_t *info = bmic_cap_info_new(status);
-    if (!info) {
-        goto err_exit;
-    }
-
-    bmic_cap_info_set_name(info, attr_name);
-    bmic_artemis_read_attributes(value_attributes, info);
-
+    /*
+     * Assign stuff to the exchange object
+     */
     ret->root = reply_obj;
     ret->data_ptr = value;
     ret->type = EX_CAP_ENTRY;
@@ -390,12 +442,11 @@ err_exit:
     return NULL;
 }
 
-
 const bmic_exchange_t *bmic_artemis_queue_attribute_read(bmic_handle_t *handle,
-        const bmic_exchange_t *capabilities, const char *name,
-        gru_status_t *status, const char *queue)
+                                                         const bmic_exchange_t *capabilities, const char *name,
+                                                         gru_status_t *status, const char *queue)
 {
-    return bmic_artemis_read(handle, capabilities->root, name, status, 
-                             REG_SEARCH_NAME, ARTEMIS_QUEUE_CAPABILITES_REGEX, 
+    return bmic_artemis_read(handle, capabilities->root, name, status,
+                             REG_SEARCH_NAME, ARTEMIS_QUEUE_CAPABILITES_REGEX,
                              queue);
 }
