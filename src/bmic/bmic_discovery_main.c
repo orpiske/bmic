@@ -23,12 +23,6 @@ typedef struct options_t_
     bool list;
 } options_t;
 
-static void print_cap(const void *nodedata, void *payload)
-{
-    const char *cap = (const char *) nodedata;
-    printf("-\t %s\n", cap);
-}
-
 static void show_help()
 {
     printf("Usage: ");
@@ -68,16 +62,15 @@ int discovery_run(options_t *options)
         return EXIT_FAILURE;
     }
 
-    printf("Product name is %s\n", api->name);
-    printf("API version is %s\n", api->version);
-
     bmic_product_info_t *info = api->product_info(handle, &status);
+    print_product_info(api, info);
+    
     if (!info || status.code != GRU_SUCCESS) {
         fprintf(stderr, "Unable to determine product version: %s\n",
                 status.message);
     }
-    else {
-        printf("The product version is: %s\n", info->version);
+    
+    if (info) {
         gru_dealloc((void **) &info);
     }
 

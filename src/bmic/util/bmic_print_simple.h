@@ -20,11 +20,14 @@
 #include "base/common/bmic_object.h"
 #include "base/common/bmic_cap_value.h"
 
+#include "management/common/bmic_product.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 void print_returned_object(const char *capname, const bmic_object_t *obj);
+void print_product_info(bmic_api_interface_t *api, bmic_product_info_t *info);
 
 #ifdef __cplusplus
 }

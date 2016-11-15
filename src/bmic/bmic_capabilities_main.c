@@ -132,20 +132,18 @@ int capabilities_run(options_t *options)
         return EXIT_FAILURE;
     }
 
-    printf("Product name is %s\n", api->name);
-    printf("API version is %s\n", api->version);
-
     bmic_product_info_t *info = api->product_info(handle, &status);
+    print_product_info(api, info);
+    
     if (!info || status.code != GRU_SUCCESS) {
         fprintf(stderr, "Unable to determine product version: %s\n",
                 status.message);
     }
-    else {
-        printf("The product version is: %s\n", info->version);
+    
+    if (info) {
         gru_dealloc((void **) &info);
     }
-
-
+    
     const bmic_exchange_t *cap = api->load_capabilities(handle, &status);
     if (!cap) {
         fprintf(stderr, "Unable to load capabilities: %s\n", status.message);
