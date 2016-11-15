@@ -35,10 +35,18 @@ const bmic_object_t *bmic_finder_varg(const bmic_object_t *root,
     
     // ... And uses it to find the matching node in the capability tree
     const bmic_object_t *ptr = bmic_object_find_regex(root, regex, flags);
-    free(regex);
     if (!ptr) {
-        gru_status_set(status, GRU_FAILURE, "Unable to find the capabilities");
+#ifdef DNDEBUG
+        gru_status_set(status, GRU_FAILURE, 
+                       "Unable to find the capabilities matching %s", regex);
+#else 
+        gru_status_set(status, GRU_FAILURE, 
+                        "Unable to find the requested capability");
+#endif
+        free(regex);
+        return NULL;
     }
     
+    free(regex);
     return ptr;
 }
