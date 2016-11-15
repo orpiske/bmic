@@ -154,17 +154,6 @@ err_exit:
 }
 
 
-
-static const char *format_path(const char *op, const bmic_object_t *obj,
-                        const char *capname, gru_status_t *status)
-{
-    return bmic_path_formatter(op, obj->name, "org.apache.activemq.artemis",
-                               capname, status);
-}
-
-
-
-
 const char *bmic_artermis_cap_attr_path(const bmic_object_t *obj, const char *name,
                                         gru_status_t *status)
 {
@@ -215,7 +204,8 @@ const bmic_exchange_t *bmic_artemis_attribute_read(bmic_handle_t *handle,
     gru_alloc_check(ret, NULL);
 
     bmic_data_t reply = {0};
-    const char *path = format_path("read", cap->data_ptr, name, status);
+    const char *path = handle->path_formatter(ARTEMIS_READ, cap->data_ptr->name,
+                                              ARTMIS_BASE_PKG, name, status);
     if (!path) {
         goto err_exit;
     }
