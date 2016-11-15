@@ -134,9 +134,6 @@ const bmic_exchange_t *bmic_artemis_mi_read(bmic_handle_t *handle,
     const bmic_object_t *value = bmic_object_find_by_name(reply_obj, "value");
 
     if (!value) {
-        // No REPLY?
-        bmic_object_destroy(&reply_obj);
-
         goto err_exit;
     }
     ////////////////////////////    
@@ -152,7 +149,8 @@ const bmic_exchange_t *bmic_artemis_mi_read(bmic_handle_t *handle,
     return ret;
 
 err_exit:
-    bmic_object_destroy(&root);
+    gru_dealloc((void **)info);
+    bmic_object_destroy(&reply_obj);
     return NULL;
 }
 
