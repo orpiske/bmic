@@ -20,6 +20,7 @@
 
 #include "bmic_capabilities_main.h"
 #include "bmic_discovery_main.h"
+#include "bmic_queue_main.h"
 
 
 void show_help() {

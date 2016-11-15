@@ -46,10 +46,11 @@ install(DIRECTORY transport
 
 add_executable(
 	bmic-client
-        bmic/bmic.c
+        bmic/util/bmic_print_simple.c
         bmic/bmic_capabilities_main.c
         bmic/bmic_discovery_main.c
         bmic/bmic_queue_main.c
+        bmic/bmic.c
 )
 
 target_link_libraries(
