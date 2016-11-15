@@ -86,8 +86,8 @@ void capabilities_do_read(bmic_handle_t *handle,
         bmic_exchange_destroy((bmic_exchange_t **) &obj);
     }
     else {
-        printf("Unable to read the capability %s (wrong cap, maybe?)\n",
-               capname);
+        printf("Unable to read the capability %s (wrong cap, maybe?): %s\n",
+               capname, status->message);
     }
     
     
