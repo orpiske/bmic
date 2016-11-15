@@ -16,6 +16,9 @@
 #ifndef BMIC_ACTIVEMQ_H
 #define BMIC_ACTIVEMQ_H
 
+#include <stdlib.h>
+#include <stdarg.h>
+
 #include <common/gru_status.h>
 #include <common/gru_alloc.h>
 

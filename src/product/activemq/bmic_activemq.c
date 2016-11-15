@@ -143,7 +143,7 @@ const bmic_exchange_t *bmic_activemq_load_capabilities(bmic_handle_t *handle,
     ret->type = EX_CAP_LIST;
 
     return ret;
-    
+
     err_exit:
     gru_dealloc((void **) &ret);
     return NULL;
@@ -166,7 +166,7 @@ const char *format_activemq_path(const char *op, const bmic_exchange_t *cap,
     return ret;
 }
 
-const char *bmic_activemq_cap_attr_path(const bmic_object_t *obj, const char *name, 
+const char *bmic_activemq_cap_attr_path(const bmic_object_t *obj, const char *name,
                                         gru_status_t *status) {
     char *ret;
 
@@ -212,7 +212,7 @@ const bmic_exchange_t *bmic_activemq_attribute_read(bmic_handle_t *handle,
 
     bmic_exchange_t *ret = gru_alloc(sizeof (bmic_exchange_t), status);
     gru_alloc_check(ret, NULL);
-    
+
     bmic_data_t reply = {0};
 
     const char *path = format_activemq_path("read", cap, name, status);
@@ -237,15 +237,15 @@ const bmic_exchange_t *bmic_activemq_attribute_read(bmic_handle_t *handle,
         bmic_object_destroy(&root);
         goto err_exit;
     }
-    
+
     const char *rev = bmic_activemq_cap_attr_path(cap->data_ptr, name, status);
-    
-    const bmic_object_t *value_attributes = bmic_object_find_by_path(cap->data_ptr, 
-                                                                     rev); 
-    
+
+    const bmic_object_t *value_attributes = bmic_object_find_by_path(cap->data_ptr,
+                                                                     rev);
+
     gru_dealloc_string((char **)&rev);
     bmic_cap_info_t *info = bmic_cap_info_new(status);
-            
+
     if (!info) {
         goto err_exit;
     }
@@ -270,21 +270,21 @@ err_exit:
 static void bmic_activemq_add_attr(const void *nodedata, void *payload)
 {
      const bmic_object_t *nodeobj = (bmic_object_t *) nodedata;
-     bmic_payload_add_attr_t *pl = 
+     bmic_payload_add_attr_t *pl =
              (bmic_payload_add_attr_t *) payload;
 
     if (nodeobj->type == OBJECT) {
         if (nodeobj->name && strcmp(nodeobj->name, "attr") != 0) {
             bmic_cap_info_t *info = bmic_cap_info_new(pl->status);
-            
+
             if (!info) {
                 return;
             }
-            
+
             bmic_cap_info_set_name(info, nodeobj->name);
-            
+
             bmic_activemq_read_attributes(nodeobj, info);
-            
+
             gru_list_append(pl->list, info);
         }
     }
@@ -299,13 +299,13 @@ const gru_list_t *bmic_activemq_attribute_list(bmic_handle_t *handle,
                                                              REG_SEARCH_PATH);
     gru_list_t *ret = gru_list_new(status);
     gru_alloc_check(ret, NULL);
-    
+
      bmic_payload_add_attr_t payload = {
         .list = ret,
         .status = status,
     };
-    
-    
+
+
     bmic_object_for_each(attributes, bmic_activemq_add_attr, &payload);
 
     return ret;
