@@ -68,6 +68,7 @@ bmic_handle_t *bmic_artemis_init(const char *base_url,
 
     handle->transport.read = bmic_endpoint_http_read;
     handle->transport.write = bmic_endpoint_http_write;
+    handle->path_formatter = bmic_path_formatter;
 
     return handle;
 }
@@ -310,43 +311,6 @@ const gru_list_t *bmic_artemis_attribute_list(bmic_handle_t *handle,
 }
 ///////////////////////////
 
-/**
- * Given an hierarchy (tree) of capabilities it navigates through it and tries
- * to find the capability that matches the given regex
- * @param root The root object
- * @param regex_fmt The regex to match 
- * @param flags The regex flags 
- * @param status The status object
- * @param ap A previously initialized va_list
- * @return The first object that matches the regex or NULL if not found (status
- * will be properly set in this case)
- */
-static const bmic_object_t *bmic_finder_varg(const bmic_object_t *root,
-                                                          const char *regex_fmt, 
-                                                          int flags,
-                                                          gru_status_t *status,
-                                                          va_list ap) {
-    const char *regex;
-
-    // Build the regex
-    int rc = vasprintf(&regex, regex_fmt, ap);
-    if (rc == -1) {
-        gru_status_set(status, GRU_FAILURE, 
-                       "Unable to format the matching regex");
-        
-        return NULL;
-    }
-    
-    // ... And uses it to find the matching node in the capability tree
-    const bmic_object_t *ptr = bmic_object_find_regex(root, regex, flags);
-    free(regex);
-    if (!ptr) {
-        gru_status_set(status, GRU_FAILURE, "Unable to find the capabilities");
-    }
-    
-    return ptr;
-}
-
 static const bmic_object_t *bmic_api_io_read_attribute(bmic_handle_t *handle,
                                                        const bmic_object_t *root, 
                                                        const bmic_object_t *capabilities,
@@ -354,10 +318,9 @@ static const bmic_object_t *bmic_api_io_read_attribute(bmic_handle_t *handle,
                                                         gru_status_t *status)
 {
     bmic_data_t reply = {0};
-    const char *path = format_path("read", capabilities, attr_name, status);
-    if (!path) {
-        return NULL;
-    }
+   
+    const char *path = handle->path_formatter(ARTEMIS_READ, capabilities->name, 
+                                              ARTMIS_BASE_PKG, attr_name, status);
 
     bmic_api_io_read(handle, path, &reply, status);
     gru_dealloc_string((char **) &path);

@@ -30,8 +30,13 @@
 
 #include "product/common/bmic_api_io.h"
 #include "product/common/bmic_internal_payloads.h"
+#include "product/common/bmic_path.h"
+#include "product/common/bmic_finder.h"
 
 #include "bmic_artemis_urls.h"
+
+#define ARTEMIS_READ "read"
+#define ARTMIS_BASE_PKG "org.apache.activemq.artemis"
 
 #ifdef __cplusplus
 extern "C" {

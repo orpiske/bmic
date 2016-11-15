@@ -21,12 +21,35 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
     
+/**
+ * Defines a cleanup function for releasing resources allocated for the ep
+ */
 typedef void (*bmic_handle_ep_cleanup_fn)(bmic_endpoint_t *ep, gru_status_t *status);
+
+/**
+ * Defines a formatter function to format paths (if needed) required to access 
+ * the management resources
+ * @param op Operation (ie.: read, write, list, etc)
+ * @param interface The management interface to set in the path
+ * @param pkg Root package
+ * @param capname Capability name
+ * @param status status
+ */
+typedef const char *(*bmic_handle_path_formatter_fn)(const char *op, const char *interface,
+        const char *pkg, const char *name, gru_status_t *status);
+
+
+
 
 typedef struct bmic_handle_t_ {
     bmic_endpoint_t *ep;
     bmic_transport_t transport;
+    /**
+     * Optional path formatter. If not give, should be ignored
+     */
+    bmic_handle_path_formatter_fn path_formatter;
 } bmic_handle_t;
 
 void bmic_handle_destroy(bmic_handle_t **handle, bmic_handle_ep_cleanup_fn cleanup);
