@@ -26,6 +26,7 @@ void show_help() {
     printf("Usage: \n");
     printf("\t\tdiscovery\tRun a discovery on the broker to find its type and version\n");
     printf("\t\tcapabilities\tRead/write/list broker capabilities and attributes\n");
+    printf("\t\tqueue\tRead/write/list queue capabilities and attributes\n");
 }
 int main(int argc, char** argv)
 {
@@ -42,6 +43,10 @@ int main(int argc, char** argv)
         
         if (strcmp(argv[1], "discovery") == 0) {
             return discovery_main((argc - 1), &argv[1]);
+        }
+        
+        if (strcmp(argv[1], "queue") == 0) {
+            return queue_main((argc - 1), &argv[1]);
         }
     }
     

@@ -49,6 +49,7 @@ add_executable(
         bmic/bmic.c
         bmic/bmic_capabilities_main.c
         bmic/bmic_discovery_main.c
+        bmic/bmic_queue_main.c
 )
 
 target_link_libraries(
