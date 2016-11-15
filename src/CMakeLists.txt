@@ -1,7 +1,5 @@
-add_definitions(-D_GNU_SOURCE -D_POSIX_C_SOURCE)
-
-if (${CMAKE_SYSTEM_NAME} EQUAL "Linux") 
- add_definitions(-DLINUX_BUILD) 
+if (${CMAKE_SYSTEM_NAME} EQUAL "Linux")
+ add_definitions(-D_GNU_SOURCE -DLINUX_BUILD)
 endif (${CMAKE_SYSTEM_NAME} EQUAL "Linux")
 
 include_directories(.)
@@ -12,12 +10,12 @@ add_library(
         base/common/bmic_object.c
         base/common/bmic_regex.c
         base/common/bmic_cap_info.c
-        base/transport/bmic_endpoint.c   
-        base/transport/bmic_endpoint_http.c        
+        base/transport/bmic_endpoint.c
+        base/transport/bmic_endpoint_http.c
         base/transport/bmic_transport.c
         base/format/bmic_json.c
         management/common/bmic_handle.c
-        management/common/bmic_discovery_hint.c        
+        management/common/bmic_discovery_hint.c
         management/common/bmic_product.c
         management/discovery/bmic_discovery.c
         product/common/bmic_api_io.c
