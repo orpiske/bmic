@@ -15,6 +15,22 @@
  */
 #include "bmic_artemis_mi.h"
 
+static const char *bmic_artermis_cap_attr_path(const bmic_object_t *obj, const char *name,
+                                        gru_status_t *status)
+{
+    char *ret;
+
+    int rc = asprintf(&ret, "/value/%s/attr/%s", obj->name, name);
+
+    if (rc == -1) {
+        gru_status_set(status, GRU_FAILURE, "Not enough memory to format capabilities path");
+
+        return NULL;
+    }
+
+    return ret;
+}
+
 static const bmic_object_t *bmic_artemis_mi_read_from(bmic_handle_t *handle,
                                                        const char *cap_name,
                                                        const char *attr_name,
