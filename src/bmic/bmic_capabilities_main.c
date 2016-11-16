@@ -103,13 +103,6 @@ static void capabilities_read(const void *nodedata, void *payload)
     
 }
 
-static void capabilities_destroy(const void *nodedata, void *payload)
-{
-    bmic_cap_info_t *info = (bmic_cap_info_t *) nodedata;
-    
-    bmic_cap_info_destroy(&info);
-}
-
 int capabilities_run(options_t *options)
 {
     gru_status_t status = {0};
@@ -159,19 +152,19 @@ int capabilities_run(options_t *options)
     }    
 
     if (options->list) {
-        const gru_list_t *list = api->attribute_list(handle, cap, &status);
+        const bmic_caplist_t *list = api->attribute_list(handle, cap, &status);
 
         if (list) {
             printf("\n  %-35s %-5s %-15s %s\n", "NAME", "MODE", "TYPE", "DESCRIPTION");
             
             gru_list_for_each(list, print_cap, NULL);
-            gru_list_destroy((gru_list_t **)&list);
+            bmic_caplist_destroy((bmic_caplist_t **)&list);
         }
         
     }
     else {
         if (options->readall) {
-            const gru_list_t *list = api->attribute_list(handle, cap, &status);
+            const bmic_caplist_t *list = api->attribute_list(handle, cap, &status);
 
             if (list) {
                 cap_read_wrapper_t wrapper; 
@@ -183,8 +176,8 @@ int capabilities_run(options_t *options)
                 
                 printf("\n  %-35s %-5s %-15s %s\n", "NAME", "MODE", "TYPE", "DESCRIPTION");
                 gru_list_for_each(list, capabilities_read, &wrapper);
-                gru_list_for_each(list, capabilities_destroy, NULL);
-                gru_list_destroy((gru_list_t **)&list);
+                
+                bmic_caplist_destroy((bmic_caplist_t **)&list);
             }
             
         }

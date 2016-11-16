@@ -63,7 +63,7 @@ const bmic_exchange_t *bmic_activemq_attribute_read(bmic_handle_t *handle,
         gru_status_t *status);
 
 
-const gru_list_t *bmic_activemq_attribute_list(bmic_handle_t *handle,
+const bmic_caplist_t *bmic_activemq_attribute_list(bmic_handle_t *handle,
         const bmic_exchange_t *cap, gru_status_t *status);
 
 const bmic_exchange_t *bmic_activemq_queue_attribute_read(bmic_handle_t *handle,

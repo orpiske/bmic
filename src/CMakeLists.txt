@@ -10,6 +10,7 @@ add_library(
         base/common/bmic_object.c
         base/common/bmic_regex.c
         base/common/bmic_cap_info.c
+        base/common/bmic_caplist.c
         base/transport/bmic_endpoint.c
         base/transport/bmic_endpoint_http.c
         base/transport/bmic_transport.c

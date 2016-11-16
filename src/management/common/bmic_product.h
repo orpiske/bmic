@@ -21,6 +21,7 @@
 
 #include "base/common/bmic_object.h"
 #include "base/common/bmic_cap_info.h"
+#include "base/common/bmic_caplist.h"
 
 #include "bmic_handle.h"
 #include "bmic_discovery_hint.h"
@@ -68,7 +69,7 @@ typedef const bmic_exchange_t *(*bmic_management_api_queue_attribute_read_fn)(bm
         const bmic_exchange_t *capabilities, const char *name,
         gru_status_t *status, const char *queue);
 
-typedef const gru_list_t *(*bmic_management_api_attr_list_fn)(bmic_handle_t *handle,
+typedef const bmic_caplist_t *(*bmic_management_api_attr_list_fn)(bmic_handle_t *handle,
         const bmic_exchange_t *cap, gru_status_t *status);
 
 
@@ -99,6 +100,8 @@ void bmic_product_registry_destroy();
 void bmic_product_registry_add(const bmic_api_interface_t *product, gru_status_t *status);
 
 const gru_list_t *bmic_product_registry();
+
+void bmic_exchange_destroy(bmic_exchange_t **ptr);
 
 
 #ifdef __cplusplus
