@@ -222,9 +222,6 @@ const gru_list_t *bmic_artemis_attribute_list(bmic_handle_t *handle,
 
     return ret;
 }
-///////////////////////////
-
-
 
 const bmic_exchange_t *bmic_artemis_queue_attribute_read(bmic_handle_t *handle,
                                                          const bmic_exchange_t *capabilities, const char *name,
