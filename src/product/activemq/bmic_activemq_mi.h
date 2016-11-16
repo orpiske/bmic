@@ -39,7 +39,18 @@ extern "C" {
 
 #define ACTIVEMQ_READ "read"
 #define ACTIVEMQ_BASE_PKG "org.apache.activemq"
+
     
+/**
+ * Reads an attribute from the management interface
+ * @param handle
+ * @param root
+ * @param attr_name
+ * @param status
+ * @param flags
+ * @param regex_fmt
+ * @return 
+ */
 const bmic_exchange_t *bmic_activemq_mi_read(bmic_handle_t *handle,
                                                 const bmic_object_t *root,
                                                 const char *attr_name,
@@ -47,6 +58,14 @@ const bmic_exchange_t *bmic_activemq_mi_read(bmic_handle_t *handle,
                                                 int flags,
                                                 const char *regex_fmt,
                                                 ...);
+
+/**
+ * Given a node of attributes, read them into the info object
+ * @param obj
+ * @param info
+ */
+void bmic_activemq_mi_translate_attr(const bmic_object_t *obj,
+                                         bmic_cap_info_t *info);
 
 
 #ifdef __cplusplus
