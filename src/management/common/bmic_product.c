@@ -29,6 +29,21 @@ bmic_api_interface_t *bmic_api_interface_new(const char *name, const char *versi
     return ret;
 }
 
+void bmic_exchange_destroy(bmic_exchange_t **ptr) {
+    bmic_exchange_t *ex = *ptr;
+    
+    if (ex == NULL) {
+        return;
+    }
+    
+    bmic_object_destroy((bmic_object_t **) &ex->root);
+    if (ex->type == EX_CAP_ENTRY) {
+        bmic_cap_info_destroy(&ex->payload.capinfo);
+    }
+    
+    gru_dealloc((void **) ptr);
+}
+
 
 void bmic_api_interface_destroy(bmic_api_interface_t **product) {
     bmic_api_interface_t *prod = *product;
