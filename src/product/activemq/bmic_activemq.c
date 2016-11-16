@@ -85,10 +85,12 @@ bmic_product_info_t *bmic_activemq_product_info(bmic_handle_t *handle,
     bmic_api_io_read(handle, ACTIVEMQ_PRODUCT_INFO_PATH, &reply, status);
 
     if (status->code != GRU_SUCCESS) {
+        bmic_data_release(&reply);
         return NULL;
     }
 
     bmic_object_t *root = bmic_api_parse_json(reply.data, status);
+    bmic_data_release(&reply);
     if (!root) {
         return NULL;
     }
@@ -126,6 +128,7 @@ const bmic_exchange_t *bmic_activemq_load_capabilities(bmic_handle_t *handle,
 
 
     bmic_object_t *root = bmic_api_parse_json(reply.data, status);
+    bmic_data_release(&reply);
     if (!root) {
         goto err_exit;
     }
@@ -147,25 +150,12 @@ const bmic_exchange_t *bmic_activemq_load_capabilities(bmic_handle_t *handle,
     return ret;
 
     err_exit:
+    bmic_data_release(&reply);
     gru_dealloc((void **) &ret);
     return NULL;
 }
 
-// TODO: move to mi
-const char *bmic_activemq_cap_attr_path(const bmic_object_t *obj, const char *name,
-                                        gru_status_t *status) {
-    char *ret;
 
-    int rc = asprintf(&ret, "/value/%s/attr/%s", obj->name, name);
-
-    if (rc == -1) {
-        gru_status_set(status, GRU_FAILURE, "Not enough memory to format capabilities path");
-
-        return NULL;
-    }
-
-    return ret;
-}
 
 // TODO: move to MI
 static void bmic_activemq_read_attributes(const bmic_object_t *obj,

@@ -18,6 +18,8 @@
 
 #include <assert.h>
 
+#include <common/gru_alloc.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -31,6 +33,12 @@ static inline const char *bmic_data_to_string(bmic_data_t *data) {
     assert(data != NULL);
     
     return (const char *) data->data;
+}
+
+static inline void bmic_data_release(bmic_data_t *data) {
+    if (data && data->data) {
+        gru_dealloc(&data->data);
+    }
 }
 
 

@@ -47,7 +47,9 @@ static const bmic_object_t *bmic_activemq_mi_read_from(bmic_handle_t *handle,
         return NULL;
     }
 
-    return bmic_api_parse_json(reply.data, status);
+    bmic_object_t *ret = bmic_api_parse_json(reply.data, status);
+    bmic_data_release(&reply);
+    return ret;
 }
 
 static const bmic_cap_info_t *bmic_activemq_mi_read_attr_info(const bmic_object_t *capabilities, const char *attr_name,

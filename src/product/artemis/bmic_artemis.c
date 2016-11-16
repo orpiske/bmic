@@ -89,6 +89,7 @@ bmic_product_info_t *bmic_artemis_product_info(bmic_handle_t *handle,
     }
 
     bmic_object_t *root = bmic_api_parse_json(reply.data, status);
+    bmic_data_release(&reply);
     if (!root) {
         return NULL;
     }
@@ -119,7 +120,8 @@ const bmic_exchange_t *bmic_artemis_load_capabilities(bmic_handle_t *handle,
 
     bmic_data_t reply = {0};
     bmic_api_io_read(handle, ARTEMIS_PRODUCT_CAPABILITIES, &reply, status);
-
+    bmic_data_release(&reply);
+    
     if (status->code != GRU_SUCCESS) {
         goto err_exit;
     }
@@ -153,21 +155,7 @@ err_exit:
     return NULL;
 }
 
-const char *bmic_artermis_cap_attr_path(const bmic_object_t *obj, const char *name,
-                                        gru_status_t *status)
-{
-    char *ret;
 
-    int rc = asprintf(&ret, "/value/%s/attr/%s", obj->name, name);
-
-    if (rc == -1) {
-        gru_status_set(status, GRU_FAILURE, "Not enough memory to format capabilities path");
-
-        return NULL;
-    }
-
-    return ret;
-}
 
 
 
