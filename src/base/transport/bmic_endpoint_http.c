@@ -47,8 +47,7 @@ static size_t curl_callback(void *contents, size_t size, size_t nmemb, void *use
         return -1;
     }
 
-
-    memcpy(&(p->body->data[p->body->size]), contents, realsize);
+    memcpy(&(((char *) p->body->data)[p->body->size]), contents, realsize);
     p->body->size += realsize;
     ((char *) p->body->data)[p->body->size] = 0;
 
