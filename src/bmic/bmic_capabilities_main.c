@@ -103,6 +103,13 @@ static void capabilities_read(const void *nodedata, void *payload)
     
 }
 
+static void capabilities_destroy(const void *nodedata, void *payload)
+{
+    bmic_cap_info_t *info = (bmic_cap_info_t *) nodedata;
+    
+    bmic_cap_info_destroy(&info);
+}
+
 int capabilities_run(options_t *options)
 {
     gru_status_t status = {0};
@@ -176,6 +183,7 @@ int capabilities_run(options_t *options)
                 
                 printf("\n  %-35s %-5s %-15s %s\n", "NAME", "MODE", "TYPE", "DESCRIPTION");
                 gru_list_for_each(list, capabilities_read, &wrapper);
+                gru_list_for_each(list, capabilities_destroy, NULL);
                 gru_list_destroy((gru_list_t **)&list);
             }
             
