@@ -26,6 +26,7 @@ bmic_api_interface_t *bmic_activemq_product(gru_status_t *status)
     ret->load_capabilities = bmic_activemq_load_capabilities;
     ret->attribute_read = bmic_activemq_attribute_read;
     ret->attribute_list = bmic_activemq_attribute_list;
+    ret->queue_attribute_read = bmic_activemq_queue_attribute_read;
 
     return ret;
 }
@@ -67,6 +68,7 @@ bmic_handle_t *bmic_activemq_init(const char *base_url,
 
     handle->transport.read = bmic_endpoint_http_read;
     handle->transport.write = bmic_endpoint_http_write;
+    handle->path_formatter = bmic_path_formatter;
 
     return handle;
 }
@@ -149,6 +151,7 @@ const bmic_exchange_t *bmic_activemq_load_capabilities(bmic_handle_t *handle,
     return NULL;
 }
 
+// TODO: deprecated
 const char *format_activemq_path(const char *op, const bmic_exchange_t *cap,
                                  const char *capname, gru_status_t *status)
 {
@@ -166,6 +169,7 @@ const char *format_activemq_path(const char *op, const bmic_exchange_t *cap,
     return ret;
 }
 
+// TODO: move to mi
 const char *bmic_activemq_cap_attr_path(const bmic_object_t *obj, const char *name,
                                         gru_status_t *status) {
     char *ret;
@@ -181,11 +185,7 @@ const char *bmic_activemq_cap_attr_path(const bmic_object_t *obj, const char *na
     return ret;
 }
 
-/**
- * Given a node of attributes, read them into the info object
- * @param obj
- * @param info
- */
+// TODO: move to MI
 static void bmic_activemq_read_attributes(const bmic_object_t *obj,
                                          bmic_cap_info_t *info)
 {
@@ -310,4 +310,14 @@ const gru_list_t *bmic_activemq_attribute_list(bmic_handle_t *handle,
 
     return ret;
 
+}
+
+
+const bmic_exchange_t *bmic_activemq_queue_attribute_read(bmic_handle_t *handle,
+                                                         const bmic_exchange_t *capabilities, const char *name,
+                                                         gru_status_t *status, const char *queue)
+{
+    return bmic_activemq_mi_read(handle, capabilities->root, name, status,
+                             REG_SEARCH_NAME, ACTIVEMQ_QUEUE_CAPABILITES_REGEX,
+                             queue);
 }

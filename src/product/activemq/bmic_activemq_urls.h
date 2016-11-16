@@ -28,5 +28,7 @@
 #define ACTIVEMQ_CAPABILITIES_KEY_REGEX "(brokerName=)([a-z0-9\\.])*(,type=Broker)"
 #define ACTIVEMQ_CORE_CAP_ATTRIBUTES "(brokerName=)([a-z0-9\\.])*(,type=Broker\\/attr$)"
 
+#define ACTIVEMQ_QUEUE_CAPABILITES_REGEX "(brokerName=)([a-zA-Z0-9\\.\"]*)(,destinationName=)(%s)(,destinationType=)([a-zA-Z0-9\\.\"]*)(,type=)([a-zA-Z0-9\\.\"]*)"
+
 #endif /* BMIC_ACTIVEMQ_URLS_H */
 

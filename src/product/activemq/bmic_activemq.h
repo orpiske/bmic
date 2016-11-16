@@ -34,8 +34,11 @@
 
 #include "product/common/bmic_api_io.h"
 #include "product/common/bmic_internal_payloads.h"
+#include "product/common/bmic_path.h"
+#include "product/common/bmic_finder.h"
 
 #include "bmic_activemq_urls.h"
+#include "bmic_activemq_mi.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -62,6 +65,10 @@ const bmic_exchange_t *bmic_activemq_attribute_read(bmic_handle_t *handle,
 
 const gru_list_t *bmic_activemq_attribute_list(bmic_handle_t *handle,
         const bmic_exchange_t *cap, gru_status_t *status);
+
+const bmic_exchange_t *bmic_activemq_queue_attribute_read(bmic_handle_t *handle,
+                                                         const bmic_exchange_t *capabilities, const char *name,
+                                                         gru_status_t *status, const char *queue);
 
 #ifdef __cplusplus
 }
