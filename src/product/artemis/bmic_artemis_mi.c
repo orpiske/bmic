@@ -23,7 +23,7 @@ static const bmic_object_t *bmic_artemis_mi_read_from(bmic_handle_t *handle,
     bmic_data_t reply = {0};
 
     const char *path = handle->path_formatter(ARTEMIS_READ, cap_name,
-                                              ARTMIS_BASE_PKG, attr_name, status);
+                                              ARTEMIS_BASE_PKG, attr_name, status);
 
     bmic_api_io_read(handle, path, &reply, status);
     gru_dealloc_string((char **) &path);
