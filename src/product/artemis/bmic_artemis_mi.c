@@ -129,7 +129,7 @@ const bmic_exchange_t *bmic_artemis_mi_read(bmic_handle_t *handle,
         return NULL;
     }
 
-    bmic_cap_info_t *info = bmic_artermis_mi_read_attr_info(capabilities, 
+    const bmic_cap_info_t *info = bmic_artermis_mi_read_attr_info(capabilities, 
                                                                attr_name, status);
 
     ////////////////////////////    
@@ -137,7 +137,7 @@ const bmic_exchange_t *bmic_artemis_mi_read(bmic_handle_t *handle,
      * Uses the resolved capability (only uses the name, actually) to read the 
      * data from the BMIC.
      */
-    bmic_object_t *reply_obj = bmic_artemis_mi_read_from(handle, capabilities->name,
+    const bmic_object_t *reply_obj = bmic_artemis_mi_read_from(handle, capabilities->name,
                                                           attr_name,
                                                           status);
     if (!reply_obj) {
@@ -166,7 +166,7 @@ const bmic_exchange_t *bmic_artemis_mi_read(bmic_handle_t *handle,
 
 err_exit:
     gru_dealloc((void **)info);
-    bmic_object_destroy(&reply_obj);
+    bmic_object_destroy((bmic_object_t **)&reply_obj);
     return NULL;
 }
 
