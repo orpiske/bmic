@@ -33,7 +33,7 @@ target_link_libraries(
 	bmic
 	gru
         curl
-        json-c
+        ${LIBJSON}
 )
 
 install(TARGETS bmic
