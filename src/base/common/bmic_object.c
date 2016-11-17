@@ -116,7 +116,7 @@ bmic_object_t *bmic_object_new_root(gru_status_t *status)
     }
 
     ret->self = gru_tree_new(NULL);
-    if (!ret) {
+    if (!ret->self) {
         bmic_object_destroy(&ret);
 
         return NULL;
