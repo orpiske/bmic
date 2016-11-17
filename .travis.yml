@@ -25,7 +25,7 @@ addons:
     packages:
       - cmake
       - doxygen
-      - libjson-c-dev
+      - libjson0-dev
       - libcurl4-openssl-dev
   coverity_scan:
     project:
