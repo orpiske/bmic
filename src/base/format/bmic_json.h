@@ -19,7 +19,11 @@
 #include <stdbool.h>
 #include <assert.h>
 
-#include <json-c/json.h>
+#if defined(__DEBIAN_DISTRO__) || defined(__UBUNTU_DISTRO__)
+ #include <json/json.h>
+#else
+ #include <json-c/json.h>
+#endif
 
 #include <common/gru_alloc.h>
 #include <common/gru_status.h>
