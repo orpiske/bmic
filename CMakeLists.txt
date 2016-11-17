@@ -18,14 +18,17 @@ if (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
 
     if(EXISTS "/etc/redhat-release")
         add_definitions(-D__RH_DISTRO__)
+        set(LIBJSON json-c)
     endif(EXISTS "/etc/redhat-release")
 
     if(EXISTS "/etc/debian_version")
         add_definitions(-D__DEBIAN_DISTRO__)
+        set(LIBJSON json)
     endif(EXISTS "/etc/debian_version")
 
     if(EXISTS "/etc/ubuntu-release")
         add_definitions(-D__UBUNTU_DISTRO__)
+        set(LIBJSON json)
     endif(EXISTS "/etc/ubuntu-release")
 endif(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
 
