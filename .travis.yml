@@ -1,0 +1,32 @@
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: "Zizye5YuocAjm1NaABSEpPRO46JWeezIY06ISBLa0NmZR3U1F7F7TBpq51Wr5hSxHeTxeVx/AjTfC1sb0/kqDDWu/PUKGtxzkKJsfp1s8ytKDplsJWUgL12KttGXSdcd/VIJHLkfvUGMnXP0dfK+W3dFGqLOKVd3CHUB2NBRxrxNauRkVs/NjrIGx+CAoVY4yM84i87VUYgpuW4wtdxrA/ya9f9lWmPniNXmI+ICJZ13wVvrGyHHbb6ZISdn3zV7PG12OoWs74Fh38k/7EYLK8+rBbbqTBHvqxHPFoOUDlJugX9CAIKJY2yA7HELshaDuJ/dhfRGRzNrB8ivcxwd9yA40wM9n5Do3lrwCBGNoI1tDJnTmWwa7VFIBRFZHc1kKS1lzucDuuYmSZhR7zFNKs/Swzcz7GD+aOUqGSeFzv6FCeEaP91gfgt7etyaSEqf8vsxLOLzWN5qE9U44UtPRyDAjulu1FPeE+HUX+2pA0ngFhEhgXdsYaELpakavXYbh9wjn3WNrnsFwiKaf/9AnZzhcfbT4Keddhp+lsMRPvqIvMVXE10bplN3KA36SsgbHLpNx109QcHe4/QfRVePTQ/eBuTg0TCkqgAQdnvunB2rRJT+8JCyZzuJ7Q4MEF/ZkJcuj2Zr9giT2nm4jWdSRvnG7PR4m7n0EJus8etZZrU="
+os:
+- linux
+sudo: true
+language:
+- c
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install -y cmake doxygen
+  - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+before_script:
+- wget https://github.com/orpiske/gru/tarball/master -O gru-head.tar.gz
+- mkdir gru && tar -xvf gru-head.tar.gz -C gru --strip-components=1
+- pushd gru && mkdir build && cd build && cmake -DCMAKE_INSTALL_PREFIX=/usr .. && make && sudo make install ; popd
+- mkdir build
+- cd build
+- cmake -DCMAKE_BUILD_TYPE=RELEASE ..
+script:
+- make all
+addons:
+  coverity_scan:
+    project:
+      name: "orpiske/gru"
+      description: "Generic Reusable Utilities"
+    notification_email: angusyoung@gmail.com
+    build_command_prepend: "mkdir build ; cd build && - cmake -DCMAKE_BUILD_TYPE=RELEASE .."
+    build_command:   "make"
+    branch_pattern: coverity_scan
