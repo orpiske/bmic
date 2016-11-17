@@ -9,8 +9,7 @@ sudo: required
 language:
 - c
 before_install:
-  - sudo apt-get -qq update
-  - sudo apt-get install -y cmake doxygen libjson-c-dev libcurl4-openssl-dev
+  - sudo apt-get install -y cmake doxygen
   - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
 before_script:
 - wget https://github.com/orpiske/gru/tarball/master -O gru-head.tar.gz
@@ -22,6 +21,12 @@ before_script:
 script:
 - make all
 addons:
+  apt:
+    packages:
+      - cmake
+      - doxygen
+      - libjson-c-dev
+      - libcurl4-openssl-dev
   coverity_scan:
     project:
       name: "orpiske/bmic"
