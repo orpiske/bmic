@@ -2,7 +2,7 @@ env:
   global:
    # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
    #   via the "travis encrypt" command using the project repo's public key
-   - secure: "Zizye5YuocAjm1NaABSEpPRO46JWeezIY06ISBLa0NmZR3U1F7F7TBpq51Wr5hSxHeTxeVx/AjTfC1sb0/kqDDWu/PUKGtxzkKJsfp1s8ytKDplsJWUgL12KttGXSdcd/VIJHLkfvUGMnXP0dfK+W3dFGqLOKVd3CHUB2NBRxrxNauRkVs/NjrIGx+CAoVY4yM84i87VUYgpuW4wtdxrA/ya9f9lWmPniNXmI+ICJZ13wVvrGyHHbb6ZISdn3zV7PG12OoWs74Fh38k/7EYLK8+rBbbqTBHvqxHPFoOUDlJugX9CAIKJY2yA7HELshaDuJ/dhfRGRzNrB8ivcxwd9yA40wM9n5Do3lrwCBGNoI1tDJnTmWwa7VFIBRFZHc1kKS1lzucDuuYmSZhR7zFNKs/Swzcz7GD+aOUqGSeFzv6FCeEaP91gfgt7etyaSEqf8vsxLOLzWN5qE9U44UtPRyDAjulu1FPeE+HUX+2pA0ngFhEhgXdsYaELpakavXYbh9wjn3WNrnsFwiKaf/9AnZzhcfbT4Keddhp+lsMRPvqIvMVXE10bplN3KA36SsgbHLpNx109QcHe4/QfRVePTQ/eBuTg0TCkqgAQdnvunB2rRJT+8JCyZzuJ7Q4MEF/ZkJcuj2Zr9giT2nm4jWdSRvnG7PR4m7n0EJus8etZZrU="
+    - secure: "zZgLfFHU8OdmvpWCz5HfdGDDL/ry58xtttTtU3hfloRMOv2RT3cGN6W3HgF13mDZ13kS58gOkfEw5740s6/aZ6JvXHezGWy7A2Gjpshvw0cY3vmEvf68bFMhvJlw3XpXFXbTSsgl9h5NQvhFfmmzzkALxwBnWoUEpJrijyq20i/HD6+ayd6tUjHPg1PqD4Rz6FA9otu4f7y6lKIvtWRlKVeW7bV6EmdK09MumCM2tWiRe1cKBsyPKpLrf1XVON1IAQccOED49vgKK6KTHCYB+IsbA3qzkppMfl4XI3C1jFoZeLk60pAlMDsD2DUo6fRgtiBUkws0oKr8YZdeJxg3AsKAPfvEw2DwuOvgs12p3v6pwApRpy9iAyMQBiA9uG8PWtD6+O5xs9LMPrRRPTUWpU5A+cqIDZ/P1voFRjw5awZE4D8IWS5ZQ6L6G0ZVba/0JH4cOcSKjsX+j4RSSPZeVe/4DPlDEveKi5cenXM+hdFkIwXsMqUxVqYzcdlj0tcX3rJYpBNfevD2hQ2zws28GSX12NjI8ya3nzZRMD0opMEpZoKzhlnTYEstRwKki+Ieh4rPDx62BzkqIM3yw3gQfoBlZhNxRYcpFfpu296q1Fe+ny4LTWYuYPLFdY7f1xrCm0TbaThoBw1qtC7CzJfSDgXzYldd75u5dTLCkAQTGpM="
 os:
 - linux
 sudo: true
@@ -24,8 +24,8 @@ script:
 addons:
   coverity_scan:
     project:
-      name: "orpiske/gru"
-      description: "Generic Reusable Utilities"
+      name: "orpiske/bmic"
+      description: "Broker Management Interface Client"
     notification_email: angusyoung@gmail.com
     build_command_prepend: "mkdir build ; cd build && - cmake -DCMAKE_BUILD_TYPE=RELEASE .."
     build_command:   "make"
