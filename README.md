@@ -3,7 +3,7 @@ BMIC: Broker Management Interface Client
 
 Build Status
 ----
-Linux Build Status: [![Linux Build Status](https://travis-ci.org/orpiske/bmic.svg?branch=master)](https://travis-ci.org/orpiske/bmic
+Linux Build Status: [![Linux Build Status](https://travis-ci.org/orpiske/bmic.svg?branch=master)](https://travis-ci.org/orpiske/bmic)
 
 Coverity Scan: [![Coverity Scan Build Status](https://scan.coverity.com/projects/10840/badge.svg)](https://scan.coverity.com/projects/orpiske-bmic)
 
