@@ -120,7 +120,7 @@ const bmic_exchange_t *bmic_artemis_load_capabilities(bmic_handle_t *handle,
 
     bmic_data_t reply = {0};
     bmic_api_io_read(handle, ARTEMIS_PRODUCT_CAPABILITIES, &reply, status);
-    bmic_data_release(&reply);
+    
     
     if (status->code != GRU_SUCCESS) {
         goto err_exit;
@@ -143,6 +143,7 @@ const bmic_exchange_t *bmic_artemis_load_capabilities(bmic_handle_t *handle,
 
         goto err_exit;
     }
+    bmic_data_release(&reply);
 
     ret->root = root;
     ret->data_ptr = capabilities;
@@ -151,6 +152,7 @@ const bmic_exchange_t *bmic_artemis_load_capabilities(bmic_handle_t *handle,
     return ret;
 
 err_exit:
+    bmic_data_release(&reply);
     gru_dealloc((void **) &ret);
     return NULL;
 }
