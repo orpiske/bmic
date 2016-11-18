@@ -42,6 +42,13 @@ typedef struct bmic_op_arg_t_ {
  */
 bmic_op_arg_t *bmic_op_arg_new(gru_status_t *status);
 
+
+/**
+ * Destroys the argument object and free's all memory used
+ * @param ptr the object to free
+ */
+void bmic_op_arg_destroy(bmic_op_arg_t **ptr);
+
 /**
  * Sets the name
  * @param arg the argument object to set the name
