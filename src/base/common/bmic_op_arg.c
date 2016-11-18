@@ -50,14 +50,14 @@ void bmic_op_arg_set_name(bmic_op_arg_t *arg, const char *name) {
     assert(arg != NULL);
 
     if (asprintf(&arg->name, "%s", name) == -1) {
-        fprintf(stderr, "Unable to allocate memory for saving the argacity name\n");
+        fprintf(stderr, "Unable to allocate memory for saving the argument name\n");
     }
 }
 void bmic_op_arg_set_description(bmic_op_arg_t *arg, const char *description) {
     assert(arg != NULL);
 
     if (asprintf(&arg->description, "%s", description) == -1) {
-        fprintf(stderr, "Unable to allocate memory for saving the argacity description\n");
+        fprintf(stderr, "Unable to allocate memory for saving the argument description\n");
     }
 }
 
@@ -66,6 +66,6 @@ void bmic_op_arg_set_type(bmic_op_arg_t *arg, const char *type) {
     assert(arg != NULL);
 
     if (asprintf(&arg->type, "%s", type) == -1) {
-        fprintf(stderr, "Unable to allocate memory for saving the argacity typename\n");
+        fprintf(stderr, "Unable to allocate memory for saving the argument typename\n");
     }
 }
