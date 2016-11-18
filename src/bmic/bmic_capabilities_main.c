@@ -210,7 +210,7 @@ int capabilities_run(options_t *options)
 
 int capabilities_main(int argc, char **argv)
 {
-    int c = 0;
+    
     int option_index = 0;
     options_t options = {0};
 
@@ -236,7 +236,8 @@ int capabilities_main(int argc, char **argv)
             { 0, 0, 0, 0}
         };
 
-        c = getopt_long(argc, argv, "hu:p:l:s:lr:", long_options, &option_index);
+        int c = getopt_long(argc, argv, "hu:p:l:s:lr:", long_options, 
+                            &option_index);
         if (c == -1) {
             if (optind == 1) {
                 break;
