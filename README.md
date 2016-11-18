@@ -34,6 +34,7 @@ The API version is 1.x.x
 The product version is: 1.4.0
 ```
 
+Displaying Core Capabilities:
 ```
 $ ./bmic-client capabilities --read-all -u admin -p admin -s localhost
 The product name is artemis
