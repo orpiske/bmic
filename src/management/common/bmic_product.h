@@ -71,7 +71,8 @@ typedef const bmic_exchange_t *(*bmic_management_api_queue_attribute_read_fn)(bm
 
 typedef const bmic_caplist_t *(*bmic_management_api_attr_list_fn)(bmic_handle_t *handle,
         const bmic_exchange_t *cap, gru_status_t *status);
-
+typedef const bmic_caplist_t *(*bmic_management_api_op_list_fn)(bmic_handle_t *handle,
+        const bmic_exchange_t *cap, gru_status_t *status);
 
 typedef struct bmic_api_interface_t_ {
     char name[64];
@@ -86,6 +87,7 @@ typedef struct bmic_api_interface_t_ {
     bmic_management_api_attr_read_fn attribute_read;
     bmic_management_api_attr_list_fn attribute_list;
     bmic_management_api_queue_attribute_read_fn queue_attribute_read;
+    bmic_management_api_op_list_fn operation_list;
 
 } bmic_api_interface_t;
 
