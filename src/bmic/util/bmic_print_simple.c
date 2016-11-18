@@ -90,8 +90,8 @@ void print_returned_object(const char *capname, const bmic_object_t *obj)
 }
 
 void print_product_info(bmic_api_interface_t *api, bmic_product_info_t *info) {
-    printf("Product name is %s\n", api->name);
-    printf("API version is %s\n", api->version);
+    printf("The product name is %s\n", api->name);
+    printf("The API version is %s\n", api->version);
 
     if (info) {
         printf("The product version is: %s\n", info->version);
