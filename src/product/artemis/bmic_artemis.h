@@ -21,6 +21,9 @@
 
 #include "base/common/bmic_credentials.h"
 #include "base/common/bmic_cap_info.h"
+#include "base/common/bmic_op_arg.h"
+#include "base/common/bmic_op_sig.h"
+#include "base/common/bmic_op_info.h"
 #include "base/transport/bmic_transport.h"
 #include "base/transport/bmic_endpoint_http.h"
 #include "base/format/bmic_json.h"
@@ -91,6 +94,18 @@ const bmic_caplist_t *bmic_artemis_attribute_list(bmic_handle_t *handle,
 const bmic_exchange_t *bmic_artemis_queue_attribute_read(bmic_handle_t *handle,
         const bmic_exchange_t *capabilities, const char *name,
         gru_status_t *status, const char *queue);
+
+
+
+/**
+ * Get a list of all available broker operations and their metadata
+ * @param handle
+ * @param cap
+ * @param status
+ * @return 
+ */
+const bmic_caplist_t *bmic_artemis_operation_list(bmic_handle_t *handle,
+                                              const bmic_exchange_t *cap, gru_status_t *status);
 
 #ifdef __cplusplus
 }

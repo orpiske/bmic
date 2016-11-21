@@ -22,6 +22,7 @@
 #include <collection/gru_list.h>
 
 #include "bmic_op_arg.h"
+#include "bmic_op_sig.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -29,7 +30,7 @@ extern "C" {
 
 typedef struct bmic_op_info_t_ {
     char *name;
-    gru_list_t *args;
+    gru_list_t *signature;
     char *ret;
     char *description;
 } bmic_op_info_t;
@@ -74,9 +75,9 @@ void bmic_op_info_set_ret(bmic_op_info_t *op, const char *typename);
 /**
  * Adds and argument to the operation
  * @param op the operation object to set the name
- * @param arg the argument to add
+ * @param sig the signature to add
  */
-void bmic_op_info_add_arg(bmic_op_info_t *op, const bmic_op_arg_t *arg);
+void bmic_op_info_add_signature(bmic_op_info_t *op, const bmic_op_sig_t *sig);
 
 
 

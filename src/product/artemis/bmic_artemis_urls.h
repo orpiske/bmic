@@ -28,5 +28,7 @@
 #define ARTEMIS_CORE_CAP_ATTRIBUTES "(brokerName=)([a-z0-9\\.\"])*(,module=Core,serviceType=Server,type=Broker\\/attr$)"
 #define ARTEMIS_QUEUE_CAPABILITES_REGEX "(address=.)(%s).(,brokerName=)([a-z0-9\\.\"]*)(,module=)([a-zA-Z0-9\\.\"]*)(,name=)([a-zA-Z0-9\\.\"]*)(,serviceType=)([a-zA-Z0-9\\.\"]*)(,type=)([a-zA-Z0-9\\.\"]*)"
 
+#define ARTEMIS_CORE_CAP_OPERATIONS "(brokerName=)([a-z0-9\\.\"])*(,module=Core,serviceType=Server,type=Broker\\/op$)"
+
 #endif /* BMIC_ARTEMIS_URLS_H */
 

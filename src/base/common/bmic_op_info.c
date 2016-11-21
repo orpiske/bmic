@@ -20,8 +20,8 @@ bmic_op_info_t *bmic_op_info_new(gru_status_t *status) {
     bmic_op_info_t *ret = gru_alloc(sizeof(bmic_op_info_t), status);
     gru_alloc_check(ret, NULL);
     
-    ret->args = gru_list_new(status);
-    if (!ret->args) {
+    ret->signature = gru_list_new(status);
+    if (!ret->signature) {
         gru_dealloc((void **)&ret);
         
         return NULL;
@@ -49,7 +49,7 @@ void bmic_op_info_destroy(bmic_op_info_t **ptr) {
         gru_dealloc_string(&obj->ret);
     }
     
-    gru_list_destroy(&obj->args);
+    gru_list_destroy(&obj->signature);
 
     gru_dealloc((void **) ptr);
 }
@@ -79,12 +79,12 @@ void bmic_op_info_set_ret(bmic_op_info_t *op, const char *ret) {
 }
 
 
-void bmic_op_info_add_arg(bmic_op_info_t *op, const bmic_op_arg_t *arg) {
+void bmic_op_info_add_signature(bmic_op_info_t *op, const bmic_op_sig_t *sig) {
     assert(op != NULL);
-    assert(op->args != NULL);
+    assert(op->signature != NULL);
     
     
-    if (gru_list_append(op->args, arg) == NULL) {
+    if (gru_list_append(op->signature, sig) == NULL) {
         fprintf(stderr, "Unable to add new argument\n");
     }
 }

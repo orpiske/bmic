@@ -27,6 +27,7 @@ bmic_api_interface_t *bmic_artemis_product(gru_status_t *status)
     ret->attribute_read = bmic_artemis_attribute_read;
     ret->attribute_list = bmic_artemis_attribute_list;
     ret->queue_attribute_read = bmic_artemis_queue_attribute_read;
+    ret->operation_list = bmic_artemis_operation_list;
 
     return ret;
 }
@@ -190,7 +191,6 @@ static void bmic_artemis_add_attr(const void *nodedata, void *payload)
             gru_list_append(pl->list, info);
         }
     }
-
 }
 
 const bmic_caplist_t *bmic_artemis_attribute_list(bmic_handle_t *handle,
@@ -220,4 +220,47 @@ const bmic_exchange_t *bmic_artemis_queue_attribute_read(bmic_handle_t *handle,
     return bmic_artemis_mi_read(handle, capabilities->root, name, status,
                              REG_SEARCH_NAME, ARTEMIS_QUEUE_CAPABILITES_REGEX,
                              queue);
+}
+
+
+static void bmic_artemis_add_op(const void *nodedata, void *payload)
+{
+    const bmic_object_t *nodeobj = (bmic_object_t *) nodedata;
+    bmic_payload_add_attr_t *pl =
+            (bmic_payload_add_attr_t *) payload;
+
+    if (nodeobj->type == OBJECT) {
+        if (nodeobj->name && strcmp(nodeobj->name, "op") != 0) {
+            bmic_op_info_t *info = bmic_op_info_new(pl->status);
+
+            if (!info) {
+                return;
+            }
+
+            bmic_op_info_set_name(info, nodeobj->name);
+            bmic_artemis_mi_translate_op(nodeobj, info, pl->status);
+
+            gru_list_append(pl->list, info);
+        }
+    }
+}
+
+const bmic_caplist_t *bmic_artemis_operation_list(bmic_handle_t *handle,
+                                              const bmic_exchange_t *cap, gru_status_t *status)
+{
+    const bmic_object_t *attributes = bmic_object_find_regex(cap->root,
+                                                             ARTEMIS_CORE_CAP_OPERATIONS,
+                                                             REG_SEARCH_PATH);
+    bmic_caplist_t *ret = bmic_caplist_new(status);
+    gru_alloc_check(ret, NULL);
+
+    bmic_payload_add_attr_t payload = {
+        .list = ret,
+        .status = status,
+    };
+
+
+    bmic_object_for_each_child(attributes, bmic_artemis_add_op, &payload);
+
+    return ret;
 }

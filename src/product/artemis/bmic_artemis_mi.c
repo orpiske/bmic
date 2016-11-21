@@ -14,6 +14,7 @@
  limitations under the License.
  */
 #include "bmic_artemis_mi.h"
+#include "base/common/bmic_op_info.h"
 
 static const char *bmic_artermis_cap_attr_path(const bmic_object_t *obj, const char *name,
                                         gru_status_t *status)
@@ -189,5 +190,71 @@ void bmic_artemis_mi_translate_attr(const bmic_object_t *obj,
     const bmic_object_t *desc = bmic_object_find_by_name(obj, "desc");
     if (desc && desc->type == STRING) {
         bmic_cap_info_set_description(info, desc->data.str);
+    }
+}
+
+// typedef struct 
+
+static void bmic_artermis_mi_translate_arg_value(const void *nodedata, void *payload) {
+    const bmic_object_t *node = (const bmic_object_t *) nodedata;
+    bmic_op_sig_t *sig = (bmic_op_info_t *) payload;
+    
+    // TODO: fix this
+    bmic_op_arg_t *arg = bmic_op_arg_new(NULL);
+    
+    const bmic_object_t *name = bmic_object_find_by_name(node, "name");
+    if (name && name->type == STRING) {
+        bmic_op_arg_set_name(arg, name->data.str);
+    } 
+
+    const bmic_object_t *type = bmic_object_find_by_name(node, "type");
+    if (type && type->type == STRING) {
+        bmic_op_arg_set_type(arg, type->data.str);
+    }
+
+    const bmic_object_t *desc = bmic_object_find_by_name(node, "desc");
+    if (desc && desc->type == STRING) {
+        bmic_op_arg_set_description(desc, desc->data.str);
+    }
+    
+    bmic_op_sig_add_arg(sig, arg);
+}
+
+static void bmic_artermis_mi_translate_sigs(const void *nodedata, void *payload) {
+    const bmic_object_t *node = (const bmic_object_t *) nodedata;
+    bmic_op_info_t *info = (bmic_op_info_t *) payload;
+    
+    const bmic_object_t *args = bmic_object_find_by_name(node, "args");
+    if (args && args->type == LIST) {
+        // TODO: another instantiantion without check
+        bmic_op_sig_t *sig = bmic_op_sig_new(NULL);
+        bmic_object_for_each_child(args, bmic_artermis_mi_translate_arg_value, 
+                                   sig);
+        bmic_op_info_add_signature(info, sig);
+    }
+    
+    const bmic_object_t *ret = bmic_object_find_by_name(node, "ret");
+    if (ret && ret->type == STRING) {
+        bmic_op_arg_set_type(info, ret->data.str);
+    }
+
+    const bmic_object_t *desc = bmic_object_find_by_name(node, "desc");
+    if (desc && desc->type == STRING) {
+        bmic_op_arg_set_description(info, desc->data.str);
+    }
+}
+
+// obj::list
+// obj::child
+
+void bmic_artemis_mi_translate_op(const bmic_object_t *obj,
+                                         bmic_op_info_t *info,
+                                  gru_status_t *status)
+{
+    if (obj->type == LIST) {
+        bmic_object_for_each_child(obj, bmic_artermis_mi_translate_sigs, info);
+    }
+    else {
+        bmic_artermis_mi_translate_sigs(obj, info);
     }
 }
