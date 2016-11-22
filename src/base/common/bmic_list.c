@@ -13,7 +13,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-#include "bmic_caplist.h"
+#include "bmic_list.h"
 
 
 inline bmic_caplist_t *bmic_caplist_new(gru_status_t *status) {

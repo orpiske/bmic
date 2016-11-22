@@ -21,7 +21,7 @@
 
 #include "base/common/bmic_object.h"
 #include "base/common/bmic_cap_info.h"
-#include "base/common/bmic_caplist.h"
+#include "base/common/bmic_list.h"
 
 #include "bmic_handle.h"
 #include "bmic_discovery_hint.h"

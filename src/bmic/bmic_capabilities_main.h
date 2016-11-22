@@ -27,7 +27,7 @@
 #include "base/transport/bmic_endpoint_http.h"
 #include "base/format/bmic_json.h"
 #include "base/common/bmic_cap_info.h"
-#include "base/common/bmic_caplist.h"
+#include "base/common/bmic_list.h"
 
 #include "management/common/bmic_product.h"
 #include "management/common/bmic_discovery_hint.h"
