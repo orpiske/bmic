@@ -211,13 +211,13 @@ static void bmic_activemq_add_attr(const void *nodedata, void *payload)
 
 }
 
-const bmic_caplist_t *bmic_activemq_attribute_list(bmic_handle_t *handle,
+const bmic_list_t *bmic_activemq_attribute_list(bmic_handle_t *handle,
                                                 const bmic_exchange_t *cap, gru_status_t *status)
 {
     const bmic_object_t *attributes = bmic_object_find_regex(cap->data_ptr,
                                                              ACTIVEMQ_CORE_CAP_ATTRIBUTES,
                                                              REG_SEARCH_PATH);
-    bmic_caplist_t *ret = bmic_caplist_new(status);
+    bmic_list_t *ret = bmic_caplist_new(status);
     gru_alloc_check(ret, NULL);
 
      bmic_payload_add_attr_t payload = {

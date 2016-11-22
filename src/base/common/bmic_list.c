@@ -16,7 +16,7 @@
 #include "bmic_list.h"
 
 
-inline bmic_caplist_t *bmic_caplist_new(gru_status_t *status) {
+inline bmic_list_t *bmic_caplist_new(gru_status_t *status) {
     return gru_list_new(status);
 }
 
@@ -27,8 +27,8 @@ static void bmic_caplist_node_destroy(const void *nodedata, void *payload)
     bmic_cap_info_destroy(&info);
 }
 
-void bmic_caplist_destroy(bmic_caplist_t **ptr) {
-    bmic_caplist_t *caplist = (bmic_caplist_t *) *ptr;
+void bmic_caplist_destroy(bmic_list_t **ptr) {
+    bmic_list_t *caplist = (bmic_list_t *) *ptr;
     
     gru_list_for_each(caplist, bmic_caplist_node_destroy, NULL);
     gru_list_destroy(ptr);

@@ -28,10 +28,10 @@
 extern "C" {
 #endif
 
-typedef gru_list_t bmic_caplist_t;
+typedef gru_list_t bmic_list_t;
 
-bmic_caplist_t *bmic_caplist_new(gru_status_t *status);
-void bmic_caplist_destroy(bmic_caplist_t **ptr);
+bmic_list_t *bmic_caplist_new(gru_status_t *status);
+void bmic_caplist_destroy(bmic_list_t **ptr);
         
 #ifdef __cplusplus
 }
