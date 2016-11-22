@@ -157,8 +157,8 @@ int capabilities_run(options_t *options)
         if (list) {
             printf("\n  %-35s %-5s %-15s %s\n", "NAME", "MODE", "TYPE", "DESCRIPTION");
             
-            gru_list_for_each(list, print_cap, NULL);
-            bmic_caplist_destroy((bmic_list_t **)&list);
+            gru_list_for_each(list->items, print_cap, NULL);
+            bmic_list_destroy((bmic_list_t **)&list);
         }
         
     }
@@ -175,9 +175,9 @@ int capabilities_run(options_t *options)
                 wrapper.status = &status;
                 
                 printf("\n  %-35s %-5s %-15s %s\n", "NAME", "MODE", "TYPE", "DESCRIPTION");
-                gru_list_for_each(list, capabilities_read, &wrapper);
+                gru_list_for_each(list->items, capabilities_read, &wrapper);
                 
-                bmic_caplist_destroy((bmic_list_t **)&list);
+                bmic_list_destroy((bmic_list_t **)&list);
             }
             
         }

@@ -217,11 +217,11 @@ const bmic_list_t *bmic_activemq_attribute_list(bmic_handle_t *handle,
     const bmic_object_t *attributes = bmic_object_find_regex(cap->data_ptr,
                                                              ACTIVEMQ_CORE_CAP_ATTRIBUTES,
                                                              REG_SEARCH_PATH);
-    bmic_list_t *ret = bmic_caplist_new(status);
+    bmic_list_t *ret = bmic_list_new(status, bmic_cap_info_destroy);
     gru_alloc_check(ret, NULL);
 
      bmic_payload_add_attr_t payload = {
-        .list = ret,
+        .list = ret->items,
         .status = status,
     };
 

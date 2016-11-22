@@ -9,8 +9,8 @@ add_library(
         base/common/bmic_credentials.c
         base/common/bmic_object.c
         base/common/bmic_regex.c
+        base/common/bmic_list.c
         base/common/bmic_cap_info.c
-        base/common/bmic_caplist.c
         base/common/bmic_op_arg.c
         base/common/bmic_op_sig.c
         base/common/bmic_op_info.c

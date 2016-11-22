@@ -199,11 +199,11 @@ const bmic_list_t *bmic_artemis_attribute_list(bmic_handle_t *handle,
     const bmic_object_t *attributes = bmic_object_find_regex(cap->data_ptr,
                                                              ARTEMIS_CORE_CAP_ATTRIBUTES,
                                                              REG_SEARCH_PATH);
-    bmic_list_t *ret = bmic_caplist_new(status);
+    bmic_list_t *ret = bmic_list_new(status, bmic_cap_info_destroy);
     gru_alloc_check(ret, NULL);
 
     bmic_payload_add_attr_t payload = {
-        .list = ret,
+        .list = ret->items,
         .status = status,
     };
 
@@ -251,11 +251,11 @@ const bmic_list_t *bmic_artemis_operation_list(bmic_handle_t *handle,
     const bmic_object_t *attributes = bmic_object_find_regex(cap->root,
                                                              ARTEMIS_CORE_CAP_OPERATIONS,
                                                              REG_SEARCH_PATH);
-    bmic_list_t *ret = bmic_caplist_new(status);
+    bmic_list_t *ret = bmic_list_new(status, bmic_op_info_destroy);
     gru_alloc_check(ret, NULL);
 
     bmic_payload_add_attr_t payload = {
-        .list = ret,
+        .list = ret->items,
         .status = status,
     };
 

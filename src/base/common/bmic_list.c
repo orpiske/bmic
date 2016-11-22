@@ -16,20 +16,33 @@
 #include "bmic_list.h"
 
 
-inline bmic_list_t *bmic_caplist_new(gru_status_t *status) {
-    return gru_list_new(status);
+inline bmic_list_t *bmic_list_new(gru_status_t *status, node_destructor destructor) {
+    bmic_list_t *ret = gru_alloc(sizeof(bmic_list_t), status);
+    gru_alloc_check(ret, NULL);
+    
+    ret->items = gru_list_new(status);
+    if (!ret->items) {
+        gru_dealloc(&ret);
+        
+        return NULL;
+    }
+    
+    ret->destructor = destructor;
+    return ret;
 }
 
 static void bmic_caplist_node_destroy(const void *nodedata, void *payload)
 {
     bmic_cap_info_t *info = (bmic_cap_info_t *) nodedata;
+    node_destructor destructor = (node_destructor) payload;
     
-    bmic_cap_info_destroy(&info);
+    destructor(&info);
 }
 
-void bmic_caplist_destroy(bmic_list_t **ptr) {
-    bmic_list_t *caplist = (bmic_list_t *) *ptr;
+void bmic_list_destroy(bmic_list_t **ptr) {
+    bmic_list_t *list = (bmic_list_t *) *ptr;
     
-    gru_list_for_each(caplist, bmic_caplist_node_destroy, NULL);
-    gru_list_destroy(ptr);
+    gru_list_for_each(list->items, bmic_caplist_node_destroy, list->destructor);
+    gru_list_destroy(&list->items);
+    gru_dealloc((void **)ptr);
 }
