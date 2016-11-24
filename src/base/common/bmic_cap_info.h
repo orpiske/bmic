@@ -35,13 +35,15 @@ typedef struct bmic_cap_info_t_ {
 } bmic_cap_info_t;
 
 bmic_cap_info_t *bmic_cap_info_new(gru_status_t *status);
+void bmic_cap_info_destroy(bmic_cap_info_t **ptr);
+void bmic_cap_info_destroy_list(void **ptr);
 
 void bmic_cap_info_set_name(bmic_cap_info_t *cap, const char *name);
 void bmic_cap_info_set_description(bmic_cap_info_t *cap, const char *description);
 void bmic_cap_info_set_write(bmic_cap_info_t *cap, bool write);
 void bmic_cap_info_set_typename(bmic_cap_info_t *cap, const char *typename);
 
-void bmic_cap_info_destroy(bmic_cap_info_t **ptr);
+
 
 #ifdef __cplusplus
 }

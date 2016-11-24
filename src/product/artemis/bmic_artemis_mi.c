@@ -197,7 +197,7 @@ void bmic_artemis_mi_translate_attr(const bmic_object_t *obj,
 
 static void bmic_artermis_mi_translate_arg_value(const void *nodedata, void *payload) {
     const bmic_object_t *node = (const bmic_object_t *) nodedata;
-    bmic_op_sig_t *sig = (bmic_op_info_t *) payload;
+    bmic_op_sig_t *sig = (bmic_op_sig_t *) payload;
     
     // TODO: fix this
     bmic_op_arg_t *arg = bmic_op_arg_new(NULL);
@@ -214,7 +214,7 @@ static void bmic_artermis_mi_translate_arg_value(const void *nodedata, void *pay
 
     const bmic_object_t *desc = bmic_object_find_by_name(node, "desc");
     if (desc && desc->type == STRING) {
-        bmic_op_arg_set_description(desc, desc->data.str);
+        bmic_op_arg_set_description(arg, desc->data.str);
     }
     
     bmic_op_sig_add_arg(sig, arg);
@@ -225,23 +225,26 @@ static void bmic_artermis_mi_translate_sigs(const void *nodedata, void *payload)
     bmic_op_info_t *info = (bmic_op_info_t *) payload;
     
     const bmic_object_t *args = bmic_object_find_by_name(node, "args");
+    bmic_op_sig_t *sig = bmic_op_sig_new(NULL);
+    
     if (args && args->type == LIST) {
-        // TODO: another instantiantion without check
-        bmic_op_sig_t *sig = bmic_op_sig_new(NULL);
         bmic_object_for_each_child(args, bmic_artermis_mi_translate_arg_value, 
                                    sig);
         bmic_op_info_add_signature(info, sig);
     }
     
-    const bmic_object_t *ret = bmic_object_find_by_name(node, "ret");
+    const bmic_object_t *ret = bmic_object_find_child_by_name(node, "ret");
     if (ret && ret->type == STRING) {
-        bmic_op_arg_set_type(info, ret->data.str);
+        bmic_op_sig_set_ret(sig, ret->data.str);
     }
 
-    const bmic_object_t *desc = bmic_object_find_by_name(node, "desc");
+    const bmic_object_t *desc = bmic_object_find_child_by_name(node, "desc");
     if (desc && desc->type == STRING) {
-        bmic_op_arg_set_description(info, desc->data.str);
+        bmic_op_sig_set_description(sig, desc->data.str);
     }
+    
+    bmic_op_info_add_signature(info, sig);
+    
 }
 
 // obj::list

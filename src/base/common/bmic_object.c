@@ -447,7 +447,7 @@ const bmic_object_t *bmic_object_find_child_by_name(const bmic_object_t *parent,
 {
     assert(parent != NULL && name != NULL);
     
-    gru_tree_node_t *ret = gru_tree_search_child(parent->self, bmic_compare_name, name);
+    const gru_tree_node_t *ret = gru_tree_search_child(parent->self, bmic_compare_name, name);
     if (ret) {
         return ret->data;
     }

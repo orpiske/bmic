@@ -22,7 +22,7 @@ inline bmic_list_t *bmic_list_new(gru_status_t *status, node_destructor destruct
     
     ret->items = gru_list_new(status);
     if (!ret->items) {
-        gru_dealloc(&ret);
+        gru_dealloc((void **)&ret);
         
         return NULL;
     }
@@ -31,18 +31,17 @@ inline bmic_list_t *bmic_list_new(gru_status_t *status, node_destructor destruct
     return ret;
 }
 
-static void bmic_caplist_node_destroy(const void *nodedata, void *payload)
+static void bmic_list_node_destroy(const void *nodedata, void *payload)
 {
-    bmic_cap_info_t *info = (bmic_cap_info_t *) nodedata;
     node_destructor destructor = (node_destructor) payload;
     
-    destructor(&info);
+    destructor((void **)&nodedata);
 }
 
 void bmic_list_destroy(bmic_list_t **ptr) {
     bmic_list_t *list = (bmic_list_t *) *ptr;
     
-    gru_list_for_each(list->items, bmic_caplist_node_destroy, list->destructor);
+    gru_list_for_each(list->items, bmic_list_node_destroy, list->destructor);
     gru_list_destroy(&list->items);
     gru_dealloc((void **)ptr);
 }

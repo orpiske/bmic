@@ -32,15 +32,47 @@ bmic_op_sig_t *bmic_op_sig_new(gru_status_t *status) {
 
 
 void bmic_op_sig_destroy(bmic_op_sig_t **ptr) {
-    if ((*ptr)->args) {
-        gru_list_destroy((*ptr)->args);
+    bmic_op_sig_t *sig = *ptr;
+    
+    if (!sig) {
+        return;
+    }
+    
+    if (sig->args) {
+        gru_list_destroy(&sig->args);
+    }
+    
+    if (sig->description != NULL) {
+        gru_dealloc_string(&sig->description);
+    }
+
+    if (sig->ret != NULL) {
+        gru_dealloc_string(&sig->ret);
     }
     
     gru_dealloc((void **) ptr);
 }
 
-void bmic_op_sig_add_arg(bmic_op_sig_t *sigs, const bmic_op_arg_t *arg) {
-    if (gru_list_append(sigs->args, arg) == NULL) {
+void bmic_op_sig_add_arg(bmic_op_sig_t *sig, const bmic_op_arg_t *arg) {
+    if (gru_list_append(sig->args, arg) == NULL) {
         fprintf(stderr, "Unable to add new argument");
+    }
+}
+
+
+void bmic_op_sig_set_description(bmic_op_sig_t *sig, const char *description) {
+    assert(sig != NULL);
+
+    if (asprintf(&sig->description, "%s", description) == -1) {
+        fprintf(stderr, "Unable to allocate memory for saving the signature description\n");
+    }
+}
+
+
+void bmic_op_sig_set_ret(bmic_op_sig_t *sig, const char *ret) {
+    assert(sig != NULL);
+
+    if (asprintf(&sig->ret, "%s", ret) == -1) {
+        fprintf(stderr, "Unable to allocate memory for saving the signature return type\n");
     }
 }

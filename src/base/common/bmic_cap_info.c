@@ -44,6 +44,10 @@ void bmic_cap_info_destroy(bmic_cap_info_t **ptr) {
     gru_dealloc((void **) ptr);
 }
 
+inline void bmic_cap_info_destroy_list(void **ptr) {
+    bmic_cap_info_destroy((bmic_cap_info_t **) ptr);
+}
+
 void bmic_cap_info_set_name(bmic_cap_info_t *cap, const char *name) {
     assert(cap != NULL);
 

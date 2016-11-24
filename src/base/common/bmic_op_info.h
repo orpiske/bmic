@@ -21,6 +21,8 @@
 
 #include <collection/gru_list.h>
 
+#include "bmic_debug.h"
+
 #include "bmic_op_arg.h"
 #include "bmic_op_sig.h"
 
@@ -31,8 +33,6 @@ extern "C" {
 typedef struct bmic_op_info_t_ {
     char *name;
     gru_list_t *signature;
-    char *ret;
-    char *description;
 } bmic_op_info_t;
 
 
@@ -52,25 +52,18 @@ void bmic_op_info_destroy(bmic_op_info_t **ptr);
 
 
 /**
+ * Destroys an operation info object (wrapper for usage w/ bmic_list)
+ * @param ptr the object to destroy
+ */
+void bmic_op_info_destroy_list(void **ptr);
+
+
+/**
  * Sets the name
  * @param op the operation object to set the name
  * @param name the name to set
  */
 void bmic_op_info_set_name(bmic_op_info_t *op, const char *name);
-
-/**
- * Sets the description
- * @param op the operation object to set the name
- * @param description the description to set
- */
-void bmic_op_info_set_description(bmic_op_info_t *op, const char *description);
-
-/**
- * Sets the return type
- * @param op the operation object to set the name
- * @param type the name to set
- */
-void bmic_op_info_set_ret(bmic_op_info_t *op, const char *typename);
 
 /**
  * Adds and argument to the operation

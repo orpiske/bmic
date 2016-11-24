@@ -40,18 +40,14 @@ void bmic_op_info_destroy(bmic_op_info_t **ptr) {
     if (obj->name != NULL) {
         gru_dealloc_string(&obj->name);
     }
-
-    if (obj->description != NULL) {
-        gru_dealloc_string(&obj->description);
-    }
-
-    if (obj->ret != NULL) {
-        gru_dealloc_string(&obj->ret);
-    }
     
     gru_list_destroy(&obj->signature);
 
     gru_dealloc((void **) ptr);
+}
+
+inline void bmic_op_info_destroy_list(void **ptr) {
+    bmic_op_info_destroy((bmic_op_info_t **)ptr);
 }
 
 void bmic_op_info_set_name(bmic_op_info_t *op, const char *name) {
@@ -61,28 +57,12 @@ void bmic_op_info_set_name(bmic_op_info_t *op, const char *name) {
         fprintf(stderr, "Unable to allocate memory for saving the operation name\n");
     }
 }
-void bmic_op_info_set_description(bmic_op_info_t *op, const char *description) {
-    assert(op != NULL);
-
-    if (asprintf(&op->description, "%s", description) == -1) {
-        fprintf(stderr, "Unable to allocate memory for saving the operation description\n");
-    }
-}
-
-
-void bmic_op_info_set_ret(bmic_op_info_t *op, const char *ret) {
-    assert(op != NULL);
-
-    if (asprintf(&op->ret, "%s", ret) == -1) {
-        fprintf(stderr, "Unable to allocate memory for saving the operation return type\n");
-    }
-}
-
 
 void bmic_op_info_add_signature(bmic_op_info_t *op, const bmic_op_sig_t *sig) {
     assert(op != NULL);
     assert(op->signature != NULL);
     
+    bmic_debug_print("Adding signature %p\n", sig);
     
     if (gru_list_append(op->signature, sig) == NULL) {
         fprintf(stderr, "Unable to add new argument\n");

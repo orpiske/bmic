@@ -199,7 +199,7 @@ const bmic_list_t *bmic_artemis_attribute_list(bmic_handle_t *handle,
     const bmic_object_t *attributes = bmic_object_find_regex(cap->data_ptr,
                                                              ARTEMIS_CORE_CAP_ATTRIBUTES,
                                                              REG_SEARCH_PATH);
-    bmic_list_t *ret = bmic_list_new(status, bmic_cap_info_destroy);
+    bmic_list_t *ret = bmic_list_new(status, bmic_cap_info_destroy_list);
     gru_alloc_check(ret, NULL);
 
     bmic_payload_add_attr_t payload = {
@@ -229,7 +229,7 @@ static void bmic_artemis_add_op(const void *nodedata, void *payload)
     bmic_payload_add_attr_t *pl =
             (bmic_payload_add_attr_t *) payload;
 
-    if (nodeobj->type == OBJECT) {
+    if (nodeobj->type == OBJECT || nodeobj->type == LIST) {
         if (nodeobj->name && strcmp(nodeobj->name, "op") != 0) {
             bmic_op_info_t *info = bmic_op_info_new(pl->status);
 
@@ -251,7 +251,7 @@ const bmic_list_t *bmic_artemis_operation_list(bmic_handle_t *handle,
     const bmic_object_t *attributes = bmic_object_find_regex(cap->root,
                                                              ARTEMIS_CORE_CAP_OPERATIONS,
                                                              REG_SEARCH_PATH);
-    bmic_list_t *ret = bmic_list_new(status, bmic_op_info_destroy);
+    bmic_list_t *ret = bmic_list_new(status, bmic_op_info_destroy_list);
     gru_alloc_check(ret, NULL);
 
     bmic_payload_add_attr_t payload = {

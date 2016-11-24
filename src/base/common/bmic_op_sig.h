@@ -23,18 +23,54 @@
 
 #include "bmic_op_arg.h"
 
+
+/**
+ * @brief Operation signatures
+ */
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 typedef struct bmic_op_sig_t_ {
     gru_list_t *args;
+    char *ret;
+    char *description;
 } bmic_op_sig_t;
 
+/**
+ * Create a new operation signature
+ * @param status
+ * @return 
+ */
 bmic_op_sig_t *bmic_op_sig_new(gru_status_t *status);
+
+/**
+ * Destroy a signature object releasing all allocated memory
+ * @param ptr the pointer to destroy
+ */
 void bmic_op_sig_destroy(bmic_op_sig_t **ptr);
 
-void bmic_op_sig_add_arg(bmic_op_sig_t *sigs, const bmic_op_arg_t *arg);
+/**
+ * Adds an argument to the method signature
+ * @param sig the signature
+ * @param arg the argument
+ */
+void bmic_op_sig_add_arg(bmic_op_sig_t *sig, const bmic_op_arg_t *arg);
+
+/**
+ * Sets the description
+ * @param sig the signature object
+ * @param description the description to set
+ */
+void bmic_op_sig_set_description(bmic_op_sig_t *sig, const char *description);
+
+/**
+ * Sets the return type
+ * @param sig the signature object
+ * @param ret the return type text
+ */
+void bmic_op_sig_set_ret(bmic_op_sig_t *sig, const char *ret);
 
 #ifdef __cplusplus
 }

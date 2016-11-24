@@ -28,7 +28,7 @@
 extern "C" {
 #endif
     
-typedef void *(*node_destructor)(void **);
+typedef void(*node_destructor)(void **);
 
 typedef struct bmic_list_t_ {
     gru_list_t *items;
