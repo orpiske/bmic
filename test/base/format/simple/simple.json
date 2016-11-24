@@ -1,0 +1,34 @@
+{
+    "request": {
+        "path": "net.orpiske",
+        "type": "list"
+    },
+    "args": [
+        {
+            "name": "selector",
+            "type": "java.lang.String",
+            "desc": ""
+        },
+        {
+            "name": "maximumMessages",
+            "type": "int",
+            "desc": ""
+        }
+    ],
+    "complex": {
+        "child1": {
+            "name": "complex.child1",
+            "type": "complex.type1"
+        },
+        "child2": {
+            "name": "complex.child2",
+            "type": "complex.type2"
+        },
+        "child3": {
+            "name": "complex.child3",
+            "type": "complex.type3"
+        }
+    },
+    "timestamp": 1478447918,
+    "status": 200
+}

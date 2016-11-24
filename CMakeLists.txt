@@ -131,3 +131,10 @@ SetLinkDirByPlatform(${GRU_DIR})
 
 include_directories(src)
 add_subdirectory(src/ objs)
+
+if (BUILD_WITH_UNIT_TESTS)
+    enable_testing()
+
+    include_directories(test)
+    add_subdirectory(test)
+endif (BUILD_WITH_UNIT_TESTS)
