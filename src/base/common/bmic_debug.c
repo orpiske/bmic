@@ -16,20 +16,48 @@
 #include "bmic_debug.h"
 
 
-void bmic_debug_print(const char *format, const char *message, ...) {
+void bmic_debug_do_print(const char *format, ...) {
 #ifndef BMIC_DEBUG
     if (getenv("BMIC_DEBUG")) {
-        va_list ap;
+            printf("DEBUG: ");
+        
+            va_list ap;
 
-        va_start(ap, message);
-        vprintf(format, ap);
+            va_start(ap, format);
 
-        va_end(ap);
+            vprintf(format, ap);
+
+            va_end(ap);
+        
+        
     }
 #else 
+    printf("DEBUG: ");
+    
     va_list ap;
 
-    va_start(ap, message);
+    va_start(ap, format);
+
+    vprintf(format, ap);
+
+    va_end(ap);
+#endif // BMIC_DEBUG
+}
+
+
+void bmic_debug_do_print_verbose(const char *file, const char *func, 
+                                 int linenum, const char *format, ...) {
+#ifndef BMIC_DEBUG
+    if (!getenv("BMIC_DEBUG")) {
+        return;
+    }
+#else 
+    printf("[DEBUG %s@%s:%d] ", func, file, linenum);
+    
+    va_list ap;
+
+    va_start(ap, format);
+
     vprintf(format, ap);
 
     va_end(ap);

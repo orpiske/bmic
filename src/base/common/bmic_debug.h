@@ -24,8 +24,15 @@
 extern "C" {
 #endif
     
-void bmic_debug_print(const char *format, const char *message, ...);
+void bmic_debug_do_print(const char *format, ...);
+void bmic_debug_do_print_verbose(const char *file, const char *func,
+        int linenum, const char *format, ...);
 
+/**
+ * Debug print wrapper
+ */
+#define bmic_debug_print(format, ...) bmic_debug_do_print_verbose(strrchr("/" __FILE__, '/') + 1,\
+    __func__, __LINE__, format, __VA_ARGS__)
 
 #ifdef __cplusplus
 }
