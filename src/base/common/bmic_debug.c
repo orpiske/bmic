@@ -17,6 +17,7 @@
 
 
 void bmic_debug_print(const char *format, const char *message, ...) {
+#ifndef BMIC_DEBUG
     if (getenv("BMIC_DEBUG")) {
         va_list ap;
 
@@ -25,4 +26,12 @@ void bmic_debug_print(const char *format, const char *message, ...) {
 
         va_end(ap);
     }
+#else 
+    va_list ap;
+
+    va_start(ap, message);
+    vprintf(format, ap);
+
+    va_end(ap);
+#endif // BMIC_DEBUG
 }
