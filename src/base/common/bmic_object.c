@@ -23,28 +23,28 @@ static void print(const void *obj1, void *d2)
         return;
     }
 
-    printf("Path: %s\n", nodeojb->path);
+    bmic_debug_print("Path: %s\n", nodeojb->path);
 
     switch (nodeojb->type) {
     case STRING:
     {
-        printf("%s (string): %s\n", nodeojb->name, nodeojb->data.str);
+        bmic_debug_print("%s (string): %s\n", nodeojb->name, nodeojb->data.str);
         break;
     }
     case INTEGER:
     {
-        printf("%s (int): %i\n", nodeojb->name, nodeojb->data.number);
+        bmic_debug_print("%s (int): %i\n", nodeojb->name, nodeojb->data.number);
         break;
     }
     case BOOLEAN:
     {
-        printf("%s (bool): %s\n", nodeojb->name,
+        bmic_debug_print("%s (bool): %s\n", nodeojb->name,
                (nodeojb->data.value ? "true" : "false"));
         break;
     }
     case DOUBLE:
     {
-        printf("%s (double): %.4f\n", nodeojb->name, nodeojb->data.d);
+        bmic_debug_print("%s (double): %.4f\n", nodeojb->name, nodeojb->data.d);
         break;
     }
     case LIST:
@@ -56,7 +56,7 @@ static void print(const void *obj1, void *d2)
     {
         if (nodeojb) {
             if (nodeojb->name) {
-                printf("Object: %s\n", nodeojb->name);
+                bmic_debug_print("Object: %s\n", nodeojb->name);
             }
         }
 
@@ -64,7 +64,7 @@ static void print(const void *obj1, void *d2)
     }
     case NULL_TYPE:
     {
-        printf("%s (null)\n", nodeojb->name);
+        bmic_debug_print("%s (null)\n", nodeojb->name);
 
         break;
     }
@@ -142,6 +142,8 @@ void bmic_object_destroy(bmic_object_t **ptr)
     if (!obj) {
         return;
     }
+    
+    bmic_debug_print("Destroying object %s [%s]\n", obj->name, obj->path);
 
     if (obj->type == STRING) {
         if (obj->data.str) {
@@ -197,6 +199,8 @@ void bmic_object_set_string(bmic_object_t *obj, const char *value)
 {
     assert(obj != NULL && value != NULL);
     
+    bmic_debug_print("Setting %s [%s] to %s\n", obj->name, obj->path, value);
+    
     obj->type = STRING;
     asprintf(&obj->data.str, "%s", value);
 }
@@ -205,6 +209,7 @@ void bmic_object_set_integer(bmic_object_t *obj, int32_t value)
 {
     assert(obj != NULL);
     
+    bmic_debug_print("Setting %s [%s] to %i\n", obj->name, obj->path, value);
     obj->type = INTEGER;
     obj->data.number = value;
 }
@@ -212,6 +217,7 @@ void bmic_object_set_integer(bmic_object_t *obj, int32_t value)
 void bmic_object_set_boolean(bmic_object_t *obj, bool value)
 {
     assert(obj != NULL);
+    
     
     obj->type = BOOLEAN;
     obj->data.value = value;
@@ -238,7 +244,6 @@ void bmic_object_add_list_element(bmic_object_t *parent, bmic_object_t *element)
     assert(parent != NULL && element != NULL);
     
     parent->type = LIST;
-    
     uint32_t pos = gru_tree_count_children(parent->self);
 
     element->self = gru_tree_add_child(parent->self, element);
@@ -249,6 +254,9 @@ void bmic_object_add_list_element(bmic_object_t *parent, bmic_object_t *element)
     }
     
     bmic_object_set_path(element, "%s/%s[%i]", parent->path, element->name, pos);
+    
+    bmic_debug_print("Adding %s [%s] to %s\n", element->name, element->path, 
+                     parent->name);
 }
 
 void bmic_object_add_object(bmic_object_t *parent,
@@ -271,7 +279,7 @@ void bmic_object_add_object(bmic_object_t *parent,
 
 static bool bmic_compare_name(const void *nodedata, const void *data, void *r)
 {
-    const bmic_object_t *nodeobj = (bmic_object_t *) nodedata;
+    const bmic_object_t *nodeobj = (const bmic_object_t *) nodedata;
 
     if (nodedata == NULL) {
         if (data == NULL) {
@@ -282,6 +290,8 @@ static bool bmic_compare_name(const void *nodedata, const void *data, void *r)
     }
 
     if (nodeobj->name != NULL) {
+        bmic_debug_print("Comparing %s [%s] %d with %s\n", nodeobj->name, 
+                         nodeobj->path, nodeobj->type, (const char *) data);
         if (strcmp(nodeobj->name, (const char *) data) == 0) {
             return true;
         }
@@ -431,6 +441,20 @@ const bmic_object_t *bmic_object_find_regex(const bmic_object_t *parent,
 
     return NULL;
 }
+
+const bmic_object_t *bmic_object_find_child_by_name(const bmic_object_t *parent, 
+                                                    const char *name)
+{
+    assert(parent != NULL && name != NULL);
+    
+    gru_tree_node_t *ret = gru_tree_search_child(parent->self, bmic_compare_name, name);
+    if (ret) {
+        return ret->data;
+    }
+    
+    return NULL;
+}
+
 
 void bmic_object_for_each(const bmic_object_t *obj, tree_callback_fn callback, 
         void *payload) 
