@@ -6,6 +6,7 @@ include_directories(.)
 
 add_library(
 	bmic SHARED
+        base/common/bmic_debug.c
         base/common/bmic_credentials.c
         base/common/bmic_object.c
         base/common/bmic_regex.c
