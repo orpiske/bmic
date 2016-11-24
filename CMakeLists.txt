@@ -41,16 +41,21 @@ set(CPP_INCLUDE_DIR "include")
 set(SHARED_DIR "share")
 set(GRU_SHARED_DIR ${SHARED_DIR}/gru)
 set(BUILD_WITH_UNIT_TESTS ON CACHE BOOL "Build unit tests")
+set(BUILD_WITH_EXTRA_DEBUG OFF CACHE BOOL "Build extra debug information")
 
 #### GNU Compiler flags
+if (BUILD_WITH_EXTRA_DEBUG)
+    set(BMIC_DEBUG_DEFINES "-DBMIC_DEBUG")
+endif (BUILD_WITH_EXTRA_DEBUG)
 
 if (CMAKE_COMPILER_IS_GNUCXX)
 	set(CMAKE_C_FLAGS "-Wall -Wshadow -std=c99" CACHE STRING
 		"Flags used by the compiler during all build types." FORCE
 	)
-        set(CMAKE_C_FLAGS_DEBUG "-DNDEBUG -DBMIC_DEBUG -fdiagnostics-color=auto -g" CACHE STRING
+        set(CMAKE_C_FLAGS_DEBUG "-DNDEBUG ${BMIC_DEBUG_DEFINES} -fdiagnostics-color=auto -g" CACHE STRING
 		"Flags used by the compiler during debug build." FORCE
 	)
+        
         set(CMAKE_C_FLAGS_RELEASE "-O2 -fomit-frame-pointer" CACHE STRING
 		"Flags used by the compiler during release build." FORCE
 	)
