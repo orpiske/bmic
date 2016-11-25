@@ -108,12 +108,12 @@ int queue_main(int argc, char **argv) {
     while (1) {
 
         static struct option long_options[] = {
-            { "help", false, 0, 'h'},
-            { "username", true, 0, 'u'},
-            { "password", true, 0, 'p'},
-            { "server", true, 0, 's'},
-            { "name", true, 0, 'n'},
-            { "read", true, 0, 'r'},
+            { "help", no_argument, 0, 'h'},
+            { "username", required_argument, 0, 'u'},
+            { "password", required_argument, 0, 'p'},
+            { "server", required_argument, 0, 's'},
+            { "name", required_argument, 0, 'n'},
+            { "read", required_argument, 0, 'r'},
             { 0, 0, 0, 0}
         };
 

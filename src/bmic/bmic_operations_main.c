@@ -27,6 +27,9 @@ typedef struct options_t_
     char read[OPT_MAX_STR_SIZE];
 } options_t;
 
+
+
+
 typedef struct cap_read_wrapper_t_ {
     bmic_handle_t *handle; 
     bmic_api_interface_t *api;
@@ -37,15 +40,13 @@ typedef struct cap_read_wrapper_t_ {
 static void print_op_arguments(const void *nodedata, void *p) {
     bmic_op_arg_t *arg = (const bmic_op_arg_t *) nodedata;
     
-    // printf("\t\t%-20s %20s %10%\n", arg->name, arg->description, arg->type);
-    
-    
+//     printf("\t\t%-20s %20s %10%\n", arg->name, arg->description, arg->type);
 }
 
 static void print_op_signature(const void *nodedata, void *p) {
     const bmic_op_sig_t *sig = (const bmic_op_sig_t *) nodedata;
     
-    // printf("\t%-35s %35s\n", sig->description, sig->ret);
+    printf("\t%-35s %35s\n", sig->description, sig->ret);
     // gru_list_for_each(sig->args, print_op_arguments, NULL);
 }
 
@@ -164,17 +165,17 @@ int operations_main(int argc, char **argv)
     while (1) {
 
         static struct option long_options[] = {
-            { "help", false, 0, 'h'},
-            { "username", true, 0, 'u'},
-            { "password", true, 0, 'p'},
-            { "server", true, 0, 's'},
-            { "list", false, 0, 'l'},
-            { "read", true, 0, 'r'},
-            { "read-all", false, 0, 'R'},
+            { "help", optional_argument, 0, 'h'},
+            { "username", required_argument, 0, 'u'},
+            { "password", required_argument, 0, 'p'},
+            { "server", required_argument, 0, 's'},
+            { "list", no_argument, 0, 'l'},
+            { "read", required_argument, 0, 'r'},
+            { "read-all", required_argument, 0, 'R'},
             { 0, 0, 0, 0}
         };
 
-        int c = getopt_long(argc, argv, "hu:p:l:s:lr:", long_options, 
+        int c = getopt_long(argc, argv, "h:u:p:l:s:lr:", long_options, 
                             &option_index);
         if (c == -1) {
             if (optind == 1) {
