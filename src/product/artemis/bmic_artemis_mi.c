@@ -230,7 +230,6 @@ static void bmic_artermis_mi_translate_sigs(const void *nodedata, void *payload)
     if (args && args->type == LIST) {
         bmic_object_for_each_child(args, bmic_artermis_mi_translate_arg_value, 
                                    sig);
-        bmic_op_info_add_signature(info, sig);
     }
     
     const bmic_object_t *ret = bmic_object_find_child_by_name(node, "ret");
