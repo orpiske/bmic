@@ -12,7 +12,7 @@ add_executable(bmic_json_simple_test
 )
 
 target_link_libraries(bmic_json_simple_test
-           bmic)
+           bmic-base)
 
 add_test(NAME bmic-json-simple-test
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/target/tests/bin

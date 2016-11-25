@@ -5,7 +5,7 @@ endif (${CMAKE_SYSTEM_NAME} EQUAL "Linux")
 include_directories(.)
 
 add_library(
-	bmic SHARED
+	bmic-base SHARED
         base/common/bmic_debug.c
         base/common/bmic_credentials.c
         base/common/bmic_object.c
@@ -19,10 +19,33 @@ add_library(
         base/transport/bmic_endpoint_http.c
         base/transport/bmic_transport.c
         base/format/bmic_json.c
+)
+
+target_link_libraries(
+	bmic-base
+	gru
+        curl
+        ${LIBJSON}
+)
+
+add_library(
+	bmic-management SHARED
         management/common/bmic_handle.c
         management/common/bmic_discovery_hint.c
         management/common/bmic_product.c
         management/discovery/bmic_discovery.c
+)
+
+target_link_libraries(
+	bmic-management
+        bmic-base
+	gru
+        curl
+        ${LIBJSON}
+)
+
+add_library(
+	bmic-product SHARED
         product/common/bmic_api_io.c
         product/common/bmic_path.c
         product/common/bmic_finder.c
@@ -34,13 +57,15 @@ add_library(
 )
 
 target_link_libraries(
-	bmic
+	bmic-product
+        bmic-base
+        bmic-management
 	gru
         curl
         ${LIBJSON}
 )
 
-install(TARGETS bmic
+install(TARGETS bmic-base bmic-management bmic-product 
 	LIBRARY DESTINATION ${CPP_LIBRARY_DIR}
 )
 
@@ -50,7 +75,7 @@ install(DIRECTORY transport
 )
 
 add_executable(
-	bmic-client
+	bmic
         bmic/util/bmic_print_simple.c
         bmic/bmic_capabilities_main.c
         bmic/bmic_discovery_main.c
@@ -60,6 +85,8 @@ add_executable(
 )
 
 target_link_libraries(
-	bmic-client
 	bmic
+	bmic-product
+        bmic-base
+        bmic-management
 )
