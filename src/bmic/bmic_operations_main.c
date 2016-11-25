@@ -14,6 +14,7 @@
  limitations under the License.
  */
 #include <string.h>
+#include <getopt.h>
 
 #include "bmic_operations_main.h"
 
@@ -23,8 +24,7 @@ typedef struct options_t_
     char password[OPT_MAX_STR_SIZE];
     char server[OPT_MAX_STR_SIZE];
     bool list;
-    bool readall;
-    char read[OPT_MAX_STR_SIZE];
+    char name[OPT_MAX_STR_SIZE];
 } options_t;
 
 
@@ -40,27 +40,33 @@ typedef struct cap_read_wrapper_t_ {
 static void print_op_arguments(const void *nodedata, void *p) {
     bmic_op_arg_t *arg = (const bmic_op_arg_t *) nodedata;
     
-//     printf("\t\t%-20s %20s %10%\n", arg->name, arg->description, arg->type);
+    printf("\t%-30s %-35s %-15s\n", arg->name, arg->description, arg->type);
 }
 
 static void print_op_signature(const void *nodedata, void *p) {
     const bmic_op_sig_t *sig = (const bmic_op_sig_t *) nodedata;
     
-    printf("\t%-35s %35s\n", sig->description, sig->ret);
-    // gru_list_for_each(sig->args, print_op_arguments, NULL);
-}
-
-static void print_op_info(const bmic_op_info_t *info)
-{
-    printf("- %-35s\n", info->name);
-    
-    gru_list_for_each(info->signature, print_op_signature, NULL);
+    printf("   %-65s %-15s\n", sig->description, sig->ret);
+    gru_list_for_each(sig->args, print_op_arguments, NULL);
 }
 
 static void print_op(const void *nodedata, void *payload)
 {
     const bmic_op_info_t *info = (bmic_op_info_t *) nodedata;
-    print_op_info(info);
+    
+    if (payload == NULL) { 
+        printf("- %-35s\n", info->name);
+        
+        gru_list_for_each(info->signature, print_op_signature, NULL);
+    }
+    else {
+        const char *name = (const char *) payload;
+        if (strncmp(info->name, name, strlen(info->name)) == 0) {
+            printf("- %-35s\n", info->name);
+            
+            gru_list_for_each(info->signature, print_op_signature, NULL);
+        }
+    }
 }
 
 static void show_help()
@@ -71,7 +77,6 @@ static void show_help()
     printf("\t-p\t--password=<str> password to access the management console\n");
     printf("\t-s\t--server=<str> hostname or IP address of the server\n");
     printf("\t-l\t--list list available capabilities/attributes from the server\n");
-    printf("\t-r\t--read=<str> read a capability/attribute from the server\n");
 }
 
 
@@ -127,14 +132,21 @@ int operations_run(options_t *options)
         const bmic_list_t *list = api->operation_list(handle, cap, &status);
 
         if (list) {
-            printf("\n  %-20s %-15s %-30s\n", "NAME", "RETURN", "DESCRIPTION");
+            printf("\n  %-20s\n", "NAME");
             
             gru_list_for_each(list->items, print_op, NULL);
             bmic_list_destroy((bmic_list_t **)&list);
         }  
     }
     else {
+        const bmic_list_t *list = api->operation_list(handle, cap, &status);
         
+        if (list) {
+            printf("\n  %-20s %-15s %-30s\n", "NAME", "RETURN", "DESCRIPTION");
+            
+            gru_list_for_each(list->items, print_op, options->name);
+            bmic_list_destroy((bmic_list_t **)&list);
+        }  
     }
 
     bmic_exchange_destroy((bmic_exchange_t **)&cap);
@@ -154,7 +166,6 @@ int operations_main(int argc, char **argv)
     options_t options = {0};
 
     options.list = false;
-    options.readall = false;
 
     if (argc < 2) {
         show_help();
@@ -170,8 +181,6 @@ int operations_main(int argc, char **argv)
             { "password", required_argument, 0, 'p'},
             { "server", required_argument, 0, 's'},
             { "list", no_argument, 0, 'l'},
-            { "read", required_argument, 0, 'r'},
-            { "read-all", required_argument, 0, 'R'},
             { 0, 0, 0, 0}
         };
 
@@ -197,15 +206,18 @@ int operations_main(int argc, char **argv)
         case 'l':
             options.list = true;
             break;
-        case 'r':
-            strncpy(options.read, optarg, sizeof (options.read) - 1);
-            break;
-        case 'R':
-            options.readall = true;
-            break;
         case 'h':
-            show_help();
-            return EXIT_SUCCESS;
+            
+            if (!optarg) {
+                show_help();
+                
+                return EXIT_SUCCESS;
+            }
+            else {
+                strncpy(options.name, optarg, sizeof (options.name) - 1);
+            }
+            
+            break;
         default:
             printf("Invalid or missing option\n");
             show_help();
@@ -213,8 +225,8 @@ int operations_main(int argc, char **argv)
         }
     }
 
-    if (options.list == false && strlen(options.read) == 0 && options.readall == false) {
-        fprintf(stderr, "Either -l (--list) or -r (--read) must be used\n");
+    if (options.list == false && strlen(options.name) == 0) {
+        fprintf(stderr, "Either -l (--list) or -h <name> (--help=<name>) must be used\n");
 
         return EXIT_FAILURE;
     }
