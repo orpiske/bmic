@@ -24,6 +24,7 @@
 #include "base/common/bmic_op_arg.h"
 #include "base/common/bmic_op_sig.h"
 #include "base/common/bmic_op_info.h"
+#include "base/transport/bmic_data.h"
 #include "base/transport/bmic_transport.h"
 #include "base/transport/bmic_endpoint_http.h"
 #include "base/format/bmic_json.h"
@@ -38,6 +39,7 @@
 
 #include "bmic_artemis_urls.h"
 #include "bmic_artemis_mi.h"
+#include "bmic_artemis_json.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -105,7 +107,21 @@ const bmic_exchange_t *bmic_artemis_queue_attribute_read(bmic_handle_t *handle,
  * @return 
  */
 const bmic_list_t *bmic_artemis_operation_list(bmic_handle_t *handle,
-                                              const bmic_exchange_t *cap, gru_status_t *status);
+                                              const bmic_exchange_t *cap, 
+                                                gru_status_t *status);
+
+/**
+ * Create a core queue
+ * @param handle
+ * @param cap
+ * @param name
+ * @param status
+ * @return 
+ */
+bool bmic_artemis_operation_create_queue(bmic_handle_t *handle,
+                                            const bmic_exchange_t *cap, 
+                                            const char *name,
+                                            gru_status_t *status);
 
 #ifdef __cplusplus
 }

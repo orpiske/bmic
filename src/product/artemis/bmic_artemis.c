@@ -264,3 +264,32 @@ const bmic_list_t *bmic_artemis_operation_list(bmic_handle_t *handle,
 
     return ret;
 }
+
+
+
+bool bmic_artemis_operation_create_queue(bmic_handle_t *handle,
+                                            const bmic_exchange_t *cap, 
+                                            const char *name,
+                                            gru_status_t *status)
+{
+    const bmic_object_t *attributes = bmic_object_find_regex(cap->root,
+                                                             ARTEMIS_CORE_CAP_OPERATIONS,
+                                                             REG_SEARCH_PATH);
+    
+    bmic_json_t *json = bmic_json_new(status);
+    gru_alloc_check(json, false);
+    
+    bmic_artemis_json_create_queue(attributes, json, name);
+    bmic_data_t data = bmic_json_to_data(json, NULL);
+    
+    bmic_endpoint_status_t epstatus = {
+        .status = status,
+    };
+    
+    handle->transport.write(handle->ep, NULL, &data, &epstatus);
+    if (status->code != GRU_SUCCESS) {
+        return false;
+    }
+    
+    return true;
+}

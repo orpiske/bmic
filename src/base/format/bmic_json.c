@@ -14,6 +14,7 @@
  limitations under the License.
  */
 #include "bmic_json.h"
+#include "base/transport/bmic_data.h"
 
 bmic_json_t *bmic_json_new(gru_status_t *status) {
     bmic_json_t *ret = gru_alloc(sizeof (bmic_json_t), status);
@@ -149,3 +150,11 @@ void bmic_json_transform(const bmic_json_t *jobj, bmic_object_t *ret)
 }
 
 
+bmic_data_t bmic_json_to_data(const bmic_json_t *jobj, gru_status_t *status) {
+    bmic_data_t data = {0};
+    
+    data.data = json_object_to_json_string(jobj->obj);
+    data.size = strlen((char *) data.data);
+    
+    return data;
+}

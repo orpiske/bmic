@@ -27,7 +27,7 @@
  *      http://localhost:8161/jolokia/
  */
 
-void bmic_artemis_json_create_queue(bmic_object_t *op, bmic_json_t *json, 
+void bmic_artemis_json_create_queue(const bmic_object_t *op, bmic_json_t *json, 
                                     const char *name) 
 {
     json_object *op_type = json_object_new_string("EXEC");

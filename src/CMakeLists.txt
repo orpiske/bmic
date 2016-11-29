@@ -50,6 +50,7 @@ add_library(
         product/common/bmic_path.c
         product/common/bmic_finder.c
         product/artemis/bmic_artemis_mi.c
+        product/artemis/bmic_artemis_json.c
         product/artemis/bmic_artemis.c
         product/activemq/bmic_activemq_mi.c
         product/activemq/bmic_activemq.c

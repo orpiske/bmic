@@ -28,8 +28,8 @@
 #include <common/gru_alloc.h>
 #include <common/gru_status.h>
 
-
 #include "base/common/bmic_object.h"
+#include "base/transport/bmic_data.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -47,6 +47,7 @@ bmic_json_t *bmic_json_init(const char *data, gru_status_t *status);
 void bmic_json_destroy(bmic_json_t **json);
 
 void bmic_json_transform(const bmic_json_t *jobj, bmic_object_t *ret);
+bmic_data_t bmic_json_to_data(const bmic_json_t *jobj, gru_status_t *status);
 
 #ifdef __cplusplus
 }
