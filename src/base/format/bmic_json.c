@@ -15,6 +15,21 @@
  */
 #include "bmic_json.h"
 
+bmic_json_t *bmic_json_new(gru_status_t *status) {
+    bmic_json_t *ret = gru_alloc(sizeof (bmic_json_t), status);
+    gru_alloc_check(ret, NULL);
+    
+    ret->obj = json_object_new_object();
+    if (!ret->obj) {
+        gru_dealloc(&ret);
+        gru_status_set(status, GRU_FAILURE, "Unable to create the json object");
+        
+        return NULL;
+    }
+    
+    return ret;
+}
+
 bmic_json_t *bmic_json_init(const char *data, gru_status_t *status)
 {
     enum json_tokener_error jerr = json_tokener_success;
@@ -123,8 +138,6 @@ static void bmic_json_transform_int(const json_object *jobj, bmic_object_t *pare
             bmic_json_transform_simple_obj(child, type, val);
             break;
         }
-
-
     }
 }
 
@@ -133,5 +146,6 @@ void bmic_json_transform(const bmic_json_t *jobj, bmic_object_t *ret)
     assert(jobj != NULL && ret != NULL);
     
     return bmic_json_transform_int(jobj->obj, ret);
-
 }
+
+

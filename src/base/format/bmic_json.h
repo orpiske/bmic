@@ -42,6 +42,7 @@ typedef struct bmic_json_t_ {
 
 typedef int(*bmic_match_cond)(const char *keyname, const char *value);
 
+bmic_json_t *bmic_json_new(gru_status_t *status);
 bmic_json_t *bmic_json_init(const char *data, gru_status_t *status);
 void bmic_json_destroy(bmic_json_t **json);
 
