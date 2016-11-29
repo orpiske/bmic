@@ -20,7 +20,7 @@
 
 #include <common/gru_status.h>
 
-#include "base/transport/bmic_data.h"
+#include "base/common/bmic_data.h"
 #include "base/format/bmic_json.h"
 
 #include "management/common/bmic_handle.h"

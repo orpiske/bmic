@@ -17,12 +17,12 @@
 #ifndef BMIC_TRANSPORT_HTTP_H
 #define BMIC_TRANSPORT_HTTP_H
 
-#include "bmic_transport.h"
-#include "bmic_data.h"
-
 #include <common/gru_status.h>
 
 #include <curl/curl.h>
+
+#include "bmic_transport.h"
+#include "base/common/bmic_data.h"
 
 #define HTTP_STATUS_OK 200
 

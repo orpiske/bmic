@@ -14,7 +14,6 @@
  limitations under the License.
  */
 #include "bmic_json.h"
-#include "base/transport/bmic_data.h"
 
 bmic_json_t *bmic_json_new(gru_status_t *status) {
     bmic_json_t *ret = gru_alloc(sizeof (bmic_json_t), status);

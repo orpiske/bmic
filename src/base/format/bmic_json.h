@@ -29,7 +29,7 @@
 #include <common/gru_status.h>
 
 #include "base/common/bmic_object.h"
-#include "base/transport/bmic_data.h"
+#include "base/common/bmic_data.h"
 
 #ifdef __cplusplus
 extern "C" {

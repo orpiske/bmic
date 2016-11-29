@@ -21,7 +21,7 @@
 
 #include <common/gru_status.h>
 
-#include "bmic_data.h"
+#include "base/common/bmic_data.h"
 #include "bmic_endpoint.h"
 
 #ifdef __cplusplus

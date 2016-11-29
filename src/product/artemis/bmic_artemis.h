@@ -24,7 +24,7 @@
 #include "base/common/bmic_op_arg.h"
 #include "base/common/bmic_op_sig.h"
 #include "base/common/bmic_op_info.h"
-#include "base/transport/bmic_data.h"
+#include "base/common/bmic_data.h"
 #include "base/transport/bmic_transport.h"
 #include "base/transport/bmic_endpoint_http.h"
 #include "base/format/bmic_json.h"
