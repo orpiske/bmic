@@ -23,6 +23,7 @@
 
 #include "bmic_transport.h"
 #include "base/common/bmic_data.h"
+#include "base/common/bmic_debug.h"
 
 #define HTTP_STATUS_OK 200
 

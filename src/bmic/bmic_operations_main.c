@@ -26,6 +26,8 @@ typedef struct options_t_
     bool list;
     bool help;
     char name[OPT_MAX_STR_SIZE];
+    bool create;
+    bool queue;
 } options_t;
 
 
@@ -89,6 +91,8 @@ static void show_help()
     printf("\t-p\t--password=<str> password to access the management console\n");
     printf("\t-s\t--server=<str> hostname or IP address of the server\n");
     printf("\t-l\t--list list available capabilities/attributes from the server\n");
+    printf("\t-c\t--create create\n");
+    printf("\t-q\t--queue queue\n");
 }
 
 
@@ -143,9 +147,7 @@ int operations_run(options_t *options)
     if (options->list) {
         const bmic_list_t *list = api->operation_list(handle, cap, &status);
 
-        if (list) {
-            // printf("\n  %-20s %-15s %-30s\n", "NAME", " ", "DESCRIPTION");
-            
+        if (list) {           
             gru_list_for_each(list->items, print_op, NULL);
             bmic_list_destroy((bmic_list_t **)&list);
         }  
@@ -155,11 +157,23 @@ int operations_run(options_t *options)
             const bmic_list_t *list = api->operation_list(handle, cap, &status);
 
             if (list) {
-                // printf("\n  %-20s %-15s %-30s\n", "NAME", " ", "DESCRIPTION");
 
                 gru_list_for_each(list->items, print_op, options->name);
                 bmic_list_destroy((bmic_list_t **)&list);
             }  
+        }
+        else {
+            /*
+             bmic_artemis_operation_create_queue(bmic_handle_t *handle,
+                                            const bmic_exchange_t *cap, 
+                                            const char *name,
+                                            gru_status_t *status)
+             */
+            api->create_queue(handle, cap, options->name, &status);
+            if (status.code != GRU_SUCCESS) {
+                fprintf(stderr, "%s\n", status.message);
+            }
+        
         }
     }
 
@@ -195,10 +209,12 @@ int operations_main(int argc, char **argv)
             { "password", required_argument, 0, 'p'},
             { "server", required_argument, 0, 's'},
             { "list", no_argument, 0, 'l'},
+            { "create", no_argument, 0, 'c'},
+            { "queue", required_argument, 0, 'q'},
             { 0, 0, 0, 0}
         };
 
-        int c = getopt_long(argc, argv, "h:u:p:l:s:lr:", long_options, 
+        int c = getopt_long(argc, argv, "h:u:p:s:l:cq:", long_options, 
                             &option_index);
         if (c == -1) {
             if (optind == 1) {
@@ -219,6 +235,12 @@ int operations_main(int argc, char **argv)
             break;
         case 'l':
             options.list = true;
+            break;
+        case 'c':
+            options.create = true;
+            break;
+        case 'q':
+            strncpy(options.name, optarg, sizeof (options.name) - 1);
             break;
         case 'h':
             

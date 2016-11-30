@@ -36,6 +36,7 @@ static size_t curl_callback(void *contents, size_t size, size_t nmemb, void *use
 {
     size_t realsize = size * nmemb;
     bmic_reply_data_t *p = (bmic_reply_data_t *) userp;
+    bmic_debug_print("Reading data: %s", (char *) contents);
 
     p->body->data = (char *) realloc(p->body->data, p->body->size + realsize + 1);
 
@@ -86,10 +87,17 @@ static char *bmic_endpoint_http_path_join(const bmic_endpoint_t *ep,
                                                 gru_status_t *status)
 {
     char *full_url = NULL;
-    char *escaped_path = curl_easy_escape(easy, ep->path, 0);
-    int ret = asprintf(&full_url, "%s/%s", ep->url, escaped_path);
+    
+    int ret = 0;
+    if (ep->path) { 
+        char *escaped_path = curl_easy_escape(easy, ep->path, 0);
+        ret = asprintf(&full_url, "%s/%s", ep->url, escaped_path);
 
-    curl_free(escaped_path);
+        curl_free(escaped_path);
+    }
+    else {
+        ret = asprintf(&full_url, "%s", ep->url);
+    }
 
     if (ret == -1) {
         gru_status_set(status, GRU_FAILURE, "Not enough memory to join URL path");
@@ -171,6 +179,7 @@ void bmic_endpoint_http_write(const bmic_endpoint_t *ep, bmic_data_t *payload,
     }
 
     curl_easy_setopt(easy, CURLOPT_URL, full_path);
+    bmic_debug_print("sending request to %s\n", full_path);
 
     bmic_reply_data_t reply = {0};
     reply.body = data;
@@ -190,8 +199,12 @@ void bmic_endpoint_http_write(const bmic_endpoint_t *ep, bmic_data_t *payload,
 
     curl_easy_setopt(easy, CURLOPT_CUSTOMREQUEST, "POST");
     curl_easy_setopt(easy, CURLOPT_HTTPHEADER, headers);
-    curl_easy_setopt(easy, CURLOPT_POSTFIELDS, bmic_data_to_string(data));
+    
+    const char *postdata = bmic_data_to_string(data);
+    curl_easy_setopt(easy, CURLOPT_POSTFIELDS, postdata);
+    bmic_debug_print("sending data %s\n", postdata);
 
+    curl_easy_setopt(easy, CURLOPT_WRITEFUNCTION, curl_callback);
     curl_easy_setopt(easy, CURLOPT_WRITEDATA, &reply);
     curl_easy_setopt(easy, CURLOPT_USERAGENT, "bmic/0.0.1");
 
@@ -209,12 +222,14 @@ void bmic_endpoint_http_write(const bmic_endpoint_t *ep, bmic_data_t *payload,
                        "Error while trying to write data: %s", curl_easy_strerror(rcode));
     }
 
-    curl_easy_getinfo (easy, CURLINFO_RESPONSE_CODE, &epstatus->epcode);
-
+    
     curl_easy_getinfo (easy, CURLINFO_RESPONSE_CODE, &epstatus->epcode);
     if (epstatus->epcode != HTTP_STATUS_OK) {
         gru_status_set(epstatus->status, GRU_FAILURE,
                        "Unacceptable response from server (HTTP status %ld)",
                        epstatus->epcode);
     }
+    
+    bmic_debug_print("Response code %d\n", epstatus->epcode);
+    bmic_debug_print("Response data %d\n", bmic_data_to_string(&reply));
 }

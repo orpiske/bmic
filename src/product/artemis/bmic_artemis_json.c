@@ -14,6 +14,7 @@
  limitations under the License.
  */
 #include "bmic_artemis_json.h"
+#include "bmic_artemis_mi.h"
 
 /*
  curl -u admin:admin -H "Content-Type: application/json" -X POST 
@@ -33,7 +34,11 @@ void bmic_artemis_json_create_queue(const bmic_object_t *op, bmic_json_t *json,
     json_object *op_type = json_object_new_string("EXEC");
     json_object_object_add(json->obj, "type", op_type);
     
-    json_object *mbean = json_object_new_string(op->name);
+    char *mbean_value = NULL;
+    asprintf(&mbean_value, "%s:%s", ARTEMIS_BASE_PKG, op->name);
+    json_object *mbean = json_object_new_string(mbean_value);
+    free(mbean_value);
+    
     json_object_object_add(json->obj, "mbean", mbean);
     
     json_object *create_queue = json_object_new_string(CREATE_CORE_QUEUE_SIG);

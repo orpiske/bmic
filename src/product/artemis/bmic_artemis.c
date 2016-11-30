@@ -274,8 +274,8 @@ bool bmic_artemis_operation_create_queue(bmic_handle_t *handle,
                                             gru_status_t *status)
 {
     const bmic_object_t *attributes = bmic_object_find_regex(cap->root,
-                                                             ARTEMIS_CORE_CAP_OPERATIONS,
-                                                             REG_SEARCH_PATH);
+                                                             ARTEMIS_CORE_BROKER_OPERATIONS_ROOT,
+                                                             REG_SEARCH_NAME);
     
     bmic_json_t *json = bmic_json_new(status);
     gru_alloc_check(json, false);
@@ -287,7 +287,9 @@ bool bmic_artemis_operation_create_queue(bmic_handle_t *handle,
         .status = status,
     };
     
+    bmic_endpoint_set_path(handle->ep, "exec");
     handle->transport.write(handle->ep, NULL, &data, &epstatus);
+    bmic_endpoint_reset_path(handle->ep);
     if (status->code != GRU_SUCCESS) {
         return false;
     }
