@@ -28,6 +28,7 @@ bmic_api_interface_t *bmic_artemis_product(gru_status_t *status)
     ret->attribute_list = bmic_artemis_attribute_list;
     ret->queue_attribute_read = bmic_artemis_queue_attribute_read;
     ret->operation_list = bmic_artemis_operation_list;
+    ret->create_queue = bmic_artemis_operation_create_queue;
 
     return ret;
 }
