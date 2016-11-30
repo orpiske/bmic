@@ -30,15 +30,42 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
     
+/**
+ * Initializes the endpoint
+ * @param ep
+ * @param status
+ */
 void bmic_endpoint_http_begin(bmic_endpoint_t *ep, gru_status_t *status);
+
+/**
+ * Terminates the endpoint
+ * @param ep
+ * @param status
+ */
 void bmic_endpoint_http_terminate(bmic_endpoint_t *ep, gru_status_t *status);
 
-void bmic_endpoint_http_read(const bmic_endpoint_t *, bmic_data_t *payload, 
-        bmic_data_t *data, bmic_endpoint_status_t *status); 
 
-void bmic_endpoint_http_write(const bmic_endpoint_t *, bmic_data_t *payload, 
-        bmic_data_t *data, bmic_endpoint_status_t *status); 
+/**
+ * Executes a HTTP get request
+ * @param ep Endpoint
+ * @param request request data
+ * @param reply response data
+ * @param status endpoint status
+ */
+void bmic_endpoint_http_read(const bmic_endpoint_t *ep, bmic_data_t *request,
+                             bmic_data_t *reply, bmic_endpoint_status_t *epstatus); 
+
+/**
+ * Executes a HTTP post request
+ * @param ep Endpoint
+ * @param request request data
+ * @param reply response data
+ * @param status endpoint status
+ */
+void bmic_endpoint_http_write(const bmic_endpoint_t *ep, bmic_data_t *request, 
+        bmic_data_t *reply, bmic_endpoint_status_t *status); 
 
 
 #ifdef __cplusplus

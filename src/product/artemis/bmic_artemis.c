@@ -288,7 +288,7 @@ bool bmic_artemis_operation_create_queue(bmic_handle_t *handle,
     };
     
     bmic_endpoint_set_path(handle->ep, "exec");
-    handle->transport.write(handle->ep, NULL, &data, &epstatus);
+    handle->transport.write(handle->ep, &data, NULL, &epstatus);
     bmic_endpoint_reset_path(handle->ep);
     if (status->code != GRU_SUCCESS) {
         return false;
