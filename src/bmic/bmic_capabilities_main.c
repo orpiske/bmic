@@ -94,24 +94,16 @@ int capabilities_run(options_t *options)
 {
     gru_status_t status = {0};
 
-    bmic_discovery_hint_t *hint = NULL;
-    bmic_credentials_t *credentials = NULL;
-
-    bmic_product_registry_init(&status);
-
-    bmic_product_register(&status);
-
-
-    credentials = bmic_credentials_init(options->username, options->password,
-                                        &status);
-
-    hint = bmic_discovery_hint_eval_addressing(options->server,
-                                               BMIC_PORT_UNKNOWN,
-                                               &status);
-
-    bmic_handle_t *handle = NULL;
-    bmic_api_interface_t *api = bmic_discovery_run(hint, credentials, &handle,
-                                                   &status);
+    bmic_context_t ctxt = {0};
+    
+    bool ret = bmic_context_init_simple(&ctxt, options->server, options->username, 
+                             options->password, &status);
+    if (!ret) {
+        fprintf(stderr, "%s\n", status.message);
+        return EXIT_FAILURE;
+    }
+    
+    bmic_api_interface_t *api = ctxt.api;
 
     if (api == NULL) {
         fprintf(stderr, "Unable to discover server: %s\n", status.message);
@@ -119,7 +111,7 @@ int capabilities_run(options_t *options)
         return EXIT_FAILURE;
     }
 
-    bmic_product_info_t *info = api->product_info(handle, &status);
+    bmic_product_info_t *info = api->product_info(ctxt.handle, &status);
     print_product_info(api, info);
     
     if (!info || status.code != GRU_SUCCESS) {
@@ -131,7 +123,7 @@ int capabilities_run(options_t *options)
         gru_dealloc((void **) &info);
     }
     
-    const bmic_exchange_t *cap = api->load_capabilities(handle, &status);
+    const bmic_exchange_t *cap = api->load_capabilities(ctxt.handle, &status);
     if (!cap) {
         fprintf(stderr, "Unable to load capabilities: %s\n", status.message);
 
@@ -139,7 +131,7 @@ int capabilities_run(options_t *options)
     }    
 
     if (options->list) {
-        const bmic_list_t *list = api->attribute_list(handle, cap, &status);
+        const bmic_list_t *list = api->attribute_list(ctxt.handle, cap, &status);
 
         if (list) {
             printf("\n%s%s  %-35s %-5s %-15s %s%s\n", RESET, LIGHT_WHITE, 
@@ -152,14 +144,14 @@ int capabilities_run(options_t *options)
     }
     else {
         if (options->readall) {
-            const bmic_list_t *list = api->attribute_list(handle, cap, &status);
+            const bmic_list_t *list = api->attribute_list(ctxt.handle, cap, &status);
 
             if (list) {
                 cap_read_wrapper_t wrapper; 
                 
                 wrapper.api = api;
                 wrapper.cap = cap;
-                wrapper.handle = handle;
+                wrapper.handle = ctxt.handle;
                 wrapper.status = &status;
                 
                 printf("\n%s%s  %-35s %-5s %-15s %s%s\n", RESET, LIGHT_WHITE,
@@ -171,7 +163,7 @@ int capabilities_run(options_t *options)
             
         }
         else {
-            const bmic_exchange_t *obj = api->attribute_read(handle, cap, options->read,
+            const bmic_exchange_t *obj = api->attribute_read(ctxt.handle, cap, options->read,
                                                      &status);
 
             if (obj) {
@@ -189,11 +181,7 @@ int capabilities_run(options_t *options)
     }
 
     bmic_exchange_destroy((bmic_exchange_t **)&cap);
-    api->api_cleanup(&handle);
-    bmic_product_unregister();
-    bmic_product_registry_destroy();
-    bmic_discovery_hint_destroy(&hint);
-    bmic_credentials_detroy(&credentials);
+    bmic_context_cleanup(&ctxt);
 
     return EXIT_SUCCESS;
 }
