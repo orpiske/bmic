@@ -1,31 +1,31 @@
 env:
   global:
-   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
-   #   via the "travis encrypt" command using the project repo's public key
-    - secure: "zZgLfFHU8OdmvpWCz5HfdGDDL/ry58xtttTtU3hfloRMOv2RT3cGN6W3HgF13mDZ13kS58gOkfEw5740s6/aZ6JvXHezGWy7A2Gjpshvw0cY3vmEvf68bFMhvJlw3XpXFXbTSsgl9h5NQvhFfmmzzkALxwBnWoUEpJrijyq20i/HD6+ayd6tUjHPg1PqD4Rz6FA9otu4f7y6lKIvtWRlKVeW7bV6EmdK09MumCM2tWiRe1cKBsyPKpLrf1XVON1IAQccOED49vgKK6KTHCYB+IsbA3qzkppMfl4XI3C1jFoZeLk60pAlMDsD2DUo6fRgtiBUkws0oKr8YZdeJxg3AsKAPfvEw2DwuOvgs12p3v6pwApRpy9iAyMQBiA9uG8PWtD6+O5xs9LMPrRRPTUWpU5A+cqIDZ/P1voFRjw5awZE4D8IWS5ZQ6L6G0ZVba/0JH4cOcSKjsX+j4RSSPZeVe/4DPlDEveKi5cenXM+hdFkIwXsMqUxVqYzcdlj0tcX3rJYpBNfevD2hQ2zws28GSX12NjI8ya3nzZRMD0opMEpZoKzhlnTYEstRwKki+Ieh4rPDx62BzkqIM3yw3gQfoBlZhNxRYcpFfpu296q1Fe+ny4LTWYuYPLFdY7f1xrCm0TbaThoBw1qtC7CzJfSDgXzYldd75u5dTLCkAQTGpM="
+    # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+    #   via the "travis encrypt" command using the project repo's public key
+    - secure: "VpwgUIcPFOD2rX8KWaSGUPj1tdT/NV3/6MGzqrkJfgsoLUv+KnGlWsS0FkvSG9Gz4+TEwEPWeFR3z/SF1RnfcUUL4Mvf5P5Y5xU3JBkpNCZxpbJSwXmcLfRoB3sk4HM7awmJLOeAX0z9mKlOVFfR+gfC0k/JFUmU5hbAGaAC6Mhf3G6ls8MsnaTkHxit3EynIToaLJSvMd62fTZ6SgIs7sucpg4Jzs2CBiE5f1a/ozKcNeKy5IU0y8UAi9A0yFTQSXxaCZwMn8H6LPNq5yW4U+9HuZYalsxE0P9hZ65kz34grCGs0U9sygx7BlE+pkDlb/f0VS8QCT3n9yK0Vy/bg190vw82LffFHFylKj+yYxbNRSUtXCJQUI3gjLosbHAxti4KdPFutsq0U9B3j+iksVsqbYXCyLNF+yYrLXKx9MEf2FBtjHsvX9bet8edGlWAWL1DTlaGr4yX0tBlwHfvHSCPCnS+nrfh9mKMSz4ZCsgkB1cX8p6P3+bi4j9hraGt3cAG7cjAm/jn7fzB8VAES7sPokWThSG3qQTXIdFKnY2hBjlKtn9PyZY/adUWrtiimWC3wMKhnrXUhctXrFjwEu/zhKY4xQ5wcJ8HXQOb0qZpq25R6/ZIlN3Pa+Wfi1a317kL/YhITmxlMVQXI8lhX9y/IUmTZXeJYkzhL82y/As="
+
 os:
-- linux
+  - linux
+  - osx
 sudo: required
 dist: trusty
 language:
-- c
+  - c
 before_install:
-  - sudo apt-get install -y cmake doxygen
   - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
 before_script:
-- wget https://github.com/orpiske/gru/tarball/master -O gru-head.tar.gz
-- mkdir gru && tar -xvf gru-head.tar.gz -C gru --strip-components=1
-- pushd gru && mkdir build && cd build && cmake -DCMAKE_INSTALL_PREFIX=/usr .. && make && sudo make install ; popd
-- mkdir build
-- cd build
-- cmake -DCMAKE_BUILD_TYPE=RELEASE ..
+  - wget https://github.com/orpiske/gru/tarball/master -O gru-head.tar.gz
+  - mkdir gru && tar -xvf gru-head.tar.gz -C gru --strip-components=1
+  - pushd gru && mkdir build && cd build && cmake -DCMAKE_INSTALL_PREFIX=/usr .. && make && sudo make install ; popd
 script:
-- make all
+  - mkdir -p build
+  - cd build
+  - cmake -DCMAKE_BUILD_TYPE=RELEASE ..
+  - make all
+  - cd ..
 addons:
   apt:
     packages:
-      - cmake
-      - doxygen
       - libjson0-dev
       - libcurl4-openssl-dev
   coverity_scan:
@@ -33,6 +33,6 @@ addons:
       name: "orpiske/bmic"
       description: "Broker Management Interface Client"
     notification_email: angusyoung@gmail.com
-    build_command_prepend: "mkdir build ; cd build && - cmake -DCMAKE_BUILD_TYPE=RELEASE .."
-    build_command:   "make"
+    build_command_prepend: "mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=RELEASE .."
+    build_command: "make all"
     branch_pattern: coverity_scan
