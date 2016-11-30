@@ -55,10 +55,11 @@ static void print_op_signature(const void *nodedata, void *p) {
     const bmic_op_sig_t *sig = (const bmic_op_sig_t *) nodedata;
     const bmic_op_info_t *info = (bmic_op_info_t *) p;
     
-    printf("\nDescription: %s\n", sig->description);
+    printf("\n%s%sDescription: %s%s\n", RESET, LIGHT_WHITE, RESET, sig->description);
     printf("%s %s()\n", bmic_type_map(sig->ret), info->name);
     
-    printf("%-2s %10s %-35s %s\n", " ", "Type", "Parameter name", "Description");
+    printf("%s%s%-2s %10s %-35s %s%s\n", RESET, LIGHT_WHITE, " ", "Type", 
+           "Parameter name", "Description", RESET);
     gru_list_for_each(sig->args, print_op_arguments, NULL);
 }
 

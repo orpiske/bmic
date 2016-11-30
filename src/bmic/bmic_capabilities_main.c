@@ -142,7 +142,8 @@ int capabilities_run(options_t *options)
         const bmic_list_t *list = api->attribute_list(handle, cap, &status);
 
         if (list) {
-            printf("\n  %-35s %-5s %-15s %s\n", "NAME", "MODE", "TYPE", "DESCRIPTION");
+            printf("\n%s%s  %-35s %-5s %-15s %s%s\n", RESET, LIGHT_WHITE, 
+                   "NAME", "MODE", "TYPE", "DESCRIPTION", RESET);
             
             gru_list_for_each(list->items, print_cap, NULL);
             bmic_list_destroy((bmic_list_t **)&list);
@@ -161,7 +162,8 @@ int capabilities_run(options_t *options)
                 wrapper.handle = handle;
                 wrapper.status = &status;
                 
-                printf("\n  %-35s %-5s %-15s %s\n", "NAME", "MODE", "TYPE", "DESCRIPTION");
+                printf("\n%s%s  %-35s %-5s %-15s %s%s\n", RESET, LIGHT_WHITE,
+                       "NAME", "MODE", "TYPE", "DESCRIPTION", RESET);
                 gru_list_for_each(list->items, capabilities_read, &wrapper);
                 
                 bmic_list_destroy((bmic_list_t **)&list);
@@ -173,7 +175,8 @@ int capabilities_run(options_t *options)
                                                      &status);
 
             if (obj) {
-                printf("\n  %-35s %-5s %-15s %s\n", "NAME", "MODE", "TYPE", "DESCRIPTION");
+                printf("\n%s%s  %-35s %-5s %-15s %s%s\n", RESET, LIGHT_WHITE,
+                       "NAME", "MODE", "TYPE", "DESCRIPTION", RESET);
                 print_cap_info(obj->payload.capinfo);
                 print_returned_object(options->read, obj->data_ptr);
             }

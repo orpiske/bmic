@@ -22,6 +22,8 @@
 #include <stdbool.h>
 #include <getopt.h>
 
+#include <common/gru_colors.h>
+
 
 #include "base/transport/bmic_endpoint.h"
 #include "base/transport/bmic_endpoint_http.h"
