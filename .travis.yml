@@ -20,7 +20,7 @@ before_script:
 script:
   - mkdir -p build
   - cd build
-  - cmake -DCMAKE_BUILD_TYPE=RELEASE ..
+  - cmake -DCMAKE_BUILD_TYPE=RELEASE -DBUILD_WITH_UNIT_TESTS=OFF ..
   - make all
   - cd ..
 addons:
@@ -33,6 +33,6 @@ addons:
       name: "orpiske/bmic"
       description: "Broker Management Interface Client"
     notification_email: angusyoung@gmail.com
-    build_command_prepend: "mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=RELEASE .."
+    build_command_prepend: "mkdir build && cd build && cmake -DBUILD_WITH_UNIT_TESTS=OFF -DCMAKE_BUILD_TYPE=RELEASE .."
     build_command: "make all"
     branch_pattern: coverity_scan
