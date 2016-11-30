@@ -37,6 +37,7 @@
 #include "base/common/bmic_regex.h"
 
 #include "bmic/util/bmic_print_simple.h"
+#include "bmic/util/bmic_type_map.h"
 
 #define OPT_MAX_STR_SIZE 255
 

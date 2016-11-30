@@ -39,14 +39,15 @@ typedef struct cap_read_wrapper_t_ {
 } cap_read_wrapper_t;
 
 static void print_op_arguments(const void *nodedata, void *p) {
-    bmic_op_arg_t *arg = (const bmic_op_arg_t *) nodedata;
+    const bmic_op_arg_t *arg = (const bmic_op_arg_t *) nodedata;
     
     
     if (strncmp(arg->type, "void", 4) == 0) {
-        printf("%-2s %-35s %s\n", " ", arg->name, arg->description);
+        printf("%-2s %-35s (void) %s\n", " ", arg->name, arg->description);
     }
     else { 
-        printf("%-2s %-35s %s (%s) \n", " ", arg->name, arg->description, arg->type);
+        printf("%-2s %10s %-35s %s \n", " ", bmic_type_map(arg->type), arg->name, 
+               arg->description);
     }
 }
 
@@ -55,10 +56,9 @@ static void print_op_signature(const void *nodedata, void *p) {
     const bmic_op_info_t *info = (bmic_op_info_t *) p;
     
     printf("\nDescription: %s\n", sig->description);
-    printf("%s %s()\n", sig->ret, info->name);
+    printf("%s %s()\n", bmic_type_map(sig->ret), info->name);
     
-    printf("%-2s %-35s %s (%s)\n", " ", "Parameter name", "Description", 
-           "Return type");
+    printf("%-2s %10s %-35s %s\n", " ", "Type", "Parameter name", "Description");
     gru_list_for_each(sig->args, print_op_arguments, NULL);
 }
 
@@ -66,12 +66,15 @@ static void print_op(const void *nodedata, void *payload)
 {
     const bmic_op_info_t *info = (bmic_op_info_t *) nodedata;
     
+    
     if (payload == NULL) { 
+        printf("\n");
         gru_list_for_each(info->signature, print_op_signature, info);
     }
     else {
         const char *name = (const char *) payload;
-        if (strncmp(info->name, name, strlen(info->name)) == 0) {            
+        if (strncmp(info->name, name, strlen(info->name)) == 0) {
+            printf("\n");
             gru_list_for_each(info->signature, print_op_signature, info);
         }
     }

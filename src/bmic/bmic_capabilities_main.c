@@ -34,20 +34,7 @@ typedef struct cap_read_wrapper_t_ {
 
 static void print_cap_info(const bmic_cap_info_t *info)
 {
-    const char *typename_short = NULL;
-    
-    if (strstr(info->typename, "java.lang.String")) {
-        typename_short = "string";
-    }
-    else {
-        if (strstr(info->typename, "Object")) {
-           typename_short = "object";
-        }
-        else { 
-            typename_short = info->typename;
-        }
-    
-    }
+    const char *typename_short = bmic_type_map(info->typename);
     
     printf("- %-35s %-5s %-15s %s\n", info->name, 
            (info->write ? "rw" : "ro"), typename_short,
