@@ -19,6 +19,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+#include <log/gru_logger.h>
+
 #include "base/common/bmic_credentials.h"
 
 #include "management/common/bmic_discovery_hint.h"

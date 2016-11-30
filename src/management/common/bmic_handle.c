@@ -27,7 +27,9 @@ void bmic_handle_destroy(bmic_handle_t **handle, bmic_handle_ep_cleanup_fn clean
         
         cleanup(h->ep, &status);
         if (status.code != GRU_SUCCESS) {
-            fprintf(stderr, "Failed to cleanup CURL handle\n");
+            logger_t logger = gru_logger_get();
+        
+            logger(WARNING, "Failed to cleanup CURL handle\n");
         }
         
         bmic_endpoint_destroy(&h->ep);

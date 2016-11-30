@@ -21,8 +21,6 @@
 
 #include <collection/gru_list.h>
 
-#include "bmic_debug.h"
-
 #include "bmic_op_arg.h"
 #include "bmic_op_sig.h"
 

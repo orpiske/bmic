@@ -23,6 +23,8 @@
 #include <common/gru_alloc.h>
 #include <common/gru_status.h>
 
+#include <log/gru_logger.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif

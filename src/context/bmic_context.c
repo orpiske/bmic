@@ -16,10 +16,41 @@
 #include "bmic_context.h"
 #include "management/common/bmic_product.h"
 
+static void bmic_logger_default_printer(log_level_t level, const char *msg, ...) {
+    if (!gru_logger_can_log(level)) {
+        return;
+    }
+
+    va_list ap;
+    va_start(ap, msg);
+    gru_logger_default_do_print(level, msg, ap);
+    va_end(ap);
+}
+
+static void bmic_log_initialization() {
+    const char *log_level_str = getenv("BMIC_DEBUG");
+    log_level_t log_level;
+    if (!log_level_str) {
+        log_level = FATAL;
+    }
+    else {
+        log_level = gru_logger_get_level(log_level_str);
+    }
+    
+    gru_logger_set_mininum(log_level);
+    gru_logger_set(bmic_logger_default_printer);
+
+}
+
 bool bmic_context_init_simple(bmic_context_t *ctxt, const char *server, 
                                         const char *username, 
                                         const char *password,                               
                                         gru_status_t *status) {
+    
+    bmic_log_initialization();
+    gru_logger_set(gru_logger_default_printer);
+
+    
     bmic_product_registry_init(status);
     bmic_product_register(status);
     
@@ -44,6 +75,8 @@ bool bmic_context_init_simple(bmic_context_t *ctxt, const char *server,
         
         return false;
     }
+
+
         
     return true;
 }

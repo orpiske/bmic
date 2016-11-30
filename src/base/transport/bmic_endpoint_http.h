@@ -18,12 +18,12 @@
 #define BMIC_TRANSPORT_HTTP_H
 
 #include <common/gru_status.h>
+#include <log/gru_logger.h>
 
 #include <curl/curl.h>
 
 #include "bmic_transport.h"
 #include "base/common/bmic_data.h"
-#include "base/common/bmic_debug.h"
 
 #define HTTP_STATUS_OK 200
 

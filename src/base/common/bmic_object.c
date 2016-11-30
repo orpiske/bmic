@@ -18,33 +18,36 @@
 static void print(const void *obj1, void *d2)
 {
     const bmic_object_t *nodeojb = (bmic_object_t *) obj1;
+    
 
     if (nodeojb == NULL) {
         return;
     }
+    
+    logger_t logger = gru_logger_get();
 
-    bmic_debug_print("Path: %s\n", nodeojb->path);
+    logger(DEBUG, "Path: %s", nodeojb->path);
 
     switch (nodeojb->type) {
     case STRING:
     {
-        bmic_debug_print("%s (string): %s\n", nodeojb->name, nodeojb->data.str);
+        logger(DEBUG, "%s (string): %s", nodeojb->name, nodeojb->data.str);
         break;
     }
     case INTEGER:
     {
-        bmic_debug_print("%s (int): %i\n", nodeojb->name, nodeojb->data.number);
+        logger(DEBUG, "%s (int): %i", nodeojb->name, nodeojb->data.number);
         break;
     }
     case BOOLEAN:
     {
-        bmic_debug_print("%s (bool): %s\n", nodeojb->name,
+        logger(DEBUG, "%s (bool): %s", nodeojb->name,
                (nodeojb->data.value ? "true" : "false"));
         break;
     }
     case DOUBLE:
     {
-        bmic_debug_print("%s (double): %.4f\n", nodeojb->name, nodeojb->data.d);
+        logger(DEBUG, "%s (double): %.4f", nodeojb->name, nodeojb->data.d);
         break;
     }
     case LIST:
@@ -56,7 +59,7 @@ static void print(const void *obj1, void *d2)
     {
         if (nodeojb) {
             if (nodeojb->name) {
-                bmic_debug_print("Object: %s\n", nodeojb->name);
+                logger(DEBUG, "Object: %s", nodeojb->name);
             }
         }
 
@@ -64,7 +67,7 @@ static void print(const void *obj1, void *d2)
     }
     case NULL_TYPE:
     {
-        bmic_debug_print("%s (null)\n", nodeojb->name);
+        logger(DEBUG, "%s (null)", nodeojb->name);
 
         break;
     }
@@ -127,7 +130,6 @@ bmic_object_t *bmic_object_new_root(gru_status_t *status)
 }
 
 
-
 static void bmic_object_destroy_element(const void *nodedata, void *data)
 {
     bmic_object_t *obj = (bmic_object_t *) nodedata;
@@ -143,7 +145,8 @@ void bmic_object_destroy(bmic_object_t **ptr)
         return;
     }
     
-    bmic_debug_print("Destroying object %s [%s]\n", obj->name, obj->path);
+    logger_t logger = gru_logger_get();
+    logger(TRACE, "Destroying object %s [%s]", obj->name, obj->path);
 
     if (obj->type == STRING) {
         if (obj->data.str) {
@@ -199,7 +202,8 @@ void bmic_object_set_string(bmic_object_t *obj, const char *value)
 {
     assert(obj != NULL && value != NULL);
     
-    bmic_debug_print("Setting %s [%s] to %s\n", obj->name, obj->path, value);
+    logger_t logger = gru_logger_get();
+    logger(TRACE, "Setting %s [%s] to %s", obj->name, obj->path, value);
     
     obj->type = STRING;
     asprintf(&obj->data.str, "%s", value);
@@ -209,7 +213,8 @@ void bmic_object_set_integer(bmic_object_t *obj, int32_t value)
 {
     assert(obj != NULL);
     
-    bmic_debug_print("Setting %s [%s] to %i\n", obj->name, obj->path, value);
+    logger_t logger = gru_logger_get();
+    logger(TRACE, "Setting %s [%s] to %i", obj->name, obj->path, value);
     obj->type = INTEGER;
     obj->data.number = value;
 }
@@ -218,6 +223,8 @@ void bmic_object_set_boolean(bmic_object_t *obj, bool value)
 {
     assert(obj != NULL);
     
+    logger_t logger = gru_logger_get();
+    logger(TRACE, "Setting %s [%s] to %s", obj->name, obj->path, (value ? "true" : "false"));
     
     obj->type = BOOLEAN;
     obj->data.value = value;
@@ -226,6 +233,9 @@ void bmic_object_set_boolean(bmic_object_t *obj, bool value)
 void bmic_object_set_double(bmic_object_t *obj, double value)
 {
     assert(obj != NULL);
+    
+    logger_t logger = gru_logger_get();
+    logger(TRACE, "Setting %s [%s] to %.4f", obj->name, obj->path, value);
     
     obj->type = DOUBLE;
     obj->data.d = value;
@@ -242,20 +252,21 @@ void bmic_object_set_null(bmic_object_t *obj)
 void bmic_object_add_list_element(bmic_object_t *parent, bmic_object_t *element)
 {
     assert(parent != NULL && element != NULL);
+    logger_t logger = gru_logger_get();
     
     parent->type = LIST;
     uint32_t pos = gru_tree_count_children(parent->self);
 
     element->self = gru_tree_add_child(parent->self, element);
     if (!element->self) {
-        fprintf(stderr, "Unable to create a new tree storage for the child object");
+        logger(FATAL, "Unable to create a new tree storage for the child object");
 
         return;
     }
     
     bmic_object_set_path(element, "%s/%s[%i]", parent->path, element->name, pos);
     
-    bmic_debug_print("Adding %s [%s] to %s\n", element->name, element->path, 
+    logger(TRACE, "Adding %s [%s] to %s", element->name, element->path, 
                      parent->name);
 }
 
@@ -269,7 +280,8 @@ void bmic_object_add_object(bmic_object_t *parent,
 
     child->self = gru_tree_add_child(parent->self, child);
     if (!child->self) {
-        fprintf(stderr, "Unable to create a new tree storage for the child object");
+        logger_t logger = gru_logger_get();
+        logger(FATAL, "Unable to create a new tree storage for the child object");
 
         return;
     }
@@ -290,7 +302,8 @@ static bool bmic_compare_name(const void *nodedata, const void *data, void *r)
     }
 
     if (nodeobj->name != NULL) {
-        bmic_debug_print("Comparing %s [%s] %d with %s\n", nodeobj->name, 
+        logger_t logger = gru_logger_get();
+        logger(TRACE, "Comparing %s [%s] %d with %s", nodeobj->name, 
                          nodeobj->path, nodeobj->type, (const char *) data);
         if (strcmp(nodeobj->name, (const char *) data) == 0) {
             return true;
@@ -387,7 +400,8 @@ static bool bmic_object_regex_name(const void *nodedata,
 
     // TODO: improve the error handling here
     if (status.code == GRU_FAILURE) {
-        fprintf(stderr, "%s\n", status.message);
+        logger_t logger = gru_logger_get();
+        logger(FATAL, "%s", status.message);
     }
 
 
@@ -408,7 +422,9 @@ static bool bmic_object_regex_path(const void *nodedata,
 
     // TODO: improve the error handling here
     if (status.code == GRU_FAILURE) {
-        fprintf(stderr, "%s\n", status.message);
+        logger_t logger = gru_logger_get();
+        
+        logger(FATAL, "%s", status.message);
     }
 
 

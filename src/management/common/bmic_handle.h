@@ -16,6 +16,8 @@
 #ifndef BMIC_HANDLE_H
 #define BMIC_HANDLE_H
 
+#include <log/gru_logger.h>
+
 #include "base/transport/bmic_transport.h"
 
 #ifdef __cplusplus

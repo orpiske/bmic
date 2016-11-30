@@ -16,6 +16,8 @@
 #ifndef BMIC_PRODUCT_REGISTER_H
 #define BMIC_PRODUCT_REGISTER_H
 
+#include <log/gru_logger.h>
+
 #include "management/common/bmic_product.h"
 #include "product/activemq/bmic_activemq.h"
 #include "product/artemis/bmic_artemis.h"
