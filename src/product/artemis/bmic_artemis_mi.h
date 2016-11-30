@@ -38,6 +38,7 @@
 
 #define ARTEMIS_READ "read"
 #define ARTEMIS_BASE_PKG "org.apache.activemq.artemis"
+#define ARTEMIS_STATUS_OK 200
 
 #ifdef __cplusplus
 extern "C" {
@@ -78,6 +79,9 @@ void bmic_artemis_mi_translate_attr(const bmic_object_t *obj,
 void bmic_artemis_mi_translate_op(const bmic_object_t *obj,
                                          bmic_op_info_t *info,
                                         gru_status_t *status);
+
+
+bool bmic_artemis_mi_translate_status(bmic_object_t *root, gru_status_t *status);
 
 #ifdef __cplusplus
 }

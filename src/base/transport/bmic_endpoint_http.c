@@ -194,7 +194,7 @@ void bmic_endpoint_http_write(const bmic_endpoint_t *ep, bmic_data_t *request,
     logger(DEBUG, "Sending request to %s", full_path);
 
     bmic_reply_data_t reply_data = {0};
-    reply_data.body = request;
+    reply_data.body = reply;
 
     if (ep->credentials->username != NULL) {
         curl_easy_setopt(easy, CURLOPT_USERNAME, ep->credentials->username);
