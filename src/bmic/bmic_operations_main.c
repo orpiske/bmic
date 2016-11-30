@@ -24,6 +24,7 @@ typedef struct options_t_
     char password[OPT_MAX_STR_SIZE];
     char server[OPT_MAX_STR_SIZE];
     bool list;
+    bool help;
     char name[OPT_MAX_STR_SIZE];
 } options_t;
 
@@ -40,13 +41,24 @@ typedef struct cap_read_wrapper_t_ {
 static void print_op_arguments(const void *nodedata, void *p) {
     bmic_op_arg_t *arg = (const bmic_op_arg_t *) nodedata;
     
-    printf("\t%-30s %-35s %-15s\n", arg->name, arg->description, arg->type);
+    
+    if (strncmp(arg->type, "void", 4) == 0) {
+        printf("%-2s %-35s %s\n", " ", arg->name, arg->description);
+    }
+    else { 
+        printf("%-2s %-35s %s (%s) \n", " ", arg->name, arg->description, arg->type);
+    }
 }
 
 static void print_op_signature(const void *nodedata, void *p) {
     const bmic_op_sig_t *sig = (const bmic_op_sig_t *) nodedata;
+    const bmic_op_info_t *info = (bmic_op_info_t *) p;
     
-    printf("   %-65s %-15s\n", sig->description, sig->ret);
+    printf("\nDescription: %s\n", sig->description);
+    printf("%s %s()\n", sig->ret, info->name);
+    
+    printf("%-2s %-35s %s (%s)\n", " ", "Parameter name", "Description", 
+           "Return type");
     gru_list_for_each(sig->args, print_op_arguments, NULL);
 }
 
@@ -55,16 +67,12 @@ static void print_op(const void *nodedata, void *payload)
     const bmic_op_info_t *info = (bmic_op_info_t *) nodedata;
     
     if (payload == NULL) { 
-        printf("- %-35s\n", info->name);
-        
-        gru_list_for_each(info->signature, print_op_signature, NULL);
+        gru_list_for_each(info->signature, print_op_signature, info);
     }
     else {
         const char *name = (const char *) payload;
-        if (strncmp(info->name, name, strlen(info->name)) == 0) {
-            printf("- %-35s\n", info->name);
-            
-            gru_list_for_each(info->signature, print_op_signature, NULL);
+        if (strncmp(info->name, name, strlen(info->name)) == 0) {            
+            gru_list_for_each(info->signature, print_op_signature, info);
         }
     }
 }
@@ -132,21 +140,23 @@ int operations_run(options_t *options)
         const bmic_list_t *list = api->operation_list(handle, cap, &status);
 
         if (list) {
-            printf("\n  %-20s\n", "NAME");
+            // printf("\n  %-20s %-15s %-30s\n", "NAME", " ", "DESCRIPTION");
             
             gru_list_for_each(list->items, print_op, NULL);
             bmic_list_destroy((bmic_list_t **)&list);
         }  
     }
     else {
-        const bmic_list_t *list = api->operation_list(handle, cap, &status);
-        
-        if (list) {
-            printf("\n  %-20s %-15s %-30s\n", "NAME", "RETURN", "DESCRIPTION");
-            
-            gru_list_for_each(list->items, print_op, options->name);
-            bmic_list_destroy((bmic_list_t **)&list);
-        }  
+        if (options->help) { 
+            const bmic_list_t *list = api->operation_list(handle, cap, &status);
+
+            if (list) {
+                // printf("\n  %-20s %-15s %-30s\n", "NAME", " ", "DESCRIPTION");
+
+                gru_list_for_each(list->items, print_op, options->name);
+                bmic_list_destroy((bmic_list_t **)&list);
+            }  
+        }
     }
 
     bmic_exchange_destroy((bmic_exchange_t **)&cap);
@@ -214,6 +224,7 @@ int operations_main(int argc, char **argv)
                 return EXIT_SUCCESS;
             }
             else {
+                options.help = true;
                 strncpy(options.name, optarg, sizeof (options.name) - 1);
             }
             
