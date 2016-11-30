@@ -55,6 +55,7 @@ add_library(
         product/activemq/bmic_activemq_mi.c
         product/activemq/bmic_activemq.c
         product/bmic_product_register.c
+        context/bmic_context.c
 )
 
 target_link_libraries(
