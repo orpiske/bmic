@@ -21,6 +21,9 @@
 
 #include "base/common/bmic_credentials.h"
 #include "base/common/bmic_cap_info.h"
+#include "base/common/bmic_op_arg.h"
+#include "base/common/bmic_op_sig.h"
+#include "base/common/bmic_op_info.h"
 #include "base/transport/bmic_transport.h"
 #include "base/transport/bmic_endpoint_http.h"
 #include "base/format/bmic_json.h"
@@ -67,6 +70,15 @@ const bmic_exchange_t *bmic_activemq_mi_read(bmic_handle_t *handle,
 void bmic_activemq_mi_translate_attr(const bmic_object_t *obj,
                                          bmic_cap_info_t *info);
 
+
+/**
+ * Given a node of operations, read them into the info object
+ * @param obj
+ * @param info
+ */
+void bmic_activemq_mi_translate_op(const bmic_object_t *obj,
+                                         bmic_op_info_t *info,
+                                        gru_status_t *status);
 
 #ifdef __cplusplus
 }

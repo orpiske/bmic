@@ -70,6 +70,17 @@ const bmic_exchange_t *bmic_activemq_queue_attribute_read(bmic_handle_t *handle,
                                                          const bmic_exchange_t *capabilities, const char *name,
                                                          gru_status_t *status, const char *queue);
 
+/**
+ * Get a list of all available broker operations and their metadata
+ * @param handle
+ * @param cap
+ * @param status
+ * @return 
+ */
+const bmic_list_t *bmic_activemq_operation_list(bmic_handle_t *handle,
+                                              const bmic_exchange_t *cap, 
+                                                gru_status_t *status);
+
 #ifdef __cplusplus
 }
 #endif

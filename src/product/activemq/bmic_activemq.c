@@ -27,7 +27,8 @@ bmic_api_interface_t *bmic_activemq_product(gru_status_t *status)
     ret->attribute_read = bmic_activemq_attribute_read;
     ret->attribute_list = bmic_activemq_attribute_list;
     ret->queue_attribute_read = bmic_activemq_queue_attribute_read;
-
+    ret->operation_list = bmic_activemq_operation_list;
+    
     return ret;
 }
 
@@ -240,4 +241,48 @@ const bmic_exchange_t *bmic_activemq_queue_attribute_read(bmic_handle_t *handle,
     return bmic_activemq_mi_read(handle, capabilities->root, name, status,
                              REG_SEARCH_NAME, ACTIVEMQ_QUEUE_CAPABILITES_REGEX,
                              queue);
+}
+
+
+static void bmic_activemq_add_op(const void *nodedata, void *payload)
+{
+    const bmic_object_t *nodeobj = (bmic_object_t *) nodedata;
+    bmic_payload_add_attr_t *pl =
+            (bmic_payload_add_attr_t *) payload;
+
+    if (nodeobj->type == OBJECT || nodeobj->type == LIST) {
+        if (nodeobj->name && strcmp(nodeobj->name, "op") != 0) {
+            bmic_op_info_t *info = bmic_op_info_new(pl->status);
+
+            if (!info) {
+                return;
+            }
+
+            bmic_op_info_set_name(info, nodeobj->name);
+            bmic_activemq_mi_translate_op(nodeobj, info, pl->status);
+
+            gru_list_append(pl->list, info);
+        }
+    }
+}
+
+
+const bmic_list_t *bmic_activemq_operation_list(bmic_handle_t *handle,
+                                              const bmic_exchange_t *cap, gru_status_t *status)
+{
+    const bmic_object_t *attributes = bmic_object_find_regex(cap->root,
+                                                             ACTIVEMQ_CORE_CAP_OPERATIONS,
+                                                             REG_SEARCH_PATH);
+    bmic_list_t *ret = bmic_list_new(status, bmic_op_info_destroy_list);
+    gru_alloc_check(ret, NULL);
+
+    bmic_payload_add_attr_t payload = {
+        .list = ret->items,
+        .status = status,
+    };
+
+
+    bmic_object_for_each_child(attributes, bmic_activemq_add_op, &payload);
+
+    return ret;
 }
