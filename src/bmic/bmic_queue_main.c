@@ -39,46 +39,31 @@ int queue_run(options_t *options)
 {
     gru_status_t status = {0};
 
-    bmic_discovery_hint_t *hint = NULL;
-    bmic_credentials_t *credentials = NULL;
-
-    bmic_product_registry_init(&status);
-
-    bmic_product_register(&status);
-
-
-    credentials = bmic_credentials_init(options->username, options->password,
-                                        &status);
-
-    hint = bmic_discovery_hint_eval_addressing(options->server,
-                                               BMIC_PORT_UNKNOWN,
-                                               &status);
-
-    bmic_handle_t *handle = NULL;
-    bmic_api_interface_t *api = bmic_discovery_run(hint, credentials, &handle,
-                                                   &status);
-
-    if (api == NULL) {
-        fprintf(stderr, "Unable to discover server: %s\n", status.message);
-
+    
+    bmic_context_t ctxt = {0};
+    
+    bool ret = bmic_context_init_simple(&ctxt, options->server, options->username, 
+                             options->password, &status);
+    if (!ret) {
+        fprintf(stderr, "%s\n", status.message);
         return EXIT_FAILURE;
     }
-
-    printf("Product name is %s\n", api->name);
-    printf("API version is %s\n", api->version);
-
-    bmic_product_info_t *info = api->product_info(handle, &status);
+    
+    bmic_api_interface_t *api = ctxt.api;
+    
+    bmic_product_info_t *info = api->product_info(ctxt.handle, &status);
+    print_product_info(api, info);
+    
     if (!info || status.code != GRU_SUCCESS) {
         fprintf(stderr, "Unable to determine product version: %s\n",
                 status.message);
     }
-    else {
-        printf("The product version is: %s\n", info->version);
-        gru_dealloc((void **) &info);
-    }
+    
+//    if (info) {
+//        gru_dealloc((void **) &info);
+//    }
 
-
-    const bmic_exchange_t *cap = api->load_capabilities(handle, &status);
+    const bmic_exchange_t *cap = api->load_capabilities(ctxt.handle, &status);
     if (!cap) {
         fprintf(stderr, "Unable to load capabilities: %s\n", status.message);
 
@@ -86,13 +71,28 @@ int queue_run(options_t *options)
     }
     
     
-    const bmic_exchange_t *obj = api->queue_attribute_read(handle, cap, 
+    const bmic_exchange_t *obj = api->queue_attribute_read(ctxt.handle, cap, 
                                                            options->read, &status, 
                               options->queue);
     
-    print_returned_object("test", obj->data_ptr);
-    
-    return EXIT_SUCCESS;
+    if (obj) { 
+        // print_returned_object(options->read, obj->data_ptr);
+        print_returned_object(options->read, obj->data_ptr);
+        
+        bmic_exchange_destroy((bmic_exchange_t **)&cap);
+        bmic_context_cleanup(&ctxt);
+        
+        return EXIT_SUCCESS;
+    }
+    else {
+        fprintf(stderr, "Unable to read property %s for queue %s: %s\n", options->read, 
+                options->queue, status.message);
+        
+        bmic_exchange_destroy((bmic_exchange_t **)&cap);
+        bmic_context_cleanup(&ctxt);
+        
+        return EXIT_FAILURE;
+    }
 }
 
 int queue_main(int argc, char **argv) {

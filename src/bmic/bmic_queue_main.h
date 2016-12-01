@@ -26,10 +26,7 @@
 #include "base/format/bmic_json.h"
 #include "base/common/bmic_cap_info.h"
 
-#include "management/common/bmic_product.h"
-#include "management/common/bmic_discovery_hint.h"
-#include "management/discovery/bmic_discovery.h"
-#include "product/bmic_product_register.h"
+#include "context/bmic_context.h"
 
 #include "base/common/bmic_regex.h"
 
