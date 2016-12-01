@@ -239,7 +239,7 @@ static void bmic_artemis_add_op(const void *nodedata, void *payload)
             }
 
             bmic_op_info_set_name(info, nodeobj->name);
-            bmic_artemis_mi_translate_op(nodeobj, info, pl->status);
+            bmic_jolokia_translate_op(nodeobj, info, pl->status);
 
             gru_list_append(pl->list, info);
         }

@@ -33,6 +33,7 @@ add_library(
         management/common/bmic_discovery_hint.c
         management/common/bmic_product.c
         management/discovery/bmic_discovery.c
+        management/interfaces/jolokia/bmic_jolokia.c
 )
 
 target_link_libraries(
