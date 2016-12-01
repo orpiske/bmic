@@ -168,7 +168,7 @@ const bmic_exchange_t *bmic_artemis_mi_read(bmic_handle_t *handle,
     return ret;
 
 err_exit:
-    gru_dealloc((void **)info);
+    gru_dealloc((void **)&info);
     bmic_object_destroy((bmic_object_t **)&reply_obj);
     return NULL;
 }
