@@ -59,9 +59,9 @@ int queue_run(options_t *options)
                 status.message);
     }
     
-//    if (info) {
-//        gru_dealloc((void **) &info);
-//    }
+    if (info) {
+        gru_dealloc((void **) &info);
+    }
 
     const bmic_exchange_t *cap = api->load_capabilities(ctxt.handle, &status);
     if (!cap) {
