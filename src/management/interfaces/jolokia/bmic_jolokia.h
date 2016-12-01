@@ -24,6 +24,8 @@
 #include "base/common/bmic_op_sig.h"
 #include "base/common/bmic_op_info.h"
 
+#include "bmic_jolokia_status.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -39,6 +41,14 @@ extern "C" {
 void bmic_jolokia_translate_op(const bmic_object_t *obj,
                                          bmic_op_info_t *info,
                                         gru_status_t *status);
+
+/**
+ * Reads an object tree and tries to find the status as defined by Jolokia API
+ * @param root
+ * @param status
+ * @return 
+ */
+bool bmic_jolokia_translate_status(bmic_object_t *root, gru_status_t *status);
 
 #ifdef __cplusplus
 }

@@ -77,3 +77,31 @@ void bmic_jolokia_translate_op(const bmic_object_t *obj,
         bmic_jolokia_translate_sigs(obj, info);
     }
 }
+
+
+bool bmic_jolokia_translate_status(bmic_object_t *root, gru_status_t *status) {
+    bmic_object_t *response_status = bmic_object_find_child_by_name(root, "status");
+    
+    if (response_status && response_status->type == INTEGER) {
+        if (response_status->data.number != JOLOKIA_STATUS_OK) {
+            bmic_object_t *error = bmic_object_find_child_by_name(root, "error");
+            if (error && error->type == STRING) {
+                gru_status_set(status, GRU_FAILURE, "Error %d: %s", 
+                               response_status->data.number, 
+                               error->data.str);
+            }
+            else {
+                gru_status_set(status, GRU_FAILURE, "Unknown error: %d", 
+                               response_status->data.number);
+            }
+        }
+        
+        logger_t logger = gru_logger_get();
+        
+        logger(DEBUG, "Artemis response status: %d", response_status->data.number);
+        return true;
+    }
+    
+    return false;
+        
+}

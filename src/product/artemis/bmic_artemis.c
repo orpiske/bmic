@@ -299,7 +299,7 @@ bool bmic_artemis_operation_create_queue(bmic_handle_t *handle,
     bmic_object_t *ret = bmic_api_parse_json(reply.data, status);
     bmic_data_release(&reply);
     
-    if (!bmic_artemis_mi_translate_status(ret, status)) {
+    if (!bmic_jolokia_translate_status(ret, status)) {
         gru_status_set(status, GRU_FAILURE, "Invalid response from the server: %s", 
                        (reply.data == NULL ? "(null)" : reply.data));
         
