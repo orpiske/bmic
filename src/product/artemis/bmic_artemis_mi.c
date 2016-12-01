@@ -97,7 +97,7 @@ static const bmic_cap_info_t *bmic_artermis_mi_read_attr_info(const bmic_object_
     }
 
     bmic_cap_info_set_name(info, attr_name);
-    bmic_artemis_mi_translate_attr(value_attributes, info);
+    bmic_jolokia_translate_attr(value_attributes, info);
     return info;
 }
 
@@ -174,7 +174,7 @@ err_exit:
 }
 
 
-void bmic_artemis_mi_translate_attr(const bmic_object_t *obj,
+void bmic_jolokia_translate_attr(const bmic_object_t *obj,
                                          bmic_cap_info_t *info)
 {
     const bmic_object_t *rw = bmic_object_find_by_name(obj, "rw");
@@ -192,5 +192,3 @@ void bmic_artemis_mi_translate_attr(const bmic_object_t *obj,
         bmic_cap_info_set_description(info, desc->data.str);
     }
 }
-
-

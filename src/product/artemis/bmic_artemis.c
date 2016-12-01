@@ -160,9 +160,6 @@ err_exit:
 }
 
 
-
-
-
 const bmic_exchange_t *bmic_artemis_attribute_read(bmic_handle_t *handle,
                                                    const bmic_exchange_t *cap,
                                                    const char *name,
@@ -187,7 +184,7 @@ static void bmic_artemis_add_attr(const void *nodedata, void *payload)
             }
 
             bmic_cap_info_set_name(info, nodeobj->name);
-            bmic_artemis_mi_translate_attr(nodeobj, info);
+            bmic_jolokia_translate_attr(nodeobj, info);
 
             gru_list_append(pl->list, info);
         }

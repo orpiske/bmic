@@ -15,6 +15,25 @@
  */
 #include "bmic_jolokia.h"
 
+void bmic_jolokia_translate_attr(const bmic_object_t *obj,
+                                         bmic_cap_info_t *info)
+{
+    const bmic_object_t *rw = bmic_object_find_by_name(obj, "rw");
+    if (rw && rw->type == BOOLEAN) {
+        bmic_cap_info_set_write(info, rw->data.value);
+    }
+
+    const bmic_object_t *type = bmic_object_find_by_name(obj, "type");
+    if (type && type->type == STRING) {
+        bmic_cap_info_set_typename(info, type->data.str);
+    }
+
+    const bmic_object_t *desc = bmic_object_find_by_name(obj, "desc");
+    if (desc && desc->type == STRING) {
+        bmic_cap_info_set_description(info, desc->data.str);
+    }
+}
+
 static void bmic_jolokia_translate_arg_value(const void *nodedata, void *payload) {
     const bmic_object_t *node = (const bmic_object_t *) nodedata;
     bmic_op_sig_t *sig = (bmic_op_sig_t *) payload;

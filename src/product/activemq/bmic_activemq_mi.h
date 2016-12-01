@@ -62,14 +62,6 @@ const bmic_exchange_t *bmic_activemq_mi_read(bmic_handle_t *handle,
                                                 const char *regex_fmt,
                                                 ...);
 
-/**
- * Given a node of attributes, read them into the info object
- * @param obj
- * @param info
- */
-void bmic_activemq_mi_translate_attr(const bmic_object_t *obj,
-                                         bmic_cap_info_t *info);
-
 #ifdef __cplusplus
 }
 #endif

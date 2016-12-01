@@ -95,7 +95,7 @@ static const bmic_cap_info_t *bmic_activemq_mi_read_attr_info(const bmic_object_
     }
 
     bmic_cap_info_set_name(info, attr_name);
-    bmic_activemq_mi_translate_attr(value_attributes, info);
+    bmic_jolokia_translate_attr(value_attributes, info);
     return info;
 }
 
@@ -170,23 +170,4 @@ err_exit:
     gru_dealloc((void **)info);
     bmic_object_destroy((bmic_object_t **)&reply_obj);
     return NULL;
-}
-
-void bmic_activemq_mi_translate_attr(const bmic_object_t *obj,
-                                         bmic_cap_info_t *info)
-{
-    const bmic_object_t *rw = bmic_object_find_by_name(obj, "rw");
-    if (rw && rw->type == BOOLEAN) {
-        bmic_cap_info_set_write(info, rw->data.value);
-    }
-
-    const bmic_object_t *type = bmic_object_find_by_name(obj, "type");
-    if (type && type->type == STRING) {
-        bmic_cap_info_set_typename(info, type->data.str);
-    }
-
-    const bmic_object_t *desc = bmic_object_find_by_name(obj, "desc");
-    if (desc && desc->type == STRING) {
-        bmic_cap_info_set_description(info, desc->data.str);
-    }
 }
