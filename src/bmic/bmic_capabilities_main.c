@@ -132,7 +132,6 @@ int capabilities_run(options_t *options)
         const bmic_list_t *list = api->attribute_list(ctxt.handle, cap, &status);
 
         if (list) {
-            //printf("\n%s%s%-25s %-25s%s\n", RESET, LIGHT_WHITE, "Capability", "Value", RESET);
             gru_list_for_each(list->items, print_cap, NULL);
             bmic_list_destroy((bmic_list_t **)&list);
         }
@@ -162,7 +161,6 @@ int capabilities_run(options_t *options)
                                                      &status);
 
             if (obj) {
-                print_cap_info(obj->payload.capinfo);
                 printf("\n%s%s%35s %-25s%s\n", RESET, LIGHT_WHITE, "Capability", "Value", RESET);
                 print_returned_object(options->read, obj->data_ptr);
             }

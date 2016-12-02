@@ -39,6 +39,11 @@ static void print_returned_from_list(const void *ptr, void *payload) {
         printf("%-35s %.4f\n", " ", obj->data.d);
         break;
     }
+    case OBJECT:
+    {
+        bmic_object_for_each_child(obj, print_returned_from_list, (void *)payload);
+        break;
+    }
     default: {
         break;
     }
