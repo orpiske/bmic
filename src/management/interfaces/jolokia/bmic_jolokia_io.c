@@ -20,7 +20,7 @@ bool bmic_jolokia_io_exec(bmic_handle_t *handle,
                                             bmic_json_t *json,
                                             gru_status_t *status)
 {
-    bmic_data_t request = bmic_json_to_data(json, NULL);
+    bmic_data_t request = bmic_json_to_data(json, status);
     
     bmic_endpoint_status_t epstatus = {
         .status = status,
@@ -35,7 +35,7 @@ bool bmic_jolokia_io_exec(bmic_handle_t *handle,
         return false;
     }
     
-    // TODO: move this to this subcomponent
+
     bmic_object_t *ret = bmic_jolokia_parse(reply.data, status);
     bmic_data_release(&reply);
     
