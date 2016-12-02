@@ -22,13 +22,19 @@
 #include "base/format/bmic_json.h"
 #include "bmic_activemq_mi.h"
 
-#define CREATE_CORE_QUEUE_SIG "addQueue(java.lang.String)"
+#define ACTIVEMQ_CREATE_QUEUE_SIG "addQueue(java.lang.String)"
+#define ACTIVEMQ_REMOVE_QUEUE_SIG "removeQueue(java.lang.String)"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+void bmic_activemq_json_create_queue(const bmic_object_t *op, bmic_json_t *json, 
+                                    const char *name);
 
+
+void bmic_activemq_json_delete_queue(const bmic_object_t *op, bmic_json_t *json, 
+                                    const char *name);
 
 
 #ifdef __cplusplus

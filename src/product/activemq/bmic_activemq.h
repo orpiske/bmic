@@ -40,6 +40,7 @@
 
 #include "bmic_activemq_urls.h"
 #include "bmic_activemq_mi.h"
+#include "bmic_activemq_json.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -95,6 +96,20 @@ bool bmic_activemq_operation_create_queue(bmic_handle_t *handle,
                                             const bmic_exchange_t *cap, 
                                             const char *name,
                                             gru_status_t *status);
+
+/**
+ * Deletes a core queue
+ * @param handle
+ * @param cap
+ * @param name
+ * @param status
+ * @return 
+ */
+bool bmic_activemq_operation_delete_queue(bmic_handle_t *handle,
+                                            const bmic_exchange_t *cap, 
+                                            const char *name,
+                                            gru_status_t *status);
+
 
 #ifdef __cplusplus
 }

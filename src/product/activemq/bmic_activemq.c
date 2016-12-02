@@ -29,6 +29,7 @@ bmic_api_interface_t *bmic_activemq_product(gru_status_t *status)
     ret->queue_attribute_read = bmic_activemq_queue_attribute_read;
     ret->operation_list = bmic_activemq_operation_list;
     ret->create_queue = bmic_activemq_operation_create_queue;
+    ret->delete_queue = bmic_activemq_operation_delete_queue;
     
     return ret;
 }
@@ -272,7 +273,7 @@ const bmic_list_t *bmic_activemq_operation_list(bmic_handle_t *handle,
                                               const bmic_exchange_t *cap, gru_status_t *status)
 {
     const bmic_object_t *attributes = bmic_object_find_regex(cap->root,
-                                                             ACTIVEMQ_CORE_CAP_OPERATIONS,
+                                                             ACTIVEMQ_CAP_OPERATIONS,
                                                              REG_SEARCH_PATH);
     bmic_list_t *ret = bmic_list_new(status, bmic_op_info_destroy_list);
     gru_alloc_check(ret, NULL);
@@ -294,13 +295,33 @@ bool bmic_activemq_operation_create_queue(bmic_handle_t *handle,
                                             gru_status_t *status)
 {
     const bmic_object_t *attributes = bmic_object_find_regex(cap->root,
-                                                             ACTIVEMQ_CORE_BROKER_OPERATIONS_ROOT,
+                                                             ACTIVEMQ_BROKER_OPERATIONS_ROOT,
                                                              REG_SEARCH_NAME);
     
     bmic_json_t *json = bmic_json_new(status);
     gru_alloc_check(json, false);
     
     bmic_activemq_json_create_queue(attributes, json, name);
+    bool ret = bmic_jolokia_io_exec(handle, json, status);
+    gru_dealloc(&json);
+    
+    return ret;
+}
+
+
+bool bmic_activemq_operation_delete_queue(bmic_handle_t *handle,
+                                            const bmic_exchange_t *cap, 
+                                            const char *name,
+                                            gru_status_t *status)
+{
+    const bmic_object_t *attributes = bmic_object_find_regex(cap->root,
+                                                             ACTIVEMQ_BROKER_OPERATIONS_ROOT,
+                                                             REG_SEARCH_NAME);
+    
+    bmic_json_t *json = bmic_json_new(status);
+    gru_alloc_check(json, false);
+    
+    bmic_activemq_json_delete_queue(attributes, json, name);
     bool ret = bmic_jolokia_io_exec(handle, json, status);
     gru_dealloc(&json);
     

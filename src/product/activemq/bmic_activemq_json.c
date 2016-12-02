@@ -58,7 +58,25 @@ void bmic_activemq_json_create_queue(const bmic_object_t *op, bmic_json_t *json,
     
     bmic_activemq_json_op_mbean(op, json);
     
-    json_object *create_queue = json_object_new_string(CREATE_CORE_QUEUE_SIG);
+    json_object *create_queue = json_object_new_string(ACTIVEMQ_CREATE_QUEUE_SIG);
+    json_object_object_add(json->obj, "operation", create_queue);
+    
+    // Arguments
+    json_object *arguments = json_object_new_array();
+    json_object *arg_name = json_object_new_string(name);
+    json_object_array_add(arguments, arg_name);
+    json_object_object_add(json->obj, "arguments", arguments);   
+}
+
+
+void bmic_activemq_json_delete_queue(const bmic_object_t *op, bmic_json_t *json, 
+                                    const char *name) 
+{
+    bmic_activemq_json_op_exec(op, json);
+    
+    bmic_activemq_json_op_mbean(op, json);
+    
+    json_object *create_queue = json_object_new_string(ACTIVEMQ_REMOVE_QUEUE_SIG);
     json_object_object_add(json->obj, "operation", create_queue);
     
     // Arguments
