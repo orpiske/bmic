@@ -282,36 +282,5 @@ bool bmic_artemis_operation_create_queue(bmic_handle_t *handle,
     gru_dealloc(&json);
     
     return ret;
-    /*
-    bmic_data_t request = bmic_json_to_data(json, NULL);
-    
-    
-    
-    
-    bmic_endpoint_status_t epstatus = {
-        .status = status,
-    };
-    
-    bmic_endpoint_set_path(handle->ep, "exec");
-    
-    bmic_data_t reply = {0};
-    handle->transport.write(handle->ep, &request, &reply, &epstatus);
-    bmic_endpoint_reset_path(handle->ep);
-    if (status->code != GRU_SUCCESS) {
-        return false;
-    }
-    
-    bmic_object_t *ret = bmic_api_parse_json(reply.data, status);
-    bmic_data_release(&reply);
-    
-    if (!bmic_jolokia_translate_status(ret, status)) {
-        gru_status_set(status, GRU_FAILURE, "Invalid response from the server: %s", 
-                       (reply.data == NULL ? "(null)" : reply.data));
-        
-        return false;
-    }
-    
-    return true;
-    */
 }
 
