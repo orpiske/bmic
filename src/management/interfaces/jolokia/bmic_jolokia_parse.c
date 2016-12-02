@@ -15,7 +15,7 @@
  */
 #include "bmic_jolokia_parse.h"
 
-bmic_object_t *bmic_api_parse_json(const char *str, gru_status_t *status) {
+bmic_object_t *bmic_jolokia_parse(const char *str, gru_status_t *status) {
     bmic_object_t *root = bmic_object_new_root(status);
     if (!root) {
         return NULL;

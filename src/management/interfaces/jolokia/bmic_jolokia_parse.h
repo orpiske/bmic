@@ -34,7 +34,7 @@ extern "C" {
  * @param status the status for the parsing
  * @return A pointer to a new object of type bmic_object_t
  */
-bmic_object_t *bmic_api_parse_json(const char *str, gru_status_t *status);
+bmic_object_t *bmic_jolokia_parse(const char *str, gru_status_t *status);
 
 
 #ifdef __cplusplus

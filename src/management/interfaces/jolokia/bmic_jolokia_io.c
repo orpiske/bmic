@@ -36,7 +36,7 @@ bool bmic_jolokia_io_exec(bmic_handle_t *handle,
     }
     
     // TODO: move this to this subcomponent
-    bmic_object_t *ret = bmic_api_parse_json(reply.data, status);
+    bmic_object_t *ret = bmic_jolokia_parse(reply.data, status);
     bmic_data_release(&reply);
     
     if (!bmic_jolokia_translate_status(ret, status)) {

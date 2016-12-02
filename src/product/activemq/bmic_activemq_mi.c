@@ -47,7 +47,7 @@ static const bmic_object_t *bmic_activemq_mi_read_from(bmic_handle_t *handle,
         return NULL;
     }
 
-    bmic_object_t *ret = bmic_api_parse_json(reply.data, status);
+    bmic_object_t *ret = bmic_jolokia_parse(reply.data, status);
     bmic_data_release(&reply);
     return ret;
 }

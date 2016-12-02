@@ -92,7 +92,7 @@ bmic_product_info_t *bmic_activemq_product_info(bmic_handle_t *handle,
         return NULL;
     }
 
-    bmic_object_t *root = bmic_api_parse_json(reply.data, status);
+    bmic_object_t *root = bmic_jolokia_parse(reply.data, status);
     bmic_data_release(&reply);
     if (!root) {
         return NULL;
@@ -130,7 +130,7 @@ const bmic_exchange_t *bmic_activemq_load_capabilities(bmic_handle_t *handle,
     }
 
 
-    bmic_object_t *root = bmic_api_parse_json(reply.data, status);
+    bmic_object_t *root = bmic_jolokia_parse(reply.data, status);
     bmic_data_release(&reply);
     if (!root) {
         goto err_exit;
