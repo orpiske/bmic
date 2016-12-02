@@ -234,7 +234,7 @@ bool bmic_artemis_operation_create_queue(bmic_handle_t *handle,
     
     bmic_artemis_json_create_queue(attributes, json, name);
     bool ret = bmic_jolokia_io_exec(handle, json, status);
-    gru_dealloc(&json);
+    bmic_json_destroy(&json);
     
     return ret;
 }
@@ -253,7 +253,7 @@ bool bmic_artemis_operation_delete_queue(bmic_handle_t *handle,
     
     bmic_artemis_json_destroy_queue(attributes, json, name);
     bool ret = bmic_jolokia_io_exec(handle, json, status);
-    gru_dealloc(&json);
+    bmic_json_destroy(&json);
     
     return ret;
 }
