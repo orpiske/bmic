@@ -18,15 +18,20 @@
 
 #include "bmic_operations_main.h"
 
+typedef enum operations_t_ {
+    OP_LIST,
+    OP_CREATE,
+    OP_DELETE,
+} operations_t;
+
 typedef struct options_t_
 {
     char username[OPT_MAX_STR_SIZE];
     char password[OPT_MAX_STR_SIZE];
     char server[OPT_MAX_STR_SIZE];
-    bool list;
     bool help;
     char name[OPT_MAX_STR_SIZE];
-    bool create;
+    operations_t operation;
     bool queue;
 } options_t;
 
@@ -90,6 +95,7 @@ static void show_help()
     printf("\t-s\t--server=<str> hostname or IP address of the server\n");
     printf("\t-l\t--list list available capabilities/attributes from the server\n");
     printf("\t-c\t--create create\n");
+    printf("\t-c\t--delete delete\n");
     printf("\t-q\t--queue queue\n");
 }
 
@@ -128,30 +134,41 @@ int operations_run(options_t *options)
         return EXIT_FAILURE;
     }    
 
-    if (options->list) {
-        const bmic_list_t *list = api->operation_list(ctxt.handle, cap, &status);
-
-        if (list) {           
-            gru_list_for_each(list->items, print_op, NULL);
-            bmic_list_destroy((bmic_list_t **)&list);
-        }  
-    }
-    else {
-        if (options->help) { 
+    switch (options->operation) {
+        case OP_LIST: {
             const bmic_list_t *list = api->operation_list(ctxt.handle, cap, &status);
 
-            if (list) {
-
-                gru_list_for_each(list->items, print_op, options->name);
+            if (list) {           
+                gru_list_for_each(list->items, print_op, NULL);
                 bmic_list_destroy((bmic_list_t **)&list);
-            }  
+            }
+            break;
         }
-        else {
+        case OP_CREATE: {
             api->create_queue(ctxt.handle, cap, options->name, &status);
             if (status.code != GRU_SUCCESS) {
                 fprintf(stderr, "%s\n", status.message);
             }
-        
+            break;
+        }
+        case OP_DELETE: {
+            api->delete_queue(ctxt.handle, cap, options->name, &status);
+            if (status.code != GRU_SUCCESS) {
+                fprintf(stderr, "%s\n", status.message);
+            }
+            break;
+        }
+        default: {
+            if (options->help) { 
+                const bmic_list_t *list = api->operation_list(ctxt.handle, cap, &status);
+
+                if (list) {
+
+                    gru_list_for_each(list->items, print_op, options->name);
+                    bmic_list_destroy((bmic_list_t **)&list);
+                }  
+            }
+            break;
         }
     }
 
@@ -166,8 +183,6 @@ int operations_main(int argc, char **argv)
     
     int option_index = 0;
     options_t options = {0};
-
-    options.list = false;
 
     if (argc < 2) {
         show_help();
@@ -184,11 +199,12 @@ int operations_main(int argc, char **argv)
             { "server", required_argument, 0, 's'},
             { "list", no_argument, 0, 'l'},
             { "create", no_argument, 0, 'c'},
+            { "delete", no_argument, 0, 'd'},
             { "queue", required_argument, 0, 'q'},
             { 0, 0, 0, 0}
         };
 
-        int c = getopt_long(argc, argv, "h:u:p:s:l:cq:", long_options, 
+        int c = getopt_long(argc, argv, "h:u:p:s:l:cdq:", long_options, 
                             &option_index);
         if (c == -1) {
             if (optind == 1) {
@@ -208,16 +224,18 @@ int operations_main(int argc, char **argv)
             strncpy(options.server, optarg, sizeof (options.server) - 1);
             break;
         case 'l':
-            options.list = true;
+            options.operation = OP_LIST;
             break;
         case 'c':
-            options.create = true;
+            options.operation = OP_CREATE;
+            break;
+        case 'd':
+            options.operation = OP_DELETE;
             break;
         case 'q':
             strncpy(options.name, optarg, sizeof (options.name) - 1);
             break;
         case 'h':
-            
             if (!optarg) {
                 show_help();
                 
@@ -236,7 +254,7 @@ int operations_main(int argc, char **argv)
         }
     }
 
-    if (options.list == false && strlen(options.name) == 0) {
+    if (options.operation != OP_LIST && strlen(options.name) == 0) {
         fprintf(stderr, "Either -l (--list) or -h <name> (--help=<name>) must be used\n");
 
         return EXIT_FAILURE;
