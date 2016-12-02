@@ -28,6 +28,7 @@
  */
 
 #define CREATE_CORE_QUEUE_SIG "createQueue(java.lang.String,java.lang.String)"
+#define DESTROY_CORE_QUEUE_SIG "destroyQueue(java.lang.String)"
 
 #ifdef __cplusplus
 extern "C" {

@@ -16,6 +16,31 @@
 #include "bmic_artemis_json.h"
 #include "bmic_artemis_mi.h"
 
+
+/**
+ * Sets the mbean part of the exec call
+ * @param op
+ * @note The first part of exec call is: "type":"EXEC", 
+ */
+static void bmic_artemis_json_op_mbean(const bmic_object_t *op, bmic_json_t *json) {
+    char *mbean_value = NULL;
+    asprintf(&mbean_value, "%s:%s", ARTEMIS_BASE_PKG, op->name);
+    json_object *mbean = json_object_new_string(mbean_value);
+    free(mbean_value);
+    
+    json_object_object_add(json->obj, "mbean", mbean);
+}
+
+/**
+ * Sets the first part of the exec call
+ * @param op
+ * @note The first part of exec call is: "type":"EXEC", 
+ */
+static void bmic_artemis_json_op_exec(const bmic_object_t *op, bmic_json_t *json) {
+    json_object *op_type = json_object_new_string("EXEC");
+    json_object_object_add(json->obj, "type", op_type);
+}
+
 /*
  curl -u admin:admin -H "Content-Type: application/json" -X POST 
  *  -d '{ 
@@ -50,6 +75,23 @@ void bmic_artemis_json_create_queue(const bmic_object_t *op, bmic_json_t *json,
     json_object *address = json_object_new_string(name);
     json_object_array_add(arguments, arg_name);
     json_object_array_add(arguments, address);
-    json_object_object_add(json->obj, "arguments", arguments);
+    json_object_object_add(json->obj, "arguments", arguments);   
+}
+
+
+void bmic_artemis_json_destroy_queue(const bmic_object_t *op, bmic_json_t *json, 
+                                    const char *name) 
+{
+    bmic_artemis_json_op_exec(op, json);
     
+    bmic_artemis_json_op_mbean(op, json);
+    
+    json_object *operation = json_object_new_string(DESTROY_CORE_QUEUE_SIG);
+    json_object_object_add(json->obj, "operation", operation);
+    
+    // Arguments
+    json_object *arguments = json_object_new_array();
+    json_object *arg_name = json_object_new_string(name);
+    json_object_array_add(arguments, arg_name);
+    json_object_object_add(json->obj, "arguments", arguments);   
 }

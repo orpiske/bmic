@@ -125,6 +125,20 @@ bool bmic_artemis_operation_create_queue(bmic_handle_t *handle,
                                             const char *name,
                                             gru_status_t *status);
 
+
+/**
+ * Deletes a core queue
+ * @param handle
+ * @param cap
+ * @param name
+ * @param status
+ * @return 
+ */
+bool bmic_artemis_operation_delete_queue(bmic_handle_t *handle,
+                                            const bmic_exchange_t *cap, 
+                                            const char *name,
+                                            gru_status_t *status);
+
 #ifdef __cplusplus
 }
 #endif

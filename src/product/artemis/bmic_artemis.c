@@ -29,6 +29,7 @@ bmic_api_interface_t *bmic_artemis_product(gru_status_t *status)
     ret->queue_attribute_read = bmic_artemis_queue_attribute_read;
     ret->operation_list = bmic_artemis_operation_list;
     ret->create_queue = bmic_artemis_operation_create_queue;
+    ret->delete_queue = bmic_artemis_operation_delete_queue;
 
     return ret;
 }
@@ -284,3 +285,21 @@ bool bmic_artemis_operation_create_queue(bmic_handle_t *handle,
     return ret;
 }
 
+bool bmic_artemis_operation_delete_queue(bmic_handle_t *handle,
+                                            const bmic_exchange_t *cap, 
+                                            const char *name,
+                                            gru_status_t *status)
+{
+    const bmic_object_t *attributes = bmic_object_find_regex(cap->root,
+                                                             ARTEMIS_CORE_BROKER_OPERATIONS_ROOT,
+                                                             REG_SEARCH_NAME);
+    
+    bmic_json_t *json = bmic_json_new(status);
+    gru_alloc_check(json, false);
+    
+    bmic_artemis_json_destroy_queue(attributes, json, name);
+    bool ret = bmic_jolokia_io_exec(handle, json, status);
+    gru_dealloc(&json);
+    
+    return ret;
+}
