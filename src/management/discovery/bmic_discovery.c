@@ -45,6 +45,7 @@ static bool bmic_try_init(bmic_api_interface_t *api,
         return true;
     }
 
+    gru_status_reset(&status);
     gru_dealloc((void **)&info);
     api->api_cleanup(&handle);
     gru_dealloc_string((char **) &base_url);
