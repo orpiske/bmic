@@ -38,7 +38,7 @@ void bmic_artemis_json_create_queue(const bmic_object_t *op, bmic_json_t *json,
                                     const char *name);
 
 
-void bmic_artemis_json_delete_queue(const bmic_object_t *op, bmic_json_t *json, 
+void bmic_artemis_json_destroy_queue(const bmic_object_t *op, bmic_json_t *json, 
                                     const char *name);
 
 #ifdef __cplusplus
