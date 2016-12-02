@@ -43,8 +43,8 @@ static void bmic_activemq_json_op_exec(const bmic_object_t *op, bmic_json_t *jso
  curl -u admin:admin -H "Content-Type: application/json" -X POST 
  *  -d '{ 
  *       "type":"EXEC", 
- *        "mbean":"org.apache.activemq.artemis:brokerName=\"0.0.0.0\",module=Core,serviceType=Server,type=Broker", 
- *        "operation": "createQueue(java.lang.String,java.lang.String)", 
+ *        "mbean":"org.apache.activemq:brokerName=\"0.0.0.0\",module=Core,serviceType=Server,type=Broker", 
+ *        "operation": "addQueue(java.lang.String,java.lang.String)", 
  *        "arguments": ["name", "address"] 
  *      }'
  * 
