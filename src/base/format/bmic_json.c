@@ -21,7 +21,7 @@ bmic_json_t *bmic_json_new(gru_status_t *status) {
     
     ret->obj = json_object_new_object();
     if (!ret->obj) {
-        gru_dealloc(&ret);
+        gru_dealloc((void **)&ret);
         gru_status_set(status, GRU_FAILURE, "Unable to create the json object");
         
         return NULL;

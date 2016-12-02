@@ -70,7 +70,7 @@ static void print_op_signature(const void *nodedata, void *p) {
 
 static void print_op(const void *nodedata, void *payload)
 {
-    const bmic_op_info_t *info = (bmic_op_info_t *) nodedata;
+    bmic_op_info_t *info = (bmic_op_info_t *) nodedata;
     
     
     if (payload == NULL) { 
