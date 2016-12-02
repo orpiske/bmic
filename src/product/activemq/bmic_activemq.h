@@ -82,6 +82,20 @@ const bmic_list_t *bmic_activemq_operation_list(bmic_handle_t *handle,
                                               const bmic_exchange_t *cap, 
                                                 gru_status_t *status);
 
+
+/**
+ * Create a core queue
+ * @param handle
+ * @param cap
+ * @param name
+ * @param status
+ * @return 
+ */
+bool bmic_activemq_operation_create_queue(bmic_handle_t *handle,
+                                            const bmic_exchange_t *cap, 
+                                            const char *name,
+                                            gru_status_t *status);
+
 #ifdef __cplusplus
 }
 #endif

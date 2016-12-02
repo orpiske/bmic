@@ -28,6 +28,7 @@ bmic_api_interface_t *bmic_activemq_product(gru_status_t *status)
     ret->attribute_list = bmic_activemq_attribute_list;
     ret->queue_attribute_read = bmic_activemq_queue_attribute_read;
     ret->operation_list = bmic_activemq_operation_list;
+    ret->create_queue = bmic_activemq_operation_create_queue;
     
     return ret;
 }
@@ -284,5 +285,24 @@ const bmic_list_t *bmic_activemq_operation_list(bmic_handle_t *handle,
 
     bmic_object_for_each_child(attributes, bmic_activemq_add_op, &payload);
 
+    return ret;
+}
+
+bool bmic_activemq_operation_create_queue(bmic_handle_t *handle,
+                                            const bmic_exchange_t *cap, 
+                                            const char *name,
+                                            gru_status_t *status)
+{
+    const bmic_object_t *attributes = bmic_object_find_regex(cap->root,
+                                                             ACTIVEMQ_CORE_BROKER_OPERATIONS_ROOT,
+                                                             REG_SEARCH_NAME);
+    
+    bmic_json_t *json = bmic_json_new(status);
+    gru_alloc_check(json, false);
+    
+    bmic_activemq_json_create_queue(attributes, json, name);
+    bool ret = bmic_jolokia_io_exec(handle, json, status);
+    gru_dealloc(&json);
+    
     return ret;
 }
