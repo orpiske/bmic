@@ -228,6 +228,7 @@ void bmic_endpoint_http_write(const bmic_endpoint_t *ep, bmic_data_t *request,
 
     CURLcode rcode = curl_easy_perform(easy);
     bmic_endpoint_http_path_cleanup(&full_path);
+    curl_slist_free_all(headers);
 
     if (rcode != CURLE_OK) {
         gru_status_set(epstatus->status, GRU_FAILURE,
