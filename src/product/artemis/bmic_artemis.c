@@ -170,28 +170,6 @@ const bmic_exchange_t *bmic_artemis_attribute_read(bmic_handle_t *handle,
                              REG_SEARCH_NAME, ARTEMIS_CAPABILITIES_KEY_REGEX);
 }
 
-static void bmic_artemis_add_attr(const void *nodedata, void *payload)
-{
-    const bmic_object_t *nodeobj = (bmic_object_t *) nodedata;
-    bmic_payload_add_attr_t *pl =
-            (bmic_payload_add_attr_t *) payload;
-
-    if (nodeobj->type == OBJECT) {
-        if (nodeobj->name && strcmp(nodeobj->name, "attr") != 0) {
-            bmic_cap_info_t *info = bmic_cap_info_new(pl->status);
-
-            if (!info) {
-                return;
-            }
-
-            bmic_cap_info_set_name(info, nodeobj->name);
-            bmic_jolokia_translate_attr(nodeobj, info);
-
-            gru_list_append(pl->list, info);
-        }
-    }
-}
-
 const bmic_list_t *bmic_artemis_attribute_list(bmic_handle_t *handle,
                                               const bmic_exchange_t *cap, gru_status_t *status)
 {
@@ -207,7 +185,7 @@ const bmic_list_t *bmic_artemis_attribute_list(bmic_handle_t *handle,
     };
 
 
-    bmic_object_for_each(attributes, bmic_artemis_add_attr, &payload);
+    bmic_object_for_each(attributes, bmic_jolokia_translate_attr_object, &payload);
 
     return ret;
 }
@@ -240,7 +218,6 @@ const bmic_list_t *bmic_artemis_operation_list(bmic_handle_t *handle,
 
     return ret;
 }
-
 
 
 bool bmic_artemis_operation_create_queue(bmic_handle_t *handle,

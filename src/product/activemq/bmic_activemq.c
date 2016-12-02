@@ -159,59 +159,12 @@ const bmic_exchange_t *bmic_activemq_load_capabilities(bmic_handle_t *handle,
 }
 
 
-
-// TODO: move to MI
-static void bmic_activemq_read_attributes(const bmic_object_t *obj,
-                                         bmic_cap_info_t *info)
-{
-    const bmic_object_t *rw = bmic_object_find_by_name(obj, "rw");
-    if (rw && rw->type == BOOLEAN) {
-        bmic_cap_info_set_write(info, rw->data.value);
-    }
-
-    const bmic_object_t *type = bmic_object_find_by_name(obj, "type");
-    if (type && type->type == STRING) {
-        bmic_cap_info_set_typename(info, type->data.str);
-    }
-
-    const bmic_object_t *desc = bmic_object_find_by_name(obj, "desc");
-    if (desc && desc->type == STRING) {
-        bmic_cap_info_set_description(info, desc->data.str);
-    }
-}
-
 const bmic_exchange_t *bmic_activemq_attribute_read(bmic_handle_t *handle,
                                                     const bmic_exchange_t *cap, const char *name,
                                                     gru_status_t *status)
 {
     return bmic_activemq_mi_read(handle, cap->root, name, status,
                              REG_SEARCH_NAME, ACTIVEMQ_CAPABILITIES_KEY_REGEX);
-}
-
-
-
-static void bmic_activemq_add_attr(const void *nodedata, void *payload)
-{
-     const bmic_object_t *nodeobj = (bmic_object_t *) nodedata;
-     bmic_payload_add_attr_t *pl =
-             (bmic_payload_add_attr_t *) payload;
-
-    if (nodeobj->type == OBJECT) {
-        if (nodeobj->name && strcmp(nodeobj->name, "attr") != 0) {
-            bmic_cap_info_t *info = bmic_cap_info_new(pl->status);
-
-            if (!info) {
-                return;
-            }
-
-            bmic_cap_info_set_name(info, nodeobj->name);
-
-            bmic_activemq_read_attributes(nodeobj, info);
-
-            gru_list_append(pl->list, info);
-        }
-    }
-
 }
 
 const bmic_list_t *bmic_activemq_attribute_list(bmic_handle_t *handle,
@@ -229,7 +182,7 @@ const bmic_list_t *bmic_activemq_attribute_list(bmic_handle_t *handle,
     };
 
 
-    bmic_object_for_each(attributes, bmic_activemq_add_attr, &payload);
+    bmic_object_for_each(attributes, bmic_jolokia_translate_attr_object, &payload);
 
     return ret;
 

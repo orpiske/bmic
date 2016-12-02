@@ -43,6 +43,17 @@ extern "C" {
 void bmic_jolokia_translate_attr(const bmic_object_t *obj,
                                          bmic_cap_info_t *info);
 
+
+
+/**
+ * Given a list of bmic_objects representing Jolokia attributes, translates them into a 
+ * list of attributes. This method is meant to be used when iterating over a list of 
+ * objects, therefore it must comply with the tree_callback_fn signature
+ * @param nodedata The node data (which is a bmic_object_t *) 
+ * @param payload A payload wrapper of type bmic_payload_add_attr_t  
+ */
+void bmic_jolokia_translate_attr_object(const void *nodedata, void *payload);
+
 /**
  * Given an object that represents a single-signature operation or a multi-signature 
  * operation, reads it and transform into a bmic_op_info_t object.

@@ -34,6 +34,28 @@ void bmic_jolokia_translate_attr(const bmic_object_t *obj,
     }
 }
 
+
+void bmic_jolokia_translate_attr_object(const void *nodedata, void *payload)
+{
+     const bmic_object_t *nodeobj = (bmic_object_t *) nodedata;
+     bmic_payload_add_attr_t *pl =
+             (bmic_payload_add_attr_t *) payload;
+
+    if (nodeobj->type == OBJECT) {
+        if (nodeobj->name && strcmp(nodeobj->name, "attr") != 0) {
+            bmic_cap_info_t *info = bmic_cap_info_new(pl->status);
+
+            if (!info) {
+                return;
+            }
+
+            bmic_cap_info_set_name(info, nodeobj->name);
+            bmic_jolokia_translate_attr(nodeobj, info);
+            gru_list_append(pl->list, info);
+        }
+    }
+}
+
 static void bmic_jolokia_translate_arg_value(const void *nodedata, void *payload) {
     const bmic_object_t *node = (const bmic_object_t *) nodedata;
     bmic_op_sig_t *sig = (bmic_op_sig_t *) payload;
