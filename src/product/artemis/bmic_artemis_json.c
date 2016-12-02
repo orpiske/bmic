@@ -60,7 +60,7 @@ void bmic_artemis_json_create_queue(const bmic_object_t *op, bmic_json_t *json,
     
     bmic_artemis_json_op_mbean(op, json);
     
-    json_object *create_queue = json_object_new_string(CREATE_CORE_QUEUE_SIG);
+    json_object *create_queue = json_object_new_string(ARTEMIS_CREATE_CORE_QUEUE_SIG);
     json_object_object_add(json->obj, "operation", create_queue);
     
     // Arguments
@@ -80,7 +80,7 @@ void bmic_artemis_json_destroy_queue(const bmic_object_t *op, bmic_json_t *json,
     
     bmic_artemis_json_op_mbean(op, json);
     
-    json_object *operation = json_object_new_string(DESTROY_CORE_QUEUE_SIG);
+    json_object *operation = json_object_new_string(ARTEMIS_DESTROY_CORE_QUEUE_SIG);
     json_object_object_add(json->obj, "operation", operation);
     
     // Arguments
