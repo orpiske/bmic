@@ -35,6 +35,7 @@ add_library(
         management/discovery/bmic_discovery.c
         management/interfaces/jolokia/bmic_jolokia.c
         management/interfaces/jolokia/bmic_jolokia_io.c
+        management/interfaces/jolokia/bmic_jolokia_parse.c
 )
 
 target_link_libraries(

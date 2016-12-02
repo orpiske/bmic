@@ -25,6 +25,9 @@
 
 #include "management/common/bmic_handle.h"
 
+#include "bmic_jolokia_parse.h"
+#include "bmic_jolokia.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif

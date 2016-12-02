@@ -13,40 +13,33 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-#ifndef BMIC_API_IO_H
-#define BMIC_API_IO_H
+
+#ifndef BMIC_JOLOKIA_PARSE_H
+#define BMIC_JOLOKIA_PARSE_H
 
 #include <stdlib.h>
 
 #include <common/gru_status.h>
 
-#include "base/common/bmic_data.h"
+#include "base/common/bmic_object.h"
 #include "base/format/bmic_json.h"
-
-#include "management/common/bmic_handle.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /**
- * @file Internal API stuff
+ * Parses a JSON text data and transform into a bmic_object_t
+ * @param str The JSON text data
+ * @param status the status for the parsing
+ * @return A pointer to a new object of type bmic_object_t
  */
-
-/**
- * Lower level IO from the management interface
- * @param handle the BMIC handle for the interface
- * @param path the path within the interface
- * @param reply the storage for the reply
- * @param status the status for the I/O call
- */
-void bmic_api_io_read(bmic_handle_t *handle, const char *path,
-                                    bmic_data_t *reply, gru_status_t *status);
+bmic_object_t *bmic_api_parse_json(const char *str, gru_status_t *status);
 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* BMIC_API_IO_H */
+#endif /* BMIC_JOLOKIA_PARSE_H */
 
