@@ -76,7 +76,6 @@ int queue_run(options_t *options)
                               options->queue);
     
     if (obj) { 
-        // print_returned_object(options->read, obj->data_ptr);
         print_returned_object(options->read, obj->data_ptr);
         
         bmic_exchange_destroy((bmic_exchange_t **)&cap);

@@ -17,6 +17,8 @@
 #ifndef BMIC_PRINT_SIMPLE_H
 #define BMIC_PRINT_SIMPLE_H
 
+#include <common/gru_colors.h>
+
 #include "base/common/bmic_object.h"
 #include "base/common/bmic_cap_value.h"
 

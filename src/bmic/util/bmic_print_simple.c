@@ -21,22 +21,22 @@ static void print_returned_from_list(const void *ptr, void *payload) {
     switch (obj->type) {
     case STRING:
     {
-        printf(" \\_ %s\n", obj->data.str);
+        printf("%-35s %s\n", " ", obj->data.str);
         break;
     }
     case INTEGER:
     {
-        printf(" \\_ %i\n", obj->data.number);
+        printf("%-35s %i\n", " ", obj->data.number);
         break;
     }
     case BOOLEAN:
     {
-        printf(" \\_ %s\n", (obj->data.value ? "true" : "false"));
+        printf("%-35s %-25s\n", " ", (obj->data.value ? "true" : "false"));
         break;
     }
     case DOUBLE:
     {
-        printf(" \\_ %.4f\n", obj->data.d);
+        printf("%-35s %.4f\n", " ", obj->data.d);
         break;
     }
     default: {
@@ -46,36 +46,44 @@ static void print_returned_from_list(const void *ptr, void *payload) {
 
 }
 
+/*
+  printf("\n%s%sDescription: %s%s\n", RESET, LIGHT_WHITE, RESET, sig->description);
+    printf("%s %s()\n", bmic_type_map(sig->ret), info->name);
+    
+    printf("%s%s%-2s %10s %-35s %s%s\n", RESET, LIGHT_WHITE, " ", "Type", 
+           "Parameter name", "Description", RESET);
+ */
+
 void print_returned_object(const char *capname, const bmic_object_t *obj)
 {
     switch (obj->type) {
     case STRING:
     {
-        printf(" \\_ %s\n", obj->data.str);
+        printf("%35s %-25s\n", capname, obj->data.str);
         break;
     }
     case INTEGER:
     {
-        printf(" \\_ %i\n", obj->data.number);
+        printf("%35s %i\n", capname, obj->data.number);
         break;
     }
     case BOOLEAN:
     {
-        printf(" \\_ %s\n", (obj->data.value ? "true" : "false"));
+        printf("%35s %s\n", capname, (obj->data.value ? "true" : "false"));
         break;
     }
     case DOUBLE:
     {
-        printf(" \\_  %.4f\n", obj->data.d);
+        printf("%35s %.4f\n", capname, obj->data.d);
         break;
     }
     case NULL_TYPE:
     {
-        printf(" \\_  (null)\n");
+        printf("%35s (null)\n", capname);
         break;
     }
     case LIST: {
-        printf("\n");
+        printf("%35s \n", capname);
 
         bmic_object_for_each_child(obj, print_returned_from_list, (void *)capname);
         break;
@@ -83,6 +91,7 @@ void print_returned_object(const char *capname, const bmic_object_t *obj)
     case OBJECT:
     default:
     {
+        printf("%35s \n", capname);
         bmic_object_for_each(obj, print_returned_from_list, (void *)capname);
         break;
     }

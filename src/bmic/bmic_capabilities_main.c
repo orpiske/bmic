@@ -67,14 +67,12 @@ void capabilities_do_read(bmic_handle_t *handle,
                                              status);
 
     if (obj) {
-        print_cap_info(obj->payload.capinfo);
         print_returned_object(capname, obj->data_ptr);
         
         bmic_exchange_destroy((bmic_exchange_t **) &obj);
     }
     else {
-        printf("Unable to read the capability %s (wrong cap, maybe?): %s\n",
-               capname, status->message);
+        printf("%35s %s%s%s%s\n", capname, RESET, RED, "Unable to read", RESET);
     }
     
     
@@ -134,9 +132,7 @@ int capabilities_run(options_t *options)
         const bmic_list_t *list = api->attribute_list(ctxt.handle, cap, &status);
 
         if (list) {
-            printf("\n%s%s  %-35s %-5s %-15s %s%s\n", RESET, LIGHT_WHITE, 
-                   "NAME", "MODE", "TYPE", "DESCRIPTION", RESET);
-            
+            //printf("\n%s%s%-25s %-25s%s\n", RESET, LIGHT_WHITE, "Capability", "Value", RESET);
             gru_list_for_each(list->items, print_cap, NULL);
             bmic_list_destroy((bmic_list_t **)&list);
         }
@@ -154,8 +150,7 @@ int capabilities_run(options_t *options)
                 wrapper.handle = ctxt.handle;
                 wrapper.status = &status;
                 
-                printf("\n%s%s  %-35s %-5s %-15s %s%s\n", RESET, LIGHT_WHITE,
-                       "NAME", "MODE", "TYPE", "DESCRIPTION", RESET);
+                printf("\n%s%s%35s %-25s%s\n", RESET, LIGHT_WHITE, "Capability", "Value", RESET);
                 gru_list_for_each(list->items, capabilities_read, &wrapper);
                 
                 bmic_list_destroy((bmic_list_t **)&list);
@@ -167,14 +162,12 @@ int capabilities_run(options_t *options)
                                                      &status);
 
             if (obj) {
-                printf("\n%s%s  %-35s %-5s %-15s %s%s\n", RESET, LIGHT_WHITE,
-                       "NAME", "MODE", "TYPE", "DESCRIPTION", RESET);
                 print_cap_info(obj->payload.capinfo);
+                printf("\n%s%s%35s %-25s%s\n", RESET, LIGHT_WHITE, "Capability", "Value", RESET);
                 print_returned_object(options->read, obj->data_ptr);
             }
             else {
-                printf("Unable to read the capability %s (wrong cap, maybe?)\n",
-                       options->read);
+                printf("%35s %s%s%s%s\n", options->read, RESET, RED, "Unable to read", RESET);
             }
             bmic_exchange_destroy((bmic_exchange_t **)&obj);
         }
