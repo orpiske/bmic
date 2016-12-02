@@ -32,7 +32,6 @@
 #include "management/discovery/bmic_discovery.h"
 
 #include "product/common/bmic_api_io.h"
-#include "product/common/bmic_internal_payloads.h"
 #include "product/common/bmic_path.h"
 #include "product/common/bmic_finder.h"
 

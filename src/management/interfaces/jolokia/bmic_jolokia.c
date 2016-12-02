@@ -98,6 +98,29 @@ void bmic_jolokia_translate_op(const bmic_object_t *obj,
 }
 
 
+void bmic_jolokia_translate_op_object(const void *nodedata, void *payload)
+{
+    const bmic_object_t *nodeobj = (bmic_object_t *) nodedata;
+    bmic_payload_add_attr_t *pl =
+            (bmic_payload_add_attr_t *) payload;
+
+    if (nodeobj->type == OBJECT || nodeobj->type == LIST) {
+        if (nodeobj->name && strcmp(nodeobj->name, "op") != 0) {
+            bmic_op_info_t *info = bmic_op_info_new(pl->status);
+
+            if (!info) {
+                return;
+            }
+
+            bmic_op_info_set_name(info, nodeobj->name);
+            bmic_jolokia_translate_op(nodeobj, info, pl->status);
+
+            gru_list_append(pl->list, info);
+        }
+    }
+}
+
+
 bool bmic_jolokia_translate_status(bmic_object_t *root, gru_status_t *status) {
     bmic_object_t *response_status = bmic_object_find_child_by_name(root, "status");
     
