@@ -278,7 +278,15 @@ bool bmic_artemis_operation_create_queue(bmic_handle_t *handle,
     gru_alloc_check(json, false);
     
     bmic_artemis_json_create_queue(attributes, json, name);
+    bool ret = bmic_jolokia_io_exec(handle, json, status);
+    gru_dealloc(&json);
+    
+    return ret;
+    /*
     bmic_data_t request = bmic_json_to_data(json, NULL);
+    
+    
+    
     
     bmic_endpoint_status_t epstatus = {
         .status = status,
@@ -304,4 +312,6 @@ bool bmic_artemis_operation_create_queue(bmic_handle_t *handle,
     }
     
     return true;
+    */
 }
+
