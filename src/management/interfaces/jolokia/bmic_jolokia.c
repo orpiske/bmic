@@ -144,11 +144,11 @@ void bmic_jolokia_translate_op_object(const void *nodedata, void *payload)
 
 
 bool bmic_jolokia_translate_status(bmic_object_t *root, gru_status_t *status) {
-    bmic_object_t *response_status = bmic_object_find_child_by_name(root, "status");
+    const bmic_object_t *response_status = bmic_object_find_child_by_name(root, "status");
     
     if (response_status && response_status->type == INTEGER) {
         if (response_status->data.number != JOLOKIA_STATUS_OK) {
-            bmic_object_t *error = bmic_object_find_child_by_name(root, "error");
+            const bmic_object_t *error = bmic_object_find_child_by_name(root, "error");
             if (error && error->type == STRING) {
                 gru_status_set(status, GRU_FAILURE, "Error %d: %s", 
                                response_status->data.number, 
