@@ -35,6 +35,8 @@ extern "C" {
  * Given an object of attributes, read them into the info object
  * @param obj
  * @param info
+ * @note The expected formated for the transformed BMIC Object is: 
+ *    "attr": { "name": { "rw": true, "type": "boolean", "desc": "description" },
  */
 void bmic_jolokia_translate_attr(const bmic_object_t *obj,
                                          bmic_cap_info_t *info);
