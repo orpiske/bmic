@@ -79,6 +79,11 @@ typedef bool (*bmic_management_api_create_queue_fn)(bmic_handle_t *handle,
                                             const char *name,
                                             gru_status_t *status);
 
+typedef bool (*bmic_management_api_delete_queue_fn)(bmic_handle_t *handle,
+                                            const bmic_exchange_t *cap, 
+                                            const char *name,
+                                            gru_status_t *status);
+
 typedef struct bmic_api_interface_t_ {
     char name[64];
     char version[16];
@@ -94,6 +99,7 @@ typedef struct bmic_api_interface_t_ {
     bmic_management_api_queue_attribute_read_fn queue_attribute_read;
     bmic_management_api_op_list_fn operation_list;
     bmic_management_api_create_queue_fn create_queue;
+    bmic_management_api_delete_queue_fn delete_queue;
 
 } bmic_api_interface_t;
 
