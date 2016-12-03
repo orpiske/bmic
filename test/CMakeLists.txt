@@ -16,4 +16,13 @@ target_link_libraries(bmic_json_simple_test
 
 add_test(NAME bmic-json-simple-test
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/target/tests/bin
-    COMMAND bmic_json_simple_test ${CMAKE_BINARY_DIR}/target/tests/share/simple.json)
+    COMMAND bmic_json_simple_test 
+        ${CMAKE_BINARY_DIR}/target/tests/share/simple.json)
+
+
+add_executable(bmic_artemis_test
+	product/artemis/bmic_artemis_test.c
+)
+
+target_link_libraries(bmic_artemis_test
+           bmic-base bmic-management bmic-product)

@@ -1,5 +1,5 @@
 # In all project subdirectories
-set(json-test-files simple/simple.json)
+set(json-test-files simple/simple.json artemis/capabilities-v140.json)
 
 set(SHARED_DATA_OUTPUT_PATH ${CMAKE_BINARY_DIR}/../build/target/tests/share)
 
