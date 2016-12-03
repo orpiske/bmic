@@ -99,6 +99,7 @@ bmic_product_info_t *bmic_artemis_product_info(bmic_handle_t *handle,
     bmic_api_io_read(handle, ARTEMIS_PRODUCT_INFO_PATH, &reply, status);
 
     if (status->code != GRU_SUCCESS) {
+        bmic_data_release(&reply);
         return NULL;
     }
 
