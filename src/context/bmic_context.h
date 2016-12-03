@@ -39,6 +39,11 @@ typedef struct bmic_context_t_ {
 #ifdef __cplusplus
 extern "C" {
 #endif
+    
+/**
+ * Initializes logging
+ */
+void bmic_log_initialization();
 
 /**
  * Initializes the BMIC API context

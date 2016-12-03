@@ -27,7 +27,7 @@ static void bmic_logger_default_printer(log_level_t level, const char *msg, ...)
     va_end(ap);
 }
 
-static void bmic_log_initialization() {
+void bmic_log_initialization() {
     const char *log_level_str = getenv("BMIC_DEBUG");
     log_level_t log_level;
     if (!log_level_str) {
