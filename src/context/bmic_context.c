@@ -48,8 +48,6 @@ bool bmic_context_init_simple(bmic_context_t *ctxt, const char *server,
                                         gru_status_t *status) {
     
     bmic_log_initialization();
-    gru_logger_set(gru_logger_default_printer);
-
     
     bmic_product_registry_init(status);
     bmic_product_register(status);
@@ -75,9 +73,7 @@ bool bmic_context_init_simple(bmic_context_t *ctxt, const char *server,
         
         return false;
     }
-
-
-        
+    
     return true;
 }
 
