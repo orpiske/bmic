@@ -17,6 +17,7 @@
 #define BMIC_ENDPOINT_H
 
 #include <common/gru_alloc.h>
+#include <log/gru_logger.h>
 
 #include "base/common/bmic_credentials.h"
 
@@ -45,7 +46,7 @@ void bmic_endpoint_destroy(bmic_endpoint_t **ep);
 void bmic_endpoint_set_credentials(bmic_endpoint_t *ep,
     const bmic_credentials_t *credentials, gru_status_t *status);
 
-void bmic_endpoint_set_path(bmic_endpoint_t *ep, const char *path);
+void bmic_endpoint_set_path(bmic_endpoint_t *ep, const char *path, gru_status_t *status);
 void bmic_endpoint_reset_path(bmic_endpoint_t *ep);
 
 // void bmic_endpoint_status()

@@ -15,23 +15,33 @@
  */
 #include "bmic_endpoint.h"
 
-
 bmic_endpoint_t *bmic_endpoint_init(const char *url, const char *username,
-        const char *password, gru_status_t *status)
+                                    const char *password, gru_status_t *status)
 {
     assert(url != NULL);
-    
-    bmic_endpoint_t *ret = gru_alloc(sizeof(bmic_endpoint_t), status);
+
+    bmic_endpoint_t *ret = gru_alloc(sizeof (bmic_endpoint_t), status);
     gru_alloc_check(ret, NULL);
 
-    asprintf(&ret->url, "%s", url);
+    if (asprintf(&ret->url, "%s", url) == -1) {
+        gru_status_set(status, GRU_FAILURE, "Unable to set URL: not enough memory");
+
+        bmic_endpoint_destroy(&ret);
+
+        return NULL;
+    }
 
     ret->credentials = bmic_credentials_init(username, password, status);
+    if (!ret->credentials) {
+        bmic_endpoint_destroy(&ret);
+
+        return NULL;
+    }
     return ret;
 }
 
-
-void bmic_endpoint_destroy(bmic_endpoint_t **ep) {
+void bmic_endpoint_destroy(bmic_endpoint_t **ep)
+{
     bmic_endpoint_t *e = *ep;
 
     if (e->credentials) {
@@ -41,7 +51,7 @@ void bmic_endpoint_destroy(bmic_endpoint_t **ep) {
     if (e->path) {
         gru_dealloc_string(&e->path);
     }
-    
+
     if (e->url) {
         gru_dealloc_string(&e->url);
     }
@@ -50,7 +60,7 @@ void bmic_endpoint_destroy(bmic_endpoint_t **ep) {
 }
 
 void bmic_endpoint_set_credentials(bmic_endpoint_t *ep,
-    const bmic_credentials_t *credentials, gru_status_t *status)
+                                   const bmic_credentials_t *credentials, gru_status_t *status)
 {
     if (!ep) {
         gru_status_set(status, GRU_FAILURE, "Invalid endpoint (null)");
@@ -65,11 +75,10 @@ void bmic_endpoint_set_credentials(bmic_endpoint_t *ep,
     ep->credentials = bmic_credentials_clone(credentials, status);
 }
 
-
-void bmic_endpoint_set_path(bmic_endpoint_t *ep, const char *path)
+void bmic_endpoint_set_path(bmic_endpoint_t *ep, const char *path, gru_status_t *status)
 {
     assert(ep != NULL);
-    
+
     if (ep->path != NULL) {
         gru_dealloc_string(&ep->path);
     }
@@ -80,9 +89,17 @@ void bmic_endpoint_set_path(bmic_endpoint_t *ep, const char *path)
         return;
     }
 
-    asprintf(&ep->path, "%s", path);
+    // TODO: 
+    if (asprintf(&ep->path, "%s", path) == -1) {
+        logger_t logger = gru_logger_get();
+        
+        logger(FATAL, "Unable to set URL: not enough memory (%s)", path);
+        gru_status_set(status, GRU_FAILURE, "Unable to set URL: not enough memory");
+    }
 }
 
-void bmic_endpoint_reset_path(bmic_endpoint_t *ep) {
-    bmic_endpoint_set_path(ep, NULL);
+void bmic_endpoint_reset_path(bmic_endpoint_t *ep)
+{
+    // It will just free the memory, therefore won't fail
+    bmic_endpoint_set_path(ep, NULL, NULL);
 }

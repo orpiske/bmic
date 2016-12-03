@@ -24,7 +24,15 @@
  */
 static void bmic_artemis_json_op_mbean(const bmic_object_t *op, bmic_json_t *json) {
     char *mbean_value = NULL;
-    asprintf(&mbean_value, "%s:%s", ARTEMIS_BASE_PKG, op->name);
+    
+    // TODO: inadequate handling of asprintf result. 
+    if (asprintf(&mbean_value, "%s:%s", ARTEMIS_BASE_PKG, op->name) == -1) {
+        logger_t logger = gru_logger_get();
+        
+        logger(FATAL, "Not enough memory to set json value 'mbean'");
+        
+        return;
+    }
     json_object *mbean = json_object_new_string(mbean_value);
     free(mbean_value);
     

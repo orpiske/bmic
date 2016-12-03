@@ -22,11 +22,24 @@ bmic_credentials_t *bmic_credentials_init(const char *username,
     
     
     if (username != NULL) { 
-        asprintf(&ret->username, "%s", username);
+        if (asprintf(&ret->username, "%s", username) == 1){
+            gru_status_set(status, GRU_FAILURE, 
+                           "Unable to set username: not enough memory");
+            
+            bmic_credentials_detroy(&ret);
+            return NULL;
+        }
     }
     
     if (password != NULL) { 
-        asprintf(&ret->password, "%s", password);
+        if (asprintf(&ret->password, "%s", password) == -1) {
+            gru_status_set(status, GRU_FAILURE, 
+                           "Unable to set password: not enough memory");
+            
+            bmic_credentials_detroy(&ret);
+            
+            return NULL;
+        }
     }
     
     return ret;
@@ -39,11 +52,24 @@ bmic_credentials_t *bmic_credentials_clone(const bmic_credentials_t *other, gru_
     gru_alloc_check(ret, NULL);
     
     if (other->username != NULL) { 
-        asprintf(&ret->username, "%s", other->username);
+        if (asprintf(&ret->username, "%s", other->username) == -1) {
+            gru_status_set(status, GRU_FAILURE, 
+                           "Unable to set username: not enough memory");
+            
+            bmic_credentials_detroy(&ret);
+            return NULL;
+        }
     }
     
     if (other->password != NULL) { 
-        asprintf(&ret->password, "%s", other->password);
+        if (asprintf(&ret->password, "%s", other->password) == -1) {
+            gru_status_set(status, GRU_FAILURE, 
+                           "Unable to set password: not enough memory");
+            
+            bmic_credentials_detroy(&ret);
+            
+            return NULL;
+        } 
     }
     
     return ret;

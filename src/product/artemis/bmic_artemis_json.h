@@ -19,6 +19,8 @@
 #include <common/gru_status.h>
 #include <common/gru_alloc.h>
 
+#include <log/gru_logger.h>
+
 #include "base/format/bmic_json.h"
 
 /**

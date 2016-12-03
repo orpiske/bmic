@@ -26,7 +26,10 @@ bool bmic_jolokia_io_exec(bmic_handle_t *handle,
         .status = status,
     };
     
-    bmic_endpoint_set_path(handle->ep, "exec");
+    bmic_endpoint_set_path(handle->ep, "exec", status);
+    if (status->code != GRU_SUCCESS) {
+        return false;
+    }
     
     bmic_data_t reply = {0};
     handle->transport.write(handle->ep, &request, &reply, &epstatus);
