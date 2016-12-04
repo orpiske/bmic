@@ -13,13 +13,15 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
+#include <io/gru_ioutils.h>
 
 #include <base/common/bmic_object.h>
 #include <base/format/bmic_json.h>
 
 #include <context/bmic_context.h>
 
-#include <io/gru_ioutils.h>
+#include <product/artemis/bmic_artemis_mi.h>
+
 
 static bool open_file(const char *path, bmic_object_t **root, gru_status_t *status) {
     char *buff = NULL;
