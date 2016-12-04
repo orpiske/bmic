@@ -24,6 +24,7 @@
 #include "base/transport/bmic_endpoint.h"
 
 #include "management/common/bmic_handle.h"
+#include "management/common/bmic_api_io.h"
 
 #include "bmic_jolokia_parse.h"
 #include "bmic_jolokia.h"
@@ -36,6 +37,9 @@ bool bmic_jolokia_io_exec(bmic_handle_t *handle,
                                             bmic_json_t *json,
                                             gru_status_t *status);
 
+
+const bmic_object_t *bmic_jolokia_io_read(bmic_handle_t *handle, const char *path, 
+                                       gru_status_t *status);
 
 #ifdef __cplusplus
 }

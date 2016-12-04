@@ -21,20 +21,12 @@ static const bmic_object_t *bmic_artemis_mi_read_from(bmic_handle_t *handle,
                                                        const char *attr_name,
                                                        gru_status_t *status)
 {
-    bmic_data_t reply = {0};
-
     const char *path = handle->path_formatter(ARTEMIS_READ, cap_name,
                                               ARTEMIS_BASE_PKG, attr_name, status);
 
-    bmic_api_io_read(handle, path, &reply, status);
+    const bmic_object_t *ret = bmic_jolokia_io_read(handle, path, status);
     gru_dealloc_string((char **) &path);
 
-    if (status->code != GRU_SUCCESS) {
-        return NULL;
-    }
-
-    bmic_object_t *ret = bmic_jolokia_parse(reply.data, status);
-    bmic_data_release(&reply);
     return ret;
 }
 

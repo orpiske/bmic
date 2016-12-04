@@ -53,3 +53,21 @@ bool bmic_jolokia_io_exec(bmic_handle_t *handle,
     bmic_object_destroy(&ret);
     return true;
 }
+
+
+const bmic_object_t *bmic_jolokia_io_read(bmic_handle_t *handle, const char *path, 
+                                       gru_status_t *status)
+{
+    bmic_data_t reply = {0};
+
+    bmic_api_io_read(handle, path, &reply, status);
+
+    if (status->code != GRU_SUCCESS) {
+        bmic_data_release(&reply);
+        return NULL;
+    }
+
+    bmic_object_t *ret = bmic_jolokia_parse(reply.data, status);
+    bmic_data_release(&reply);
+    return ret;
+}
