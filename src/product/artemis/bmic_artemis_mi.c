@@ -55,11 +55,6 @@ const bmic_exchange_t *bmic_artemis_mi_read(bmic_handle_t *handle,
      * Uses the resolved capability (only uses the name, actually) to read the 
      * data from the BMIC.
      */
-    /*
-     const bmic_object_t *reply_obj = bmic_artemis_mi_read_from(handle, capabilities->name,
-                                                          attr_name,
-                                                          status);
-    */
     const bmic_object_t *reply_obj = bmic_jolokia_io_read_attribute(handle, 
                                                         ARTEMIS_BASE_PKG,
                                                         capabilities->name,
