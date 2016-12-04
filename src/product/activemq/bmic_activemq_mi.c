@@ -15,21 +15,6 @@
  */
 #include "bmic_activemq_mi.h"
 
-static const char *bmic_activemq_cap_attr_path(const bmic_object_t *obj, const char *name,
-                                        gru_status_t *status) {
-    char *ret;
-
-    int rc = asprintf(&ret, "/value/%s/attr/%s", obj->name, name);
-
-    if (rc == -1) {
-        gru_status_set(status, GRU_FAILURE, "Not enough memory to format capabilities path");
-
-        return NULL;
-    }
-
-    return ret;
-}
-
 static const bmic_object_t *bmic_activemq_mi_read_from(bmic_handle_t *handle,
                                                        const char *cap_name,
                                                        const char *attr_name,
@@ -50,53 +35,6 @@ static const bmic_object_t *bmic_activemq_mi_read_from(bmic_handle_t *handle,
     bmic_object_t *ret = bmic_jolokia_parse(reply.data, status);
     bmic_data_release(&reply);
     return ret;
-}
-
-static const bmic_cap_info_t *bmic_activemq_mi_read_attr_info(const bmic_object_t *capabilities, const char *attr_name,
-                                                                    gru_status_t *status)
-{
-    /*
-     * Gets the path to the attribute???
-     * 
-     * ie.: /value/address=\"test.performance.queue\",brokerName=\"0.0.0.0\",module=Core,name=\"test.performance.queue\",serviceType=Queue,type=Broker/attr/MessageCount
-     * 
-     */
-    const char *rev = bmic_activemq_cap_attr_path(capabilities, attr_name, status);
-    if (!rev) {
-        return NULL;
-    }
-
-
-    /*
-     * Read the attributes of the value itself (ie.: whether it's rw, type, desc)
-     */
-    const bmic_object_t *value_attributes = bmic_object_find_by_path(capabilities,
-                                                                     rev);
-    gru_dealloc_string((char **) &rev);
-    if (!value_attributes) {
-        gru_status_set(status, GRU_FAILURE,
-                       "Unable to find a capability/attribute named %s", attr_name);
-
-        return NULL;
-    }
-
-    /*
-     * Read the attributes (ie.: whether it's rw, type, desc) of the value 
-     * (ie.: attributes of the requested capability/attribute) and put them 
-     * into the bmic_cap_info_t * object
-     */
-    bmic_cap_info_t *info = bmic_cap_info_new(status);
-    if (!info) {
-        gru_status_set(status, GRU_FAILURE,
-                       "Unable to allocate memory for the capability metadata",
-                       attr_name);
-
-        return NULL;
-    }
-
-    bmic_cap_info_set_name(info, attr_name);
-    bmic_jolokia_translate_attr(value_attributes, info);
-    return info;
 }
 
 
@@ -131,7 +69,7 @@ const bmic_exchange_t *bmic_activemq_mi_read(bmic_handle_t *handle,
         return NULL;
     }
 
-    const bmic_cap_info_t *info = bmic_activemq_mi_read_attr_info(capabilities, 
+    const bmic_cap_info_t *info = bmic_jolokia_read_attr_info(capabilities, 
                                                                attr_name, status);
 
     ////////////////////////////    

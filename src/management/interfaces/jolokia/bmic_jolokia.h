@@ -32,6 +32,19 @@
 extern "C" {
 #endif
 
+
+/**
+ * Reads the information about a capability or attribute matching the given name
+ * @param capabilities A top-level bmic_objec_t that contains the details of the 
+ * capability to be read (ie.: usually one of the child-elements of the root object)
+ * @param attr_name the name of the attribute or capability to read
+ * @param status Status code/message
+ * @return the Attribute or capability information or NULL in case of error (including 
+ * not found)
+ */
+const bmic_cap_info_t *bmic_jolokia_read_attr_info(const bmic_object_t *capabilities, 
+                                                            const char *attr_name,
+                                                            gru_status_t *status);
     
 /**
  * Given an object of attributes, read them into the info object

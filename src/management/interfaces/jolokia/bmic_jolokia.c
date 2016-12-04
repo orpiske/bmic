@@ -15,6 +15,78 @@
  */
 #include "bmic_jolokia.h"
 
+/**
+ * Formats the path to read an attribute
+ * @param obj
+ * @param name
+ * @param status
+ * @return 
+ */
+static const char *bmic_jolokia_cap_attr_path(const bmic_object_t *obj, const char *name,
+                                        gru_status_t *status)
+{
+    char *ret;
+
+    int rc = asprintf(&ret, "/value/%s/attr/%s", obj->name, name);
+
+    if (rc == -1) {
+        gru_status_set(status, GRU_FAILURE, "Not enough memory to format capabilities path");
+
+        return NULL;
+    }
+
+    return ret;
+}
+
+const bmic_cap_info_t *bmic_jolokia_read_attr_info(const bmic_object_t *capabilities, 
+                                                            const char *attr_name,
+                                                            gru_status_t *status)
+{
+    /*
+     * Gets the path to the attribute???
+     * 
+     * ie.: /value/address=\"queue.name\",brokerName=\"0.0.0.0\",module=Core,name=\"queue.name\",serviceType=Queue,type=Broker/attr/MessageCount
+     * 
+     */
+    const char *rev = bmic_jolokia_cap_attr_path(capabilities, attr_name, status);
+    if (!rev) {
+        return NULL;
+    }
+
+
+    /*
+     * Find the value object for the capability/attribute
+     */
+    const bmic_object_t *value_attributes = bmic_object_find_by_path(capabilities,
+                                                                     rev);
+    gru_dealloc_string((char **) &rev);
+    if (!value_attributes) {
+        gru_status_set(status, GRU_FAILURE,
+                       "Unable to find a capability/attribute named %s", attr_name);
+
+        return NULL;
+    }
+
+    /*
+     * Read the attributes (ie.: whether it's rw, type, desc) of the value 
+     * (ie.: attributes of the requested capability/attribute) and put them 
+     * into the bmic_cap_info_t * object
+     */
+    bmic_cap_info_t *info = bmic_cap_info_new(status);
+    if (!info) {
+        gru_status_set(status, GRU_FAILURE,
+                       "Unable to allocate memory for the capability metadata",
+                       attr_name);
+
+        return NULL;
+    }
+
+    bmic_cap_info_set_name(info, attr_name);
+    bmic_jolokia_translate_attr(value_attributes, info);
+    return info;
+}
+
+
 void bmic_jolokia_translate_attr(const bmic_object_t *obj,
                                          bmic_cap_info_t *info)
 {
