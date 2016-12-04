@@ -1,0 +1,4097 @@
+{
+  "request": {
+    "path": "org.apache.activemq.artemis",
+    "type": "list"
+  },
+  "value": {
+    "brokerName=\"0.0.0.0\",module=Core,name=\"hornetq\",serviceType=Acceptor,type=Broker": {
+      "op": {
+        "reload": {
+          "args": [],
+          "ret": "void",
+          "desc": "Re-create the acceptor with the existing configuration values. Useful, for example, for reloading key/trust stores on acceptors which support SSL."
+        },
+        "stop": {
+          "args": [],
+          "ret": "void",
+          "desc": "stops this component"
+        },
+        "start": {
+          "args": [],
+          "ret": "void",
+          "desc": "starts this component"
+        }
+      },
+      "attr": {
+        "FactoryClassName": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "class name of the AcceptorFactory implementation used by this acceptor"
+        },
+        "Started": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "whether this component is started"
+        },
+        "Parameters": {
+          "rw": false,
+          "type": "java.util.Map",
+          "desc": "parameters used to configure this acceptor"
+        },
+        "Name": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "name of the acceptor"
+        }
+      },
+      "desc": "Information on the management interface of the MBean"
+    },
+    "address=\"jms.queue.DLQ\",brokerName=\"0.0.0.0\",module=Core,name=\"jms.queue.DLQ\",serviceType=Queue,type=Broker": {
+      "op": {
+        "listMessages": {
+          "args": [
+            {
+              "name": "filter",
+              "type": "java.lang.String",
+              "desc": "A message filter (can be empty)"
+            }
+          ],
+          "ret": "[Ljava.util.Map;",
+          "desc": "List all the messages in the queue matching the given filter"
+        },
+        "listScheduledMessagesAsJSON": {
+          "args": [],
+          "ret": "java.lang.String",
+          "desc": "List the messages scheduled for delivery and returns them using JSON"
+        },
+        "moveMessage": [
+          {
+            "args": [
+              {
+                "name": "messageID",
+                "type": "long",
+                "desc": "A message ID"
+              },
+              {
+                "name": "otherQueueName",
+                "type": "java.lang.String",
+                "desc": "The name of the queue to move the message to"
+              },
+              {
+                "name": "rejectDuplicates",
+                "type": "boolean",
+                "desc": "Reject messages identified as duplicate by the duplicate message"
+              }
+            ],
+            "ret": "boolean",
+            "desc": "Move the message corresponding to the given messageID to another queue"
+          },
+          {
+            "args": [
+              {
+                "name": "messageID",
+                "type": "long",
+                "desc": "A message ID"
+              },
+              {
+                "name": "otherQueueName",
+                "type": "java.lang.String",
+                "desc": "The name of the queue to move the message to"
+              }
+            ],
+            "ret": "boolean",
+            "desc": "Move the message corresponding to the given messageID to another queue. rejectDuplicate=false on this case"
+          }
+        ],
+        "moveMessages": [
+          {
+            "args": [
+              {
+                "name": "flushLimit",
+                "type": "int",
+                "desc": "Limit to flush transactions during the operation to avoid OutOfMemory"
+              },
+              {
+                "name": "filter",
+                "type": "java.lang.String",
+                "desc": "A message filter (can be empty)"
+              },
+              {
+                "name": "otherQueueName",
+                "type": "java.lang.String",
+                "desc": "The name of the queue to move the messages to"
+              },
+              {
+                "name": "rejectDuplicates",
+                "type": "boolean",
+                "desc": "Reject messages identified as duplicate by the duplicate message"
+              }
+            ],
+            "ret": "int",
+            "desc": "Move the messages corresponding to the given filter (and returns the number of moved messages)"
+          },
+          {
+            "args": [
+              {
+                "name": "filter",
+                "type": "java.lang.String",
+                "desc": "A message filter (can be empty)"
+              },
+              {
+                "name": "otherQueueName",
+                "type": "java.lang.String",
+                "desc": "The name of the queue to move the messages to"
+              },
+              {
+                "name": "rejectDuplicates",
+                "type": "boolean",
+                "desc": "Reject messages identified as duplicate by the duplicate message"
+              }
+            ],
+            "ret": "int",
+            "desc": "Move the messages corresponding to the given filter (and returns the number of moved messages)"
+          },
+          {
+            "args": [
+              {
+                "name": "filter",
+                "type": "java.lang.String",
+                "desc": "A message filter (can be empty)"
+              },
+              {
+                "name": "otherQueueName",
+                "type": "java.lang.String",
+                "desc": "The name of the queue to move the messages to"
+              }
+            ],
+            "ret": "int",
+            "desc": "Move the messages corresponding to the given filter (and returns the number of moved messages). RejectDuplicates=false on this case."
+          }
+        ],
+        "resetMessageCounter": {
+          "args": [],
+          "ret": "void",
+          "desc": "Reset the message counters"
+        },
+        "sendMessageToDeadLetterAddress": {
+          "args": [
+            {
+              "name": "messageID",
+              "type": "long",
+              "desc": "A message ID"
+            }
+          ],
+          "ret": "boolean",
+          "desc": "Send the message corresponding to the given messageID to this queue's Dead Letter Address"
+        },
+        "removeMessage": {
+          "args": [
+            {
+              "name": "messageID",
+              "type": "long",
+              "desc": "A message ID"
+            }
+          ],
+          "ret": "boolean",
+          "desc": "Remove the message corresponding to the given messageID"
+        },
+        "listScheduledMessages": {
+          "args": [],
+          "ret": "[Ljava.util.Map;",
+          "desc": "List the messages scheduled for delivery"
+        },
+        "listDeliveringMessages": {
+          "args": [],
+          "ret": "java.util.Map",
+          "desc": "List all messages being delivered per consumer"
+        },
+        "resetMessagesAcknowledged": {
+          "args": [],
+          "ret": "void",
+          "desc": "Resets the MessagesAcknowledged property"
+        },
+        "changeMessagesPriority": {
+          "args": [
+            {
+              "name": "filter",
+              "type": "java.lang.String",
+              "desc": "A message filter (can be empty)"
+            },
+            {
+              "name": "newPriority",
+              "type": "int",
+              "desc": "the new priority (between 0 and 9)"
+            }
+          ],
+          "ret": "int",
+          "desc": "Change the priority of the messages corresponding to the given filter"
+        },
+        "listMessageCounterHistoryAsHTML": {
+          "args": [],
+          "ret": "java.lang.String",
+          "desc": "List the message counters history HTML"
+        },
+        "listConsumersAsJSON": {
+          "args": [],
+          "ret": "java.lang.String",
+          "desc": "List all the existent consumers on the Queue"
+        },
+        "retryMessage": {
+          "args": [
+            {
+              "name": "messageID",
+              "type": "long",
+              "desc": "A message ID"
+            }
+          ],
+          "ret": "boolean",
+          "desc": "Retry the message corresponding to the given messageID to the original queue"
+        },
+        "listMessagesAsJSON": {
+          "args": [
+            {
+              "name": "filter",
+              "type": "java.lang.String",
+              "desc": "A message filter (can be empty)"
+            }
+          ],
+          "ret": "java.lang.String",
+          "desc": "List all the messages in the queue matching the given filter and returns them using JSON"
+        },
+        "removeMessages": [
+          {
+            "args": [
+              {
+                "name": "filter",
+                "type": "java.lang.String",
+                "desc": "A message filter (can be empty)"
+              }
+            ],
+            "ret": "int",
+            "desc": "Remove the messages corresponding to the given filter (and returns the number of removed messages)"
+          },
+          {
+            "args": [
+              {
+                "name": "flushLimit",
+                "type": "int",
+                "desc": "Limit to flush transactions during the operation to avoid OutOfMemory"
+              },
+              {
+                "name": "filter",
+                "type": "java.lang.String",
+                "desc": "A message filter (can be empty)"
+              }
+            ],
+            "ret": "int",
+            "desc": "Remove the messages corresponding to the given filter (and returns the number of removed messages)"
+          }
+        ],
+        "flushExecutor": {
+          "args": [],
+          "ret": "void",
+          "desc": "flushExecutor"
+        },
+        "resume": {
+          "args": [],
+          "ret": "void",
+          "desc": "Resumes delivery of queued messages and gets the queue out of paused state."
+        },
+        "countMessages": {
+          "args": [
+            {
+              "name": "filter",
+              "type": "java.lang.String",
+              "desc": "A message filter (can be empty)"
+            }
+          ],
+          "ret": "long",
+          "desc": "Returns the number of the messages in the queue matching the given filter"
+        },
+        "listMessageCounterAsHTML": {
+          "args": [],
+          "ret": "java.lang.String",
+          "desc": "List the message counters as HTML"
+        },
+        "listMessageCounterHistory": {
+          "args": [],
+          "ret": "java.lang.String",
+          "desc": "List the message counters history"
+        },
+        "sendMessage": {
+          "args": [
+            {
+              "name": "headers",
+              "type": "java.util.Map",
+              "desc": "The headers to add to the message"
+            },
+            {
+              "name": "headers",
+              "type": "int",
+              "desc": "A type for the message"
+            },
+            {
+              "name": "body",
+              "type": "java.lang.String",
+              "desc": "The body (byte[]) of the message encoded as a string using Base64"
+            },
+            {
+              "name": "body",
+              "type": "java.lang.String",
+              "desc": "The user ID to set on the message"
+            },
+            {
+              "name": "durable",
+              "type": "boolean",
+              "desc": "Whether the message is durable"
+            },
+            {
+              "name": "user",
+              "type": "java.lang.String",
+              "desc": "The user to authenticate with"
+            },
+            {
+              "name": "password",
+              "type": "java.lang.String",
+              "desc": "The users password to authenticate with"
+            }
+          ],
+          "ret": "java.lang.String",
+          "desc": "Sends a TextMessage to a password-protected destination."
+        },
+        "resetMessagesAdded": {
+          "args": [],
+          "ret": "void",
+          "desc": "Resets the MessagesAdded property"
+        },
+        "listMessageCounter": {
+          "args": [],
+          "ret": "java.lang.String",
+          "desc": "List the message counters"
+        },
+        "pause": {
+          "args": [],
+          "ret": "void",
+          "desc": "Pauses the Queue"
+        },
+        "listDeliveringMessagesAsJSON": {
+          "args": [],
+          "ret": "java.lang.String",
+          "desc": "list all messages being delivered per consumer using JSON form"
+        },
+        "expireMessage": {
+          "args": [
+            {
+              "name": "messageID",
+              "type": "long",
+              "desc": "A message ID"
+            }
+          ],
+          "ret": "boolean",
+          "desc": "Remove the message corresponding to the given messageID"
+        },
+        "changeMessagePriority": {
+          "args": [
+            {
+              "name": "messageID",
+              "type": "long",
+              "desc": "A message ID"
+            },
+            {
+              "name": "newPriority",
+              "type": "int",
+              "desc": "the new priority (between 0 and 9)"
+            }
+          ],
+          "ret": "boolean",
+          "desc": "Change the priority of the message corresponding to the given messageID"
+        },
+        "sendMessagesToDeadLetterAddress": {
+          "args": [
+            {
+              "name": "filter",
+              "type": "java.lang.String",
+              "desc": "A message filter (can be empty)"
+            }
+          ],
+          "ret": "int",
+          "desc": "Send the messages corresponding to the given filter to this queue's Dead Letter Address"
+        },
+        "retryMessages": {
+          "args": [],
+          "ret": "int",
+          "desc": "Retry all messages on a DLQ to their respective original queues"
+        },
+        "expireMessages": {
+          "args": [
+            {
+              "name": "filter",
+              "type": "java.lang.String",
+              "desc": "A message filter"
+            }
+          ],
+          "ret": "int",
+          "desc": "Expire the messages corresponding to the given filter (and returns the number of expired messages)"
+        },
+        "browse": {
+          "args": [
+            {
+              "name": "p 1",
+              "type": "java.lang.String",
+              "desc": "parameter 1"
+            }
+          ],
+          "ret": "[Ljavax.management.openmbean.CompositeData;",
+          "desc": "Browse Messages"
+        }
+      },
+      "attr": {
+        "FirstMessageAge": {
+          "rw": false,
+          "type": "java.lang.Long",
+          "desc": "age of the first message in milliseconds"
+        },
+        "DeadLetterAddress": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "dead-letter address associated with this queue"
+        },
+        "MessagesAdded": {
+          "rw": false,
+          "type": "long",
+          "desc": "number of messages added to this queue since it was created"
+        },
+        "ConsumerCount": {
+          "rw": false,
+          "type": "int",
+          "desc": "number of consumers consuming messages from this queue"
+        },
+        "Address": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "address this queue is bound to"
+        },
+        "DeliveringCount": {
+          "rw": false,
+          "type": "int",
+          "desc": "number of messages that this queue is currently delivering to its consumers"
+        },
+        "MessagesAcknowledged": {
+          "rw": false,
+          "type": "long",
+          "desc": "number of messages acknowledged from this queue since it was created"
+        },
+        "ScheduledCount": {
+          "rw": false,
+          "type": "long",
+          "desc": "number of scheduled messages in this queue"
+        },
+        "Name": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "name of this queue"
+        },
+        "Temporary": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "whether this queue is temporary"
+        },
+        "FirstMessageTimestamp": {
+          "rw": false,
+          "type": "java.lang.Long",
+          "desc": "timestamp of the first message in milliseconds"
+        },
+        "Filter": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "filter associated with this queue"
+        },
+        "Durable": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "whether this queue is durable"
+        },
+        "ExpiryAddress": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "expiry address associated with this queue"
+        },
+        "ID": {
+          "rw": false,
+          "type": "long",
+          "desc": "ID of this queue"
+        },
+        "FirstMessageAsJSON": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "first message on the queue as JSON"
+        },
+        "MessageCount": {
+          "rw": false,
+          "type": "long",
+          "desc": "number of messages currently in this queue (includes scheduled, paged, and in-delivery messages)"
+        },
+        "Paused": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "whether the queue is paused"
+        }
+      },
+      "desc": "Information on the management interface of the MBean"
+    },
+    "brokerName=\"0.0.0.0\",module=Core,name=\"mqtt\",serviceType=Acceptor,type=Broker": {
+      "op": {
+        "reload": {
+          "args": [],
+          "ret": "void",
+          "desc": "Re-create the acceptor with the existing configuration values. Useful, for example, for reloading key/trust stores on acceptors which support SSL."
+        },
+        "stop": {
+          "args": [],
+          "ret": "void",
+          "desc": "stops this component"
+        },
+        "start": {
+          "args": [],
+          "ret": "void",
+          "desc": "starts this component"
+        }
+      },
+      "attr": {
+        "FactoryClassName": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "class name of the AcceptorFactory implementation used by this acceptor"
+        },
+        "Started": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "whether this component is started"
+        },
+        "Parameters": {
+          "rw": false,
+          "type": "java.util.Map",
+          "desc": "parameters used to configure this acceptor"
+        },
+        "Name": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "name of the acceptor"
+        }
+      },
+      "desc": "Information on the management interface of the MBean"
+    },
+    "brokerName=\"0.0.0.0\",module=Core,name=\"jms.queue.DLQ\",serviceType=Address,type=Broker": {
+      "attr": {
+        "QueueNames": {
+          "rw": false,
+          "type": "[Ljava.lang.String;",
+          "desc": "names of the queues bound to this address"
+        },
+        "AddressSize": {
+          "rw": false,
+          "type": "long",
+          "desc": "N/A"
+        },
+        "NumberOfBytesPerPage": {
+          "rw": false,
+          "type": "long",
+          "desc": "number of bytes used by each page for this address"
+        },
+        "Address": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "managed address"
+        },
+        "NumberOfMessages": {
+          "rw": false,
+          "type": "long",
+          "desc": "N/A"
+        },
+        "Paging": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "whether this address is paging"
+        },
+        "Roles": {
+          "rw": false,
+          "type": "[Ljava.lang.Object;",
+          "desc": "roles (name and permissions) associated with this address"
+        },
+        "RolesAsJSON": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "roles  (name and permissions) associated with this address using JSON serialization"
+        },
+        "NumberOfPages": {
+          "rw": false,
+          "type": "int",
+          "desc": "number of pages used by this address"
+        },
+        "BindingNames": {
+          "rw": false,
+          "type": "[Ljava.lang.String;",
+          "desc": "names of all bindings (both queues and diverts) bound to this address"
+        }
+      },
+      "desc": "Information on the management interface of the MBean"
+    },
+    "brokerName=\"0.0.0.0\",module=Core,name=\"artemis\",serviceType=Acceptor,type=Broker": {
+      "op": {
+        "reload": {
+          "args": [],
+          "ret": "void",
+          "desc": "Re-create the acceptor with the existing configuration values. Useful, for example, for reloading key/trust stores on acceptors which support SSL."
+        },
+        "stop": {
+          "args": [],
+          "ret": "void",
+          "desc": "stops this component"
+        },
+        "start": {
+          "args": [],
+          "ret": "void",
+          "desc": "starts this component"
+        }
+      },
+      "attr": {
+        "FactoryClassName": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "class name of the AcceptorFactory implementation used by this acceptor"
+        },
+        "Started": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "whether this component is started"
+        },
+        "Parameters": {
+          "rw": false,
+          "type": "java.util.Map",
+          "desc": "parameters used to configure this acceptor"
+        },
+        "Name": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "name of the acceptor"
+        }
+      },
+      "desc": "Information on the management interface of the MBean"
+    },
+    "brokerName=\"0.0.0.0\",module=Core,serviceType=Server,type=Broker": {
+      "op": {
+        "removeAddressSettings": {
+          "args": [
+            {
+              "name": "p 1",
+              "type": "java.lang.String",
+              "desc": "parameter 1"
+            }
+          ],
+          "ret": "void",
+          "desc": "removeAddressSettings"
+        },
+        "createBridge": {
+          "args": [
+            {
+              "name": "name",
+              "type": "java.lang.String",
+              "desc": "Name of the bridge"
+            },
+            {
+              "name": "queueName",
+              "type": "java.lang.String",
+              "desc": "Name of the source queue"
+            },
+            {
+              "name": "forwardingAddress",
+              "type": "java.lang.String",
+              "desc": "Forwarding address"
+            },
+            {
+              "name": "filterString",
+              "type": "java.lang.String",
+              "desc": "Filter of the brdige"
+            },
+            {
+              "name": "transformerClassName",
+              "type": "java.lang.String",
+              "desc": "Class name of the bridge transformer"
+            },
+            {
+              "name": "retryInterval",
+              "type": "long",
+              "desc": "Connection retry interval"
+            },
+            {
+              "name": "retryIntervalMultiplier",
+              "type": "double",
+              "desc": "Connection retry interval multiplier"
+            },
+            {
+              "name": "initialConnectAttempts",
+              "type": "int",
+              "desc": "Number of initial connection attempts"
+            },
+            {
+              "name": "reconnectAttempts",
+              "type": "int",
+              "desc": "Number of reconnection attempts"
+            },
+            {
+              "name": "useDuplicateDetection",
+              "type": "boolean",
+              "desc": "Use duplicate detection"
+            },
+            {
+              "name": "confirmationWindowSize",
+              "type": "int",
+              "desc": "Confirmation window size"
+            },
+            {
+              "name": "clientFailureCheckPeriod",
+              "type": "long",
+              "desc": "Period to check client failure"
+            },
+            {
+              "name": "staticConnectorNames",
+              "type": "java.lang.String",
+              "desc": "comma separated list of connector names or name of discovery group if 'useDiscoveryGroup' is set to true"
+            },
+            {
+              "name": "useDiscoveryGroup",
+              "type": "boolean",
+              "desc": "use discovery  group"
+            },
+            {
+              "name": "ha",
+              "type": "boolean",
+              "desc": "Is it using HA"
+            },
+            {
+              "name": "user",
+              "type": "java.lang.String",
+              "desc": "User name"
+            },
+            {
+              "name": "password",
+              "type": "java.lang.String",
+              "desc": "User password"
+            }
+          ],
+          "ret": "void",
+          "desc": "Create a Bridge"
+        },
+        "listSessions": {
+          "args": [
+            {
+              "name": "connectionID",
+              "type": "java.lang.String",
+              "desc": "a connection ID"
+            }
+          ],
+          "ret": "[Ljava.lang.String;",
+          "desc": "List the sessions for the given connectionID"
+        },
+        "disableMessageCounters": {
+          "args": [],
+          "ret": "void",
+          "desc": "Disable message counters"
+        },
+        "addAddressSettings": {
+          "args": [
+            {
+              "name": "addressMatch",
+              "type": "java.lang.String",
+              "desc": "an address match"
+            },
+            {
+              "name": "DLA",
+              "type": "java.lang.String",
+              "desc": "the dead letter address setting"
+            },
+            {
+              "name": "expiryAddress",
+              "type": "java.lang.String",
+              "desc": "the expiry address setting"
+            },
+            {
+              "name": "expiryDelay",
+              "type": "long",
+              "desc": "the expiry delay setting"
+            },
+            {
+              "name": "lastValueQueue",
+              "type": "boolean",
+              "desc": "are any queues created for this address a last value queue"
+            },
+            {
+              "name": "deliveryAttempts",
+              "type": "int",
+              "desc": "the delivery attempts"
+            },
+            {
+              "name": "maxSizeBytes",
+              "type": "long",
+              "desc": "the max size in bytes"
+            },
+            {
+              "name": "pageSizeBytes",
+              "type": "int",
+              "desc": "the page size in bytes"
+            },
+            {
+              "name": "pageMaxCacheSize",
+              "type": "int",
+              "desc": "the max number of pages in the soft memory cache"
+            },
+            {
+              "name": "redeliveryDelay",
+              "type": "long",
+              "desc": "the redelivery delay"
+            },
+            {
+              "name": "redeliveryMultiplier",
+              "type": "double",
+              "desc": "the redelivery delay multiplier"
+            },
+            {
+              "name": "maxRedeliveryDelay",
+              "type": "long",
+              "desc": "the maximum redelivery delay"
+            },
+            {
+              "name": "redistributionDelay",
+              "type": "long",
+              "desc": "the redistribution delay"
+            },
+            {
+              "name": "sendToDLAOnNoRoute",
+              "type": "boolean",
+              "desc": "do we send to the DLA when there is no where to route the message"
+            },
+            {
+              "name": "addressFullMessagePolicy",
+              "type": "java.lang.String",
+              "desc": "the policy to use when the address is full"
+            },
+            {
+              "name": "slowConsumerThreshold",
+              "type": "long",
+              "desc": "when a consumer falls below this threshold in terms of messages consumed per second it will be considered 'slow'"
+            },
+            {
+              "name": "slowConsumerCheckPeriod",
+              "type": "long",
+              "desc": "how often (in seconds) to check for slow consumers"
+            },
+            {
+              "name": "slowConsumerPolicy",
+              "type": "java.lang.String",
+              "desc": "the policy to use when a slow consumer is detected"
+            },
+            {
+              "name": "autoCreateJmsQueues",
+              "type": "boolean",
+              "desc": "allow queues to be created automatically"
+            },
+            {
+              "name": "autoDeleteJmsQueues",
+              "type": "boolean",
+              "desc": "allow auto-created queues to be deleted automatically"
+            },
+            {
+              "name": "autoCreateJmsTopics",
+              "type": "boolean",
+              "desc": "allow topics to be created automatically"
+            },
+            {
+              "name": "autoDeleteJmsTopics",
+              "type": "boolean",
+              "desc": "allow auto-created topics to be deleted automatically"
+            }
+          ],
+          "ret": "void",
+          "desc": "Add address settings for addresses matching the addressMatch"
+        },
+        "scaleDown": {
+          "args": [
+            {
+              "name": "name",
+              "type": "java.lang.String",
+              "desc": "The connector to use to scale down, if not provided the first appropriate connector will be used"
+            }
+          ],
+          "ret": "void",
+          "desc": "force the server to stop and to scale down to another server"
+        },
+        "listConnectionIDs": {
+          "args": [],
+          "ret": "[Ljava.lang.String;",
+          "desc": "List all the connection IDs"
+        },
+        "resetAllMessageCounters": {
+          "args": [],
+          "ret": "void",
+          "desc": "Reset all message counters"
+        },
+        "addSecuritySettings": {
+          "args": [
+            {
+              "name": "addressMatch",
+              "type": "java.lang.String",
+              "desc": "an address match"
+            },
+            {
+              "name": "send",
+              "type": "java.lang.String",
+              "desc": "a comma-separated list of roles allowed to send messages"
+            },
+            {
+              "name": "consume",
+              "type": "java.lang.String",
+              "desc": "a comma-separated list of roles allowed to consume messages"
+            },
+            {
+              "name": "createDurableQueueRoles",
+              "type": "java.lang.String",
+              "desc": "a comma-separated list of roles allowed to create durable queues"
+            },
+            {
+              "name": "deleteDurableQueueRoles",
+              "type": "java.lang.String",
+              "desc": "a comma-separated list of roles allowed to delete durable queues"
+            },
+            {
+              "name": "createNonDurableQueueRoles",
+              "type": "java.lang.String",
+              "desc": "a comma-separated list of roles allowed to create non durable queues"
+            },
+            {
+              "name": "deleteNonDurableQueueRoles",
+              "type": "java.lang.String",
+              "desc": "a comma-separated list of roles allowed to delete non durable queues"
+            },
+            {
+              "name": "manage",
+              "type": "java.lang.String",
+              "desc": "a comma-separated list of roles allowed to send management messages messages"
+            }
+          ],
+          "ret": "void",
+          "desc": "Add security settings for addresses matching the addressMatch"
+        },
+        "createDivert": {
+          "args": [
+            {
+              "name": "name",
+              "type": "java.lang.String",
+              "desc": "Name of the divert"
+            },
+            {
+              "name": "routingName",
+              "type": "java.lang.String",
+              "desc": "Routing name of the divert"
+            },
+            {
+              "name": "address",
+              "type": "java.lang.String",
+              "desc": "Address to divert from"
+            },
+            {
+              "name": "forwardingAddress",
+              "type": "java.lang.String",
+              "desc": "Address to divert to"
+            },
+            {
+              "name": "exclusive",
+              "type": "boolean",
+              "desc": "Is the divert exclusive?"
+            },
+            {
+              "name": "filterString",
+              "type": "java.lang.String",
+              "desc": "Filter of the divert"
+            },
+            {
+              "name": "transformerClassName",
+              "type": "java.lang.String",
+              "desc": "Class name of the divert's transformer"
+            }
+          ],
+          "ret": "void",
+          "desc": "Create a Divert"
+        },
+        "getRolesAsJSON": {
+          "args": [
+            {
+              "name": "addressMatch",
+              "type": "java.lang.String",
+              "desc": "an address match"
+            }
+          ],
+          "ret": "java.lang.String",
+          "desc": "get roles (as a JSON string) for a specific address match"
+        },
+        "listHeuristicRolledBackTransactions": {
+          "args": [],
+          "ret": "[Ljava.lang.String;",
+          "desc": "List transactions which have been heuristically rolled back"
+        },
+        "closeConnectionsForAddress": {
+          "args": [
+            {
+              "name": "ipAddress",
+              "type": "java.lang.String",
+              "desc": "an IP address"
+            }
+          ],
+          "ret": "boolean",
+          "desc": "Closes all the connections for the given IP Address"
+        },
+        "enableMessageCounters": {
+          "args": [],
+          "ret": "void",
+          "desc": "Enable message counters"
+        },
+        "listPreparedTransactions": {
+          "args": [],
+          "ret": "[Ljava.lang.String;",
+          "desc": "List all the prepared transaction, sorted by date, oldest first"
+        },
+        "deployQueue": [
+          {
+            "args": [
+              {
+                "name": "address",
+                "type": "java.lang.String",
+                "desc": "Address of the queue"
+              },
+              {
+                "name": "name",
+                "type": "java.lang.String",
+                "desc": "Name of the queue"
+              },
+              {
+                "name": "filter",
+                "type": "java.lang.String",
+                "desc": "Filter of the queue"
+              },
+              {
+                "name": "durable",
+                "type": "boolean",
+                "desc": "Is the queue durable?"
+              }
+            ],
+            "ret": "void",
+            "desc": "Deploy a queue"
+          },
+          {
+            "args": [
+              {
+                "name": "address",
+                "type": "java.lang.String",
+                "desc": "Address of the queue"
+              },
+              {
+                "name": "name",
+                "type": "java.lang.String",
+                "desc": "Name of the queue"
+              },
+              {
+                "name": "filter",
+                "type": "java.lang.String",
+                "desc": "Filter of the queue"
+              }
+            ],
+            "ret": "void",
+            "desc": "Deploy a queue"
+          }
+        ],
+        "listHeuristicCommittedTransactions": {
+          "args": [],
+          "ret": "[Ljava.lang.String;",
+          "desc": "List transactions which have been heuristically committed"
+        },
+        "getAddressSettingsAsJSON": {
+          "args": [
+            {
+              "name": "addressMatch",
+              "type": "java.lang.String",
+              "desc": "an address match"
+            }
+          ],
+          "ret": "java.lang.String",
+          "desc": "returns the address settings as a JSON string for an address match"
+        },
+        "listRemoteAddresses": [
+          {
+            "args": [],
+            "ret": "[Ljava.lang.String;",
+            "desc": "List the client addresses"
+          },
+          {
+            "args": [
+              {
+                "name": "ipAddress",
+                "type": "java.lang.String",
+                "desc": "an IP address"
+              }
+            ],
+            "ret": "[Ljava.lang.String;",
+            "desc": "List the client addresses which match the given IP Address"
+          }
+        ],
+        "closeConsumerConnectionsForAddress": {
+          "args": [
+            {
+              "name": "address",
+              "type": "java.lang.String",
+              "desc": "a messaging address"
+            }
+          ],
+          "ret": "boolean",
+          "desc": "Closes all the consumer connections for the given messaging address"
+        },
+        "getRoles": {
+          "args": [
+            {
+              "name": "addressMatch",
+              "type": "java.lang.String",
+              "desc": "an address match"
+            }
+          ],
+          "ret": "[Ljava.lang.Object;",
+          "desc": "get roles for a specific address match"
+        },
+        "forceFailover": {
+          "args": [],
+          "ret": "void",
+          "desc": "force the server to stop and notify clients to failover"
+        },
+        "commitPreparedTransaction": {
+          "args": [
+            {
+              "name": "transactionAsBase64",
+              "type": "java.lang.String",
+              "desc": "the Base64 representation of a transaction"
+            }
+          ],
+          "ret": "boolean",
+          "desc": "Commit a prepared transaction"
+        },
+        "destroyQueue": {
+          "args": [
+            {
+              "name": "name",
+              "type": "java.lang.String",
+              "desc": "Name of the queue to destroy"
+            }
+          ],
+          "ret": "void",
+          "desc": "Destroy a queue"
+        },
+        "listPreparedTransactionDetailsAsJSON": {
+          "args": [],
+          "ret": "java.lang.String",
+          "desc": "List all the prepared transaction, sorted by date, oldest first, with details, in JSON format"
+        },
+        "updateDuplicateIdCache": {
+          "args": [
+            {
+              "name": "p 1",
+              "type": "java.lang.String",
+              "desc": "parameter 1"
+            },
+            {
+              "name": "p 2",
+              "type": "[Ljava.lang.Object;",
+              "desc": "parameter 2"
+            }
+          ],
+          "ret": "void",
+          "desc": "updateDuplicateIdCache"
+        },
+        "listPreparedTransactionDetailsAsHTML": {
+          "args": [],
+          "ret": "java.lang.String",
+          "desc": "List all the prepared transaction, sorted by date, oldest first, with details, in HTML format"
+        },
+        "resetAllMessageCounterHistories": {
+          "args": [],
+          "ret": "void",
+          "desc": "Reset all message counters history"
+        },
+        "destroyDivert": {
+          "args": [
+            {
+              "name": "name",
+              "type": "java.lang.String",
+              "desc": "Name of the divert"
+            }
+          ],
+          "ret": "void",
+          "desc": "Destroy a Divert"
+        },
+        "destroyBridge": {
+          "args": [
+            {
+              "name": "name",
+              "type": "java.lang.String",
+              "desc": "Name of the bridge"
+            }
+          ],
+          "ret": "void",
+          "desc": "Destroy a bridge"
+        },
+        "listProducersInfoAsJSON": {
+          "args": [],
+          "ret": "java.lang.String",
+          "desc": "listProducersInfoAsJSON"
+        },
+        "sendQueueInfoToQueue": {
+          "args": [
+            {
+              "name": "p 1",
+              "type": "java.lang.String",
+              "desc": "parameter 1"
+            },
+            {
+              "name": "p 2",
+              "type": "java.lang.String",
+              "desc": "parameter 2"
+            }
+          ],
+          "ret": "void",
+          "desc": "sendQueueInfoToQueue"
+        },
+        "createQueue": [
+          {
+            "args": [
+              {
+                "name": "address",
+                "type": "java.lang.String",
+                "desc": "Address of the queue"
+              },
+              {
+                "name": "name",
+                "type": "java.lang.String",
+                "desc": "Name of the queue"
+              },
+              {
+                "name": "durable",
+                "type": "boolean",
+                "desc": "Is the queue durable?"
+              }
+            ],
+            "ret": "void",
+            "desc": "Create a queue with the specified address, name and durability"
+          },
+          {
+            "args": [
+              {
+                "name": "address",
+                "type": "java.lang.String",
+                "desc": "Address of the queue"
+              },
+              {
+                "name": "name",
+                "type": "java.lang.String",
+                "desc": "Name of the queue"
+              },
+              {
+                "name": "filter",
+                "type": "java.lang.String",
+                "desc": "Filter of the queue"
+              },
+              {
+                "name": "durable",
+                "type": "boolean",
+                "desc": "Is the queue durable?"
+              }
+            ],
+            "ret": "void",
+            "desc": "Create a queue"
+          },
+          {
+            "args": [
+              {
+                "name": "address",
+                "type": "java.lang.String",
+                "desc": "Address of the queue"
+              },
+              {
+                "name": "name",
+                "type": "java.lang.String",
+                "desc": "Name of the queue"
+              }
+            ],
+            "ret": "void",
+            "desc": "Create a queue with the specified address"
+          }
+        ],
+        "closeConnectionsForUser": {
+          "args": [
+            {
+              "name": "userName",
+              "type": "java.lang.String",
+              "desc": "a user name"
+            }
+          ],
+          "ret": "boolean",
+          "desc": "Closes all the connections for sessions with the given user name"
+        },
+        "removeSecuritySettings": {
+          "args": [
+            {
+              "name": "addressMatch",
+              "type": "java.lang.String",
+              "desc": "an address match"
+            }
+          ],
+          "ret": "void",
+          "desc": "Remove security settings for an address"
+        },
+        "rollbackPreparedTransaction": {
+          "args": [
+            {
+              "name": "transactionAsBase64",
+              "type": "java.lang.String",
+              "desc": "the Base64 representation of a transaction"
+            }
+          ],
+          "ret": "boolean",
+          "desc": "Rollback a prepared transaction"
+        }
+      },
+      "attr": {
+        "ManagementAddress": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "management address of this server"
+        },
+        "JournalMinFiles": {
+          "rw": false,
+          "type": "int",
+          "desc": "number of journal files to pre-create"
+        },
+        "Clustered": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "whether this server is clustered"
+        },
+        "JournalCompactMinFiles": {
+          "rw": false,
+          "type": "int",
+          "desc": "minimal number of journal files before compacting"
+        },
+        "FailoverOnServerShutdown": {
+          "rw": true,
+          "type": "boolean",
+          "desc": "if clients failover on a server shutdown"
+        },
+        "PersistDeliveryCountBeforeDelivery": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "whether delivery count is persisted before messages are delivered to the consumers"
+        },
+        "MessageExpiryThreadPriority": {
+          "rw": false,
+          "type": "long",
+          "desc": "priority of the thread used to scan message expiration"
+        },
+        "ConnectionTTLOverride": {
+          "rw": false,
+          "type": "long",
+          "desc": "connection time to live"
+        },
+        "JournalCompactPercentage": {
+          "rw": false,
+          "type": "int",
+          "desc": "percentage of live data before compacting the journal"
+        },
+        "PersistenceEnabled": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "whether this server is using persistence and store data"
+        },
+        "CreateBindingsDir": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "whether the bindings directory is created on this server startu"
+        },
+        "ConnectionCount": {
+          "rw": false,
+          "type": "int",
+          "desc": "number of clients connected to this server"
+        },
+        "Version": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "server's version"
+        },
+        "JournalDirectory": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "file system directory used to store journal log"
+        },
+        "UptimeMillis": {
+          "rw": false,
+          "type": "long",
+          "desc": "uptime of this server in milliseconds"
+        },
+        "ManagementNotificationAddress": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "management notification address of this server"
+        },
+        "DivertNames": {
+          "rw": false,
+          "type": "[Ljava.lang.String;",
+          "desc": "names of the diverts deployed on this server"
+        },
+        "JournalSyncNonTransactional": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "whether the journal is synchronized when receiving non-transactional datar"
+        },
+        "TotalConnectionCount": {
+          "rw": false,
+          "type": "long",
+          "desc": "number of clients which have connected to this server since it was started"
+        },
+        "SharedStore": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "whether this server shares its data store with a corresponding live or backup serve"
+        },
+        "QueueNames": {
+          "rw": false,
+          "type": "[Ljava.lang.String;",
+          "desc": "names of the queues created on this server"
+        },
+        "PagingDirectory": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "file system directory used to store paging files"
+        },
+        "LargeMessagesDirectory": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "file system directory used to store large messages"
+        },
+        "JournalBufferSize": {
+          "rw": false,
+          "type": "int",
+          "desc": "size of the internal buffer on the journal"
+        },
+        "SecurityInvalidationInterval": {
+          "rw": false,
+          "type": "long",
+          "desc": "interval time (in milliseconds) to invalidate security credentials"
+        },
+        "MessageCounterSamplePeriod": {
+          "rw": true,
+          "type": "long",
+          "desc": "sample period (in milliseconds) to take message counter snapshot"
+        },
+        "TotalMessagesAdded": {
+          "rw": false,
+          "type": "long",
+          "desc": "number of messages sent to this server since it was started"
+        },
+        "TotalConsumerCount": {
+          "rw": false,
+          "type": "long",
+          "desc": "number of consumers consuming messages from all the queues on this server"
+        },
+        "BridgeNames": {
+          "rw": false,
+          "type": "[Ljava.lang.String;",
+          "desc": "names of the bridges deployed on this server"
+        },
+        "WildcardRoutingEnabled": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "whether wildcard routing is supported by this server"
+        },
+        "PersistIDCache": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "whether message ID cache is persisted"
+        },
+        "AsyncConnectionExecutionEnabled": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "whether code coming from connection is executed asynchronously or not"
+        },
+        "Started": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "whether this server is started"
+        },
+        "TotalMessageCount": {
+          "rw": false,
+          "type": "long",
+          "desc": "number of messages in all queues on the server"
+        },
+        "CreateJournalDir": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "whether the journal directory is created on this server startup"
+        },
+        "Backup": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "whether this server is a backup"
+        },
+        "AddressNames": {
+          "rw": false,
+          "type": "[Ljava.lang.String;",
+          "desc": "addresses created on this server"
+        },
+        "TotalMessagesAcknowledged": {
+          "rw": false,
+          "type": "long",
+          "desc": "number of messages acknowledged from all the queues on this server since it was started"
+        },
+        "JournalBufferTimeout": {
+          "rw": false,
+          "type": "int",
+          "desc": "timeout (in nanoseconds) used to flush internal buffers on the journal"
+        },
+        "IncomingInterceptorClassNames": {
+          "rw": false,
+          "type": "[Ljava.lang.String;",
+          "desc": "list of interceptors used by this server for incoming messages"
+        },
+        "ReplicaSync": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "whether the initial replication synchronization process with the backup server is complete"
+        },
+        "ConnectorsAsJSON": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "connectors configured for this server using JSON serialization"
+        },
+        "JournalFileSize": {
+          "rw": false,
+          "type": "int",
+          "desc": "size (in bytes) of each journal files"
+        },
+        "TransactionTimeout": {
+          "rw": false,
+          "type": "long",
+          "desc": "timeout (in milliseconds) after which transactions is removed from the resource manager after it was created"
+        },
+        "MessageCounterEnabled": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "whether message counter is enabled for this server"
+        },
+        "OutgoingInterceptorClassNames": {
+          "rw": false,
+          "type": "[Ljava.lang.String;",
+          "desc": "list of interceptors used by this server for outgoing messages"
+        },
+        "IDCacheSize": {
+          "rw": false,
+          "type": "int",
+          "desc": "size of the cache for pre-creating message IDs"
+        },
+        "Uptime": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "uptime of this server"
+        },
+        "JournalSyncTransactional": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "whether the journal is synchronized when receiving transactional data"
+        },
+        "ScheduledThreadPoolMaxSize": {
+          "rw": false,
+          "type": "int",
+          "desc": "maximum number of threads in the scheduled thread pool"
+        },
+        "TransactionTimeoutScanPeriod": {
+          "rw": false,
+          "type": "long",
+          "desc": "frequency (in milliseconds)  to scan transactions to detect which transactions have timed out"
+        },
+        "SecurityEnabled": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "whether security is enabled for this server"
+        },
+        "BindingsDirectory": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "file system directory used to store bindings"
+        },
+        "Connectors": {
+          "rw": false,
+          "type": "[Ljava.lang.Object;",
+          "desc": "connectors configured for this server"
+        },
+        "JournalMaxIO": {
+          "rw": false,
+          "type": "int",
+          "desc": "maximum number of write requests that can be in the AIO queue at any given time"
+        },
+        "MessageExpiryScanPeriod": {
+          "rw": false,
+          "type": "long",
+          "desc": "frequency (in milliseconds)  to scan messages to detect which messages have expired"
+        },
+        "MessageCounterMaxDayCount": {
+          "rw": true,
+          "type": "int",
+          "desc": "maximum number of days kept in memory for message counter"
+        },
+        "JournalType": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "type of journal used by this server"
+        },
+        "ThreadPoolMaxSize": {
+          "rw": false,
+          "type": "int",
+          "desc": "maximum number of threads in the thread pool"
+        }
+      },
+      "desc": "Information on the management interface of the MBean"
+    },
+    "brokerName=\"0.0.0.0\",module=Core,name=\"jms.queue.ExpiryQueue\",serviceType=Address,type=Broker": {
+      "attr": {
+        "QueueNames": {
+          "rw": false,
+          "type": "[Ljava.lang.String;",
+          "desc": "names of the queues bound to this address"
+        },
+        "AddressSize": {
+          "rw": false,
+          "type": "long",
+          "desc": "N/A"
+        },
+        "NumberOfBytesPerPage": {
+          "rw": false,
+          "type": "long",
+          "desc": "number of bytes used by each page for this address"
+        },
+        "Address": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "managed address"
+        },
+        "NumberOfMessages": {
+          "rw": false,
+          "type": "long",
+          "desc": "N/A"
+        },
+        "Paging": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "whether this address is paging"
+        },
+        "Roles": {
+          "rw": false,
+          "type": "[Ljava.lang.Object;",
+          "desc": "roles (name and permissions) associated with this address"
+        },
+        "RolesAsJSON": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "roles  (name and permissions) associated with this address using JSON serialization"
+        },
+        "NumberOfPages": {
+          "rw": false,
+          "type": "int",
+          "desc": "number of pages used by this address"
+        },
+        "BindingNames": {
+          "rw": false,
+          "type": "[Ljava.lang.String;",
+          "desc": "names of all bindings (both queues and diverts) bound to this address"
+        }
+      },
+      "desc": "Information on the management interface of the MBean"
+    },
+    "brokerName=\"0.0.0.0\",module=JMS,serviceType=Server,type=Broker": {
+      "op": {
+        "destroyConnectionFactory": {
+          "args": [
+            {
+              "name": "name",
+              "type": "java.lang.String",
+              "desc": "Name of the ConnectionFactory to destroy"
+            }
+          ],
+          "ret": "void",
+          "desc": "Destroy a JMS ConnectionFactory"
+        },
+        "listSessions": {
+          "args": [
+            {
+              "name": "connectionID",
+              "type": "java.lang.String",
+              "desc": "a connection ID"
+            }
+          ],
+          "ret": "[Ljava.lang.String;",
+          "desc": "List the sessions for the given connectionID"
+        },
+        "createTopic": [
+          {
+            "args": [
+              {
+                "name": "name",
+                "type": "java.lang.String",
+                "desc": "Name of the topic to create"
+              },
+              {
+                "name": "jndiBindings",
+                "type": "java.lang.String",
+                "desc": "comma-separated list of JNDI bindings (use '&comma;' if u need to use commas in your jndi name)"
+              }
+            ],
+            "ret": "boolean",
+            "desc": "Create a JMS Topic"
+          },
+          {
+            "args": [
+              {
+                "name": "name",
+                "type": "java.lang.String",
+                "desc": "Name of the topic to create"
+              }
+            ],
+            "ret": "boolean",
+            "desc": "Create a JMS Topic"
+          }
+        ],
+        "listConnectionsAsJSON": {
+          "args": [],
+          "ret": "java.lang.String",
+          "desc": "List all JMS connections"
+        },
+        "listTargetDestinations": {
+          "args": [
+            {
+              "name": "sessionID",
+              "type": "java.lang.String",
+              "desc": "a session ID"
+            }
+          ],
+          "ret": "[Ljava.lang.String;",
+          "desc": "Lists all addresses to which the designated session has sent messages"
+        },
+        "destroyQueue": [
+          {
+            "args": [
+              {
+                "name": "name",
+                "type": "java.lang.String",
+                "desc": "Name of the queue to destroy"
+              }
+            ],
+            "ret": "boolean",
+            "desc": "Destroy a JMS Queue"
+          },
+          {
+            "args": [
+              {
+                "name": "name",
+                "type": "java.lang.String",
+                "desc": "Name of the queue to destroy"
+              },
+              {
+                "name": "removeConsumers",
+                "type": "boolean",
+                "desc": "disconnect any consumers connected to this queue"
+              }
+            ],
+            "ret": "boolean",
+            "desc": "Destroy a JMS Queue"
+          }
+        ],
+        "listConnectionIDs": {
+          "args": [],
+          "ret": "[Ljava.lang.String;",
+          "desc": "List all the connection IDs"
+        },
+        "listAllConsumersAsJSON": {
+          "args": [],
+          "ret": "java.lang.String",
+          "desc": "List all JMS consumers associated with a JMS Connection"
+        },
+        "listPreparedTransactionDetailsAsJSON": {
+          "args": [],
+          "ret": "java.lang.String",
+          "desc": "List all the prepared transaction, sorted by date, oldest first, with details, in JSON format"
+        },
+        "getSessionCreationTime": {
+          "args": [
+            {
+              "name": "sessionID",
+              "type": "java.lang.String",
+              "desc": "session name"
+            }
+          ],
+          "ret": "java.lang.String",
+          "desc": "Gets the sessions creation time"
+        },
+        "listPreparedTransactionDetailsAsHTML": {
+          "args": [],
+          "ret": "java.lang.String",
+          "desc": "List all the prepared transaction, sorted by date, oldest first, with details, in HTML format"
+        },
+        "closeConnectionsForAddress": {
+          "args": [
+            {
+              "name": "ipAddress",
+              "type": "java.lang.String",
+              "desc": "an IP address"
+            }
+          ],
+          "ret": "boolean",
+          "desc": "Closes all the connections for the given IP Address"
+        },
+        "getLastSentMessageID": {
+          "args": [
+            {
+              "name": "sessionID",
+              "type": "java.lang.String",
+              "desc": "session name"
+            },
+            {
+              "name": "address",
+              "type": "java.lang.String",
+              "desc": "address"
+            }
+          ],
+          "ret": "java.lang.String",
+          "desc": "Returns the last sent message's ID from the given session to an address"
+        },
+        "destroyTopic": [
+          {
+            "args": [
+              {
+                "name": "name",
+                "type": "java.lang.String",
+                "desc": "Name of the topic to destroy"
+              }
+            ],
+            "ret": "boolean",
+            "desc": "Destroy a JMS Topic"
+          },
+          {
+            "args": [
+              {
+                "name": "name",
+                "type": "java.lang.String",
+                "desc": "Name of the topic to destroy"
+              },
+              {
+                "name": "removeConsumers",
+                "type": "boolean",
+                "desc": "disconnect any consumers connected to this queue"
+              }
+            ],
+            "ret": "boolean",
+            "desc": "Destroy a JMS Topic"
+          }
+        ],
+        "listConsumersAsJSON": {
+          "args": [
+            {
+              "name": "connectionID",
+              "type": "java.lang.String",
+              "desc": "a connection ID"
+            }
+          ],
+          "ret": "java.lang.String",
+          "desc": "List all JMS consumers associated with a JMS Connection"
+        },
+        "createConnectionFactory": [
+          {
+            "args": [
+              {
+                "name": "name",
+                "type": "java.lang.String",
+                "desc": "N/A"
+              },
+              {
+                "name": "ha",
+                "type": "boolean",
+                "desc": "N/A"
+              },
+              {
+                "name": "useDiscovery",
+                "type": "boolean",
+                "desc": "should we use discovery or a connector configuration"
+              },
+              {
+                "name": "cfType",
+                "type": "int",
+                "desc": "RegularCF=0, QueueCF=1, TopicCF=2, XACF=3, QueueXACF=4, TopicXACF=5"
+              },
+              {
+                "name": "connectorNames",
+                "type": "java.lang.String",
+                "desc": "comma-separated list of connectorNames or the discovery group name"
+              },
+              {
+                "name": "jndiBindings",
+                "type": "java.lang.String",
+                "desc": "comma-separated list of JNDI bindings (use '&comma;' if u need to use commas in your jndi name)"
+              }
+            ],
+            "ret": "void",
+            "desc": "Create a JMS ConnectionFactory"
+          },
+          {
+            "args": [
+              {
+                "name": "name",
+                "type": "java.lang.String",
+                "desc": "N/A"
+              },
+              {
+                "name": "ha",
+                "type": "boolean",
+                "desc": "N/A"
+              },
+              {
+                "name": "useDiscovery",
+                "type": "boolean",
+                "desc": "should we use discovery or a connector configuration"
+              },
+              {
+                "name": "cfType",
+                "type": "int",
+                "desc": "RegularCF=0, QueueCF=1, TopicCF=2, XACF=3, QueueXACF=4, TopicXACF=5"
+              },
+              {
+                "name": "connectorNames",
+                "type": "[Ljava.lang.String;",
+                "desc": "An array of connector or the binding address"
+              },
+              {
+                "name": "jndiBindings",
+                "type": "[Ljava.lang.String;",
+                "desc": "array JNDI bindings (use '&comma;' if u need to use commas in your jndi name)"
+              },
+              {
+                "name": "clientID",
+                "type": "java.lang.String",
+                "desc": "The clientID configured for the connectionFactory"
+              },
+              {
+                "name": "clientFailureCheckPeriod",
+                "type": "long",
+                "desc": "clientFailureCheckPeriod"
+              },
+              {
+                "name": "connectionTTL",
+                "type": "long",
+                "desc": "connectionTTL"
+              },
+              {
+                "name": "callTimeout",
+                "type": "long",
+                "desc": "callTimeout"
+              },
+              {
+                "name": "callFailoverTimeout",
+                "type": "long",
+                "desc": "callFailoverTimeout"
+              },
+              {
+                "name": "minLargeMessageSize",
+                "type": "int",
+                "desc": "minLargeMessageSize"
+              },
+              {
+                "name": "compressLargeMessages",
+                "type": "boolean",
+                "desc": "compressLargeMessages"
+              },
+              {
+                "name": "consumerWindowSize",
+                "type": "int",
+                "desc": "consumerWindowSize"
+              },
+              {
+                "name": "consumerMaxRate",
+                "type": "int",
+                "desc": "consumerMaxRate"
+              },
+              {
+                "name": "confirmationWindowSize",
+                "type": "int",
+                "desc": "confirmationWindowSize"
+              },
+              {
+                "name": "producerWindowSize",
+                "type": "int",
+                "desc": "producerWindowSize"
+              },
+              {
+                "name": "producerMaxRate",
+                "type": "int",
+                "desc": "producerMaxRate"
+              },
+              {
+                "name": "blockOnAcknowledge",
+                "type": "boolean",
+                "desc": "blockOnAcknowledge"
+              },
+              {
+                "name": "blockOnDurableSend",
+                "type": "boolean",
+                "desc": "blockOnDurableSend"
+              },
+              {
+                "name": "blockOnNonDurableSend",
+                "type": "boolean",
+                "desc": "blockOnNonDurableSend"
+              },
+              {
+                "name": "autoGroup",
+                "type": "boolean",
+                "desc": "autoGroup"
+              },
+              {
+                "name": "preAcknowledge",
+                "type": "boolean",
+                "desc": "preAcknowledge"
+              },
+              {
+                "name": "loadBalancingPolicyClassName",
+                "type": "java.lang.String",
+                "desc": "loadBalancingPolicyClassName (null or blank mean use the default value)"
+              },
+              {
+                "name": "transactionBatchSize",
+                "type": "int",
+                "desc": "transactionBatchSize"
+              },
+              {
+                "name": "dupsOKBatchSize",
+                "type": "int",
+                "desc": "dupsOKBatchSize"
+              },
+              {
+                "name": "useGlobalPools",
+                "type": "boolean",
+                "desc": "useGlobalPools"
+              },
+              {
+                "name": "scheduledThreadPoolMaxSize",
+                "type": "int",
+                "desc": "scheduledThreadPoolMaxSize"
+              },
+              {
+                "name": "threadPoolMaxSize",
+                "type": "int",
+                "desc": "threadPoolMaxSize"
+              },
+              {
+                "name": "retryInterval",
+                "type": "long",
+                "desc": "retryInterval"
+              },
+              {
+                "name": "retryIntervalMultiplier",
+                "type": "double",
+                "desc": "retryIntervalMultiplier"
+              },
+              {
+                "name": "maxRetryInterval",
+                "type": "long",
+                "desc": "maxRetryInterval"
+              },
+              {
+                "name": "reconnectAttempts",
+                "type": "int",
+                "desc": "reconnectAttempts"
+              },
+              {
+                "name": "failoverOnInitialConnection",
+                "type": "boolean",
+                "desc": "failoverOnInitialConnection"
+              },
+              {
+                "name": "groupId",
+                "type": "java.lang.String",
+                "desc": "groupId"
+              }
+            ],
+            "ret": "void",
+            "desc": "Create a JMS ConnectionFactory"
+          },
+          {
+            "args": [
+              {
+                "name": "name",
+                "type": "java.lang.String",
+                "desc": "N/A"
+              },
+              {
+                "name": "ha",
+                "type": "boolean",
+                "desc": "N/A"
+              },
+              {
+                "name": "useDiscovery",
+                "type": "boolean",
+                "desc": "should we use discovery or a connector configuration"
+              },
+              {
+                "name": "cfType",
+                "type": "int",
+                "desc": "RegularCF=0, QueueCF=1, TopicCF=2, XACF=3, QueueXACF=4, TopicXACF=5"
+              },
+              {
+                "name": "connectorNames",
+                "type": "java.lang.String",
+                "desc": "comma-separated list of connectorNames or the discovery group name"
+              },
+              {
+                "name": "jndiBindings",
+                "type": "java.lang.String",
+                "desc": "comma-separated list of JNDI bindings (use '&comma;' if u need to use commas in your jndi name)"
+              },
+              {
+                "name": "clientID",
+                "type": "java.lang.String",
+                "desc": "The clientID configured for the connectionFactory"
+              },
+              {
+                "name": "clientFailureCheckPeriod",
+                "type": "long",
+                "desc": "clientFailureCheckPeriod"
+              },
+              {
+                "name": "connectionTTL",
+                "type": "long",
+                "desc": "connectionTTL"
+              },
+              {
+                "name": "callTimeout",
+                "type": "long",
+                "desc": "callTimeout"
+              },
+              {
+                "name": "callFailoverTimeout",
+                "type": "long",
+                "desc": "callFailoverTimeout"
+              },
+              {
+                "name": "minLargeMessageSize",
+                "type": "int",
+                "desc": "minLargeMessageSize"
+              },
+              {
+                "name": "compressLargeMessages",
+                "type": "boolean",
+                "desc": "compressLargeMessages"
+              },
+              {
+                "name": "consumerWindowSize",
+                "type": "int",
+                "desc": "consumerWindowSize"
+              },
+              {
+                "name": "consumerMaxRate",
+                "type": "int",
+                "desc": "consumerMaxRate"
+              },
+              {
+                "name": "confirmationWindowSize",
+                "type": "int",
+                "desc": "confirmationWindowSize"
+              },
+              {
+                "name": "producerWindowSize",
+                "type": "int",
+                "desc": "producerWindowSize"
+              },
+              {
+                "name": "producerMaxRate",
+                "type": "int",
+                "desc": "producerMaxRate"
+              },
+              {
+                "name": "blockOnAcknowledge",
+                "type": "boolean",
+                "desc": "blockOnAcknowledge"
+              },
+              {
+                "name": "blockOnDurableSend",
+                "type": "boolean",
+                "desc": "blockOnDurableSend"
+              },
+              {
+                "name": "blockOnNonDurableSend",
+                "type": "boolean",
+                "desc": "blockOnNonDurableSend"
+              },
+              {
+                "name": "autoGroup",
+                "type": "boolean",
+                "desc": "autoGroup"
+              },
+              {
+                "name": "preAcknowledge",
+                "type": "boolean",
+                "desc": "preAcknowledge"
+              },
+              {
+                "name": "loadBalancingPolicyClassName",
+                "type": "java.lang.String",
+                "desc": "loadBalancingPolicyClassName (null or blank mean use the default value)"
+              },
+              {
+                "name": "transactionBatchSize",
+                "type": "int",
+                "desc": "transactionBatchSize"
+              },
+              {
+                "name": "dupsOKBatchSize",
+                "type": "int",
+                "desc": "dupsOKBatchSize"
+              },
+              {
+                "name": "useGlobalPools",
+                "type": "boolean",
+                "desc": "useGlobalPools"
+              },
+              {
+                "name": "scheduledThreadPoolMaxSize",
+                "type": "int",
+                "desc": "scheduledThreadPoolMaxSize"
+              },
+              {
+                "name": "threadPoolMaxSize",
+                "type": "int",
+                "desc": "threadPoolMaxSize"
+              },
+              {
+                "name": "retryInterval",
+                "type": "long",
+                "desc": "retryInterval"
+              },
+              {
+                "name": "retryIntervalMultiplier",
+                "type": "double",
+                "desc": "retryIntervalMultiplier"
+              },
+              {
+                "name": "maxRetryInterval",
+                "type": "long",
+                "desc": "maxRetryInterval"
+              },
+              {
+                "name": "reconnectAttempts",
+                "type": "int",
+                "desc": "reconnectAttempts"
+              },
+              {
+                "name": "failoverOnInitialConnection",
+                "type": "boolean",
+                "desc": "failoverOnInitialConnection"
+              },
+              {
+                "name": "groupId",
+                "type": "java.lang.String",
+                "desc": "groupId"
+              }
+            ],
+            "ret": "void",
+            "desc": "Create a JMS ConnectionFactory"
+          },
+          {
+            "args": [
+              {
+                "name": "p 1",
+                "type": "java.lang.String",
+                "desc": "parameter 1"
+              },
+              {
+                "name": "p 2",
+                "type": "boolean",
+                "desc": "parameter 2"
+              },
+              {
+                "name": "p 3",
+                "type": "boolean",
+                "desc": "parameter 3"
+              },
+              {
+                "name": "cfType",
+                "type": "int",
+                "desc": "RegularCF=0, QueueCF=1, TopicCF=2, XACF=3, QueueXACF=4, TopicXACF=5"
+              },
+              {
+                "name": "p 5",
+                "type": "[Ljava.lang.String;",
+                "desc": "parameter 5"
+              },
+              {
+                "name": "p 6",
+                "type": "[Ljava.lang.Object;",
+                "desc": "parameter 6"
+              }
+            ],
+            "ret": "void",
+            "desc": "createConnectionFactory"
+          }
+        ],
+        "listNetworkTopology": {
+          "args": [],
+          "ret": "java.lang.String",
+          "desc": "List the Network Topology"
+        },
+        "createQueue": [
+          {
+            "args": [
+              {
+                "name": "name",
+                "type": "java.lang.String",
+                "desc": "Name of the queue to create"
+              },
+              {
+                "name": "jndiBindings",
+                "type": "java.lang.String",
+                "desc": "comma-separated list of JNDI bindings (use '&comma;' if u need to use commas in your jndi name)"
+              }
+            ],
+            "ret": "boolean",
+            "desc": "Create a JMS Queue"
+          },
+          {
+            "args": [
+              {
+                "name": "name",
+                "type": "java.lang.String",
+                "desc": "Name of the queue to create"
+              },
+              {
+                "name": "jndiBindings",
+                "type": "java.lang.String",
+                "desc": "comma-separated list of JNDI bindings (use '&comma;' if u need to use commas in your jndi name)"
+              },
+              {
+                "name": "selector",
+                "type": "java.lang.String",
+                "desc": "the jms selector"
+              }
+            ],
+            "ret": "boolean",
+            "desc": "Create a JMS Queue"
+          },
+          {
+            "args": [
+              {
+                "name": "name",
+                "type": "java.lang.String",
+                "desc": "Name of the queue to create"
+              },
+              {
+                "name": "jndiBindings",
+                "type": "java.lang.String",
+                "desc": "comma-separated list of JNDI bindings (use '&comma;' if u need to use commas in your jndi name)"
+              },
+              {
+                "name": "selector",
+                "type": "java.lang.String",
+                "desc": "the jms selector"
+              },
+              {
+                "name": "durable",
+                "type": "boolean",
+                "desc": "durability of the queue"
+              }
+            ],
+            "ret": "boolean",
+            "desc": "Create a JMS Queue"
+          },
+          {
+            "args": [
+              {
+                "name": "name",
+                "type": "java.lang.String",
+                "desc": "Name of the queue to create"
+              }
+            ],
+            "ret": "boolean",
+            "desc": "Create a JMS Queue"
+          }
+        ],
+        "listRemoteAddresses": [
+          {
+            "args": [
+              {
+                "name": "ipAddress",
+                "type": "java.lang.String",
+                "desc": "an IP address"
+              }
+            ],
+            "ret": "[Ljava.lang.String;",
+            "desc": "List the client addresses which match the given IP Address"
+          },
+          {
+            "args": [],
+            "ret": "[Ljava.lang.String;",
+            "desc": "List the client addresses"
+          }
+        ],
+        "closeConsumerConnectionsForAddress": {
+          "args": [
+            {
+              "name": "address",
+              "type": "java.lang.String",
+              "desc": "a messaging address"
+            }
+          ],
+          "ret": "boolean",
+          "desc": "Closes all the consumer connections for the given messaging address"
+        },
+        "closeConnectionsForUser": {
+          "args": [
+            {
+              "name": "userName",
+              "type": "java.lang.String",
+              "desc": "a user name"
+            }
+          ],
+          "ret": "boolean",
+          "desc": "Closes all the connections for session using a particular user name"
+        },
+        "listSessionsAsJSON": {
+          "args": [
+            {
+              "name": "connectionID",
+              "type": "java.lang.String",
+              "desc": "a connection ID"
+            }
+          ],
+          "ret": "java.lang.String",
+          "desc": "List the sessions for the given connectionID"
+        },
+        "closeConnectionWithClientID": {
+          "args": [
+            {
+              "name": "clientID",
+              "type": "java.lang.String",
+              "desc": "the clientID used to connect"
+            }
+          ],
+          "ret": "java.lang.String",
+          "desc": "Will close any connection with the given connectionID"
+        }
+      },
+      "attr": {
+        "Started": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "whether this server is started"
+        },
+        "QueueNames": {
+          "rw": false,
+          "type": "[Ljava.lang.String;",
+          "desc": "names of the JMS queues available on this server"
+        },
+        "ConnectionFactoryNames": {
+          "rw": false,
+          "type": "[Ljava.lang.String;",
+          "desc": "names of the JMS connection factories available on this server"
+        },
+        "Version": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "server's version"
+        },
+        "TopicNames": {
+          "rw": false,
+          "type": "[Ljava.lang.String;",
+          "desc": "names of the JMS topics available on this server"
+        },
+        "NodeID": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "server's nodeId"
+        }
+      },
+      "desc": "Information on the management interface of the MBean"
+    },
+    "brokerName=\"0.0.0.0\",module=JMS,name=\"DLQ\",serviceType=Queue,type=Broker": {
+      "op": {
+        "listMessages": {
+          "args": [
+            {
+              "name": "filter",
+              "type": "java.lang.String",
+              "desc": "A JMS Message filter"
+            }
+          ],
+          "ret": "[Ljava.util.Map;",
+          "desc": "List all messages in the queue which matches the filter"
+        },
+        "listScheduledMessagesAsJSON": {
+          "args": [],
+          "ret": "java.lang.String",
+          "desc": "List the messages scheduled for delivery and returns them using JSON"
+        },
+        "moveMessage": [
+          {
+            "args": [
+              {
+                "name": "messageID",
+                "type": "java.lang.String",
+                "desc": "A message ID"
+              },
+              {
+                "name": "otherQueueName",
+                "type": "java.lang.String",
+                "desc": "The name of the queue to move the message to"
+              },
+              {
+                "name": "rejectDuplicates",
+                "type": "boolean",
+                "desc": "Reject messages identified as duplicate by the duplicate message"
+              }
+            ],
+            "ret": "boolean",
+            "desc": "Move the message corresponding to the given messageID to another queue"
+          },
+          {
+            "args": [
+              {
+                "name": "messageID",
+                "type": "java.lang.String",
+                "desc": "A message ID"
+              },
+              {
+                "name": "otherQueueName",
+                "type": "java.lang.String",
+                "desc": "The name of the queue to move the message to"
+              }
+            ],
+            "ret": "boolean",
+            "desc": "Move the message corresponding to the given messageID to another queue, ignoring duplicates (rejectDuplicates=false on this case)"
+          }
+        ],
+        "moveMessages": [
+          {
+            "args": [
+              {
+                "name": "filter",
+                "type": "java.lang.String",
+                "desc": "A message filter (can be empty)"
+              },
+              {
+                "name": "otherQueueName",
+                "type": "java.lang.String",
+                "desc": "The name of the queue to move the messages to"
+              },
+              {
+                "name": "rejectDuplicates",
+                "type": "boolean",
+                "desc": "Reject messages identified as duplicate by the duplicate message"
+              }
+            ],
+            "ret": "int",
+            "desc": "Move the messages corresponding to the given filter (and returns the number of moved messages)"
+          },
+          {
+            "args": [
+              {
+                "name": "filter",
+                "type": "java.lang.String",
+                "desc": "A message filter (can be empty)"
+              },
+              {
+                "name": "otherQueueName",
+                "type": "java.lang.String",
+                "desc": "The name of the queue to move the messages to"
+              }
+            ],
+            "ret": "int",
+            "desc": "Move the messages corresponding to the given filter (and returns the number of moved messages). rejectDuplicates=false on this case"
+          }
+        ],
+        "resetMessageCounter": {
+          "args": [],
+          "ret": "void",
+          "desc": "Reset the message counters"
+        },
+        "sendMessageToDeadLetterAddress": {
+          "args": [
+            {
+              "name": "messageID",
+              "type": "java.lang.String",
+              "desc": "A message ID"
+            }
+          ],
+          "ret": "boolean",
+          "desc": "Send the message corresponding to the given messageID to this queue's Dead Letter Address"
+        },
+        "removeMessage": {
+          "args": [
+            {
+              "name": "messageID",
+              "type": "java.lang.String",
+              "desc": "A message ID"
+            }
+          ],
+          "ret": "boolean",
+          "desc": "Remove the message corresponding to the given messageID"
+        },
+        "listScheduledMessages": {
+          "args": [],
+          "ret": "[Ljava.util.Map;",
+          "desc": "List the messages scheduled for delivery"
+        },
+        "listDeliveringMessages": {
+          "args": [],
+          "ret": "java.util.Map",
+          "desc": "List all messages being delivered per consumer"
+        },
+        "changeMessagesPriority": {
+          "args": [
+            {
+              "name": "filter",
+              "type": "java.lang.String",
+              "desc": "A message filter"
+            },
+            {
+              "name": "newPriority",
+              "type": "int",
+              "desc": "the new priority (between 0 and 9)"
+            }
+          ],
+          "ret": "int",
+          "desc": "Change the priority of the messages corresponding to the given filter"
+        },
+        "listMessageCounterHistoryAsHTML": {
+          "args": [],
+          "ret": "java.lang.String",
+          "desc": "List the message counters history as HTML"
+        },
+        "listConsumersAsJSON": {
+          "args": [],
+          "ret": "java.lang.String",
+          "desc": "List all the existent consumers on the Queue"
+        },
+        "retryMessage": {
+          "args": [
+            {
+              "name": "messageID",
+              "type": "java.lang.String",
+              "desc": "A message ID"
+            }
+          ],
+          "ret": "boolean",
+          "desc": "Retry the message corresponding to the given messageID to the original queue"
+        },
+        "listMessagesAsJSON": {
+          "args": [
+            {
+              "name": "filter",
+              "type": "java.lang.String",
+              "desc": "A JMS Message filter (can be empty)"
+            }
+          ],
+          "ret": "java.lang.String",
+          "desc": "List all messages in the queue which matches the filter and return them using JSON"
+        },
+        "removeMessages": {
+          "args": [
+            {
+              "name": "filter",
+              "type": "java.lang.String",
+              "desc": "A message filter (can be empty)"
+            }
+          ],
+          "ret": "int",
+          "desc": "Remove the messages corresponding to the given filter (and returns the number of removed messages)"
+        },
+        "flushExecutor": {
+          "args": [],
+          "ret": "void",
+          "desc": "flushExecutor"
+        },
+        "resume": {
+          "args": [],
+          "ret": "void",
+          "desc": "Resume the queue."
+        },
+        "countMessages": {
+          "args": [
+            {
+              "name": "filter",
+              "type": "java.lang.String",
+              "desc": "A JMS message filter (can be empty)"
+            }
+          ],
+          "ret": "long",
+          "desc": "Returns the number of the messages in the queue matching the given filter"
+        },
+        "listMessageCounterAsHTML": {
+          "args": [],
+          "ret": "java.lang.String",
+          "desc": "List the message counters as HTML"
+        },
+        "listMessageCounterHistory": {
+          "args": [],
+          "ret": "java.lang.String",
+          "desc": "List the message counters history"
+        },
+        "listMessageCounter": {
+          "args": [],
+          "ret": "java.lang.String",
+          "desc": "List the message counters"
+        },
+        "addBinding": {
+          "args": [
+            {
+              "name": "binding",
+              "type": "java.lang.String",
+              "desc": "the name of the binding for the registry"
+            }
+          ],
+          "ret": "void",
+          "desc": "Adds the queue to another Registry binding"
+        },
+        "pause": {
+          "args": [],
+          "ret": "void",
+          "desc": "Pause the queue."
+        },
+        "listDeliveringMessagesAsJSON": {
+          "args": [],
+          "ret": "java.lang.String",
+          "desc": "list all messages being delivered per consumer using JSON form"
+        },
+        "expireMessage": {
+          "args": [
+            {
+              "name": "messageID",
+              "type": "java.lang.String",
+              "desc": "A message ID"
+            }
+          ],
+          "ret": "boolean",
+          "desc": "Expire the message corresponding to the given messageID"
+        },
+        "changeMessagePriority": {
+          "args": [
+            {
+              "name": "messageID",
+              "type": "java.lang.String",
+              "desc": "A message ID"
+            },
+            {
+              "name": "newPriority",
+              "type": "int",
+              "desc": "the new priority (between 0 and 9)"
+            }
+          ],
+          "ret": "boolean",
+          "desc": "Change the priority of the message corresponding to the given messageID"
+        },
+        "sendTextMessage": [
+          {
+            "args": [
+              {
+                "name": "body",
+                "type": "java.lang.String",
+                "desc": "N/A"
+              },
+              {
+                "name": "user",
+                "type": "java.lang.String",
+                "desc": "N/A"
+              },
+              {
+                "name": "password",
+                "type": "java.lang.String",
+                "desc": "N/A"
+              }
+            ],
+            "ret": "java.lang.String",
+            "desc": "Sends a TextMessage to a password-protected destination."
+          },
+          {
+            "args": [
+              {
+                "name": "body",
+                "type": "java.lang.String",
+                "desc": "N/A"
+              }
+            ],
+            "ret": "java.lang.String",
+            "desc": "Sends a TextMessage to a password-protected destination."
+          },
+          {
+            "args": [
+              {
+                "name": "headers",
+                "type": "java.util.Map",
+                "desc": "N/A"
+              },
+              {
+                "name": "body",
+                "type": "java.lang.String",
+                "desc": "N/A"
+              },
+              {
+                "name": "user",
+                "type": "java.lang.String",
+                "desc": "N/A"
+              },
+              {
+                "name": "password",
+                "type": "java.lang.String",
+                "desc": "N/A"
+              }
+            ],
+            "ret": "java.lang.String",
+            "desc": "Sends a TextMessage to a password-protected destination."
+          },
+          {
+            "args": [
+              {
+                "name": "headers",
+                "type": "java.util.Map",
+                "desc": "N/A"
+              },
+              {
+                "name": "body",
+                "type": "java.lang.String",
+                "desc": "N/A"
+              }
+            ],
+            "ret": "java.lang.String",
+            "desc": "Sends a TextMessage to a password-protected destination."
+          }
+        ],
+        "sendMessagesToDeadLetterAddress": {
+          "args": [
+            {
+              "name": "filter",
+              "type": "java.lang.String",
+              "desc": "A message filter (can be empty)"
+            }
+          ],
+          "ret": "int",
+          "desc": "Send the messages corresponding to the given filter to this queue's Dead Letter Address"
+        },
+        "retryMessages": {
+          "args": [],
+          "ret": "int",
+          "desc": "Retry all messages on a DLQ to their respective original queues"
+        },
+        "expireMessages": {
+          "args": [
+            {
+              "name": "filter",
+              "type": "java.lang.String",
+              "desc": "A message filter (can be empty)"
+            }
+          ],
+          "ret": "int",
+          "desc": "Expire the messages corresponding to the given filter (and returns the number of expired messages)"
+        },
+        "browse": [
+          {
+            "args": [
+              {
+                "name": "p 1",
+                "type": "java.lang.String",
+                "desc": "parameter 1"
+              }
+            ],
+            "ret": "[Ljavax.management.openmbean.CompositeData;",
+            "desc": "Browse the queue."
+          },
+          {
+            "args": [],
+            "ret": "[Ljavax.management.openmbean.CompositeData;",
+            "desc": "Browse the queue."
+          }
+        ],
+        "sendTextMessageWithProperties": {
+          "args": [
+            {
+              "name": "p 1",
+              "type": "java.lang.String",
+              "desc": "parameter 1"
+            }
+          ],
+          "ret": "java.lang.String",
+          "desc": "Sends a TextMessage to a password-protected destination."
+        }
+      },
+      "attr": {
+        "FirstMessageAge": {
+          "rw": false,
+          "type": "java.lang.Long",
+          "desc": "age of the first message in milliseconds"
+        },
+        "DeadLetterAddress": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "dead-letter address associated with this queue"
+        },
+        "MessagesAdded": {
+          "rw": false,
+          "type": "long",
+          "desc": "N/A"
+        },
+        "ConsumerCount": {
+          "rw": false,
+          "type": "int",
+          "desc": "number of consumers consuming messages from this queue"
+        },
+        "Address": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "N/A"
+        },
+        "DeliveringCount": {
+          "rw": false,
+          "type": "int",
+          "desc": "N/A"
+        },
+        "RegistryBindings": {
+          "rw": false,
+          "type": "[Ljava.lang.String;",
+          "desc": "N/A"
+        },
+        "ScheduledCount": {
+          "rw": false,
+          "type": "long",
+          "desc": "number of scheduled messages in this queue"
+        },
+        "Name": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "N/A"
+        },
+        "Temporary": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "N/A"
+        },
+        "FirstMessageTimestamp": {
+          "rw": false,
+          "type": "java.lang.Long",
+          "desc": "timestamp of the first message in milliseconds"
+        },
+        "ExpiryAddress": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "expiry address associated with this queue"
+        },
+        "FirstMessageAsJSON": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "first message on the queue as JSON"
+        },
+        "MessageCount": {
+          "rw": false,
+          "type": "long",
+          "desc": "N/A"
+        },
+        "Selector": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "selector for the queue"
+        },
+        "Paused": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "N/A"
+        }
+      },
+      "desc": "Information on the management interface of the MBean"
+    },
+    "brokerName=\"0.0.0.0\",module=JMS,name=\"ExpiryQueue\",serviceType=Queue,type=Broker": {
+      "op": {
+        "listMessages": {
+          "args": [
+            {
+              "name": "filter",
+              "type": "java.lang.String",
+              "desc": "A JMS Message filter"
+            }
+          ],
+          "ret": "[Ljava.util.Map;",
+          "desc": "List all messages in the queue which matches the filter"
+        },
+        "listScheduledMessagesAsJSON": {
+          "args": [],
+          "ret": "java.lang.String",
+          "desc": "List the messages scheduled for delivery and returns them using JSON"
+        },
+        "moveMessage": [
+          {
+            "args": [
+              {
+                "name": "messageID",
+                "type": "java.lang.String",
+                "desc": "A message ID"
+              },
+              {
+                "name": "otherQueueName",
+                "type": "java.lang.String",
+                "desc": "The name of the queue to move the message to"
+              },
+              {
+                "name": "rejectDuplicates",
+                "type": "boolean",
+                "desc": "Reject messages identified as duplicate by the duplicate message"
+              }
+            ],
+            "ret": "boolean",
+            "desc": "Move the message corresponding to the given messageID to another queue"
+          },
+          {
+            "args": [
+              {
+                "name": "messageID",
+                "type": "java.lang.String",
+                "desc": "A message ID"
+              },
+              {
+                "name": "otherQueueName",
+                "type": "java.lang.String",
+                "desc": "The name of the queue to move the message to"
+              }
+            ],
+            "ret": "boolean",
+            "desc": "Move the message corresponding to the given messageID to another queue, ignoring duplicates (rejectDuplicates=false on this case)"
+          }
+        ],
+        "moveMessages": [
+          {
+            "args": [
+              {
+                "name": "filter",
+                "type": "java.lang.String",
+                "desc": "A message filter (can be empty)"
+              },
+              {
+                "name": "otherQueueName",
+                "type": "java.lang.String",
+                "desc": "The name of the queue to move the messages to"
+              },
+              {
+                "name": "rejectDuplicates",
+                "type": "boolean",
+                "desc": "Reject messages identified as duplicate by the duplicate message"
+              }
+            ],
+            "ret": "int",
+            "desc": "Move the messages corresponding to the given filter (and returns the number of moved messages)"
+          },
+          {
+            "args": [
+              {
+                "name": "filter",
+                "type": "java.lang.String",
+                "desc": "A message filter (can be empty)"
+              },
+              {
+                "name": "otherQueueName",
+                "type": "java.lang.String",
+                "desc": "The name of the queue to move the messages to"
+              }
+            ],
+            "ret": "int",
+            "desc": "Move the messages corresponding to the given filter (and returns the number of moved messages). rejectDuplicates=false on this case"
+          }
+        ],
+        "resetMessageCounter": {
+          "args": [],
+          "ret": "void",
+          "desc": "Reset the message counters"
+        },
+        "sendMessageToDeadLetterAddress": {
+          "args": [
+            {
+              "name": "messageID",
+              "type": "java.lang.String",
+              "desc": "A message ID"
+            }
+          ],
+          "ret": "boolean",
+          "desc": "Send the message corresponding to the given messageID to this queue's Dead Letter Address"
+        },
+        "removeMessage": {
+          "args": [
+            {
+              "name": "messageID",
+              "type": "java.lang.String",
+              "desc": "A message ID"
+            }
+          ],
+          "ret": "boolean",
+          "desc": "Remove the message corresponding to the given messageID"
+        },
+        "listScheduledMessages": {
+          "args": [],
+          "ret": "[Ljava.util.Map;",
+          "desc": "List the messages scheduled for delivery"
+        },
+        "listDeliveringMessages": {
+          "args": [],
+          "ret": "java.util.Map",
+          "desc": "List all messages being delivered per consumer"
+        },
+        "changeMessagesPriority": {
+          "args": [
+            {
+              "name": "filter",
+              "type": "java.lang.String",
+              "desc": "A message filter"
+            },
+            {
+              "name": "newPriority",
+              "type": "int",
+              "desc": "the new priority (between 0 and 9)"
+            }
+          ],
+          "ret": "int",
+          "desc": "Change the priority of the messages corresponding to the given filter"
+        },
+        "listMessageCounterHistoryAsHTML": {
+          "args": [],
+          "ret": "java.lang.String",
+          "desc": "List the message counters history as HTML"
+        },
+        "listConsumersAsJSON": {
+          "args": [],
+          "ret": "java.lang.String",
+          "desc": "List all the existent consumers on the Queue"
+        },
+        "retryMessage": {
+          "args": [
+            {
+              "name": "messageID",
+              "type": "java.lang.String",
+              "desc": "A message ID"
+            }
+          ],
+          "ret": "boolean",
+          "desc": "Retry the message corresponding to the given messageID to the original queue"
+        },
+        "listMessagesAsJSON": {
+          "args": [
+            {
+              "name": "filter",
+              "type": "java.lang.String",
+              "desc": "A JMS Message filter (can be empty)"
+            }
+          ],
+          "ret": "java.lang.String",
+          "desc": "List all messages in the queue which matches the filter and return them using JSON"
+        },
+        "removeMessages": {
+          "args": [
+            {
+              "name": "filter",
+              "type": "java.lang.String",
+              "desc": "A message filter (can be empty)"
+            }
+          ],
+          "ret": "int",
+          "desc": "Remove the messages corresponding to the given filter (and returns the number of removed messages)"
+        },
+        "flushExecutor": {
+          "args": [],
+          "ret": "void",
+          "desc": "flushExecutor"
+        },
+        "resume": {
+          "args": [],
+          "ret": "void",
+          "desc": "Resume the queue."
+        },
+        "countMessages": {
+          "args": [
+            {
+              "name": "filter",
+              "type": "java.lang.String",
+              "desc": "A JMS message filter (can be empty)"
+            }
+          ],
+          "ret": "long",
+          "desc": "Returns the number of the messages in the queue matching the given filter"
+        },
+        "listMessageCounterAsHTML": {
+          "args": [],
+          "ret": "java.lang.String",
+          "desc": "List the message counters as HTML"
+        },
+        "listMessageCounterHistory": {
+          "args": [],
+          "ret": "java.lang.String",
+          "desc": "List the message counters history"
+        },
+        "listMessageCounter": {
+          "args": [],
+          "ret": "java.lang.String",
+          "desc": "List the message counters"
+        },
+        "addBinding": {
+          "args": [
+            {
+              "name": "binding",
+              "type": "java.lang.String",
+              "desc": "the name of the binding for the registry"
+            }
+          ],
+          "ret": "void",
+          "desc": "Adds the queue to another Registry binding"
+        },
+        "pause": {
+          "args": [],
+          "ret": "void",
+          "desc": "Pause the queue."
+        },
+        "listDeliveringMessagesAsJSON": {
+          "args": [],
+          "ret": "java.lang.String",
+          "desc": "list all messages being delivered per consumer using JSON form"
+        },
+        "expireMessage": {
+          "args": [
+            {
+              "name": "messageID",
+              "type": "java.lang.String",
+              "desc": "A message ID"
+            }
+          ],
+          "ret": "boolean",
+          "desc": "Expire the message corresponding to the given messageID"
+        },
+        "changeMessagePriority": {
+          "args": [
+            {
+              "name": "messageID",
+              "type": "java.lang.String",
+              "desc": "A message ID"
+            },
+            {
+              "name": "newPriority",
+              "type": "int",
+              "desc": "the new priority (between 0 and 9)"
+            }
+          ],
+          "ret": "boolean",
+          "desc": "Change the priority of the message corresponding to the given messageID"
+        },
+        "sendTextMessage": [
+          {
+            "args": [
+              {
+                "name": "body",
+                "type": "java.lang.String",
+                "desc": "N/A"
+              },
+              {
+                "name": "user",
+                "type": "java.lang.String",
+                "desc": "N/A"
+              },
+              {
+                "name": "password",
+                "type": "java.lang.String",
+                "desc": "N/A"
+              }
+            ],
+            "ret": "java.lang.String",
+            "desc": "Sends a TextMessage to a password-protected destination."
+          },
+          {
+            "args": [
+              {
+                "name": "body",
+                "type": "java.lang.String",
+                "desc": "N/A"
+              }
+            ],
+            "ret": "java.lang.String",
+            "desc": "Sends a TextMessage to a password-protected destination."
+          },
+          {
+            "args": [
+              {
+                "name": "headers",
+                "type": "java.util.Map",
+                "desc": "N/A"
+              },
+              {
+                "name": "body",
+                "type": "java.lang.String",
+                "desc": "N/A"
+              },
+              {
+                "name": "user",
+                "type": "java.lang.String",
+                "desc": "N/A"
+              },
+              {
+                "name": "password",
+                "type": "java.lang.String",
+                "desc": "N/A"
+              }
+            ],
+            "ret": "java.lang.String",
+            "desc": "Sends a TextMessage to a password-protected destination."
+          },
+          {
+            "args": [
+              {
+                "name": "headers",
+                "type": "java.util.Map",
+                "desc": "N/A"
+              },
+              {
+                "name": "body",
+                "type": "java.lang.String",
+                "desc": "N/A"
+              }
+            ],
+            "ret": "java.lang.String",
+            "desc": "Sends a TextMessage to a password-protected destination."
+          }
+        ],
+        "sendMessagesToDeadLetterAddress": {
+          "args": [
+            {
+              "name": "filter",
+              "type": "java.lang.String",
+              "desc": "A message filter (can be empty)"
+            }
+          ],
+          "ret": "int",
+          "desc": "Send the messages corresponding to the given filter to this queue's Dead Letter Address"
+        },
+        "retryMessages": {
+          "args": [],
+          "ret": "int",
+          "desc": "Retry all messages on a DLQ to their respective original queues"
+        },
+        "expireMessages": {
+          "args": [
+            {
+              "name": "filter",
+              "type": "java.lang.String",
+              "desc": "A message filter (can be empty)"
+            }
+          ],
+          "ret": "int",
+          "desc": "Expire the messages corresponding to the given filter (and returns the number of expired messages)"
+        },
+        "browse": [
+          {
+            "args": [
+              {
+                "name": "p 1",
+                "type": "java.lang.String",
+                "desc": "parameter 1"
+              }
+            ],
+            "ret": "[Ljavax.management.openmbean.CompositeData;",
+            "desc": "Browse the queue."
+          },
+          {
+            "args": [],
+            "ret": "[Ljavax.management.openmbean.CompositeData;",
+            "desc": "Browse the queue."
+          }
+        ],
+        "sendTextMessageWithProperties": {
+          "args": [
+            {
+              "name": "p 1",
+              "type": "java.lang.String",
+              "desc": "parameter 1"
+            }
+          ],
+          "ret": "java.lang.String",
+          "desc": "Sends a TextMessage to a password-protected destination."
+        }
+      },
+      "attr": {
+        "FirstMessageAge": {
+          "rw": false,
+          "type": "java.lang.Long",
+          "desc": "age of the first message in milliseconds"
+        },
+        "DeadLetterAddress": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "dead-letter address associated with this queue"
+        },
+        "MessagesAdded": {
+          "rw": false,
+          "type": "long",
+          "desc": "N/A"
+        },
+        "ConsumerCount": {
+          "rw": false,
+          "type": "int",
+          "desc": "number of consumers consuming messages from this queue"
+        },
+        "Address": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "N/A"
+        },
+        "DeliveringCount": {
+          "rw": false,
+          "type": "int",
+          "desc": "N/A"
+        },
+        "RegistryBindings": {
+          "rw": false,
+          "type": "[Ljava.lang.String;",
+          "desc": "N/A"
+        },
+        "ScheduledCount": {
+          "rw": false,
+          "type": "long",
+          "desc": "number of scheduled messages in this queue"
+        },
+        "Name": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "N/A"
+        },
+        "Temporary": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "N/A"
+        },
+        "FirstMessageTimestamp": {
+          "rw": false,
+          "type": "java.lang.Long",
+          "desc": "timestamp of the first message in milliseconds"
+        },
+        "ExpiryAddress": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "expiry address associated with this queue"
+        },
+        "FirstMessageAsJSON": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "first message on the queue as JSON"
+        },
+        "MessageCount": {
+          "rw": false,
+          "type": "long",
+          "desc": "N/A"
+        },
+        "Selector": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "selector for the queue"
+        },
+        "Paused": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "N/A"
+        }
+      },
+      "desc": "Information on the management interface of the MBean"
+    },
+    "address=\"jms.queue.ExpiryQueue\",brokerName=\"0.0.0.0\",module=Core,name=\"jms.queue.ExpiryQueue\",serviceType=Queue,type=Broker": {
+      "op": {
+        "listMessages": {
+          "args": [
+            {
+              "name": "filter",
+              "type": "java.lang.String",
+              "desc": "A message filter (can be empty)"
+            }
+          ],
+          "ret": "[Ljava.util.Map;",
+          "desc": "List all the messages in the queue matching the given filter"
+        },
+        "listScheduledMessagesAsJSON": {
+          "args": [],
+          "ret": "java.lang.String",
+          "desc": "List the messages scheduled for delivery and returns them using JSON"
+        },
+        "moveMessage": [
+          {
+            "args": [
+              {
+                "name": "messageID",
+                "type": "long",
+                "desc": "A message ID"
+              },
+              {
+                "name": "otherQueueName",
+                "type": "java.lang.String",
+                "desc": "The name of the queue to move the message to"
+              },
+              {
+                "name": "rejectDuplicates",
+                "type": "boolean",
+                "desc": "Reject messages identified as duplicate by the duplicate message"
+              }
+            ],
+            "ret": "boolean",
+            "desc": "Move the message corresponding to the given messageID to another queue"
+          },
+          {
+            "args": [
+              {
+                "name": "messageID",
+                "type": "long",
+                "desc": "A message ID"
+              },
+              {
+                "name": "otherQueueName",
+                "type": "java.lang.String",
+                "desc": "The name of the queue to move the message to"
+              }
+            ],
+            "ret": "boolean",
+            "desc": "Move the message corresponding to the given messageID to another queue. rejectDuplicate=false on this case"
+          }
+        ],
+        "moveMessages": [
+          {
+            "args": [
+              {
+                "name": "flushLimit",
+                "type": "int",
+                "desc": "Limit to flush transactions during the operation to avoid OutOfMemory"
+              },
+              {
+                "name": "filter",
+                "type": "java.lang.String",
+                "desc": "A message filter (can be empty)"
+              },
+              {
+                "name": "otherQueueName",
+                "type": "java.lang.String",
+                "desc": "The name of the queue to move the messages to"
+              },
+              {
+                "name": "rejectDuplicates",
+                "type": "boolean",
+                "desc": "Reject messages identified as duplicate by the duplicate message"
+              }
+            ],
+            "ret": "int",
+            "desc": "Move the messages corresponding to the given filter (and returns the number of moved messages)"
+          },
+          {
+            "args": [
+              {
+                "name": "filter",
+                "type": "java.lang.String",
+                "desc": "A message filter (can be empty)"
+              },
+              {
+                "name": "otherQueueName",
+                "type": "java.lang.String",
+                "desc": "The name of the queue to move the messages to"
+              },
+              {
+                "name": "rejectDuplicates",
+                "type": "boolean",
+                "desc": "Reject messages identified as duplicate by the duplicate message"
+              }
+            ],
+            "ret": "int",
+            "desc": "Move the messages corresponding to the given filter (and returns the number of moved messages)"
+          },
+          {
+            "args": [
+              {
+                "name": "filter",
+                "type": "java.lang.String",
+                "desc": "A message filter (can be empty)"
+              },
+              {
+                "name": "otherQueueName",
+                "type": "java.lang.String",
+                "desc": "The name of the queue to move the messages to"
+              }
+            ],
+            "ret": "int",
+            "desc": "Move the messages corresponding to the given filter (and returns the number of moved messages). RejectDuplicates=false on this case."
+          }
+        ],
+        "resetMessageCounter": {
+          "args": [],
+          "ret": "void",
+          "desc": "Reset the message counters"
+        },
+        "sendMessageToDeadLetterAddress": {
+          "args": [
+            {
+              "name": "messageID",
+              "type": "long",
+              "desc": "A message ID"
+            }
+          ],
+          "ret": "boolean",
+          "desc": "Send the message corresponding to the given messageID to this queue's Dead Letter Address"
+        },
+        "removeMessage": {
+          "args": [
+            {
+              "name": "messageID",
+              "type": "long",
+              "desc": "A message ID"
+            }
+          ],
+          "ret": "boolean",
+          "desc": "Remove the message corresponding to the given messageID"
+        },
+        "listScheduledMessages": {
+          "args": [],
+          "ret": "[Ljava.util.Map;",
+          "desc": "List the messages scheduled for delivery"
+        },
+        "listDeliveringMessages": {
+          "args": [],
+          "ret": "java.util.Map",
+          "desc": "List all messages being delivered per consumer"
+        },
+        "resetMessagesAcknowledged": {
+          "args": [],
+          "ret": "void",
+          "desc": "Resets the MessagesAcknowledged property"
+        },
+        "changeMessagesPriority": {
+          "args": [
+            {
+              "name": "filter",
+              "type": "java.lang.String",
+              "desc": "A message filter (can be empty)"
+            },
+            {
+              "name": "newPriority",
+              "type": "int",
+              "desc": "the new priority (between 0 and 9)"
+            }
+          ],
+          "ret": "int",
+          "desc": "Change the priority of the messages corresponding to the given filter"
+        },
+        "listMessageCounterHistoryAsHTML": {
+          "args": [],
+          "ret": "java.lang.String",
+          "desc": "List the message counters history HTML"
+        },
+        "listConsumersAsJSON": {
+          "args": [],
+          "ret": "java.lang.String",
+          "desc": "List all the existent consumers on the Queue"
+        },
+        "retryMessage": {
+          "args": [
+            {
+              "name": "messageID",
+              "type": "long",
+              "desc": "A message ID"
+            }
+          ],
+          "ret": "boolean",
+          "desc": "Retry the message corresponding to the given messageID to the original queue"
+        },
+        "listMessagesAsJSON": {
+          "args": [
+            {
+              "name": "filter",
+              "type": "java.lang.String",
+              "desc": "A message filter (can be empty)"
+            }
+          ],
+          "ret": "java.lang.String",
+          "desc": "List all the messages in the queue matching the given filter and returns them using JSON"
+        },
+        "removeMessages": [
+          {
+            "args": [
+              {
+                "name": "filter",
+                "type": "java.lang.String",
+                "desc": "A message filter (can be empty)"
+              }
+            ],
+            "ret": "int",
+            "desc": "Remove the messages corresponding to the given filter (and returns the number of removed messages)"
+          },
+          {
+            "args": [
+              {
+                "name": "flushLimit",
+                "type": "int",
+                "desc": "Limit to flush transactions during the operation to avoid OutOfMemory"
+              },
+              {
+                "name": "filter",
+                "type": "java.lang.String",
+                "desc": "A message filter (can be empty)"
+              }
+            ],
+            "ret": "int",
+            "desc": "Remove the messages corresponding to the given filter (and returns the number of removed messages)"
+          }
+        ],
+        "flushExecutor": {
+          "args": [],
+          "ret": "void",
+          "desc": "flushExecutor"
+        },
+        "resume": {
+          "args": [],
+          "ret": "void",
+          "desc": "Resumes delivery of queued messages and gets the queue out of paused state."
+        },
+        "countMessages": {
+          "args": [
+            {
+              "name": "filter",
+              "type": "java.lang.String",
+              "desc": "A message filter (can be empty)"
+            }
+          ],
+          "ret": "long",
+          "desc": "Returns the number of the messages in the queue matching the given filter"
+        },
+        "listMessageCounterAsHTML": {
+          "args": [],
+          "ret": "java.lang.String",
+          "desc": "List the message counters as HTML"
+        },
+        "listMessageCounterHistory": {
+          "args": [],
+          "ret": "java.lang.String",
+          "desc": "List the message counters history"
+        },
+        "sendMessage": {
+          "args": [
+            {
+              "name": "headers",
+              "type": "java.util.Map",
+              "desc": "The headers to add to the message"
+            },
+            {
+              "name": "headers",
+              "type": "int",
+              "desc": "A type for the message"
+            },
+            {
+              "name": "body",
+              "type": "java.lang.String",
+              "desc": "The body (byte[]) of the message encoded as a string using Base64"
+            },
+            {
+              "name": "body",
+              "type": "java.lang.String",
+              "desc": "The user ID to set on the message"
+            },
+            {
+              "name": "durable",
+              "type": "boolean",
+              "desc": "Whether the message is durable"
+            },
+            {
+              "name": "user",
+              "type": "java.lang.String",
+              "desc": "The user to authenticate with"
+            },
+            {
+              "name": "password",
+              "type": "java.lang.String",
+              "desc": "The users password to authenticate with"
+            }
+          ],
+          "ret": "java.lang.String",
+          "desc": "Sends a TextMessage to a password-protected destination."
+        },
+        "resetMessagesAdded": {
+          "args": [],
+          "ret": "void",
+          "desc": "Resets the MessagesAdded property"
+        },
+        "listMessageCounter": {
+          "args": [],
+          "ret": "java.lang.String",
+          "desc": "List the message counters"
+        },
+        "pause": {
+          "args": [],
+          "ret": "void",
+          "desc": "Pauses the Queue"
+        },
+        "listDeliveringMessagesAsJSON": {
+          "args": [],
+          "ret": "java.lang.String",
+          "desc": "list all messages being delivered per consumer using JSON form"
+        },
+        "expireMessage": {
+          "args": [
+            {
+              "name": "messageID",
+              "type": "long",
+              "desc": "A message ID"
+            }
+          ],
+          "ret": "boolean",
+          "desc": "Remove the message corresponding to the given messageID"
+        },
+        "changeMessagePriority": {
+          "args": [
+            {
+              "name": "messageID",
+              "type": "long",
+              "desc": "A message ID"
+            },
+            {
+              "name": "newPriority",
+              "type": "int",
+              "desc": "the new priority (between 0 and 9)"
+            }
+          ],
+          "ret": "boolean",
+          "desc": "Change the priority of the message corresponding to the given messageID"
+        },
+        "sendMessagesToDeadLetterAddress": {
+          "args": [
+            {
+              "name": "filter",
+              "type": "java.lang.String",
+              "desc": "A message filter (can be empty)"
+            }
+          ],
+          "ret": "int",
+          "desc": "Send the messages corresponding to the given filter to this queue's Dead Letter Address"
+        },
+        "retryMessages": {
+          "args": [],
+          "ret": "int",
+          "desc": "Retry all messages on a DLQ to their respective original queues"
+        },
+        "expireMessages": {
+          "args": [
+            {
+              "name": "filter",
+              "type": "java.lang.String",
+              "desc": "A message filter"
+            }
+          ],
+          "ret": "int",
+          "desc": "Expire the messages corresponding to the given filter (and returns the number of expired messages)"
+        },
+        "browse": {
+          "args": [
+            {
+              "name": "p 1",
+              "type": "java.lang.String",
+              "desc": "parameter 1"
+            }
+          ],
+          "ret": "[Ljavax.management.openmbean.CompositeData;",
+          "desc": "Browse Messages"
+        }
+      },
+      "attr": {
+        "FirstMessageAge": {
+          "rw": false,
+          "type": "java.lang.Long",
+          "desc": "age of the first message in milliseconds"
+        },
+        "DeadLetterAddress": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "dead-letter address associated with this queue"
+        },
+        "MessagesAdded": {
+          "rw": false,
+          "type": "long",
+          "desc": "number of messages added to this queue since it was created"
+        },
+        "ConsumerCount": {
+          "rw": false,
+          "type": "int",
+          "desc": "number of consumers consuming messages from this queue"
+        },
+        "Address": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "address this queue is bound to"
+        },
+        "DeliveringCount": {
+          "rw": false,
+          "type": "int",
+          "desc": "number of messages that this queue is currently delivering to its consumers"
+        },
+        "MessagesAcknowledged": {
+          "rw": false,
+          "type": "long",
+          "desc": "number of messages acknowledged from this queue since it was created"
+        },
+        "ScheduledCount": {
+          "rw": false,
+          "type": "long",
+          "desc": "number of scheduled messages in this queue"
+        },
+        "Name": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "name of this queue"
+        },
+        "Temporary": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "whether this queue is temporary"
+        },
+        "FirstMessageTimestamp": {
+          "rw": false,
+          "type": "java.lang.Long",
+          "desc": "timestamp of the first message in milliseconds"
+        },
+        "Filter": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "filter associated with this queue"
+        },
+        "Durable": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "whether this queue is durable"
+        },
+        "ExpiryAddress": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "expiry address associated with this queue"
+        },
+        "ID": {
+          "rw": false,
+          "type": "long",
+          "desc": "ID of this queue"
+        },
+        "FirstMessageAsJSON": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "first message on the queue as JSON"
+        },
+        "MessageCount": {
+          "rw": false,
+          "type": "long",
+          "desc": "number of messages currently in this queue (includes scheduled, paged, and in-delivery messages)"
+        },
+        "Paused": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "whether the queue is paused"
+        }
+      },
+      "desc": "Information on the management interface of the MBean"
+    },
+    "brokerName=\"0.0.0.0\",module=Core,name=\"stomp\",serviceType=Acceptor,type=Broker": {
+      "op": {
+        "reload": {
+          "args": [],
+          "ret": "void",
+          "desc": "Re-create the acceptor with the existing configuration values. Useful, for example, for reloading key/trust stores on acceptors which support SSL."
+        },
+        "stop": {
+          "args": [],
+          "ret": "void",
+          "desc": "stops this component"
+        },
+        "start": {
+          "args": [],
+          "ret": "void",
+          "desc": "starts this component"
+        }
+      },
+      "attr": {
+        "FactoryClassName": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "class name of the AcceptorFactory implementation used by this acceptor"
+        },
+        "Started": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "whether this component is started"
+        },
+        "Parameters": {
+          "rw": false,
+          "type": "java.util.Map",
+          "desc": "parameters used to configure this acceptor"
+        },
+        "Name": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "name of the acceptor"
+        }
+      },
+      "desc": "Information on the management interface of the MBean"
+    },
+    "brokerName=\"0.0.0.0\",module=Core,name=\"amqp\",serviceType=Acceptor,type=Broker": {
+      "op": {
+        "reload": {
+          "args": [],
+          "ret": "void",
+          "desc": "Re-create the acceptor with the existing configuration values. Useful, for example, for reloading key/trust stores on acceptors which support SSL."
+        },
+        "stop": {
+          "args": [],
+          "ret": "void",
+          "desc": "stops this component"
+        },
+        "start": {
+          "args": [],
+          "ret": "void",
+          "desc": "starts this component"
+        }
+      },
+      "attr": {
+        "FactoryClassName": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "class name of the AcceptorFactory implementation used by this acceptor"
+        },
+        "Started": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "whether this component is started"
+        },
+        "Parameters": {
+          "rw": false,
+          "type": "java.util.Map",
+          "desc": "parameters used to configure this acceptor"
+        },
+        "Name": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "name of the acceptor"
+        }
+      },
+      "desc": "Information on the management interface of the MBean"
+    }
+  },
+  "timestamp": 1480883053,
+  "status": 200
+}

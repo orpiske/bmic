@@ -28,7 +28,17 @@ target_link_libraries(bmic_artemis_test
            bmic-base bmic-management bmic-product)
 
 
-add_test(NAME bmic-artemis-cap-test
+add_test(NAME bmic-artemis-cap-test-130
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/target/tests/bin
+    COMMAND bmic_artemis_test "1.3.0"
+        ${CMAKE_BINARY_DIR}/target/tests/share/artemis-v130.json)
+
+add_test(NAME bmic-artemis-cap-test-140
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/target/tests/bin
     COMMAND bmic_artemis_test "1.4.0"
-        ${CMAKE_BINARY_DIR}/target/tests/share/capabilities-v140.json)
+        ${CMAKE_BINARY_DIR}/target/tests/share/artemis-v140.json)
+
+add_test(NAME bmic-artemis-cap-test-150
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/target/tests/bin
+    COMMAND bmic_artemis_test "1.5.0"
+        ${CMAKE_BINARY_DIR}/target/tests/share/artemis-v150.json)
