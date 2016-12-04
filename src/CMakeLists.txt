@@ -57,6 +57,8 @@ add_library(
         product/activemq/bmic_activemq_mi.c
         product/activemq/bmic_activemq_json.c
         product/activemq/bmic_activemq.c
+        product/complements/java/bmic_java.c
+        product/complements/java/bmic_java_mi.c
         product/bmic_product_register.c
         context/bmic_context.c
 )
