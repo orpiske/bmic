@@ -12,7 +12,7 @@ add_executable(bmic_json_simple_test
 )
 
 target_link_libraries(bmic_json_simple_test
-           bmic-base)
+           bmic-base bmic-management bmic-product)
 
 add_test(NAME bmic-json-simple-test
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/target/tests/bin
@@ -26,3 +26,9 @@ add_executable(bmic_artemis_test
 
 target_link_libraries(bmic_artemis_test
            bmic-base bmic-management bmic-product)
+
+
+add_test(NAME bmic-artemis-cap-test
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/target/tests/bin
+    COMMAND bmic_artemis_test "1.4.0"
+        ${CMAKE_BINARY_DIR}/target/tests/share/capabilities-v140.json)

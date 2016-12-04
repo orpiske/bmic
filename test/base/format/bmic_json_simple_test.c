@@ -23,6 +23,7 @@ int main(int argc, char **argv) {
     char *buff = NULL;
     
     gru_status_t status = {0};
+    bmic_log_initialization();
     
     FILE *file = gru_io_open_file_read_path(argv[1], &status);
     

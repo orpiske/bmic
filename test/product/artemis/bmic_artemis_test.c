@@ -70,17 +70,36 @@ int main(int argc, char **argv) {
     gru_status_t status = {0};
     bmic_object_t *root = NULL;
     
+    if (argc < 3) {
+        fprintf(stderr, "Not enough arguments.\nUsage: %s [version] [file]\n", 
+                argv[0]);
+        
+        return EXIT_FAILURE;
+    }
+    
+    printf("Trying to load capability JSON file for Artemis %s\n", argv[1]);
     bmic_log_initialization();
     
-    if (!open_file(argv[1], &root, &status)) {
+    if (!open_file(argv[2], &root, &status)) {
         fprintf(stderr, "Unable to open file");
         
         return EXIT_FAILURE;
     }
     
-    /// 
-    const bmic_object_t *type = bmic_object_find_by_name(root, "status");
-    if (type == NULL) {
+    
+    
+    const bmic_object_t *capabilities = bmic_object_find_regex(root,
+                                                           ARTEMIS_CAPABILITIES_KEY_REGEX,
+                                                           REG_SEARCH_NAME);
+    if (capabilities == NULL) {
+        bmic_object_destroy(&root);
+        fprintf(stderr, "Child not found\n");
+        
+        goto err_exit;
+    }
+    
+    const bmic_object_t *req_stat = bmic_object_find_by_name(root, "status");
+    if (req_stat == NULL) {
         bmic_object_destroy(&root);
         fprintf(stderr, "Child not found\n");
         
