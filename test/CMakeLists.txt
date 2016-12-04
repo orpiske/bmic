@@ -42,3 +42,17 @@ add_test(NAME bmic-artemis-cap-test-150
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/target/tests/bin
     COMMAND bmic_artemis_test "1.5.0"
         ${CMAKE_BINARY_DIR}/target/tests/share/artemis-v150.json)
+
+
+add_executable(bmic_activemq_test
+	product/activemq/bmic_activemq_test.c
+)
+
+target_link_libraries(bmic_activemq_test
+           bmic-base bmic-management bmic-product)
+
+
+add_test(NAME bmic-activemq-cap-test-5141
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/target/tests/bin
+    COMMAND bmic_activemq_test "5.14.1"
+        ${CMAKE_BINARY_DIR}/target/tests/share/activemq-v5.14.1.json)

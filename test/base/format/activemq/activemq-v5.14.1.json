@@ -1,0 +1,1229 @@
+{
+  "request": {
+    "path": "org.apache.activemq",
+    "type": "list"
+  },
+  "value": {
+    "brokerName=localhost,service=Health,type=Broker": {
+      "op": {
+        "healthList": {
+          "args": [],
+          "ret": "java.util.List",
+          "desc": "List of warnings and errors about the current health of the Broker - empty list is Good!"
+        },
+        "healthStatus": {
+          "args": [],
+          "ret": "java.lang.String",
+          "desc": "String representation of current Broker state"
+        },
+        "health": {
+          "args": [],
+          "ret": "javax.management.openmbean.TabularData",
+          "desc": "Operation exposed for management"
+        }
+      },
+      "attr": {
+        "CurrentStatus": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "String representation of current Broker state"
+        }
+      },
+      "desc": "Information on the management interface of the MBean"
+    },
+    "brokerName=localhost,instanceName=KahaDBPersistenceAdapter[/home/otavio/tools/apache-activemq-5.14.1/data/kahadb],service=PersistenceAdapter,type=Broker": {
+      "attr": {
+        "Transactions": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "Inflight transactions."
+        },
+        "Size": {
+          "rw": false,
+          "type": "long",
+          "desc": "Current size."
+        },
+        "Data": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "Current data."
+        },
+        "Name": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "Name of this persistence adapter."
+        }
+      },
+      "desc": "Information on the management interface of the MBean"
+    },
+    "brokerName=localhost,type=Broker": {
+      "op": {
+        "stopGracefully": {
+          "args": [
+            {
+              "name": "p1",
+              "type": "java.lang.String",
+              "desc": ""
+            },
+            {
+              "name": "p2",
+              "type": "java.lang.String",
+              "desc": ""
+            },
+            {
+              "name": "p3",
+              "type": "long",
+              "desc": ""
+            },
+            {
+              "name": "p4",
+              "type": "long",
+              "desc": ""
+            }
+          ],
+          "ret": "void",
+          "desc": "Poll for queues matching queueName are empty before stopping"
+        },
+        "addQueue": {
+          "args": [
+            {
+              "name": "name",
+              "type": "java.lang.String",
+              "desc": ""
+            }
+          ],
+          "ret": "void",
+          "desc": "Adds a Queue destination to the broker."
+        },
+        "createDurableSubscriber": {
+          "args": [
+            {
+              "name": "clientId",
+              "type": "java.lang.String",
+              "desc": ""
+            },
+            {
+              "name": "subscriberName",
+              "type": "java.lang.String",
+              "desc": ""
+            },
+            {
+              "name": "topicName",
+              "type": "java.lang.String",
+              "desc": ""
+            },
+            {
+              "name": "selector",
+              "type": "java.lang.String",
+              "desc": ""
+            }
+          ],
+          "ret": "javax.management.ObjectName",
+          "desc": "Creates a new durable topic subscriber."
+        },
+        "getTransportConnectorByType": {
+          "args": [
+            {
+              "name": "p1",
+              "type": "java.lang.String",
+              "desc": ""
+            }
+          ],
+          "ret": "java.lang.String",
+          "desc": "The url of transport connector by it's type; e.g. tcp, stomp, ssl, etc."
+        },
+        "resetStatistics": {
+          "args": [],
+          "ret": "void",
+          "desc": "Reset all broker statistics."
+        },
+        "restart": {
+          "args": [],
+          "ret": "void",
+          "desc": "Restart the broker and all its components."
+        },
+        "enableStatistics": {
+          "args": [],
+          "ret": "void",
+          "desc": "Enable broker statistics."
+        },
+        "destroyDurableSubscriber": {
+          "args": [
+            {
+              "name": "clientId",
+              "type": "java.lang.String",
+              "desc": ""
+            },
+            {
+              "name": "subscriberName",
+              "type": "java.lang.String",
+              "desc": ""
+            }
+          ],
+          "ret": "void",
+          "desc": "Destroys a durable subscriber."
+        },
+        "disableStatistics": {
+          "args": [],
+          "ret": "void",
+          "desc": "Disable broker statistics."
+        },
+        "removeTopic": {
+          "args": [
+            {
+              "name": "name",
+              "type": "java.lang.String",
+              "desc": ""
+            }
+          ],
+          "ret": "void",
+          "desc": "Removes a Topic destination from the broker."
+        },
+        "start": {
+          "args": [],
+          "ret": "void",
+          "desc": "Operation exposed for management"
+        },
+        "reloadLog4jProperties": {
+          "args": [],
+          "ret": "void",
+          "desc": "Reloads log4j.properties from the classpath."
+        },
+        "addNetworkConnector": {
+          "args": [
+            {
+              "name": "discoveryAddress",
+              "type": "java.lang.String",
+              "desc": ""
+            }
+          ],
+          "ret": "java.lang.String",
+          "desc": "Adds a Network Connector to the broker."
+        },
+        "addConnector": {
+          "args": [
+            {
+              "name": "discoveryAddress",
+              "type": "java.lang.String",
+              "desc": ""
+            }
+          ],
+          "ret": "java.lang.String",
+          "desc": "Adds a Connector to the broker."
+        },
+        "terminateJVM": {
+          "args": [
+            {
+              "name": "exitCode",
+              "type": "int",
+              "desc": ""
+            }
+          ],
+          "ret": "void",
+          "desc": "Shuts down the JVM."
+        },
+        "stop": {
+          "args": [],
+          "ret": "void",
+          "desc": "Stop the broker and all its components."
+        },
+        "removeQueue": {
+          "args": [
+            {
+              "name": "name",
+              "type": "java.lang.String",
+              "desc": ""
+            }
+          ],
+          "ret": "void",
+          "desc": "Removes a Queue destination from the broker."
+        },
+        "addTopic": {
+          "args": [
+            {
+              "name": "name",
+              "type": "java.lang.String",
+              "desc": ""
+            }
+          ],
+          "ret": "void",
+          "desc": "Adds a Topic destination to the broker."
+        },
+        "removeNetworkConnector": {
+          "args": [
+            {
+              "name": "connectorName",
+              "type": "java.lang.String",
+              "desc": ""
+            }
+          ],
+          "ret": "boolean",
+          "desc": "Removes a Network Connector from the broker."
+        },
+        "gc": {
+          "args": [],
+          "ret": "void",
+          "desc": "Runs the Garbage Collector."
+        },
+        "removeConnector": {
+          "args": [
+            {
+              "name": "connectorName",
+              "type": "java.lang.String",
+              "desc": ""
+            }
+          ],
+          "ret": "boolean",
+          "desc": "Removes a Connector from the broker."
+        }
+      },
+      "attr": {
+        "StatisticsEnabled": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "Broker statistics enabled."
+        },
+        "TemporaryQueueSubscribers": {
+          "rw": false,
+          "type": "[Ljavax.management.ObjectName;",
+          "desc": "Temporary Queue Subscribers."
+        },
+        "TotalConnectionsCount": {
+          "rw": false,
+          "type": "long",
+          "desc": "Attribute exposed for management"
+        },
+        "TotalMessageCount": {
+          "rw": false,
+          "type": "long",
+          "desc": "Number of unacknowledged messages on the broker."
+        },
+        "TempPercentUsage": {
+          "rw": false,
+          "type": "int",
+          "desc": "Percent of temp limit used."
+        },
+        "MemoryPercentUsage": {
+          "rw": false,
+          "type": "int",
+          "desc": "Percent of memory limit used."
+        },
+        "TransportConnectors": {
+          "rw": false,
+          "type": "java.util.Map",
+          "desc": "The map of all defined transport connectors, with transport name as a key"
+        },
+        "InactiveDurableTopicSubscribers": {
+          "rw": false,
+          "type": "[Ljavax.management.ObjectName;",
+          "desc": "Inactive (disconnected persistent) topic subscribers"
+        },
+        "StoreLimit": {
+          "rw": true,
+          "type": "long",
+          "desc": "Disk limit, in bytes, used for persistent messages before producers are blocked."
+        },
+        "TotalProducerCount": {
+          "rw": false,
+          "type": "long",
+          "desc": "Number of message producers active on destinations on the broker."
+        },
+        "TopicProducers": {
+          "rw": false,
+          "type": "[Ljavax.management.ObjectName;",
+          "desc": "Topic Producers."
+        },
+        "CurrentConnectionsCount": {
+          "rw": false,
+          "type": "int",
+          "desc": "Attribute exposed for management"
+        },
+        "QueueProducers": {
+          "rw": false,
+          "type": "[Ljavax.management.ObjectName;",
+          "desc": "Queue Producers."
+        },
+        "JMSJobScheduler": {
+          "rw": false,
+          "type": "javax.management.ObjectName",
+          "desc": "JMSJobScheduler"
+        },
+        "VMURL": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "The url of the VM connector"
+        },
+        "UptimeMillis": {
+          "rw": false,
+          "type": "long",
+          "desc": "Uptime of the broker in milliseconds."
+        },
+        "TemporaryTopicProducers": {
+          "rw": false,
+          "type": "[Ljavax.management.ObjectName;",
+          "desc": "Temporary Topic Producers."
+        },
+        "TemporaryQueueProducers": {
+          "rw": false,
+          "type": "[Ljavax.management.ObjectName;",
+          "desc": "Temporary Queue Producers."
+        },
+        "TotalDequeueCount": {
+          "rw": false,
+          "type": "long",
+          "desc": "Number of messages that have been acknowledged on the broker."
+        },
+        "Topics": {
+          "rw": false,
+          "type": "[Ljavax.management.ObjectName;",
+          "desc": "Topics (broadcasted 'queues'); generally system information."
+        },
+        "DurableTopicSubscribers": {
+          "rw": false,
+          "type": "[Ljavax.management.ObjectName;",
+          "desc": "Durable (persistent) topic subscribers"
+        },
+        "JobSchedulerStorePercentUsage": {
+          "rw": false,
+          "type": "int",
+          "desc": "Percent of job store limit used."
+        },
+        "Uptime": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "Uptime of the broker."
+        },
+        "QueueSubscribers": {
+          "rw": false,
+          "type": "[Ljavax.management.ObjectName;",
+          "desc": "Queue Subscribers."
+        },
+        "BrokerId": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "The unique id of the broker."
+        },
+        "AverageMessageSize": {
+          "rw": false,
+          "type": "long",
+          "desc": "Average message size on this broker"
+        },
+        "DataDirectory": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "The location of the data directory"
+        },
+        "Persistent": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "Messages are synchronized to disk."
+        },
+        "TopicSubscribers": {
+          "rw": false,
+          "type": "[Ljavax.management.ObjectName;",
+          "desc": "Topic Subscribers"
+        },
+        "BrokerVersion": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "The version of the broker."
+        },
+        "TemporaryQueues": {
+          "rw": false,
+          "type": "[Ljavax.management.ObjectName;",
+          "desc": "Temporary Queues; generally temporary message response holders."
+        },
+        "BrokerName": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "The name of the broker."
+        },
+        "MinMessageSize": {
+          "rw": false,
+          "type": "long",
+          "desc": "Min message size on this broker"
+        },
+        "MemoryLimit": {
+          "rw": true,
+          "type": "long",
+          "desc": "Memory limit, in bytes, used for holding undelivered messages before paging to temporary storage."
+        },
+        "Slave": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "Slave broker."
+        },
+        "DynamicDestinationProducers": {
+          "rw": false,
+          "type": "[Ljavax.management.ObjectName;",
+          "desc": "Dynamic Destination Producers."
+        },
+        "TotalEnqueueCount": {
+          "rw": false,
+          "type": "long",
+          "desc": "Number of messages that have been sent to the broker."
+        },
+        "TempLimit": {
+          "rw": true,
+          "type": "long",
+          "desc": "Disk limit, in bytes, used for non-persistent messages and temporary data before producers are blocked."
+        },
+        "TemporaryTopicSubscribers": {
+          "rw": false,
+          "type": "[Ljavax.management.ObjectName;",
+          "desc": "Temporary Topic Subscribers."
+        },
+        "TemporaryTopics": {
+          "rw": false,
+          "type": "[Ljavax.management.ObjectName;",
+          "desc": "Temporary Topics; generally unused."
+        },
+        "JobSchedulerStoreLimit": {
+          "rw": true,
+          "type": "long",
+          "desc": "Disk limit, in bytes, used for scheduled messages before producers are blocked."
+        },
+        "Queues": {
+          "rw": false,
+          "type": "[Ljavax.management.ObjectName;",
+          "desc": "Standard Queues containing AIE messages."
+        },
+        "TotalConsumerCount": {
+          "rw": false,
+          "type": "long",
+          "desc": "Number of message consumers subscribed to destinations on the broker."
+        },
+        "StorePercentUsage": {
+          "rw": false,
+          "type": "int",
+          "desc": "Percent of store limit used."
+        },
+        "MaxMessageSize": {
+          "rw": false,
+          "type": "long",
+          "desc": "Max message size on this broker"
+        }
+      },
+      "desc": "Information on the management interface of the MBean"
+    },
+    "brokerName=localhost,destinationName=ActiveMQ.Advisory.MasterBroker,destinationType=Topic,type=Broker": {
+      "op": {
+        "sendTextMessage": [
+          {
+            "args": [
+              {
+                "name": "headers",
+                "type": "java.util.Map",
+                "desc": ""
+              },
+              {
+                "name": "body",
+                "type": "java.lang.String",
+                "desc": ""
+              }
+            ],
+            "ret": "java.lang.String",
+            "desc": "Sends a TextMessage to the destination."
+          },
+          {
+            "args": [
+              {
+                "name": "body",
+                "type": "java.lang.String",
+                "desc": ""
+              },
+              {
+                "name": "user",
+                "type": "java.lang.String",
+                "desc": ""
+              },
+              {
+                "name": "password",
+                "type": "java.lang.String",
+                "desc": ""
+              }
+            ],
+            "ret": "java.lang.String",
+            "desc": "Sends a TextMessage to a password-protected destination."
+          },
+          {
+            "args": [
+              {
+                "name": "body",
+                "type": "java.lang.String",
+                "desc": ""
+              }
+            ],
+            "ret": "java.lang.String",
+            "desc": "Sends a TextMessage to the destination."
+          },
+          {
+            "args": [
+              {
+                "name": "headers",
+                "type": "java.util.Map",
+                "desc": ""
+              },
+              {
+                "name": "body",
+                "type": "java.lang.String",
+                "desc": ""
+              },
+              {
+                "name": "user",
+                "type": "java.lang.String",
+                "desc": ""
+              },
+              {
+                "name": "password",
+                "type": "java.lang.String",
+                "desc": ""
+              }
+            ],
+            "ret": "java.lang.String",
+            "desc": "Sends a TextMessage to a password-protected destination."
+          }
+        ],
+        "browseMessages": [
+          {
+            "args": [
+              {
+                "name": "p1",
+                "type": "java.lang.String",
+                "desc": ""
+              }
+            ],
+            "ret": "java.util.List",
+            "desc": "A list of all messages in the destination based on an SQL-92 selection on the message headers or XPATH on the body. Not HTML friendly."
+          },
+          {
+            "args": [],
+            "ret": "java.util.List",
+            "desc": "A list of all messages in the destination. Not HTML friendly."
+          }
+        ],
+        "resetStatistics": {
+          "args": [],
+          "ret": "void",
+          "desc": "Resets statistics."
+        },
+        "browseAsTable": [
+          {
+            "args": [
+              {
+                "name": "selector",
+                "type": "java.lang.String",
+                "desc": ""
+              }
+            ],
+            "ret": "javax.management.openmbean.TabularData",
+            "desc": "A list of all messages in the destination based on an SQL-92 selection on the message headers or XPATH on the body. Not HTML friendly."
+          },
+          {
+            "args": [],
+            "ret": "javax.management.openmbean.TabularData",
+            "desc": "A list of all messages in the destination. Not HTML friendly."
+          }
+        ],
+        "browse": [
+          {
+            "args": [
+              {
+                "name": "selector",
+                "type": "java.lang.String",
+                "desc": ""
+              }
+            ],
+            "ret": "[Ljavax.management.openmbean.CompositeData;",
+            "desc": "An array of all messages in the destination based on an SQL-92 selection on the message headers or XPATH on the body. Not HTML friendly."
+          },
+          {
+            "args": [],
+            "ret": "[Ljavax.management.openmbean.CompositeData;",
+            "desc": "An array of all messages in the destination. Not HTML friendly."
+          }
+        ],
+        "sendTextMessageWithProperties": {
+          "args": [
+            {
+              "name": "p1",
+              "type": "java.lang.String",
+              "desc": ""
+            }
+          ],
+          "ret": "java.lang.String",
+          "desc": "Sends a TextMessage to the destination."
+        }
+      },
+      "attr": {
+        "ProducerFlowControl": {
+          "rw": true,
+          "type": "boolean",
+          "desc": "Producers are flow controlled"
+        },
+        "Options": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "returns the destination options, name value pairs as URL queryString"
+        },
+        "AlwaysRetroactive": {
+          "rw": true,
+          "type": "boolean",
+          "desc": "Always treat consumers as retroActive"
+        },
+        "MemoryUsageByteCount": {
+          "rw": false,
+          "type": "long",
+          "desc": "Memory usage, in bytes, used by undelivered messages"
+        },
+        "AverageBlockedTime": {
+          "rw": false,
+          "type": "double",
+          "desc": "get the average time (ms) a message is blocked for Flow Control"
+        },
+        "MemoryPercentUsage": {
+          "rw": false,
+          "type": "int",
+          "desc": "The percentage of the memory limit used"
+        },
+        "Subscriptions": {
+          "rw": false,
+          "type": "[Ljavax.management.ObjectName;",
+          "desc": "returns all the current subscription MBeans matching this destination"
+        },
+        "InFlightCount": {
+          "rw": false,
+          "type": "long",
+          "desc": "Number of messages that have been dispatched to, but not acknowledged by, consumers."
+        },
+        "ForwardCount": {
+          "rw": false,
+          "type": "long",
+          "desc": "Number of messages that have been forwarded (to a networked broker) from the destination."
+        },
+        "DLQ": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "Dead Letter Queue"
+        },
+        "StoreMessageSize": {
+          "rw": false,
+          "type": "long",
+          "desc": "The memory size of all messages in this destination's store."
+        },
+        "AverageEnqueueTime": {
+          "rw": false,
+          "type": "double",
+          "desc": "Average time a message has been held this destination."
+        },
+        "Name": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "Name of this destination."
+        },
+        "MaxAuditDepth": {
+          "rw": true,
+          "type": "int",
+          "desc": "Max audit depth"
+        },
+        "BlockedSends": {
+          "rw": false,
+          "type": "long",
+          "desc": "Get number of messages blocked for Flow Control"
+        },
+        "TotalBlockedTime": {
+          "rw": false,
+          "type": "long",
+          "desc": "Get the total time (ms) messages are blocked for Flow Control"
+        },
+        "QueueSize": {
+          "rw": false,
+          "type": "long",
+          "desc": "Number of messages in the destination which are yet to be consumed.  Potentially dispatched but unacknowledged."
+        },
+        "MaxPageSize": {
+          "rw": true,
+          "type": "int",
+          "desc": "Maximum number of messages to be paged in"
+        },
+        "PrioritizedMessages": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "Prioritized messages is enabled"
+        },
+        "MemoryUsagePortion": {
+          "rw": true,
+          "type": "float",
+          "desc": "Portion of memory from the broker memory limit for this destination"
+        },
+        "EnqueueCount": {
+          "rw": false,
+          "type": "long",
+          "desc": "Number of messages that have been sent to the destination."
+        },
+        "ConsumerCount": {
+          "rw": false,
+          "type": "long",
+          "desc": "Number of consumers subscribed to this destination."
+        },
+        "AverageMessageSize": {
+          "rw": false,
+          "type": "long",
+          "desc": "Average message size on this destination"
+        },
+        "MaxProducersToAudit": {
+          "rw": true,
+          "type": "int",
+          "desc": "Maximum number of producers to audit"
+        },
+        "ExpiredCount": {
+          "rw": false,
+          "type": "long",
+          "desc": "Number of messages that have been expired."
+        },
+        "MinEnqueueTime": {
+          "rw": false,
+          "type": "long",
+          "desc": "The shortest time a message has been held this destination."
+        },
+        "MinMessageSize": {
+          "rw": false,
+          "type": "long",
+          "desc": "Min message size on this destination"
+        },
+        "MemoryLimit": {
+          "rw": true,
+          "type": "long",
+          "desc": "Memory limit, in bytes, used for holding undelivered messages before paging to temporary storage."
+        },
+        "DispatchCount": {
+          "rw": false,
+          "type": "long",
+          "desc": "Number of messages that have been delivered (but potentially not acknowledged) to consumers."
+        },
+        "MaxEnqueueTime": {
+          "rw": false,
+          "type": "long",
+          "desc": "The longest time a message has been held this destination."
+        },
+        "DequeueCount": {
+          "rw": false,
+          "type": "long",
+          "desc": "Number of messages that have been acknowledged (and removed from) from the destination."
+        },
+        "BlockedProducerWarningInterval": {
+          "rw": true,
+          "type": "long",
+          "desc": "Blocked Producer Warning Interval"
+        },
+        "ProducerCount": {
+          "rw": false,
+          "type": "long",
+          "desc": "Number of producers publishing to this destination"
+        },
+        "MaxMessageSize": {
+          "rw": false,
+          "type": "long",
+          "desc": "Max message size on this destination"
+        },
+        "UseCache": {
+          "rw": true,
+          "type": "boolean",
+          "desc": "Caching is allowed"
+        },
+        "SlowConsumerStrategy": {
+          "rw": false,
+          "type": "javax.management.ObjectName",
+          "desc": "returns the optional slowConsumer handler MBeans for this destination"
+        }
+      },
+      "desc": "Information on the management interface of the MBean"
+    },
+    "brokerName=localhost,connector=clientConnectors,connectorName=amqp,type=Broker": {
+      "op": {
+        "connectionCount": {
+          "args": [],
+          "ret": "int",
+          "desc": "Connection count"
+        },
+        "stop": {
+          "args": [],
+          "ret": "void",
+          "desc": "Operation exposed for management"
+        },
+        "resetStatistics": {
+          "args": [],
+          "ret": "void",
+          "desc": "Resets the statistics"
+        },
+        "enableStatistics": {
+          "args": [],
+          "ret": "void",
+          "desc": "Enables statistics gathering"
+        },
+        "disableStatistics": {
+          "args": [],
+          "ret": "void",
+          "desc": "Disables statistics gathering"
+        },
+        "start": {
+          "args": [],
+          "ret": "void",
+          "desc": "Operation exposed for management"
+        }
+      },
+      "attr": {
+        "StatisticsEnabled": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "Statistics gathering enabled"
+        },
+        "UpdateClusterClientsOnRemove": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "Update clients when a broker is removed from a network enabled."
+        },
+        "RebalanceClusterClients": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "Rebalance clients across the broker cluster enabled"
+        },
+        "UpdateClusterFilter": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "Comma separated list of regex patterns to match broker names for cluster client updates."
+        },
+        "AllowLinkStealingEnabled": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "Link Stealing enabled"
+        },
+        "UpdateClusterClients": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "Update client URL's when brokers leave/join a custer enabled"
+        }
+      },
+      "desc": "Information on the management interface of the MBean"
+    },
+    "brokerName=localhost,connector=clientConnectors,connectorName=mqtt,type=Broker": {
+      "op": {
+        "connectionCount": {
+          "args": [],
+          "ret": "int",
+          "desc": "Connection count"
+        },
+        "stop": {
+          "args": [],
+          "ret": "void",
+          "desc": "Operation exposed for management"
+        },
+        "resetStatistics": {
+          "args": [],
+          "ret": "void",
+          "desc": "Resets the statistics"
+        },
+        "enableStatistics": {
+          "args": [],
+          "ret": "void",
+          "desc": "Enables statistics gathering"
+        },
+        "disableStatistics": {
+          "args": [],
+          "ret": "void",
+          "desc": "Disables statistics gathering"
+        },
+        "start": {
+          "args": [],
+          "ret": "void",
+          "desc": "Operation exposed for management"
+        }
+      },
+      "attr": {
+        "StatisticsEnabled": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "Statistics gathering enabled"
+        },
+        "UpdateClusterClientsOnRemove": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "Update clients when a broker is removed from a network enabled."
+        },
+        "RebalanceClusterClients": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "Rebalance clients across the broker cluster enabled"
+        },
+        "UpdateClusterFilter": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "Comma separated list of regex patterns to match broker names for cluster client updates."
+        },
+        "AllowLinkStealingEnabled": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "Link Stealing enabled"
+        },
+        "UpdateClusterClients": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "Update client URL's when brokers leave/join a custer enabled"
+        }
+      },
+      "desc": "Information on the management interface of the MBean"
+    },
+    "brokerName=localhost,connector=clientConnectors,connectorName=ws,type=Broker": {
+      "op": {
+        "connectionCount": {
+          "args": [],
+          "ret": "int",
+          "desc": "Connection count"
+        },
+        "stop": {
+          "args": [],
+          "ret": "void",
+          "desc": "Operation exposed for management"
+        },
+        "resetStatistics": {
+          "args": [],
+          "ret": "void",
+          "desc": "Resets the statistics"
+        },
+        "enableStatistics": {
+          "args": [],
+          "ret": "void",
+          "desc": "Enables statistics gathering"
+        },
+        "disableStatistics": {
+          "args": [],
+          "ret": "void",
+          "desc": "Disables statistics gathering"
+        },
+        "start": {
+          "args": [],
+          "ret": "void",
+          "desc": "Operation exposed for management"
+        }
+      },
+      "attr": {
+        "StatisticsEnabled": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "Statistics gathering enabled"
+        },
+        "UpdateClusterClientsOnRemove": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "Update clients when a broker is removed from a network enabled."
+        },
+        "RebalanceClusterClients": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "Rebalance clients across the broker cluster enabled"
+        },
+        "UpdateClusterFilter": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "Comma separated list of regex patterns to match broker names for cluster client updates."
+        },
+        "AllowLinkStealingEnabled": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "Link Stealing enabled"
+        },
+        "UpdateClusterClients": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "Update client URL's when brokers leave/join a custer enabled"
+        }
+      },
+      "desc": "Information on the management interface of the MBean"
+    },
+    "brokerName=localhost,connector=clientConnectors,connectorName=stomp,type=Broker": {
+      "op": {
+        "connectionCount": {
+          "args": [],
+          "ret": "int",
+          "desc": "Connection count"
+        },
+        "stop": {
+          "args": [],
+          "ret": "void",
+          "desc": "Operation exposed for management"
+        },
+        "resetStatistics": {
+          "args": [],
+          "ret": "void",
+          "desc": "Resets the statistics"
+        },
+        "enableStatistics": {
+          "args": [],
+          "ret": "void",
+          "desc": "Enables statistics gathering"
+        },
+        "disableStatistics": {
+          "args": [],
+          "ret": "void",
+          "desc": "Disables statistics gathering"
+        },
+        "start": {
+          "args": [],
+          "ret": "void",
+          "desc": "Operation exposed for management"
+        }
+      },
+      "attr": {
+        "StatisticsEnabled": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "Statistics gathering enabled"
+        },
+        "UpdateClusterClientsOnRemove": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "Update clients when a broker is removed from a network enabled."
+        },
+        "RebalanceClusterClients": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "Rebalance clients across the broker cluster enabled"
+        },
+        "UpdateClusterFilter": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "Comma separated list of regex patterns to match broker names for cluster client updates."
+        },
+        "AllowLinkStealingEnabled": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "Link Stealing enabled"
+        },
+        "UpdateClusterClients": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "Update client URL's when brokers leave/join a custer enabled"
+        }
+      },
+      "desc": "Information on the management interface of the MBean"
+    },
+    "brokerName=localhost,service=Log4JConfiguration,type=Broker": {
+      "op": {
+        "setLogLevel": {
+          "args": [
+            {
+              "name": "p1",
+              "type": "java.lang.String",
+              "desc": ""
+            },
+            {
+              "name": "p2",
+              "type": "java.lang.String",
+              "desc": ""
+            }
+          ],
+          "ret": "void",
+          "desc": "Sets the logging level for the named logger."
+        },
+        "getLogLevel": {
+          "args": [
+            {
+              "name": "p1",
+              "type": "java.lang.String",
+              "desc": ""
+            }
+          ],
+          "ret": "java.lang.String",
+          "desc": "Returns the current logging level of a named logger."
+        },
+        "reloadLog4jProperties": {
+          "args": [],
+          "ret": "void",
+          "desc": "Reloads log4j.properties from the classpath."
+        }
+      },
+      "attr": {
+        "RootLogLevel": {
+          "rw": true,
+          "type": "java.lang.String",
+          "desc": "Returns the current logging level of the root logger."
+        },
+        "Loggers": {
+          "rw": false,
+          "type": "java.util.List",
+          "desc": "List of all loggers that are available for configuration."
+        }
+      },
+      "desc": "Information on the management interface of the MBean"
+    },
+    "brokerName=localhost,connector=clientConnectors,connectorName=openwire,type=Broker": {
+      "op": {
+        "connectionCount": {
+          "args": [],
+          "ret": "int",
+          "desc": "Connection count"
+        },
+        "stop": {
+          "args": [],
+          "ret": "void",
+          "desc": "Operation exposed for management"
+        },
+        "resetStatistics": {
+          "args": [],
+          "ret": "void",
+          "desc": "Resets the statistics"
+        },
+        "enableStatistics": {
+          "args": [],
+          "ret": "void",
+          "desc": "Enables statistics gathering"
+        },
+        "disableStatistics": {
+          "args": [],
+          "ret": "void",
+          "desc": "Disables statistics gathering"
+        },
+        "start": {
+          "args": [],
+          "ret": "void",
+          "desc": "Operation exposed for management"
+        }
+      },
+      "attr": {
+        "StatisticsEnabled": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "Statistics gathering enabled"
+        },
+        "UpdateClusterClientsOnRemove": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "Update clients when a broker is removed from a network enabled."
+        },
+        "RebalanceClusterClients": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "Rebalance clients across the broker cluster enabled"
+        },
+        "UpdateClusterFilter": {
+          "rw": false,
+          "type": "java.lang.String",
+          "desc": "Comma separated list of regex patterns to match broker names for cluster client updates."
+        },
+        "AllowLinkStealingEnabled": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "Link Stealing enabled"
+        },
+        "UpdateClusterClients": {
+          "rw": false,
+          "type": "boolean",
+          "desc": "Update client URL's when brokers leave/join a custer enabled"
+        }
+      },
+      "desc": "Information on the management interface of the MBean"
+    }
+  },
+  "timestamp": 1480883617,
+  "status": 200
+}
