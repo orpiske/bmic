@@ -35,7 +35,6 @@
 #include "management/interfaces/jolokia/bmic_jolokia.h"
 #include "management/interfaces/jolokia/bmic_jolokia_io.h"
 
-#include "product/common/bmic_api_io.h"
 #include "product/common/bmic_path.h"
 #include "product/common/bmic_finder.h"
 

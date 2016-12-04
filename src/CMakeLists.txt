@@ -32,6 +32,7 @@ add_library(
         management/common/bmic_handle.c
         management/common/bmic_discovery_hint.c
         management/common/bmic_product.c
+        management/common/bmic_api_io.c
         management/discovery/bmic_discovery.c
         management/interfaces/jolokia/bmic_jolokia.c
         management/interfaces/jolokia/bmic_jolokia_io.c
@@ -48,7 +49,6 @@ target_link_libraries(
 
 add_library(
 	bmic-product SHARED
-        product/common/bmic_api_io.c
         product/common/bmic_path.c
         product/common/bmic_finder.c
         product/artemis/bmic_artemis_mi.c
