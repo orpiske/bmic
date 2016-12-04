@@ -41,6 +41,13 @@ bool bmic_jolokia_io_exec(bmic_handle_t *handle,
 const bmic_object_t *bmic_jolokia_io_read(bmic_handle_t *handle, const char *path, 
                                        gru_status_t *status);
 
+
+const bmic_object_t *bmic_jolokia_io_read_attribute(bmic_handle_t *handle,
+        const char *pkg,
+        const char *cap_name,
+        const char *attr_name,
+        gru_status_t *status);
+
 #ifdef __cplusplus
 }
 #endif

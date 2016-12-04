@@ -15,21 +15,6 @@
  */
 #include "bmic_activemq_mi.h"
 
-static const bmic_object_t *bmic_activemq_mi_read_from(bmic_handle_t *handle,
-                                                       const char *cap_name,
-                                                       const char *attr_name,
-                                                       gru_status_t *status)
-{
-    const char *path = handle->path_formatter(ACTIVEMQ_READ, cap_name,
-                                              ACTIVEMQ_BASE_PKG, attr_name, status);
-
-    const bmic_object_t *ret = bmic_jolokia_io_read(handle, path, status);
-    gru_dealloc_string((char **) &path);
-
-    return ret;
-}
-
-
 const bmic_exchange_t *bmic_activemq_mi_read(bmic_handle_t *handle,
                                                 const bmic_object_t *root,
                                                 const char *attr_name,
@@ -69,9 +54,11 @@ const bmic_exchange_t *bmic_activemq_mi_read(bmic_handle_t *handle,
      * Uses the resolved capability (only uses the name, actually) to read the 
      * data from the BMIC.
      */
-    const bmic_object_t *reply_obj = bmic_activemq_mi_read_from(handle, capabilities->name,
-                                                          attr_name,
-                                                          status);
+    const bmic_object_t *reply_obj = bmic_jolokia_io_read_attribute(handle, 
+                                                        ACTIVEMQ_BASE_PKG,
+                                                        capabilities->name,
+                                                        attr_name,
+                                                        status);
     if (!reply_obj) {
         goto err_exit;
     }
