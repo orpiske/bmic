@@ -18,8 +18,6 @@
 extern "C" {
 #endif
 
-#define JAVA_CAPABILITIES_KEY_REGEX "(java.lang)"
-
 
 #ifdef __cplusplus
 }

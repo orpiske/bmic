@@ -32,17 +32,15 @@
 extern "C" {
 #endif
 
-/**
- * Read a single an attribute from the MI
- * @param handle
- * @param capabilities
- * @param name
- * @param status
- * @return 
- */
-const bmic_exchange_t *bmic_java_attribute_read(bmic_handle_t *handle,
-        const bmic_exchange_t *capabilities, const char *name,
-        gru_status_t *status);
+    
+bmic_java_mem_info_t bmic_java_mem_eden_info(bmic_handle_t *handle, gru_status_t *status);
+bmic_java_mem_info_t bmic_java_mem_survivor_info(bmic_handle_t *handle, gru_status_t *status);
+bmic_java_mem_info_t bmic_java_mem_tenured_info(bmic_handle_t *handle, gru_status_t *status);
+bmic_java_mem_info_t bmic_java_mem_code_cache_info(bmic_handle_t *handle, gru_status_t *status);
+bmic_java_mem_info_t bmic_java_mem_metaspace_info(bmic_handle_t *handle, gru_status_t *status);
+bmic_java_mem_info_t bmic_java_mem_permgen_info(bmic_handle_t *handle, gru_status_t *status);
+    
+// bmic_java_info_t bmic_java_read_info(bmic_handle_t *handle, gru_status_t *status);
 
 
 #ifdef __cplusplus
