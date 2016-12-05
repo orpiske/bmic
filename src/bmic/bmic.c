@@ -22,6 +22,7 @@
 #include "bmic_discovery_main.h"
 #include "bmic_queue_main.h"
 #include "bmic_operations_main.h"
+#include "bmic_top_main.h"
 
 
 void show_help() {
@@ -53,6 +54,10 @@ int main(int argc, char** argv)
         
         if (strcmp(argv[1], "operations") == 0) {
             return operations_main((argc - 1), &argv[1]);
+        }
+        
+        if (strcmp(argv[1], "top") == 0) {
+            return top_main((argc - 1), &argv[1]);
         }
     }
     
