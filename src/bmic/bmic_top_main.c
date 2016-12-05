@@ -41,10 +41,7 @@ static void show_help()
  */
 
 static void print_mem(const char *name, bmic_java_mem_info_t *mem) {
-    printf("%s memory initial: %lu\n", name, mem->init);
-    printf("%s memory committed: %lu\n", name, mem->committed);
-    printf("%s memory max: %lu\n", name, mem->max);
-    printf("%s memory used: %lu\n", name, mem->used);
+    printf("%-20s %-15lu %-15lu %-15lu %-15lu\n", name, mem->init, mem->committed, mem->max, mem->used);
 }
 
 int top_run(options_t *options)
@@ -63,13 +60,14 @@ int top_run(options_t *options)
     bmic_api_interface_t *api = ctxt.api;
     
     while (true) {
+        printf("\e[1;1H\e[2J");
+        printf("%-20s %-15s %-15s %-15s %-15s\n", "Area", "Initial", "Committed", "Max", "Used");
         bmic_java_mem_info_t eden = api->java.eden_info(ctxt.handle, &status);
         print_mem("Eden", &eden);
         
         bmic_java_mem_info_t survivor = api->java.survivor_info(ctxt.handle, &status);
         print_mem("Survivor", &survivor);
         
-        printf("\n");
         sleep(5);
     }
 
