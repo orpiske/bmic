@@ -41,6 +41,7 @@ bmic_java_mem_info_t bmic_java_mem_metaspace_info(bmic_handle_t *handle, gru_sta
 bmic_java_mem_info_t bmic_java_mem_permgen_info(bmic_handle_t *handle, gru_status_t *status);
     
 bmic_java_info_t bmic_java_read_info(bmic_handle_t *handle, gru_status_t *status);
+bmic_java_os_info_t bmic_java_read_os_info(bmic_handle_t *handle, gru_status_t *status);
 
 
 #ifdef __cplusplus

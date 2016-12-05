@@ -30,7 +30,9 @@ bmic_api_interface_t *bmic_artemis_product(gru_status_t *status)
     ret->operation_list = bmic_artemis_operation_list;
     ret->create_queue = bmic_artemis_operation_create_queue;
     ret->delete_queue = bmic_artemis_operation_delete_queue;
+    
     ret->java.java_info = bmic_java_read_info;
+    ret->java.os_info = bmic_java_read_os_info;
     
     ret->java.eden_info = bmic_java_mem_eden_info;
     ret->java.survivor_info = bmic_java_mem_survivor_info;

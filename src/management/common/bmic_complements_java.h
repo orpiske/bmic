@@ -49,12 +49,20 @@ typedef struct bmic_java_os_info_t_ {
     
     uint64_t mem_total;
     uint64_t mem_free;
+    
+    uint64_t swap_total;
+    uint64_t swap_free;
+    uint64_t swap_committed;
+    
     double load_average;
     double process_cpu_load;
     double system_cpu_load;
+    uint64_t process_cpu_time;
     
     uint64_t open_fd;
     uint64_t max_fd;
+    
+    uint32_t cpus;
 } bmic_java_os_info_t;
 
 typedef bmic_java_info_t (*bmic_complement_api_java_info_fn)(bmic_handle_t *handle,

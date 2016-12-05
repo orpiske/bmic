@@ -32,6 +32,7 @@ bmic_api_interface_t *bmic_activemq_product(gru_status_t *status)
     ret->delete_queue = bmic_activemq_operation_delete_queue;
     
     ret->java.java_info = bmic_java_read_info;
+    ret->java.os_info = bmic_java_read_os_info;
     
     ret->java.eden_info = bmic_java_mem_eden_info;
     ret->java.survivor_info = bmic_java_mem_survivor_info;

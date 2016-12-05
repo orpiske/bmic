@@ -62,8 +62,23 @@ int top_run(options_t *options)
     bmic_java_info_t jinfo = api->java.java_info(ctxt.handle, &status);
     
     while (true) {
+        bmic_java_os_info_t osinfo = api->java.os_info(ctxt.handle, &status);
+        
         printf("\e[1;1H\e[2J");
-        printf("%s %s\n\n", jinfo.name, jinfo.version);
+        printf("%s %s %s %s \n", jinfo.name, jinfo.version, osinfo.name, osinfo.version);
+        
+        
+        printf("%s%sLoad average:%s %-10.1f\n", RESET, LIGHT_WHITE, RESET, 
+               osinfo.load_average);
+        printf("%s%sFile descriptors:%s %-10lu max total %-10lu open %-10lu free\n", 
+               RESET, LIGHT_WHITE, RESET, 
+               osinfo.max_fd, osinfo.open_fd, (osinfo.max_fd - osinfo.open_fd));
+        printf("%s%sPhysical memory:%s %-10lu total %-10lu free\n", RESET, LIGHT_WHITE, 
+               RESET, 
+               osinfo.mem_total, osinfo.mem_free);
+        printf("%s%sSwap memory:%s %-10lu total %-10lu free %-10lu used\n\n", 
+               RESET, LIGHT_WHITE, RESET, osinfo.swap_total, osinfo.swap_free, 
+               osinfo.swap_committed);
         
         printf("%s%s%s%-20s %-15s %-15s %-15s %-15s%s\n", RESET, BG_WHITE, LIGHT_BLACK,
                "Area", "Initial", "Committed", "Max", "Used", RESET);
