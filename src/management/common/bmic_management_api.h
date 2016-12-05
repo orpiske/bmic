@@ -26,6 +26,8 @@
 #include "bmic_discovery_hint.h"
 #include "bmic_product_info.h"
 
+#include "bmic_complements_java.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -80,6 +82,8 @@ typedef struct bmic_api_interface_t_ {
     bmic_management_api_op_list_fn operation_list;
     bmic_management_api_create_queue_fn create_queue;
     bmic_management_api_delete_queue_fn delete_queue;
+    
+    bmic_complements_java_api_t java; 
 } bmic_api_interface_t;
 
 
