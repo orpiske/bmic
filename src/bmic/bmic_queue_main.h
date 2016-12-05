@@ -31,8 +31,7 @@
 #include "base/common/bmic_regex.h"
 
 #include "bmic/util/bmic_print_simple.h"
-
-#define OPT_MAX_STR_SIZE 255
+#include "bmic/util/bmic_opt_common.h"
 
 #ifdef __cplusplus
 extern "C" {
