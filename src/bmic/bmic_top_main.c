@@ -59,8 +59,12 @@ int top_run(options_t *options)
     }
     bmic_api_interface_t *api = ctxt.api;
     
+    bmic_java_info_t jinfo = api->java.java_info(ctxt.handle, &status);
+    
     while (true) {
         printf("\e[1;1H\e[2J");
+        printf("%s %s\n\n", jinfo.name, jinfo.version);
+        
         printf("%s%s%s%-20s %-15s %-15s %-15s %-15s%s\n", RESET, BG_WHITE, LIGHT_BLACK,
                "Area", "Initial", "Committed", "Max", "Used", RESET);
         bmic_java_mem_info_t eden = api->java.eden_info(ctxt.handle, &status);

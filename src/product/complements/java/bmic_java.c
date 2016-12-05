@@ -158,28 +158,46 @@ bmic_java_mem_info_t bmic_java_mem_permgen_info(bmic_handle_t *handle, gru_statu
 } bmic_complements_java_api_t;
  */
 
-/*
 bmic_java_info_t bmic_java_read_info(bmic_handle_t *handle, gru_status_t *status) {
     bmic_java_info_t ret = {0};
-    bmic_object_t *usage = bmic_jolokia_io_read_attribute(handle, "java.lang", 
+    bmic_object_t *runtime = bmic_jolokia_io_read_attribute(handle, "java.lang", 
                                                         "type=Runtime", 
-                                                        "Usage", 
+                                                        "", 
                                                         status);
     
-    if (!usage) {
+    if (!runtime) {
         return ret;
     }
     
-    bmic_jolokia_translate_status(usage, status);
+    bmic_jolokia_translate_status(runtime, status);
     if (status->code != GRU_SUCCESS) {
         return ret;
     }
     
-    bmic_object_t *init = bmic_object_find_by_path(root, "/value/init");
-    if (!init) {
-        gru_status_set(status, GRU_FAILURE, "Unable to find initial memory value");
+    bmic_object_t *jvmname = bmic_object_find_by_path(runtime, "/value/VmName");
+    if (!jvmname) {
+        gru_status_set(status, GRU_FAILURE, "Unable to find JVM name");
         return ret;
     }
-       
+    if (jvmname->type != STRING) {
+        gru_status_set(status, GRU_FAILURE, "Invalid data type for JVM name");
+        return ret;
+    }
+    
+    ret.name = jvmname->data.str;
+    
+    
+    bmic_object_t *version = bmic_object_find_by_path(runtime, "/value/SpecVersion");
+    if (!version) {
+        gru_status_set(status, GRU_FAILURE, "Unable to find JVM version");
+        return ret;
+    }
+    if (version->type != STRING) {
+        gru_status_set(status, GRU_FAILURE, "Invalid data type for JVM name");
+        return ret;
+    }
+    
+    ret.version = version->data.str;
+
+    return ret;
 }
- */ 
