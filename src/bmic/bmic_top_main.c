@@ -61,12 +61,16 @@ int top_run(options_t *options)
     
     while (true) {
         printf("\e[1;1H\e[2J");
-        printf("%-20s %-15s %-15s %-15s %-15s\n", "Area", "Initial", "Committed", "Max", "Used");
+        printf("%s%s%s%-20s %-15s %-15s %-15s %-15s%s\n", RESET, BG_WHITE, LIGHT_BLACK,
+               "Area", "Initial", "Committed", "Max", "Used", RESET);
         bmic_java_mem_info_t eden = api->java.eden_info(ctxt.handle, &status);
         print_mem("Eden", &eden);
         
         bmic_java_mem_info_t survivor = api->java.survivor_info(ctxt.handle, &status);
         print_mem("Survivor", &survivor);
+        
+        bmic_java_mem_info_t tenured = api->java.tenured_info(ctxt.handle, &status);
+        print_mem("Tenured", &tenured);
         
         sleep(5);
     }
