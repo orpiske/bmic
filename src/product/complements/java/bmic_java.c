@@ -16,7 +16,7 @@
 #include "bmic_java.h"
 
 
-static void bmic_java_read_mem_value(bmic_object_t *root, const char *name, 
+static void bmic_java_read_mem_value(const bmic_object_t *root, const char *name, 
                                      const char *path, uint64_t *dest,
                                      gru_status_t *status) 
 {
@@ -31,8 +31,14 @@ static void bmic_java_read_mem_value(bmic_object_t *root, const char *name,
                        name);
         return;
     }
-    
-    *dest = mem->data.number;
+
+    // TODO: fix
+    if (mem->data.number == -1) {
+        *dest = 0;
+    }
+    else {
+        *dest = mem->data.number;
+    }
 }
 
 /**
@@ -44,7 +50,7 @@ static void bmic_java_read_mem_value(bmic_object_t *root, const char *name,
  * @return 
  */
 static bmic_java_mem_info_t bmic_java_read_mem_info_any(bmic_handle_t *handle,
-                                                        bmic_object_t *usage, 
+                                                        const bmic_object_t *usage, 
                                                         gru_status_t *status) {
     bmic_java_mem_info_t ret = {0};
    
@@ -151,7 +157,7 @@ bmic_java_mem_info_t bmic_java_mem_permgen_info(bmic_handle_t *handle, gru_statu
 
 static const char *bmic_java_get_string(bmic_object_t *root, const char *name, 
                                  const char *path, gru_status_t *status) {
-    bmic_object_t *obj = bmic_object_find_by_path(root, path);
+    const bmic_object_t *obj = bmic_object_find_by_path(root, path);
     
     if (!obj) {
         gru_status_set(status, GRU_FAILURE, "Unable to find %s", name);
@@ -167,7 +173,7 @@ static const char *bmic_java_get_string(bmic_object_t *root, const char *name,
 
 static uint64_t bmic_java_get_number(bmic_object_t *root, const char *name, 
                                  const char *path, gru_status_t *status) {
-    bmic_object_t *obj = bmic_object_find_by_path(root, path);
+    const bmic_object_t *obj = bmic_object_find_by_path(root, path);
     
     if (!obj) {
         gru_status_set(status, GRU_FAILURE, "Unable to find %s", name);
@@ -178,12 +184,17 @@ static uint64_t bmic_java_get_number(bmic_object_t *root, const char *name,
         return 0;
     }
     
-    return obj->data.number;
+    if (obj->data.number == -1) {
+        return 0;
+    }
+    else { 
+        return obj->data.number;
+    }
 }
 
 static double bmic_java_get_double(bmic_object_t *root, const char *name, 
                                  const char *path, gru_status_t *status) {
-    bmic_object_t *obj = bmic_object_find_by_path(root, path);
+    const bmic_object_t *obj = bmic_object_find_by_path(root, path);
     
     if (!obj) {
         gru_status_set(status, GRU_FAILURE, "Unable to find %s", name);
@@ -233,6 +244,20 @@ bmic_java_info_t bmic_java_read_info(bmic_handle_t *handle, gru_status_t *status
         return;
     }
     
+    ret.jvm_package_version = bmic_java_get_string(runtime, "JVM package version", 
+                                                   "/value/SystemProperties/java.version", 
+                                                   status);
+    if (!ret.jvm_package_version) {
+        return;
+    }
+    
+    if (strncmp(ret.version, "1.6", 3) == 0 || strncmp(ret.version, "1.7", 3) == 0) {
+        ret.memory_model = JAVA_LEGACY;
+    }
+    else {
+        ret.memory_model = JAVA_MODERN;
+    }
+    
 
     return ret;
 }
@@ -261,85 +286,85 @@ bmic_java_os_info_t bmic_java_read_os_info(bmic_handle_t *handle, gru_status_t *
     
     ret.version = bmic_java_get_string(runtime, "OS version", "/value/Version", status);
     if (!ret.version) {
-        return;
+        return ret;
     }
     
     ret.arch = bmic_java_get_string(runtime, "OS arch", "/value/Arch", status);
     if (!ret.arch) {
-        return;
+        return ret;
     }
     
     
     ret.cpus = bmic_java_get_number(runtime, "processor count", 
                                     "/value/AvailableProcessors", status);
     if (status->code != GRU_SUCCESS) {
-        return;
+        return ret;
     }
     
     ret.mem_total = bmic_java_get_number(runtime, "total memory", 
                                     "/value/TotalPhysicalMemorySize", status);
     if (status->code != GRU_SUCCESS) {
-        return;
+        return ret;
     }
     
     ret.mem_free = bmic_java_get_number(runtime, "total free memory", 
                                     "/value/FreePhysicalMemorySize", status);
     if (status->code != GRU_SUCCESS) {
-        return;
+        return ret;
     }
     
     ret.swap_total = bmic_java_get_number(runtime, "total swap memory", 
                                     "/value/FreeSwapSpaceSize", status);
     if (status->code != GRU_SUCCESS) {
-        return;
+        return ret;
     }
     
     ret.swap_free = bmic_java_get_number(runtime, "total free swap memory", 
                                     "/value/FreePhysicalMemorySize", status);
     if (status->code != GRU_SUCCESS) {
-        return;
+        return ret;
     }
     
     ret.swap_committed = bmic_java_get_number(runtime, "total committed swap memory", 
                                     "/value/CommittedVirtualMemorySize", status);
     if (status->code != GRU_SUCCESS) {
-        return;
+        return ret;
     }
     
     ret.open_fd = bmic_java_get_number(runtime, "open file descriptors", 
                                     "/value/OpenFileDescriptorCount", status);
     if (status->code != GRU_SUCCESS) {
-        return;
+        return ret;
     }
     
     ret.max_fd = bmic_java_get_number(runtime, "max file descriptors", 
                                     "/value/MaxFileDescriptorCount", status);
     if (status->code != GRU_SUCCESS) {
-        return;
+        return ret;
     }
     
     ret.load_average = bmic_java_get_double(runtime, "load average", 
                                     "/value/SystemLoadAverage", status);
     if (status->code != GRU_SUCCESS) {
-        return;
+        return ret;
     }
     
     ret.process_cpu_load = bmic_java_get_double(runtime, "process CPU load", 
                                     "/value/ProcessCpuLoad", status);
     if (status->code != GRU_SUCCESS) {
-        return;
+        return ret;
     }
     
     ret.system_cpu_load = bmic_java_get_double(runtime, "system CPU load", 
                                     "/value/SystemCpuLoad", status);
     if (status->code != GRU_SUCCESS) {
-        return;
+        return ret;
     }
     
     ret.process_cpu_time = bmic_java_get_number(runtime, "process CPU time", 
                                     "/value/ProcessCpuTime", status);
     if (status->code != GRU_SUCCESS) {
-        return;
+        return ret;
     }
     
     return ret;

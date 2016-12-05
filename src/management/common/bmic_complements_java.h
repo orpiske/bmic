@@ -18,10 +18,6 @@
 extern "C" {
 #endif
     
-typedef struct bmic_java_info_t_ {
-    const char *name;
-    const char *version;
-} bmic_java_info_t;
 
 typedef struct bmic_java_mem_info_t_ {
     uint64_t init;
@@ -41,6 +37,13 @@ typedef enum bmic_java_memory_model_t_ {
      */
     JAVA_MODERN,
 } bmic_java_memory_model_t;
+
+typedef struct bmic_java_info_t_ {
+    const char *name;
+    const char *version;
+    const char *jvm_package_version;
+    bmic_java_memory_model_t memory_model;
+} bmic_java_info_t;
 
 typedef struct bmic_java_os_info_t_ {
     const char *name;
@@ -68,9 +71,6 @@ typedef struct bmic_java_os_info_t_ {
 typedef bmic_java_info_t (*bmic_complement_api_java_info_fn)(bmic_handle_t *handle,
         gru_status_t *status);
 
-typedef bmic_java_memory_model_t (*bmic_complement_api_java_mem_model_fn)(bmic_handle_t *handle,
-        gru_status_t *status);
-
 typedef bmic_java_mem_info_t (*bmic_complement_api_java_mem_info_fn)(bmic_handle_t *handle,
         gru_status_t *status);
 
@@ -79,7 +79,6 @@ typedef bmic_java_os_info_t (*bmic_complement_api_java_os_info_fn)(bmic_handle_t
 
 typedef struct bmic_complements_java_api_t_ {
     bmic_complement_api_java_info_fn java_info;
-    bmic_complement_api_java_mem_model_fn memory_model;
     bmic_complement_api_java_mem_info_fn eden_info;
     bmic_complement_api_java_mem_info_fn survivor_info;
     // aka PS Old Gen
