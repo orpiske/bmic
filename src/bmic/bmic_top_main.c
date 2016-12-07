@@ -15,6 +15,8 @@
  */
 #include "bmic_top_main.h"
 
+#define as_mb(x) (x / (1024*1024))
+
 typedef struct options_t_
 {
     char username[OPT_MAX_STR_SIZE];
@@ -31,17 +33,9 @@ static void show_help()
     printf("\t-s\t--server=<str> hostname or IP address of the server\n");
 }
 
-/*
- typedef struct bmic_java_mem_info_t_ {
-    uint64_t init;
-    uint64_t committed;
-    uint64_t max;
-    uint64_t used;
-} bmic_java_mem_info_t;
- */
-
 static void print_mem(const char *name, bmic_java_mem_info_t *mem) {
-    printf("%-20s %-15lu %-15lu %-15lu %-15lu\n", name, mem->init, mem->committed, mem->max, mem->used);
+    printf("%-20s %-15d %-15d %-15d %-15d\n", name, as_mb(mem->init), 
+           as_mb(mem->committed), as_mb(mem->max), as_mb(mem->used));
 }
 
 int top_run(options_t *options)
@@ -66,20 +60,20 @@ int top_run(options_t *options)
         
         printf("\e[1;1H\e[2J");
         printf("%s %s (%s) %s %s \n", jinfo.name, jinfo.version, jinfo.jvm_package_version, 
-               osinfo.name, osinfo.version);
-        
+               osinfo.name, 
+               osinfo.version);        
         
         printf("%s%sLoad average:%s %-10.1f\n", RESET, LIGHT_WHITE, RESET, 
                osinfo.load_average);
         printf("%s%sFile descriptors:%s %-10lu max total %-10lu open %-10lu free\n", 
                RESET, LIGHT_WHITE, RESET, 
                osinfo.max_fd, osinfo.open_fd, (osinfo.max_fd - osinfo.open_fd));
-        printf("%s%sPhysical memory:%s %-10lu total %-10lu free\n", RESET, LIGHT_WHITE, 
+        printf("%s%sPhysical memory:%s %-10d total %-10d free\n", RESET, LIGHT_WHITE, 
                RESET, 
-               osinfo.mem_total, osinfo.mem_free);
-        printf("%s%sSwap memory:%s %-10lu total %-10lu free %-10lu used\n\n", 
-               RESET, LIGHT_WHITE, RESET, osinfo.swap_total, osinfo.swap_free, 
-               osinfo.swap_committed);
+               as_mb(osinfo.mem_total), as_mb(osinfo.mem_free));
+        printf("%s%sSwap memory:%s %-10d total %-10d free %-10d used\n\n", 
+               RESET, LIGHT_WHITE, RESET, as_mb(osinfo.swap_total), as_mb(osinfo.swap_free), 
+               as_mb(osinfo.swap_committed));
         
         printf("%s%s%s%-20s %-15s %-15s %-15s %-15s%s\n", RESET, BG_WHITE, LIGHT_BLACK,
                "Area", "Initial", "Committed", "Max", "Used", RESET);
