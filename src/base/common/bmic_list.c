@@ -33,9 +33,11 @@ inline bmic_list_t *bmic_list_new(gru_status_t *status, node_destructor destruct
 
 static void bmic_list_node_destroy(const void *nodedata, void *payload)
 {
-    node_destructor destructor = (node_destructor) payload;
+    if (payload) { 
+        node_destructor destructor = (node_destructor) payload;
     
-    destructor((void **)&nodedata);
+        destructor((void **)&nodedata);
+    }
 }
 
 void bmic_list_destroy(bmic_list_t **ptr) {
