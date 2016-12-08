@@ -85,17 +85,20 @@ static void print_op(const void *nodedata, void *payload)
     }
 }
 
-static void show_help()
+
+static void show_help(char **argv)
 {
-    printf("Usage: ");
-    printf("\t-h\t--help show this help\n");
-    printf("\t-u\t--username=<str> username to access the management console\n");
-    printf("\t-p\t--password=<str> password to access the management console\n");
-    printf("\t-s\t--server=<str> hostname or IP address of the server\n");
-    printf("\t-l\t--list list available capabilities/attributes from the server\n");
-    printf("\t-c\t--create create\n");
-    printf("\t-c\t--delete delete\n");
-    printf("\t-q\t--queue queue\n");
+    print_program_usage(argv[0]);
+    
+    print_option_help("help", "h", "show this help");
+    print_option_help("help=[operation]", "h [operation]", "show help for the given operation");
+    print_option_help("username", "u", "username to access the management console");
+    print_option_help("password", "p", "password to access the management console");
+    print_option_help("server", "s", "server hostname or IP address");
+    print_option_help("list", "l", "list available capabilities/attributes from the server");
+    print_option_help("create", "c", "create a queue on the server");
+    print_option_help("delete", "d", "delete a queue the server");
+    print_option_help("queue", "q", "queue name");
 }
 
 
@@ -184,7 +187,7 @@ int operations_main(int argc, char **argv)
     options_t options = {0};
 
     if (argc < 2) {
-        show_help();
+        show_help(argv);
 
         return EXIT_FAILURE;
     }
@@ -236,7 +239,7 @@ int operations_main(int argc, char **argv)
             break;
         case 'h':
             if (!optarg) {
-                show_help();
+                show_help(argv);
                 
                 return EXIT_SUCCESS;
             }
@@ -248,7 +251,7 @@ int operations_main(int argc, char **argv)
             break;
         default:
             printf("Invalid or missing option\n");
-            show_help();
+            show_help(argv);
             return EXIT_FAILURE;
         }
     }

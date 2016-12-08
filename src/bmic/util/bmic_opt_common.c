@@ -13,31 +13,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-#ifndef BMIC_OPT_COMMON_H
-#define BMIC_OPT_COMMON_H
+#include "bmic_opt_common.h"
 
-#define OPT_MAX_STR_SIZE 255
-
-#include <stdio.h>
-
-#include <common/gru_colors.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-typedef struct credential_options_t_ {
-    char username[OPT_MAX_STR_SIZE];
-    char password[OPT_MAX_STR_SIZE];
-} credential_options_t;
-
-
-void print_option_help(const char *long_opt, const char *short_opt, const char *desc);
-void print_program_usage(char *program_name);
-
-#ifdef __cplusplus
+void print_option_help(const char *long_opt, const char *short_opt, const char *desc) {
+    printf("\t%s%s--%s (-%s short option) %s\n\t\t%s\n\n", RESET, LIGHT_WHITE, long_opt, 
+           short_opt, RESET, desc);
 }
-#endif
 
-#endif /* BMIC_OPT_COMMON_H */
-
+void print_program_usage(char *program_name) {
+    printf("%s%sUsage:%s\nbmic %s <options>\n\nValid options:\n\n", RESET, LIGHT_WHITE, RESET, program_name);
+}

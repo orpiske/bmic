@@ -22,13 +22,14 @@ typedef struct options_t_
     bool list;
 } options_t;
 
-static void show_help()
+static void show_help(char **argv)
 {
-    printf("Usage: ");
-    printf("\t-h\t--help show this help\n");
-    printf("\t-u\t--username=<str> username to access the management console\n");
-    printf("\t-p\t--password=<str> password to access the management console\n");
-    printf("\t-s\t--server=<str> hostname or IP address of the server\n");
+    print_program_usage(argv[0]);
+    
+    print_option_help("help", "h", "show this help");
+    print_option_help("username", "u", "username to access the management console");
+    print_option_help("password", "p", "password to access the management console");
+    print_option_help("server", "s", "server hostname or IP address");
 }
 
 
@@ -71,7 +72,7 @@ int discovery_main(int argc, char **argv) {
     options.list = false;
 
     if (argc < 2) {
-        show_help();
+        show_help(argv);
 
         return EXIT_FAILURE;
     }
@@ -105,11 +106,11 @@ int discovery_main(int argc, char **argv) {
             strlcpy(options.server, optarg, sizeof (options.server));
             break;
         case 'h':
-            show_help();
+            show_help(argv);
             return EXIT_SUCCESS;
         default:
             printf("Invalid or missing option\n");
-            show_help();
+            show_help(argv);
             return EXIT_FAILURE;
         }
     }

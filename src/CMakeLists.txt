@@ -84,6 +84,7 @@ add_executable(
 	bmic
         bmic/util/bmic_print_simple.c
         bmic/util/bmic_type_map.c
+        bmic/util/bmic_opt_common.c
         bmic/bmic_capabilities_main.c
         bmic/bmic_discovery_main.c
         bmic/bmic_queue_main.c

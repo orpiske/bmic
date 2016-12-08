@@ -46,17 +46,17 @@ static void print_cap(const void *nodedata, void *payload)
     print_cap_info(info);
 }
 
-static void show_help()
+static void show_help(char **argv)
 {
-    printf("Usage: ");
-    printf("\t-h\t--help show this help\n");
-    printf("\t-u\t--username=<str> username to access the management console\n");
-    printf("\t-p\t--password=<str> password to access the management console\n");
-    printf("\t-s\t--server=<str> hostname or IP address of the server\n");
-    printf("\t-l\t--list list available capabilities/attributes from the server\n");
-    printf("\t-r\t--read=<str> read a capability/attribute from the server\n");
+    print_program_usage(argv[0]);
+    
+    print_option_help("help", "h", "show this help");
+    print_option_help("username", "u", "username to access the management console");
+    print_option_help("password", "p", "password to access the management console");
+    print_option_help("list", "l", "list available capabilities/attributes from the server");
+    print_option_help("read=<str>", "r <str>", "read the capability/attribute named <str> from the server");
+    print_option_help("read-all", "R", "read all available capabilities/attributes from the server");
 }
-
 
 void capabilities_do_read(bmic_handle_t *handle, 
                        bmic_api_interface_t *api, const bmic_exchange_t *cap, 
@@ -187,7 +187,7 @@ int capabilities_main(int argc, char **argv)
     options.readall = false;
 
     if (argc < 2) {
-        show_help();
+        show_help(argv);
 
         return EXIT_FAILURE;
     }
@@ -234,11 +234,11 @@ int capabilities_main(int argc, char **argv)
             options.readall = true;
             break;
         case 'h':
-            show_help();
+            show_help(argv);
             return EXIT_SUCCESS;
         default:
             printf("Invalid or missing option\n");
-            show_help();
+            show_help(argv);
             return EXIT_FAILURE;
         }
     }
