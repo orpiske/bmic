@@ -112,13 +112,13 @@ int top_run(options_t *options)
             print_mem("PermGen", &permgen);
         }
         
-        if (list) {
+        if (list && list->items) {
             printf("\n\n");
             printf("%s%s%s%-40s %-10s %-10s %-10s %-10s%s\n", RESET, BG_WHITE, LIGHT_BLACK, 
                    "Name", "Size", "Consumers", "Ack Count", "Exp Count", RESET);
             
-            for (uint32_t i = 0; i < gru_list_count(list); i++) {
-                gru_node_t *node = gru_list_get(list, i);
+            for (uint32_t i = 0; i < gru_list_count(list->items); i++) {
+                const gru_node_t *node = gru_list_get(list->items, i);
                 
                 if (node != NULL && node->data != NULL) { 
                     
