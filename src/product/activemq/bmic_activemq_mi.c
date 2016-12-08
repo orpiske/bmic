@@ -59,6 +59,7 @@ const bmic_exchange_t *bmic_activemq_mi_read(bmic_handle_t *handle,
                                                         capabilities->name,
                                                         attr_name,
                                                         status);
+
     if (!reply_obj) {
         goto err_exit;
     }

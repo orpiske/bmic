@@ -33,5 +33,11 @@
 #define ACTIVEMQ_CAP_OPERATIONS "(brokerName=)([a-z0-9\\.\"])*(,type=Broker\\/op$)"
 #define ACTIVEMQ_BROKER_OPERATIONS_ROOT "(brokerName=)([a-z0-9\\.\"])*(,type=Broker$)"
 
+
+#define ACTIVEMQ_QUEUE_SIZE_ATTR "QueueSize"
+#define ACTIVEMQ_QUEUE_ACK_CNT_ATTR "DequeueCount"
+#define ACTIVEMQ_QUEUE_EXP_CNT_ATTR "ExpiredCount"
+#define ACTIVEMQ_QUEUE_CNS_CNT_ATTR "ConsumerCount"
+
 #endif /* BMIC_ACTIVEMQ_URLS_H */
 
