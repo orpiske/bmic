@@ -17,7 +17,8 @@
 
 bmic_api_interface_t *bmic_activemq_product(gru_status_t *status)
 {
-    bmic_api_interface_t *ret = bmic_api_interface_new("activemq", "5.x.x", status);
+    bmic_api_interface_t *ret = bmic_api_interface_new(ACTIVEMQ_PRODUCT_NAME, 
+                                                       ACTIVEMQ_API_VERSION, status);
 
     ret->base_url = bmic_activemq_base_url;
     ret->api_init = bmic_activemq_init;
@@ -121,7 +122,7 @@ bmic_product_info_t *bmic_activemq_product_info(bmic_handle_t *handle,
         return NULL;
     }
 
-    const bmic_object_t *value = bmic_object_find_by_name(root, "value");
+    const bmic_object_t *value = bmic_object_find_by_name(root, "values");
     if (!value) {
         goto err_exit;
     }
@@ -281,9 +282,10 @@ bool bmic_activemq_operation_delete_queue(bmic_handle_t *handle,
 static const char *bmic_activemq_filter_queue_name(const char *fqdn, 
                                                    gru_status_t *status) 
 {
-    logger_t logger = gru_logger_get(); 
+    logger_t logger = gru_logger_get();
+    const char *regex = "destinationName=([^,]+)";
     
-    const char *ret = bmic_regex_find(fqdn, "destinationName=([^,]+)", 2, 1, status);
+    const char *ret = bmic_regex_find(fqdn, regex, 2, 1, status);
     if (!ret) {
         logger(ERROR, "Unable to parse the queue data for %s", fqdn);
         
@@ -328,7 +330,9 @@ const bmic_list_t *bmic_activemq_queue_list(bmic_handle_t *handle,
                                            const bmic_exchange_t *cap,
                                            gru_status_t *status)
 {
-    const bmic_exchange_t *attributes = bmic_activemq_mi_read(handle, cap->root, "Queues",
+    const char *attr_name = "Queues";
+    
+    const bmic_exchange_t *attributes = bmic_activemq_mi_read(handle, cap->root, attr_name,
                                                              status,
                                                              REG_SEARCH_NAME,
                                                              ACTIVEMQ_CAPABILITIES_KEY_REGEX);

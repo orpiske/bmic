@@ -17,6 +17,9 @@
 #ifndef BMIC_ACTIVEMQ_DEFS_H
 #define BMIC_ACTIVEMQ_DEFS_H
 
+#define ACTIVEMQ_PRODUCT_NAME "activemq"
+#define ACTIVEMQ_API_VERSION "5.x.x"
+
 /**
  * Base URLs must not have the '/' char at the end
  */
