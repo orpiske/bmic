@@ -41,7 +41,7 @@ extern "C" {
 
 
 typedef union bmic_value_t_ {
-    int32_t number;
+    int64_t number;
     char *str;
     bool value;
     double d;
