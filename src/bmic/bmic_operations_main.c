@@ -26,8 +26,7 @@ typedef enum operations_t_ {
 
 typedef struct options_t_
 {
-    char username[OPT_MAX_STR_SIZE];
-    char password[OPT_MAX_STR_SIZE];
+    credential_options_t credentials;
     char server[OPT_MAX_STR_SIZE];
     bool help;
     char name[OPT_MAX_STR_SIZE];
@@ -106,8 +105,8 @@ int operations_run(options_t *options)
 
     bmic_context_t ctxt = {0};
     
-    bool ret = bmic_context_init_simple(&ctxt, options->server, options->username, 
-                             options->password, &status);
+    bool ret = bmic_context_init_simple(&ctxt, options->server, options->credentials.username, 
+                             options->credentials.password, &status);
     if (!ret) {
         fprintf(stderr, "%s\n", status.message);
         return EXIT_FAILURE;
@@ -215,10 +214,10 @@ int operations_main(int argc, char **argv)
 
         switch (c) {
         case 'u':
-            strlcpy(options.username, optarg, sizeof (options.username));
+            strlcpy(options.credentials.username, optarg, sizeof (options.credentials.username));
             break;
         case 'p':
-            strlcpy(options.password, optarg, sizeof (options.password));
+            strlcpy(options.credentials.password, optarg, sizeof (options.credentials.password));
             break;
         case 's':
             strlcpy(options.server, optarg, sizeof (options.server));

@@ -22,7 +22,10 @@
 extern "C" {
 #endif
 
-
+typedef struct credential_options_t_ {
+    char username[OPT_MAX_STR_SIZE];
+    char password[OPT_MAX_STR_SIZE];
+} credential_options_t;
 
 
 #ifdef __cplusplus
