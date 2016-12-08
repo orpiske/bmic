@@ -30,17 +30,18 @@ bmic_api_interface_t *bmic_activemq_product(gru_status_t *status)
     ret->operation_list = bmic_activemq_operation_list;
     ret->create_queue = bmic_activemq_operation_create_queue;
     ret->delete_queue = bmic_activemq_operation_delete_queue;
-    
+    ret->list_queues = bmic_activemq_queue_list;
+
     ret->java.java_info = bmic_java_read_info;
     ret->java.os_info = bmic_java_read_os_info;
-    
+
     ret->java.eden_info = bmic_java_mem_eden_info;
     ret->java.survivor_info = bmic_java_mem_survivor_info;
     ret->java.tenured_info = bmic_java_mem_tenured_info;
     ret->java.code_cache_info = bmic_java_mem_code_cache_info;
     ret->java.metaspace_info = bmic_java_mem_metaspace_info;
     ret->java.permgen_info = bmic_java_mem_permgen_info;
-    
+
     return ret;
 }
 
@@ -51,19 +52,19 @@ const char *bmic_activemq_base_url(const bmic_discovery_hint_t *hint)
     if (hint->hint_type == URL) {
         if (asprintf(&ret, ACTIVEMQ_BASE_URL_HINT_URL, hint->content.url) == -1) {
             logger_t logger = gru_logger_get();
-        
+
             logger(FATAL, "Not enough memory to set URL hint");
-        
+
             return NULL;
         }
     }
     else {
-        if (asprintf(&ret, ACTIVEMQ_BASE_URL_HINT_ADDRESSING, 
+        if (asprintf(&ret, ACTIVEMQ_BASE_URL_HINT_ADDRESSING,
                      hint->content.addressing.hostname, 8161) == -1) {
             logger_t logger = gru_logger_get();
-        
+
             logger(FATAL, "Not enough memory to set addressing hint");
-        
+
             return NULL;
         }
     }
@@ -138,7 +139,7 @@ err_exit:
 }
 
 const bmic_exchange_t *bmic_activemq_load_capabilities(bmic_handle_t *handle,
-                                                             gru_status_t *status)
+                                                       gru_status_t *status)
 {
     bmic_exchange_t *ret = gru_alloc(sizeof (bmic_exchange_t), status);
     gru_alloc_check(ret, NULL);
@@ -173,19 +174,18 @@ const bmic_exchange_t *bmic_activemq_load_capabilities(bmic_handle_t *handle,
 
     return ret;
 
-    err_exit:
+err_exit:
     bmic_data_release(&reply);
     gru_dealloc((void **) &ret);
     return NULL;
 }
-
 
 const bmic_exchange_t *bmic_activemq_attribute_read(bmic_handle_t *handle,
                                                     const bmic_exchange_t *cap, const char *name,
                                                     gru_status_t *status)
 {
     return bmic_activemq_mi_read(handle, cap->root, name, status,
-                             REG_SEARCH_NAME, ACTIVEMQ_CAPABILITIES_KEY_REGEX);
+                                 REG_SEARCH_NAME, ACTIVEMQ_CAPABILITIES_KEY_REGEX);
 }
 
 const bmic_list_t *bmic_activemq_attribute_list(bmic_handle_t *handle,
@@ -197,7 +197,7 @@ const bmic_list_t *bmic_activemq_attribute_list(bmic_handle_t *handle,
     bmic_list_t *ret = bmic_list_new(status, bmic_cap_info_destroy_list);
     gru_alloc_check(ret, NULL);
 
-     bmic_payload_add_attr_t payload = {
+    bmic_payload_add_attr_t payload = {
         .list = ret->items,
         .status = status,
     };
@@ -209,19 +209,17 @@ const bmic_list_t *bmic_activemq_attribute_list(bmic_handle_t *handle,
 
 }
 
-
 const bmic_exchange_t *bmic_activemq_queue_attribute_read(bmic_handle_t *handle,
-                                                         const bmic_exchange_t *capabilities, const char *name,
-                                                         gru_status_t *status, const char *queue)
+                                                          const bmic_exchange_t *capabilities, const char *name,
+                                                          gru_status_t *status, const char *queue)
 {
     return bmic_activemq_mi_read(handle, capabilities->root, name, status,
-                             REG_SEARCH_NAME, ACTIVEMQ_QUEUE_CAPABILITES_REGEX,
-                             queue);
+                                 REG_SEARCH_NAME, ACTIVEMQ_QUEUE_CAPABILITES_REGEX,
+                                 queue);
 }
 
-
 const bmic_list_t *bmic_activemq_operation_list(bmic_handle_t *handle,
-                                              const bmic_exchange_t *cap, gru_status_t *status)
+                                                const bmic_exchange_t *cap, gru_status_t *status)
 {
     const bmic_object_t *attributes = bmic_object_find_regex(cap->root,
                                                              ACTIVEMQ_CAP_OPERATIONS,
@@ -241,40 +239,110 @@ const bmic_list_t *bmic_activemq_operation_list(bmic_handle_t *handle,
 }
 
 bool bmic_activemq_operation_create_queue(bmic_handle_t *handle,
-                                            const bmic_exchange_t *cap, 
-                                            const char *name,
-                                            gru_status_t *status)
+                                          const bmic_exchange_t *cap,
+                                          const char *name,
+                                          gru_status_t *status)
 {
     const bmic_object_t *attributes = bmic_object_find_regex(cap->root,
                                                              ACTIVEMQ_BROKER_OPERATIONS_ROOT,
                                                              REG_SEARCH_NAME);
-    
+
     bmic_json_t *json = bmic_json_new(status);
     gru_alloc_check(json, false);
-    
+
     bmic_activemq_json_create_queue(attributes, json, name);
     bool ret = bmic_jolokia_io_exec(handle, json, status);
     bmic_json_destroy(&json);
-    
+
+    return ret;
+}
+
+bool bmic_activemq_operation_delete_queue(bmic_handle_t *handle,
+                                          const bmic_exchange_t *cap,
+                                          const char *name,
+                                          gru_status_t *status)
+{
+    const bmic_object_t *attributes = bmic_object_find_regex(cap->root,
+                                                             ACTIVEMQ_BROKER_OPERATIONS_ROOT,
+                                                             REG_SEARCH_NAME);
+
+    bmic_json_t *json = bmic_json_new(status);
+    gru_alloc_check(json, false);
+
+    bmic_activemq_json_delete_queue(attributes, json, name);
+    bool ret = bmic_jolokia_io_exec(handle, json, status);
+    bmic_json_destroy(&json);
+
     return ret;
 }
 
 
-bool bmic_activemq_operation_delete_queue(bmic_handle_t *handle,
-                                            const bmic_exchange_t *cap, 
-                                            const char *name,
-                                            gru_status_t *status)
+static const char *bmic_activemq_filter_queue_name(const char *fqdn, 
+                                                   gru_status_t *status) 
 {
-    const bmic_object_t *attributes = bmic_object_find_regex(cap->root,
-                                                             ACTIVEMQ_BROKER_OPERATIONS_ROOT,
-                                                             REG_SEARCH_NAME);
+    logger_t logger = gru_logger_get(); 
     
-    bmic_json_t *json = bmic_json_new(status);
-    gru_alloc_check(json, false);
+    const char *ret = bmic_regex_find(fqdn, "destinationName=([^,]+)", 2, 1, status);
+    if (!ret) {
+        logger(ERROR, "Unable to parse the queue data for %s", fqdn);
+        
+        return NULL;
+    }
     
-    bmic_activemq_json_delete_queue(attributes, json, name);
-    bool ret = bmic_jolokia_io_exec(handle, json, status);
-    bmic_json_destroy(&json);
+    logger(DEBUG, "Found queue name %s for %s", ret, fqdn);
     
+    return ret;
+}
+
+static void bmic_activemq_translate_queue_list(const void *nodedata, void *payload)
+{
+    const bmic_object_t *nodeobj = (bmic_object_t *) nodedata;
+    bmic_payload_add_attr_t *pl =
+            (bmic_payload_add_attr_t *) payload;
+    logger_t logger = gru_logger_get();
+    
+    logger(INFO, "Processing node %s [%s]", nodeobj->name, nodeobj->path);
+
+    if (nodeobj->type == OBJECT) { 
+        bmic_object_t *obj = bmic_object_find_by_name(nodeobj, "objectName");
+        
+        if (obj && obj->type == STRING) {
+            const char *queue_name = bmic_activemq_filter_queue_name(obj->data.str, 
+                                                                     pl->status);
+            
+            logger(INFO, "Processing node %s [%s]: %s", nodeobj->name, nodeobj->path, 
+                   queue_name);
+            gru_list_append(pl->list, queue_name);
+        }
+        else {
+            logger(WARNING, "Invalid sub node type for %s: %d", obj->name, obj->type);
+        }
+    }
+    else {
+        logger(WARNING, "Invalid node type for %s: %d", nodeobj->name, nodeobj->type);
+    }
+}
+
+const bmic_list_t *bmic_activemq_queue_list(bmic_handle_t *handle,
+                                           const bmic_exchange_t *cap,
+                                           gru_status_t *status)
+{
+    const bmic_exchange_t *attributes = bmic_activemq_mi_read(handle, cap->root, "Queues",
+                                                             status,
+                                                             REG_SEARCH_NAME,
+                                                             ACTIVEMQ_CAPABILITIES_KEY_REGEX);
+
+    bmic_list_t *ret = bmic_list_new(status, gru_dealloc);
+    gru_alloc_check(ret, NULL);
+
+    bmic_payload_add_attr_t payload = {
+        .list = ret->items,
+        .status = status,
+    };
+
+
+    bmic_object_for_each_child(attributes->data_ptr, bmic_activemq_translate_queue_list, 
+                               &payload);
+
     return ret;
 }

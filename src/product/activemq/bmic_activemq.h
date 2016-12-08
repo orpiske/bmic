@@ -111,6 +111,17 @@ bool bmic_activemq_operation_delete_queue(bmic_handle_t *handle,
                                             const char *name,
                                             gru_status_t *status);
 
+/**
+ * List queues
+ * @param handle
+ * @param cap
+ * @param status
+ * @return 
+ */
+const bmic_list_t *bmic_activemq_queue_list(bmic_handle_t *handle,
+                                           const bmic_exchange_t *cap,
+                                           gru_status_t *status);
+
 
 #ifdef __cplusplus
 }
