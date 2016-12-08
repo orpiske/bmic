@@ -31,5 +31,10 @@
 #define ARTEMIS_CORE_CAP_OPERATIONS "(brokerName=)([a-z0-9\\.\"])*(,module=Core,serviceType=Server,type=Broker\\/op$)"
 #define ARTEMIS_CORE_BROKER_OPERATIONS_ROOT "(brokerName=)([a-z0-9\\.\"])*(,module=Core,serviceType=Server,type=Broker$)"
 
+#define ARTEMIS_QUEUE_SIZE_ATTR "MessageCount"
+#define ARTEMIS_QUEUE_ACK_CNT_ATTR "MessagesAcknowledged"
+#define ARTEMIS_QUEUE_EXP_CNT_ATTR "MessagesExpired"
+#define ARTEMIS_QUEUE_CNS_CNT_ATTR "ConsumerCount"
+
 #endif /* BMIC_ARTEMIS_URLS_H */
 

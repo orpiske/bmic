@@ -31,6 +31,7 @@ bmic_api_interface_t *bmic_artemis_product(gru_status_t *status)
     ret->create_queue = bmic_artemis_operation_create_queue;
     ret->delete_queue = bmic_artemis_operation_delete_queue;
     ret->list_queues = bmic_artemis_queue_list;
+    ret->stat_queue = bmic_artemis_queue_stat;
 
     ret->java.java_info = bmic_java_read_info;
     ret->java.os_info = bmic_java_read_os_info;
@@ -246,7 +247,7 @@ const bmic_list_t *bmic_artemis_queue_list(bmic_handle_t *handle,
                                                            status,
                                                            REG_SEARCH_NAME, ARTEMIS_CAPABILITIES_KEY_REGEX);
 
-    bmic_list_t *ret = bmic_list_new(status, bmic_cap_info_destroy_list);
+    bmic_list_t *ret = bmic_list_new(status, NULL);
     gru_alloc_check(ret, NULL);
 
     bmic_payload_add_attr_t payload = {
@@ -315,5 +316,78 @@ bool bmic_artemis_operation_delete_queue(bmic_handle_t *handle,
     bool ret = bmic_jolokia_io_exec(handle, json, status);
     bmic_json_destroy(&json);
 
+    return ret;
+}
+
+/**
+ * List queues
+ * @param handle
+ * @param cap
+ * @param status
+ * @return 
+ */
+bmic_queue_stat_t bmic_artemis_queue_stat(bmic_handle_t *handle,
+                                           const bmic_exchange_t *cap,
+                                           const char *queue,
+                                           gru_status_t *status)
+{
+    bmic_queue_stat_t ret = {0};
+    const bmic_exchange_t *qsize = bmic_artemis_queue_attribute_read(handle, cap, 
+                                                                ARTEMIS_QUEUE_SIZE_ATTR,
+                                                                status, queue);
+    logger_t logger = gru_logger_get();
+    if (qsize) {
+        if (qsize->data_ptr && qsize->data_ptr->type == INTEGER) {
+            ret.queue_size = qsize->data_ptr->data.number;
+        }
+        
+        logger(ERROR, "Invalid data pointer for the queue size property");
+    }
+    else {
+        logger(ERROR, "Unavailable response for queue size property");
+    }
+    
+    const bmic_exchange_t *ack = bmic_artemis_queue_attribute_read(handle, cap, 
+                                                                ARTEMIS_QUEUE_ACK_CNT_ATTR,
+                                                                status, queue);
+    if (ack) {
+        if (ack->data_ptr && ack->data_ptr->type == INTEGER) {
+            ret.msg_ack_count = ack->data_ptr->data.number;
+        }
+        
+        logger(ERROR, "Invalid data pointer for the acknowledge message count property");
+    }
+    else {
+        logger(ERROR, "Unavailable response for acknowledge message count property");
+    }
+    
+    const bmic_exchange_t *exp = bmic_artemis_queue_attribute_read(handle, cap, 
+                                                                ARTEMIS_QUEUE_EXP_CNT_ATTR,
+                                                                status, queue);
+    if (exp) {
+        if (exp->data_ptr && exp->data_ptr->type == INTEGER) {
+            ret.msg_exp_count = exp->data_ptr->data.number;
+        }
+        
+        logger(ERROR, "Invalid data pointer for the expired message count property");
+    }
+    else {
+        logger(ERROR, "Unavailable response for expired message count property");
+    }
+    
+    const bmic_exchange_t *cns = bmic_artemis_queue_attribute_read(handle, cap, 
+                                                                ARTEMIS_QUEUE_CNS_CNT_ATTR,
+                                                                status, queue);
+    if (cns) {
+        if (cns->data_ptr && cns->data_ptr->type == INTEGER) {
+            ret.consumer_count = cns->data_ptr->data.number;
+        }
+        
+        logger(ERROR, "Invalid data pointer for the consumers count property");
+    }
+    else {
+        logger(ERROR, "Unavailable response for consumers count property");
+    }
+    
     return ret;
 }

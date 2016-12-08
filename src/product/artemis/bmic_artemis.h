@@ -151,6 +151,20 @@ const bmic_list_t *bmic_artemis_queue_list(bmic_handle_t *handle,
                                            const bmic_exchange_t *cap,
                                            gru_status_t *status);
 
+
+
+/**
+ * List queues
+ * @param handle
+ * @param cap
+ * @param status
+ * @return 
+ */
+bmic_queue_stat_t bmic_artemis_queue_stat(bmic_handle_t *handle,
+                                           const bmic_exchange_t *cap,
+                                           const char *queue,
+                                           gru_status_t *status);
+
 #ifdef __cplusplus
 }
 #endif
