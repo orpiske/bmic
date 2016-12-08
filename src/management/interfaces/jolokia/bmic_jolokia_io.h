@@ -29,6 +29,9 @@
 #include "bmic_jolokia_parse.h"
 #include "bmic_jolokia.h"
 
+#define JOLOKIA_OP_READ "read"
+#define JOLOKIA_OP_EXEC "exec"
+
 #ifdef __cplusplus
 extern "C" {
 #endif

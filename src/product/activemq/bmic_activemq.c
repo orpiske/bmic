@@ -122,7 +122,7 @@ bmic_product_info_t *bmic_activemq_product_info(bmic_handle_t *handle,
         return NULL;
     }
 
-    const bmic_object_t *value = bmic_object_find_by_name(root, "values");
+    const bmic_object_t *value = bmic_object_find_by_name(root, JOLOKIA_OBJ_VALUE_NAME);
     if (!value) {
         goto err_exit;
     }

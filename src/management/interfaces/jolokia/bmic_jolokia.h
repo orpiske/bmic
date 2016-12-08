@@ -27,6 +27,7 @@
 #include "management/common/bmic_internal_payloads.h"
 
 #include "bmic_jolokia_status.h"
+#include "bmic_jolokia_defs.h"
 
 #ifdef __cplusplus
 extern "C" {

@@ -25,7 +25,7 @@ bool bmic_jolokia_io_exec(bmic_handle_t *handle,
         .status = status,
     };
 
-    bmic_endpoint_set_path(handle->ep, "exec", status);
+    bmic_endpoint_set_path(handle->ep, JOLOKIA_OP_EXEC, status);
     if (status->code != GRU_SUCCESS) {
         return false;
     }
@@ -86,7 +86,7 @@ const bmic_object_t *bmic_jolokia_io_read_attribute(bmic_handle_t *handle,
         const char *attr_name,
         gru_status_t *status)
 {
-    const char *path = handle->path_formatter("read", cap_name,
+    const char *path = handle->path_formatter(JOLOKIA_OP_READ, cap_name,
             pkg, attr_name, status);
 
     const bmic_object_t *ret = bmic_jolokia_io_read(handle, path, status);
