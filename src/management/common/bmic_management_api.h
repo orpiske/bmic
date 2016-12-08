@@ -25,6 +25,7 @@
 #include "bmic_exchange.h"
 #include "bmic_discovery_hint.h"
 #include "bmic_product_info.h"
+#include "bmic_queue_stat.h"
 
 #include "bmic_complements_java.h"
 
@@ -68,6 +69,10 @@ typedef bool (*bmic_management_api_delete_queue_fn)(bmic_handle_t *handle,
 typedef const bmic_list_t *(*bmic_management_api_list_queues_fn)(bmic_handle_t *handle, 
         const bmic_exchange_t *cap, gru_status_t *status);
 
+typedef bmic_queue_stat_t (*bmic_management_api_stat_queue_fn)(bmic_handle_t *handle,
+        const bmic_exchange_t *cap,
+        const char *name,
+        gru_status_t *status);
 
 typedef struct bmic_api_interface_t_ {
     char name[64];
@@ -86,6 +91,7 @@ typedef struct bmic_api_interface_t_ {
     bmic_management_api_create_queue_fn create_queue;
     bmic_management_api_delete_queue_fn delete_queue;
     bmic_management_api_list_queues_fn list_queues;
+    bmic_management_api_stat_queue_fn stat_queue;
     
     bmic_complements_java_api_t java; 
 } bmic_api_interface_t;
