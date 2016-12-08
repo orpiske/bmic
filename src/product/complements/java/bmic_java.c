@@ -20,7 +20,7 @@ static void bmic_java_read_mem_value(const bmic_object_t *root, const char *name
                                      const char *path, uint64_t *dest,
                                      gru_status_t *status) 
 {
-    bmic_object_t *mem = bmic_object_find_by_path(root, path);
+    const bmic_object_t *mem = bmic_object_find_by_path(root, path);
     if (!mem) {
         gru_status_set(status, GRU_FAILURE, "Unable to find %s memory value", name);
         return;
@@ -155,7 +155,7 @@ bmic_java_mem_info_t bmic_java_mem_permgen_info(bmic_handle_t *handle, gru_statu
     return bmic_java_read_mem_info_any(handle, usage, status);
 }
 
-static const char *bmic_java_get_string(bmic_object_t *root, const char *name, 
+static const char *bmic_java_get_string(const bmic_object_t *root, const char *name, 
                                  const char *path, gru_status_t *status) {
     const bmic_object_t *obj = bmic_object_find_by_path(root, path);
     
@@ -171,7 +171,7 @@ static const char *bmic_java_get_string(bmic_object_t *root, const char *name,
     return obj->data.str;
 }
 
-static uint64_t bmic_java_get_number(bmic_object_t *root, const char *name, 
+static uint64_t bmic_java_get_number(const bmic_object_t *root, const char *name, 
                                  const char *path, gru_status_t *status) {
     const bmic_object_t *obj = bmic_object_find_by_path(root, path);
     
@@ -192,7 +192,7 @@ static uint64_t bmic_java_get_number(bmic_object_t *root, const char *name,
     }
 }
 
-static double bmic_java_get_double(bmic_object_t *root, const char *name, 
+static double bmic_java_get_double(const bmic_object_t *root, const char *name, 
                                  const char *path, gru_status_t *status) {
     const bmic_object_t *obj = bmic_object_find_by_path(root, path);
     
@@ -210,7 +210,7 @@ static double bmic_java_get_double(bmic_object_t *root, const char *name,
 
 bmic_java_info_t bmic_java_read_info(bmic_handle_t *handle, gru_status_t *status) {
     bmic_java_info_t ret = {0};
-    bmic_object_t *runtime = bmic_jolokia_io_read_attribute(handle, "java.lang", 
+    const bmic_object_t *runtime = bmic_jolokia_io_read_attribute(handle, "java.lang", 
                                                         "type=Runtime", 
                                                         "", 
                                                         status);
@@ -224,7 +224,7 @@ bmic_java_info_t bmic_java_read_info(bmic_handle_t *handle, gru_status_t *status
         return ret;
     }
     
-    bmic_object_t *jvmname = bmic_object_find_by_path(runtime, "/value/VmName");
+    const bmic_object_t *jvmname = bmic_object_find_by_path(runtime, "/value/VmName");
     if (!jvmname) {
         gru_status_set(status, GRU_FAILURE, "Unable to find JVM name");
         return ret;
@@ -236,19 +236,19 @@ bmic_java_info_t bmic_java_read_info(bmic_handle_t *handle, gru_status_t *status
     
     ret.name = bmic_java_get_string(runtime, "JVM name", "/value/VmName", status);
     if (!ret.name) {
-        return;
+        return ret;
     }
     
     ret.version = bmic_java_get_string(runtime, "JVM version", "/value/SpecVersion", status);
     if (!ret.version) {
-        return;
+        return ret;
     }
     
     ret.jvm_package_version = bmic_java_get_string(runtime, "JVM package version", 
                                                    "/value/SystemProperties/java.version", 
                                                    status);
     if (!ret.jvm_package_version) {
-        return;
+        return ret;
     }
     
     if (strncmp(ret.version, "1.6", 3) == 0 || strncmp(ret.version, "1.7", 3) == 0) {
@@ -257,14 +257,13 @@ bmic_java_info_t bmic_java_read_info(bmic_handle_t *handle, gru_status_t *status
     else {
         ret.memory_model = JAVA_MODERN;
     }
-    
 
     return ret;
 }
 
 bmic_java_os_info_t bmic_java_read_os_info(bmic_handle_t *handle, gru_status_t *status) {
     bmic_java_os_info_t ret = {0};
-    bmic_object_t *runtime = bmic_jolokia_io_read_attribute(handle, "java.lang", 
+    const bmic_object_t *runtime = bmic_jolokia_io_read_attribute(handle, "java.lang", 
                                                         "type=OperatingSystem", 
                                                         "", 
                                                         status);
@@ -281,7 +280,7 @@ bmic_java_os_info_t bmic_java_read_os_info(bmic_handle_t *handle, gru_status_t *
     
     ret.name = bmic_java_get_string(runtime, "OS name", "/value/Name", status);
     if (!ret.name) {
-        return;
+        return ret;
     }
     
     ret.version = bmic_java_get_string(runtime, "OS version", "/value/Version", status);

@@ -94,7 +94,7 @@ void bmic_jolokia_translate_op_object(const void *nodedata, void *payload);
  * @param status
  * @return 
  */
-bool bmic_jolokia_translate_status(bmic_object_t *root, gru_status_t *status);
+bool bmic_jolokia_translate_status(const bmic_object_t *root, gru_status_t *status);
 
 #ifdef __cplusplus
 }

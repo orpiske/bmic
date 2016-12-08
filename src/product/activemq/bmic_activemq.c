@@ -304,7 +304,7 @@ static void bmic_activemq_translate_queue_list(const void *nodedata, void *paylo
     logger(INFO, "Processing node %s [%s]", nodeobj->name, nodeobj->path);
 
     if (nodeobj->type == OBJECT) { 
-        bmic_object_t *obj = bmic_object_find_by_name(nodeobj, "objectName");
+        const bmic_object_t *obj = bmic_object_find_by_name(nodeobj, "objectName");
         
         if (obj && obj->type == STRING) {
             const char *queue_name = bmic_activemq_filter_queue_name(obj->data.str, 
