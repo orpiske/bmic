@@ -75,7 +75,7 @@ int top_run(options_t *options)
         
         bmic_java_os_info_t osinfo = api->java.os_info(ctxt.handle, &status);
         
-        printf("\e[1;1H\e[2J");
+        printf(CLEAR_SCREEN);
         printf("%s %s (%s) %s %s \n", jinfo.name, jinfo.version, jinfo.jvm_package_version, 
                osinfo.name, 
                osinfo.version);        
