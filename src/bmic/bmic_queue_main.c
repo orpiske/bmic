@@ -15,13 +15,21 @@
  */
 #include "bmic_queue_main.h"
 
+typedef enum operations_t_ {
+    OP_LIST,
+    OP_READ,
+    // OP_CREATE,
+    // OP_DELETE,
+} operations_t;
+
 typedef struct options_t_
 {
+    operations_t operation;
     char username[OPT_MAX_STR_SIZE];
     char password[OPT_MAX_STR_SIZE];
     char server[OPT_MAX_STR_SIZE];
     char queue[OPT_MAX_STR_SIZE];
-    char read[OPT_MAX_STR_SIZE];
+    char attribute[OPT_MAX_STR_SIZE];
 } options_t;
 
 static void show_help()
@@ -33,6 +41,25 @@ static void show_help()
     printf("\t-s\t--server=<str> hostname or IP address of the server\n");
     printf("\t-l\t--name=<str> name of the queue to manage\n");
     printf("\t-r\t--read=<str> read a capability/attribute from the queue\n");
+}
+
+static void print_queue(const void *nodedata, void *payload)
+{
+    const char *name = (const char*) nodedata;
+    
+    printf("Queue name: %s\n", name);
+//    
+//    if (payload == NULL) { 
+//        printf("\n");
+//        gru_list_for_each(info->signature, print_op_signature, info);
+//    }
+//    else {
+//        const char *name = (const char *) payload;
+//        if (strncmp(info->name, name, strlen(info->name)) == 0) {
+//            printf("\n");
+//            gru_list_for_each(info->signature, print_op_signature, info);
+//        }
+//    }
 }
 
 int queue_run(options_t *options)
@@ -70,28 +97,38 @@ int queue_run(options_t *options)
         return EXIT_FAILURE;
     }
     
-    
-    const bmic_exchange_t *obj = api->queue_attribute_read(ctxt.handle, cap, 
-                                                           options->read, &status, 
+    switch (options->operation) {
+    case OP_READ: {
+        const bmic_exchange_t *obj = api->queue_attribute_read(ctxt.handle, cap, 
+                                                           options->attribute, &status, 
                               options->queue);
-    
-    if (obj) { 
-        print_returned_object(options->read, obj->data_ptr);
+
+        if (obj) { 
+            print_returned_object(options->attribute, obj->data_ptr);
+        }
         
-        bmic_exchange_destroy((bmic_exchange_t **)&cap);
-        bmic_context_cleanup(&ctxt);
-        
-        return EXIT_SUCCESS;
+        break;
     }
-    else {
-        fprintf(stderr, "Unable to read property %s for queue %s: %s\n", options->read, 
+    case OP_LIST: {
+        const bmic_list_t *list = api->list_queues(ctxt.handle, cap, &status);
+
+         if (list) {           
+            gru_list_for_each(list->items, print_queue, NULL);
+        }
+        break;
+    }
+    default: {
+        fprintf(stderr, "Unable to read property %s for queue %s: %s\n", options->attribute, 
                 options->queue, status.message);
-        
-        bmic_exchange_destroy((bmic_exchange_t **)&cap);
-        bmic_context_cleanup(&ctxt);
-        
-        return EXIT_FAILURE;
+        break;
     }
+        
+    }
+
+    bmic_exchange_destroy((bmic_exchange_t **)&cap);
+    bmic_context_cleanup(&ctxt);
+        
+    return EXIT_FAILURE;    
 }
 
 int queue_main(int argc, char **argv) {
@@ -112,11 +149,13 @@ int queue_main(int argc, char **argv) {
             { "password", required_argument, 0, 'p'},
             { "server", required_argument, 0, 's'},
             { "name", required_argument, 0, 'n'},
-            { "read", required_argument, 0, 'r'},
+            { "attribute", required_argument, 0, 'a'},
+            { "list", no_argument, 0, 'l'},
+            { "read", no_argument, 0, 'r'},
             { 0, 0, 0, 0}
         };
 
-        int c = getopt_long(argc, argv, "hu:p:s:n:r:", long_options, &option_index);
+        int c = getopt_long(argc, argv, "hu:p:s:n:a:lr", long_options, &option_index);
         if (c == -1) {
             if (optind == 1) {
                 break;
@@ -137,8 +176,14 @@ int queue_main(int argc, char **argv) {
         case 'n':
             strncpy(options.queue, optarg, sizeof (options.queue) - 1);
             break;
+        case 'a':
+            strncpy(options.attribute, optarg, sizeof (options.attribute) - 1);
+            break;
+        case 'l':
+            options.operation = OP_LIST;
+            break;
         case 'r':
-            strncpy(options.read, optarg, sizeof (options.read) - 1);
+            options.operation = OP_READ;
             break;
         case 'h':
             show_help();
@@ -150,8 +195,8 @@ int queue_main(int argc, char **argv) {
         }
     }
 
-    if (strlen(options.read) == 0 || strlen(options.queue) == 0) {
-        fprintf(stderr, "Both -n (--name) and -r (--read) must be used\n");
+    if (options.operation != OP_LIST && strlen(options.queue) == 0) {
+        fprintf(stderr, "Option -n (--name) for all read/write operations\n");
 
         return EXIT_FAILURE;
     }
