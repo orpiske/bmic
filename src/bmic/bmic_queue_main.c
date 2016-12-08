@@ -153,19 +153,19 @@ int queue_main(int argc, char **argv) {
 
         switch (c) {
         case 'u':
-            strncpy(options.username, optarg, sizeof (options.username) - 1);
+            strlcpy(options.username, optarg, sizeof (options.username));
             break;
         case 'p':
-            strncpy(options.password, optarg, sizeof (options.password) - 1);
+            strlcpy(options.password, optarg, sizeof (options.password));
             break;
         case 's':
-            strncpy(options.server, optarg, sizeof (options.server) - 1);
+            strlcpy(options.server, optarg, sizeof (options.server));
             break;
         case 'n':
-            strncpy(options.queue, optarg, sizeof (options.queue) - 1);
+            strlcpy(options.queue, optarg, sizeof (options.queue));
             break;
         case 'a':
-            strncpy(options.attribute, optarg, sizeof (options.attribute) - 1);
+            strlcpy(options.attribute, optarg, sizeof (options.attribute));
             break;
         case 'l':
             options.operation = OP_LIST;

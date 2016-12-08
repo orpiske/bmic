@@ -22,6 +22,10 @@
 #include <stdbool.h>
 #include <getopt.h>
 
+#ifndef HAVE_STRLCPY
+#include <string/gru_alt.h>
+#endif // HAVE_STRLCPY
+
 #include <common/gru_colors.h>
 
 #include "base/transport/bmic_endpoint.h"

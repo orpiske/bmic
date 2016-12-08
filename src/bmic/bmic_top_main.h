@@ -23,6 +23,10 @@
 
 #include <common/gru_colors.h>
 
+#ifndef HAVE_STRLCPY
+#include <string/gru_alt.h>
+#endif // HAVE_STRLCPY
+
 
 #include "base/transport/bmic_endpoint.h"
 #include "base/transport/bmic_endpoint_http.h"

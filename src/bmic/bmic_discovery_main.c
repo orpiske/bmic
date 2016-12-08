@@ -97,13 +97,13 @@ int discovery_main(int argc, char **argv) {
 
         switch (c) {
         case 'u':
-            strncpy(options.username, optarg, sizeof (options.username) - 1);
+            strlcpy(options.username, optarg, sizeof (options.username));
             break;
         case 'p':
-            strncpy(options.password, optarg, sizeof (options.password) - 1);
+            strlcpy(options.password, optarg, sizeof (options.password));
             break;
         case 's':
-            strncpy(options.server, optarg, sizeof (options.server) - 1);
+            strlcpy(options.server, optarg, sizeof (options.server));
             break;
         case 'h':
             show_help();

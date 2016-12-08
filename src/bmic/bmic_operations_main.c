@@ -215,13 +215,13 @@ int operations_main(int argc, char **argv)
 
         switch (c) {
         case 'u':
-            strncpy(options.username, optarg, sizeof (options.username) - 1);
+            strlcpy(options.username, optarg, sizeof (options.username));
             break;
         case 'p':
-            strncpy(options.password, optarg, sizeof (options.password) - 1);
+            strlcpy(options.password, optarg, sizeof (options.password));
             break;
         case 's':
-            strncpy(options.server, optarg, sizeof (options.server) - 1);
+            strlcpy(options.server, optarg, sizeof (options.server));
             break;
         case 'l':
             options.operation = OP_LIST;
@@ -233,7 +233,7 @@ int operations_main(int argc, char **argv)
             options.operation = OP_DELETE;
             break;
         case 'q':
-            strncpy(options.name, optarg, sizeof (options.name) - 1);
+            strlcpy(options.name, optarg, sizeof (options.name));
             break;
         case 'h':
             if (!optarg) {
@@ -243,7 +243,7 @@ int operations_main(int argc, char **argv)
             }
             else {
                 options.help = true;
-                strncpy(options.name, optarg, sizeof (options.name) - 1);
+                strlcpy(options.name, optarg, sizeof (options.name));
             }
             
             break;

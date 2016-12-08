@@ -117,6 +117,22 @@ IF (UNIX)
 	FailIfNotSet(HAVE_CTYPE_H ctype.h)
 ENDIF (UNIX)
 
+macro (DefineIfSet VARIABLE)
+    if (${VARIABLE})
+        set(MSG "Adding definition " ${VARIABLE} "")
+        message(STATUS ${MSG})
+
+        add_definitions(-D${VARIABLE})
+    endif (${VARIABLE})
+endmacro(DefineIfSet)
+
+include(CheckFunctionExists)
+if (UNIX)
+    check_function_exists(strlcpy HAVE_STRLCPY)
+    DefineIfSet(HAVE_STRLCPY)
+endif (UNIX)
+
+
 macro(SetLinkDirByPlatform PREFIX)
     if (${APP_BUILD_PLATFORM} EQUAL "64")
             link_directories(
