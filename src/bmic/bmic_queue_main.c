@@ -48,18 +48,6 @@ static void print_queue(const void *nodedata, void *payload)
     const char *name = (const char*) nodedata;
     
     printf("Queue name: %s\n", name);
-//    
-//    if (payload == NULL) { 
-//        printf("\n");
-//        gru_list_for_each(info->signature, print_op_signature, info);
-//    }
-//    else {
-//        const char *name = (const char *) payload;
-//        if (strncmp(info->name, name, strlen(info->name)) == 0) {
-//            printf("\n");
-//            gru_list_for_each(info->signature, print_op_signature, info);
-//        }
-//    }
 }
 
 int queue_run(options_t *options)

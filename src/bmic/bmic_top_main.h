@@ -35,6 +35,7 @@
 #include "base/common/bmic_regex.h"
 
 #include "management/common/bmic_complements_java.h"
+#include "management/common/bmic_queue_stat.h"
 
 #include "bmic/util/bmic_print_simple.h"
 #include "bmic/util/bmic_type_map.h"

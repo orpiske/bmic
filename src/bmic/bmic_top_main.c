@@ -33,6 +33,12 @@ static void show_help()
     printf("\t-s\t--server=<str> hostname or IP address of the server\n");
 }
 
+static void print_queue_stat(const char *name, bmic_queue_stat_t stat)
+{
+    printf("%-40s %-10"PRId64" %-10"PRId64" %-10"PRId64" %-10"PRId64"\n", name, 
+           stat.queue_size, stat.consumer_count, stat.msg_ack_count, stat.msg_exp_count);
+}
+
 static void print_mem(const char *name, bmic_java_mem_info_t *mem) {
     printf("%-20s %-15"PRId64" %-15"PRId64" %-15"PRId64" %-15"PRId64"\n", name, 
            as_mb(mem->init), 
@@ -54,9 +60,19 @@ int top_run(options_t *options)
     }
     bmic_api_interface_t *api = ctxt.api;
     
+    const bmic_exchange_t *cap = api->load_capabilities(ctxt.handle, &status);
+    if (!cap) {
+        fprintf(stderr, "Unable to load capabilities: %s\n", status.message);
+
+        return EXIT_FAILURE;
+    }
+    
+    const bmic_list_t *list = api->list_queues(ctxt.handle, cap, &status);
+    
     bmic_java_info_t jinfo = api->java.java_info(ctxt.handle, &status);
     
     while (true) {
+        
         bmic_java_os_info_t osinfo = api->java.os_info(ctxt.handle, &status);
         
         printf("\e[1;1H\e[2J");
@@ -66,13 +82,13 @@ int top_run(options_t *options)
         
         printf("%s%sLoad average:%s %-10.1f\n", RESET, LIGHT_WHITE, RESET, 
                osinfo.load_average);
-        printf("%s%sFile descriptors:%s %-10lu max total %-10lu open %-10lu free\n", 
+        printf("%s%sFile descriptors:%s %10lu max total %10lu open %10lu free\n", 
                RESET, LIGHT_WHITE, RESET, 
                osinfo.max_fd, osinfo.open_fd, (osinfo.max_fd - osinfo.open_fd));
-        printf("%s%sPhysical memory:%s %-10"PRId64" total %-10"PRId64" free\n", RESET, LIGHT_WHITE, 
+        printf("%s%sPhysical memory:%s %10"PRId64" total %10"PRId64" free\n", RESET, LIGHT_WHITE, 
                RESET, 
                as_mb(osinfo.mem_total), as_mb(osinfo.mem_free));
-        printf("%s%sSwap memory:%s %-10"PRId64" total %-10"PRId64" free %-10"PRId64" used\n\n", 
+        printf("%s%sSwap memory:%s %10"PRId64" total %10"PRId64" free %10"PRId64" used\n\n", 
                RESET, LIGHT_WHITE, RESET, as_mb(osinfo.swap_total), as_mb(osinfo.swap_free), 
                as_mb(osinfo.swap_committed));
         
@@ -96,10 +112,30 @@ int top_run(options_t *options)
             print_mem("PermGen", &permgen);
         }
         
+        if (list) {
+            printf("\n\n");
+            printf("%s%s%s%-40s %-10s %-10s %-10s %-10s%s\n", RESET, BG_WHITE, LIGHT_BLACK, 
+                   "Name", "Size", "Consumers", "Ack Count", "Exp Count", RESET);
+            
+            for (uint32_t i = 0; i < gru_list_count(list); i++) {
+                gru_node_t *node = gru_list_get(list, i);
+                
+                if (node != NULL && node->data != NULL) { 
+                    
+                    bmic_queue_stat_t stat = 
+                            api->stat_queue(ctxt.handle, cap, (const char *) node->data, 
+                                            &status);
+
+                    print_queue_stat((const char *) node->data, stat);
+                }
+            }
+        }
         
         sleep(5);
+        
     }
 
+    bmic_list_destroy(&list);
     bmic_context_cleanup(&ctxt);
 
     return EXIT_SUCCESS;
