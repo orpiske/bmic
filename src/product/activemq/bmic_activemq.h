@@ -39,7 +39,7 @@
 #include "product/common/bmic_finder.h"
 #include "product/complements/java/bmic_java.h"
 
-#include "bmic_activemq_urls.h"
+#include "bmic_activemq_defs.h"
 #include "bmic_activemq_mi.h"
 #include "bmic_activemq_json.h"
 

@@ -13,8 +13,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-#ifndef BMIC_ARTEMIS_URLS_H
-#define BMIC_ARTEMIS_URLS_H
+#ifndef BMIC_ARTEMIS_DEFS_H
+#define BMIC_ARTEMIS_DEFS_H
 
 /**
  * Base URLs must not have the '/' char at the end
@@ -36,5 +36,5 @@
 #define ARTEMIS_QUEUE_EXP_CNT_ATTR "MessagesExpired"
 #define ARTEMIS_QUEUE_CNS_CNT_ATTR "ConsumerCount"
 
-#endif /* BMIC_ARTEMIS_URLS_H */
+#endif /* BMIC_ARTEMIS_DEFS_H */
 

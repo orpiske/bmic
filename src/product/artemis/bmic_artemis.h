@@ -40,7 +40,7 @@
 #include "product/common/bmic_finder.h"
 #include "product/complements/java/bmic_java.h"
 
-#include "bmic_artemis_urls.h"
+#include "bmic_artemis_defs.h"
 #include "bmic_artemis_mi.h"
 #include "bmic_artemis_json.h"
 

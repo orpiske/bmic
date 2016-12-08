@@ -14,8 +14,8 @@
  limitations under the License.
  */
 
-#ifndef BMIC_ACTIVEMQ_URLS_H
-#define BMIC_ACTIVEMQ_URLS_H
+#ifndef BMIC_ACTIVEMQ_DEFS_H
+#define BMIC_ACTIVEMQ_DEFS_H
 
 /**
  * Base URLs must not have the '/' char at the end
@@ -39,5 +39,5 @@
 #define ACTIVEMQ_QUEUE_EXP_CNT_ATTR "ExpiredCount"
 #define ACTIVEMQ_QUEUE_CNS_CNT_ATTR "ConsumerCount"
 
-#endif /* BMIC_ACTIVEMQ_URLS_H */
+#endif /* BMIC_ACTIVEMQ_DEFS_H */
 
