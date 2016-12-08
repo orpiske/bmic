@@ -19,6 +19,8 @@
 
 #include <io/gru_ioutils.h>
 
+#include <context/bmic_context.h>
+
 int main(int argc, char **argv) {
     char *buff = NULL;
     
