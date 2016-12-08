@@ -17,7 +17,7 @@
 
 bmic_api_interface_t *bmic_activemq_product(gru_status_t *status)
 {
-    bmic_api_interface_t *ret = bmic_api_interface_new(ACTIVEMQ_PRODUCT_NAME, 
+    bmic_api_interface_t *ret = bmic_api_interface_new(ACTIVEMQ_PRODUCT_NAME,
                                                        ACTIVEMQ_API_VERSION, status);
 
     ret->base_url = bmic_activemq_base_url;
@@ -278,22 +278,21 @@ bool bmic_activemq_operation_delete_queue(bmic_handle_t *handle,
     return ret;
 }
 
-
-static const char *bmic_activemq_filter_queue_name(const char *fqdn, 
-                                                   gru_status_t *status) 
+static const char *bmic_activemq_filter_queue_name(const char *fqdn,
+                                                   gru_status_t *status)
 {
     logger_t logger = gru_logger_get();
     const char *regex = "destinationName=([^,]+)";
-    
+
     const char *ret = bmic_regex_find(fqdn, regex, 2, 1, status);
     if (!ret) {
         logger(ERROR, "Unable to parse the queue data for %s", fqdn);
-        
+
         return NULL;
     }
-    
+
     logger(DEBUG, "Found queue name %s for %s", ret, fqdn);
-    
+
     return ret;
 }
 
@@ -303,17 +302,17 @@ static void bmic_activemq_translate_queue_list(const void *nodedata, void *paylo
     bmic_payload_add_attr_t *pl =
             (bmic_payload_add_attr_t *) payload;
     logger_t logger = gru_logger_get();
-    
+
     logger(INFO, "Processing node %s [%s]", nodeobj->name, nodeobj->path);
 
-    if (nodeobj->type == OBJECT) { 
+    if (nodeobj->type == OBJECT) {
         const bmic_object_t *obj = bmic_object_find_by_name(nodeobj, "objectName");
-        
+
         if (obj && obj->type == STRING) {
-            const char *queue_name = bmic_activemq_filter_queue_name(obj->data.str, 
+            const char *queue_name = bmic_activemq_filter_queue_name(obj->data.str,
                                                                      pl->status);
-            
-            logger(INFO, "Processing node %s [%s]: %s", nodeobj->name, nodeobj->path, 
+
+            logger(INFO, "Processing node %s [%s]: %s", nodeobj->name, nodeobj->path,
                    queue_name);
             gru_list_append(pl->list, queue_name);
         }
@@ -327,15 +326,14 @@ static void bmic_activemq_translate_queue_list(const void *nodedata, void *paylo
 }
 
 const bmic_list_t *bmic_activemq_queue_list(bmic_handle_t *handle,
-                                           const bmic_exchange_t *cap,
-                                           gru_status_t *status)
+                                            const bmic_exchange_t *cap,
+                                            gru_status_t *status)
 {
-    const char *attr_name = "Queues";
-    
-    const bmic_exchange_t *attributes = bmic_activemq_mi_read(handle, cap->root, attr_name,
-                                                             status,
-                                                             REG_SEARCH_NAME,
-                                                             ACTIVEMQ_CAPABILITIES_KEY_REGEX);
+    const bmic_exchange_t *attributes = bmic_activemq_mi_read(handle, cap->root,
+                                                              ACTIVEMQ_QUEUE_LIST_ATTR,
+                                                              status,
+                                                              REG_SEARCH_NAME,
+                                                              ACTIVEMQ_CAPABILITIES_KEY_REGEX);
 
     bmic_list_t *ret = bmic_list_new(status, gru_dealloc);
     gru_alloc_check(ret, NULL);
@@ -346,12 +344,11 @@ const bmic_list_t *bmic_activemq_queue_list(bmic_handle_t *handle,
     };
 
 
-    bmic_object_for_each_child(attributes->data_ptr, bmic_activemq_translate_queue_list, 
+    bmic_object_for_each_child(attributes->data_ptr, bmic_activemq_translate_queue_list,
                                &payload);
 
     return ret;
 }
-
 
 /**
  * List queues
@@ -366,65 +363,65 @@ bmic_queue_stat_t bmic_activemq_queue_stat(bmic_handle_t *handle,
                                            gru_status_t *status)
 {
     bmic_queue_stat_t ret = {0};
-    const bmic_exchange_t *qsize = bmic_activemq_queue_attribute_read(handle, cap, 
-                                                                ACTIVEMQ_QUEUE_SIZE_ATTR,
-                                                                status, queue);
+    const bmic_exchange_t *qsize = bmic_activemq_queue_attribute_read(handle, cap,
+                                                                      ACTIVEMQ_QUEUE_SIZE_ATTR,
+                                                                      status, queue);
     logger_t logger = gru_logger_get();
     if (qsize) {
         if (qsize->data_ptr && qsize->data_ptr->type == INTEGER) {
             ret.queue_size = qsize->data_ptr->data.number;
         }
-        else { 
+        else {
             logger(ERROR, "Invalid data pointer for the queue size property");
         }
     }
     else {
         logger(ERROR, "Unavailable response for queue size property");
     }
-    
-    const bmic_exchange_t *ack = bmic_activemq_queue_attribute_read(handle, cap, 
-                                                                ACTIVEMQ_QUEUE_ACK_CNT_ATTR,
-                                                                status, queue);
+
+    const bmic_exchange_t *ack = bmic_activemq_queue_attribute_read(handle, cap,
+                                                                    ACTIVEMQ_QUEUE_ACK_CNT_ATTR,
+                                                                    status, queue);
     if (ack) {
         if (ack->data_ptr && ack->data_ptr->type == INTEGER) {
             ret.msg_ack_count = ack->data_ptr->data.number;
-        } 
-        else { 
+        }
+        else {
             logger(ERROR, "Invalid data pointer for the acknowledge message count property");
         }
     }
     else {
         logger(ERROR, "Unavailable response for acknowledge message count property");
     }
-    
-    const bmic_exchange_t *exp = bmic_activemq_queue_attribute_read(handle, cap, 
-                                                                ACTIVEMQ_QUEUE_EXP_CNT_ATTR,
-                                                                status, queue);
+
+    const bmic_exchange_t *exp = bmic_activemq_queue_attribute_read(handle, cap,
+                                                                    ACTIVEMQ_QUEUE_EXP_CNT_ATTR,
+                                                                    status, queue);
     if (exp) {
         if (exp->data_ptr && exp->data_ptr->type == INTEGER) {
             ret.msg_exp_count = exp->data_ptr->data.number;
-        } 
-        else { 
+        }
+        else {
             logger(ERROR, "Invalid data pointer for the expired message count property");
         }
     }
     else {
         logger(ERROR, "Unavailable response for expired message count property");
     }
-    
-    const bmic_exchange_t *cns = bmic_activemq_queue_attribute_read(handle, cap, 
-                                                                ACTIVEMQ_QUEUE_CNS_CNT_ATTR,
-                                                                status, queue);
+
+    const bmic_exchange_t *cns = bmic_activemq_queue_attribute_read(handle, cap,
+                                                                    ACTIVEMQ_QUEUE_CNS_CNT_ATTR,
+                                                                    status, queue);
     if (cns) {
         if (cns->data_ptr && cns->data_ptr->type == INTEGER) {
             ret.consumer_count = cns->data_ptr->data.number;
         }
-        
+
         logger(ERROR, "Invalid data pointer for the consumers count property");
     }
     else {
         logger(ERROR, "Unavailable response for consumers count property");
     }
-    
+
     return ret;
 }

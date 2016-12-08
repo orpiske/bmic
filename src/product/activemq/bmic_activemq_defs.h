@@ -37,6 +37,7 @@
 #define ACTIVEMQ_BROKER_OPERATIONS_ROOT "(brokerName=)([a-z0-9\\.\"])*(,type=Broker$)"
 
 
+#define ACTIVEMQ_QUEUE_LIST_ATTR "Queues"
 #define ACTIVEMQ_QUEUE_SIZE_ATTR "QueueSize"
 #define ACTIVEMQ_QUEUE_ACK_CNT_ATTR "DequeueCount"
 #define ACTIVEMQ_QUEUE_EXP_CNT_ATTR "ExpiredCount"
