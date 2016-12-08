@@ -66,6 +66,16 @@ const bmic_object_t *bmic_jolokia_io_read(bmic_handle_t *handle, const char *pat
     }
 
     bmic_object_t *ret = bmic_jolokia_parse(reply.data, status);
+    
+    if (!bmic_jolokia_translate_status(ret, status)) {
+        gru_status_set(status, GRU_FAILURE, "Invalid response from the server: %s",
+                (reply.data == NULL ? "(null)" : reply.data));
+
+        bmic_object_destroy(&ret);
+        bmic_data_release(&reply);
+        return NULL;
+    }
+    
     bmic_data_release(&reply);
     return ret;
 }
