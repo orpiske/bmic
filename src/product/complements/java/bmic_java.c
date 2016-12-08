@@ -17,7 +17,7 @@
 
 
 static void bmic_java_read_mem_value(const bmic_object_t *root, const char *name, 
-                                     const char *path, uint64_t *dest,
+                                     const char *path, int64_t *dest,
                                      gru_status_t *status) 
 {
     const bmic_object_t *mem = bmic_object_find_by_path(root, path);
@@ -32,13 +32,8 @@ static void bmic_java_read_mem_value(const bmic_object_t *root, const char *name
         return;
     }
 
-    // TODO: fix
-    if (mem->data.number == -1) {
-        *dest = 0;
-    }
-    else {
-        *dest = mem->data.number;
-    }
+    
+    *dest = mem->data.number;
 }
 
 /**

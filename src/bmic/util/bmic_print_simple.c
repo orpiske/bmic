@@ -26,7 +26,7 @@ static void print_returned_from_list(const void *ptr, void *payload) {
     }
     case INTEGER:
     {
-        printf("%-35s %i\n", " ", obj->data.number);
+        printf("%-35s %"PRId64"\n", " ", obj->data.number);
         break;
     }
     case BOOLEAN:
@@ -69,7 +69,7 @@ void print_returned_object(const char *capname, const bmic_object_t *obj)
     }
     case INTEGER:
     {
-        printf("%35s %i\n", capname, obj->data.number);
+        printf("%35s %"PRId64"\n", capname, obj->data.number);
         break;
     }
     case BOOLEAN:

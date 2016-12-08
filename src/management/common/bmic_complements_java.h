@@ -20,10 +20,10 @@ extern "C" {
     
 
 typedef struct bmic_java_mem_info_t_ {
-    uint64_t init;
-    uint64_t committed;
-    uint64_t max;
-    uint64_t used;
+    int64_t init;
+    int64_t committed;
+    int64_t max;
+    int64_t used;
 } bmic_java_mem_info_t;
 
 typedef enum bmic_java_memory_model_t_ {
@@ -50,20 +50,20 @@ typedef struct bmic_java_os_info_t_ {
     const char *arch;
     const char *version;
     
-    uint64_t mem_total;
-    uint64_t mem_free;
+    int64_t mem_total;
+    int64_t mem_free;
     
-    uint64_t swap_total;
-    uint64_t swap_free;
-    uint64_t swap_committed;
+    int64_t swap_total;
+    int64_t swap_free;
+    int64_t swap_committed;
     
     double load_average;
     double process_cpu_load;
     double system_cpu_load;
-    uint64_t process_cpu_time;
+    int64_t process_cpu_time;
     
-    uint64_t open_fd;
-    uint64_t max_fd;
+    int64_t open_fd;
+    int64_t max_fd;
     
     uint32_t cpus;
 } bmic_java_os_info_t;

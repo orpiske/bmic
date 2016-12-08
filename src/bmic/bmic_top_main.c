@@ -34,7 +34,8 @@ static void show_help()
 }
 
 static void print_mem(const char *name, bmic_java_mem_info_t *mem) {
-    printf("%-20s %-15d %-15d %-15d %-15d\n", name, as_mb(mem->init), 
+    printf("%-20s %-15"PRId64" %-15"PRId64" %-15"PRId64" %-15"PRId64"\n", name, 
+           as_mb(mem->init), 
            as_mb(mem->committed), as_mb(mem->max), as_mb(mem->used));
 }
 
@@ -68,10 +69,10 @@ int top_run(options_t *options)
         printf("%s%sFile descriptors:%s %-10lu max total %-10lu open %-10lu free\n", 
                RESET, LIGHT_WHITE, RESET, 
                osinfo.max_fd, osinfo.open_fd, (osinfo.max_fd - osinfo.open_fd));
-        printf("%s%sPhysical memory:%s %-10d total %-10d free\n", RESET, LIGHT_WHITE, 
+        printf("%s%sPhysical memory:%s %-10"PRId64" total %-10"PRId64" free\n", RESET, LIGHT_WHITE, 
                RESET, 
                as_mb(osinfo.mem_total), as_mb(osinfo.mem_free));
-        printf("%s%sSwap memory:%s %-10d total %-10d free %-10d used\n\n", 
+        printf("%s%sSwap memory:%s %-10"PRId64" total %-10"PRId64" free %-10"PRId64" used\n\n", 
                RESET, LIGHT_WHITE, RESET, as_mb(osinfo.swap_total), as_mb(osinfo.swap_free), 
                as_mb(osinfo.swap_committed));
         
