@@ -14,7 +14,6 @@
  limitations under the License.
  */
 #include "bmic_artemis_mi.h"
-#include "base/common/bmic_op_info.h"
 
 const bmic_exchange_t *bmic_artemis_mi_read(bmic_handle_t *handle,
                                                 const bmic_object_t *root,
@@ -60,7 +59,6 @@ const bmic_exchange_t *bmic_artemis_mi_read(bmic_handle_t *handle,
                                                         capabilities->name,
                                                         attr_name,
                                                         status);
-    
     
     if (!reply_obj) {
         goto err_exit;
