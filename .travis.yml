@@ -12,7 +12,7 @@ dist: trusty
 language:
   - c
 before_install:
-  - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca- ; fi
 before_script:
   - wget https://github.com/orpiske/gru/tarball/master -O gru-head.tar.gz
   - mkdir gru && tar -xvf gru-head.tar.gz -C gru --strip-components=1
