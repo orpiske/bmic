@@ -317,7 +317,9 @@ static void bmic_activemq_translate_queue_list(const void *nodedata, void *paylo
             gru_list_append(pl->list, queue_name);
         }
         else {
-            logger(WARNING, "Invalid sub node type for %s: %d", obj->name, obj->type);
+            if (obj) {
+                logger(WARNING, "Invalid sub node type for %s: %d", obj->name, obj->type);
+            }
         }
     }
     else {
