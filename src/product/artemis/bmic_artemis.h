@@ -154,7 +154,7 @@ const bmic_list_t *bmic_artemis_queue_list(bmic_handle_t *handle,
 
 
 /**
- * List queues
+ * Query queue stats
  * @param handle
  * @param cap
  * @param status

@@ -340,8 +340,9 @@ bmic_queue_stat_t bmic_artemis_queue_stat(bmic_handle_t *handle,
         if (qsize->data_ptr && qsize->data_ptr->type == INTEGER) {
             ret.queue_size = qsize->data_ptr->data.number;
         }
-        
-        logger(ERROR, "Invalid data pointer for the queue size property");
+        else { 
+            logger(ERROR, "Invalid data pointer for the queue size property");
+        }
     }
     else {
         logger(ERROR, "Unavailable response for queue size property");
@@ -354,8 +355,9 @@ bmic_queue_stat_t bmic_artemis_queue_stat(bmic_handle_t *handle,
         if (ack->data_ptr && ack->data_ptr->type == INTEGER) {
             ret.msg_ack_count = ack->data_ptr->data.number;
         }
-        
-        logger(ERROR, "Invalid data pointer for the acknowledge message count property");
+        else {
+            logger(ERROR, "Invalid data pointer for the acknowledge message count property");
+        }
     }
     else {
         logger(ERROR, "Unavailable response for acknowledge message count property");
@@ -368,8 +370,9 @@ bmic_queue_stat_t bmic_artemis_queue_stat(bmic_handle_t *handle,
         if (exp->data_ptr && exp->data_ptr->type == INTEGER) {
             ret.msg_exp_count = exp->data_ptr->data.number;
         }
-        
-        logger(ERROR, "Invalid data pointer for the expired message count property");
+        else { 
+            logger(ERROR, "Invalid data pointer for the expired message count property");
+        }
     }
     else {
         logger(ERROR, "Unavailable response for expired message count property");
@@ -382,8 +385,9 @@ bmic_queue_stat_t bmic_artemis_queue_stat(bmic_handle_t *handle,
         if (cns->data_ptr && cns->data_ptr->type == INTEGER) {
             ret.consumer_count = cns->data_ptr->data.number;
         }
-        
-        logger(ERROR, "Invalid data pointer for the consumers count property");
+        else { 
+            logger(ERROR, "Invalid data pointer for the consumers count property");
+        }
     }
     else {
         logger(ERROR, "Unavailable response for consumers count property");
