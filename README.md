@@ -178,6 +178,32 @@ The product version is: 5.13.3
  \_ 1
 ```
 
+Listing queues:
+
+```
+bmic queue -l -u admin -p admin -s localhost
+The product name is artemis
+The API version is 1.x.x
+The product version is: 1.4.0
+Queue name: jms.queue.jms.queue.cli2.test.notcore
+Queue name: jms.queue.DLQ
+Queue name: jms.queue.ExpiryQueue
+Queue name: test.performance.queue
+Queue name: jms.queue.cli1.test.notcore
+Queue name: jms.queue.cli2.test.notcore
+```
+
+Creating queues:
+```
+./bmic queue -c -n new.queue -u admin -p admin -s localhost
+```
+
+Deleting queues:
+```
+./bmic queue -d -n new.queue -u admin -p admin -s localhost
+```
+
+
 License
 ----
 
