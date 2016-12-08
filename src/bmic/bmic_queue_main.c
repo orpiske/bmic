@@ -15,11 +15,12 @@
  */
 #include "bmic_queue_main.h"
 
-typedef enum operations_t_ {
+typedef enum operations_t_
+{
     OP_LIST,
     OP_READ,
-    // OP_CREATE,
-    // OP_DELETE,
+    OP_CREATE,
+    OP_DELETE,
 } operations_t;
 
 typedef struct options_t_
@@ -34,7 +35,7 @@ typedef struct options_t_
 static void show_help(char **argv)
 {
     print_program_usage(argv[0]);
-    
+
     print_option_help("help", "h", "show this help");
     print_option_help("help=[operation]", "h [operation]", "show help for the given operation");
     print_option_help("username", "u", "username to access the management console");
@@ -48,7 +49,7 @@ static void show_help(char **argv)
 static void print_queue(const void *nodedata, void *payload)
 {
     const char *name = (const char*) nodedata;
-    
+
     printf("Queue name: %s\n", name);
 }
 
@@ -56,26 +57,26 @@ int queue_run(options_t *options)
 {
     gru_status_t status = {0};
 
-    
+
     bmic_context_t ctxt = {0};
-    
-    bool ret = bmic_context_init_simple(&ctxt, options->server, options->credentials.username, 
-                             options->credentials.password, &status);
+
+    bool ret = bmic_context_init_simple(&ctxt, options->server, options->credentials.username,
+                                        options->credentials.password, &status);
     if (!ret) {
         fprintf(stderr, "%s\n", status.message);
         return EXIT_FAILURE;
     }
-    
+
     bmic_api_interface_t *api = ctxt.api;
-    
+
     bmic_product_info_t *info = api->product_info(ctxt.handle, &status);
     print_product_info(api, info);
-    
+
     if (!info || status.code != GRU_SUCCESS) {
         fprintf(stderr, "Unable to determine product version: %s\n",
                 status.message);
     }
-    
+
     if (info) {
         gru_dealloc((void **) &info);
     }
@@ -86,42 +87,63 @@ int queue_run(options_t *options)
 
         return EXIT_FAILURE;
     }
-    
-    switch (options->operation) {
-    case OP_READ: {
-        const bmic_exchange_t *obj = api->queue_attribute_read(ctxt.handle, cap, 
-                                                           options->attribute, &status, 
-                              options->queue);
 
-        if (obj) { 
+    switch (options->operation) {
+    case OP_READ:
+    {
+        const bmic_exchange_t *obj = api->queue_attribute_read(ctxt.handle, cap,
+                                                               options->attribute, &status,
+                                                               options->queue);
+
+        if (obj) {
             print_returned_object(options->attribute, obj->data_ptr);
+        }
+
+        break;
+    }
+    case OP_LIST:
+    {
+        const bmic_list_t *list = api->list_queues(ctxt.handle, cap, &status);
+
+        if (list) {
+            gru_list_for_each(list->items, print_queue, NULL);
         }
         
         break;
     }
-    case OP_LIST: {
-        const bmic_list_t *list = api->list_queues(ctxt.handle, cap, &status);
-
-         if (list) {           
-            gru_list_for_each(list->items, print_queue, NULL);
+    case OP_CREATE:
+    {
+        api->create_queue(ctxt.handle, cap, options->queue, &status);
+        if (status.code != GRU_SUCCESS) {
+            fprintf(stderr, "%s\n", status.message);
         }
         break;
     }
-    default: {
-        fprintf(stderr, "Unable to read property %s for queue %s: %s\n", options->attribute, 
+    case OP_DELETE:
+    {
+        api->delete_queue(ctxt.handle, cap, options->queue, &status);
+        if (status.code != GRU_SUCCESS) {
+            fprintf(stderr, "%s\n", status.message);
+        }
+        break;
+    }
+    default:
+    {
+        fprintf(stderr, "Unable to read property %s for queue %s: %s\n", options->attribute,
                 options->queue, status.message);
         break;
     }
-        
+
     }
 
-    bmic_exchange_destroy((bmic_exchange_t **)&cap);
+    bmic_exchange_destroy((bmic_exchange_t **) & cap);
     bmic_context_cleanup(&ctxt);
-        
-    return EXIT_FAILURE;    
+
+    return EXIT_FAILURE;
 }
 
-int queue_main(int argc, char **argv) {
+int queue_main(int argc, char **argv)
+{
     int option_index = 0;
     options_t options = {0};
 
@@ -142,10 +164,12 @@ int queue_main(int argc, char **argv) {
             { "attribute", required_argument, 0, 'a'},
             { "list", no_argument, 0, 'l'},
             { "read", no_argument, 0, 'r'},
+            { "create", no_argument, 0, 'c'},
+            { "delete", no_argument, 0, 'd'},
             { 0, 0, 0, 0}
         };
 
-        int c = getopt_long(argc, argv, "hu:p:s:n:a:lr", long_options, &option_index);
+        int c = getopt_long(argc, argv, "hu:p:s:n:a:lrcd", long_options, &option_index);
         if (c == -1) {
             if (optind == 1) {
                 break;
@@ -174,6 +198,12 @@ int queue_main(int argc, char **argv) {
             break;
         case 'r':
             options.operation = OP_READ;
+            break;
+        case 'c':
+            options.operation = OP_CREATE;
+            break;
+        case 'd':
+            options.operation = OP_DELETE;
             break;
         case 'h':
             show_help(argv);

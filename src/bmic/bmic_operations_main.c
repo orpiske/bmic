@@ -20,8 +20,6 @@
 
 typedef enum operations_t_ {
     OP_LIST,
-    OP_CREATE,
-    OP_DELETE,
 } operations_t;
 
 typedef struct options_t_
@@ -31,7 +29,6 @@ typedef struct options_t_
     bool help;
     char name[OPT_MAX_STR_SIZE];
     operations_t operation;
-    bool queue;
 } options_t;
 
 
@@ -96,9 +93,6 @@ static void show_help(char **argv)
     print_option_help("password", "p", "password to access the management console");
     print_option_help("server", "s", "server hostname or IP address");
     print_option_help("list", "l", "list available capabilities/attributes from the server");
-    print_option_help("create", "c", "create a queue on the server");
-    print_option_help("delete", "d", "delete a queue the server");
-    print_option_help("queue", "q", "queue name");
 }
 
 
@@ -146,20 +140,6 @@ int operations_run(options_t *options)
             }
             break;
         }
-        case OP_CREATE: {
-            api->create_queue(ctxt.handle, cap, options->name, &status);
-            if (status.code != GRU_SUCCESS) {
-                fprintf(stderr, "%s\n", status.message);
-            }
-            break;
-        }
-        case OP_DELETE: {
-            api->delete_queue(ctxt.handle, cap, options->name, &status);
-            if (status.code != GRU_SUCCESS) {
-                fprintf(stderr, "%s\n", status.message);
-            }
-            break;
-        }
         default: {
             if (options->help) { 
                 const bmic_list_t *list = api->operation_list(ctxt.handle, cap, &status);
@@ -200,13 +180,10 @@ int operations_main(int argc, char **argv)
             { "password", required_argument, 0, 'p'},
             { "server", required_argument, 0, 's'},
             { "list", no_argument, 0, 'l'},
-            { "create", no_argument, 0, 'c'},
-            { "delete", no_argument, 0, 'd'},
-            { "queue", required_argument, 0, 'q'},
             { 0, 0, 0, 0}
         };
 
-        int c = getopt_long(argc, argv, "h:u:p:s:l:cdq:", long_options, 
+        int c = getopt_long(argc, argv, "h:u:p:s:l:", long_options, 
                             &option_index);
         if (c == -1) {
             if (optind == 1) {
@@ -227,15 +204,6 @@ int operations_main(int argc, char **argv)
             break;
         case 'l':
             options.operation = OP_LIST;
-            break;
-        case 'c':
-            options.operation = OP_CREATE;
-            break;
-        case 'd':
-            options.operation = OP_DELETE;
-            break;
-        case 'q':
-            strlcpy(options.name, optarg, sizeof (options.name));
             break;
         case 'h':
             if (!optarg) {
