@@ -76,14 +76,50 @@ int top_run(options_t *options)
         return EXIT_FAILURE;
     }
     
-    const bmic_list_t *list = api->queue_list(ctxt.handle, cap, &status);
+    bmic_queue_stat_t *stat;
     
+    const bmic_list_t *list = api->queue_list(ctxt.handle, cap, &status);
+    if (list && list->items) {
+        size_t size = gru_list_count(list->items);
+        if (size > 0) {
+            stat = calloc(size, sizeof(bmic_queue_stat_t));
+        }
+    }
+    
+    printf("Reading broker information ...\n");
     bmic_java_info_t jinfo = api->java.java_info(ctxt.handle, &status);
     
     uint32_t iteration = 0;
     while (iteration != options->repeat) {
         
         bmic_java_os_info_t osinfo = api->java.os_info(ctxt.handle, &status);
+        bmic_java_mem_info_t eden = api->java.eden_info(ctxt.handle, &status);
+        bmic_java_mem_info_t survivor = api->java.survivor_info(ctxt.handle, &status);
+        bmic_java_mem_info_t tenured = api->java.tenured_info(ctxt.handle, &status);
+        bmic_java_mem_info_t metaspace;
+        bmic_java_mem_info_t permgen;
+        
+        if (jinfo.memory_model == JAVA_MODERN) {
+            metaspace = api->java.metaspace_info(ctxt.handle, &status);
+        }
+        else {
+            permgen = api->java.permgen_info(ctxt.handle, &status);
+        }
+        
+        if (list && list->items) {
+            for (uint32_t i = 0; i < gru_list_count(list->items); i++) {
+                const gru_node_t *node = gru_list_get(list->items, i);
+                
+                if (node != NULL && node->data != NULL) { 
+                    
+                    stat[i] = api->queue_stats(ctxt.handle, cap, 
+                                (const char *) node->data, 
+                                            &status);
+                }
+            }
+        }
+        
+        
         
         printf(CLEAR_SCREEN);
         printf("%s %s (%s) %s %s \n", jinfo.name, jinfo.version, jinfo.jvm_package_version, 
@@ -106,21 +142,15 @@ int top_run(options_t *options)
         
         printf("%s%s%s%-20s %-15s %-15s %-15s %-15s%s\n", RESET, BG_WHITE, LIGHT_BLACK,
                "Area", "Initial", "Committed", "Max", "Used", RESET);
-        bmic_java_mem_info_t eden = api->java.eden_info(ctxt.handle, &status);
+        
         print_mem("Eden", &eden);
-        
-        bmic_java_mem_info_t survivor = api->java.survivor_info(ctxt.handle, &status);
         print_mem("Survivor", &survivor);
-        
-        bmic_java_mem_info_t tenured = api->java.tenured_info(ctxt.handle, &status);
         print_mem("Tenured", &tenured);
         
         if (jinfo.memory_model == JAVA_MODERN) {
-            bmic_java_mem_info_t metaspace = api->java.metaspace_info(ctxt.handle, &status);
             print_mem("Metaspace", &metaspace);
         }
         else {
-            bmic_java_mem_info_t permgen = api->java.permgen_info(ctxt.handle, &status);
             print_mem("PermGen", &permgen);
         }
         
@@ -133,12 +163,7 @@ int top_run(options_t *options)
                 const gru_node_t *node = gru_list_get(list->items, i);
                 
                 if (node != NULL && node->data != NULL) { 
-                    
-                    bmic_queue_stat_t stat = 
-                            api->queue_stats(ctxt.handle, cap, (const char *) node->data, 
-                                            &status);
-
-                    print_queue_stat((const char *) node->data, stat);
+                    print_queue_stat((const char *) node->data, (stat[i]));
                 }
             }
         }
@@ -156,6 +181,8 @@ int top_run(options_t *options)
         sleep(options->interval);
         
     }
+    
+    gru_dealloc((void **) &stat);
     
     bmic_java_info_cleanup(jinfo);
 
