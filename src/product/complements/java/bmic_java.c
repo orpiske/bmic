@@ -101,7 +101,9 @@ bmic_java_mem_info_t bmic_java_mem_eden_info(bmic_handle_t *handle, gru_status_t
                                                         "Usage", 
                                                         status);
     
-    return bmic_java_read_mem_info_any(handle, usage, status);
+    bmic_java_mem_info_t ret = bmic_java_read_mem_info_any(handle, usage, status);
+    bmic_object_destroy((bmic_object_t **)&usage);
+    return ret;
 }
 
 bmic_java_mem_info_t bmic_java_mem_survivor_info(bmic_handle_t *handle, gru_status_t *status) {
@@ -110,7 +112,9 @@ bmic_java_mem_info_t bmic_java_mem_survivor_info(bmic_handle_t *handle, gru_stat
                                                         "Usage", 
                                                         status);
     
-    return bmic_java_read_mem_info_any(handle, usage, status);
+    bmic_java_mem_info_t ret = bmic_java_read_mem_info_any(handle, usage, status);
+    bmic_object_destroy((bmic_object_t **)&usage);
+    return ret;
 }
 
 bmic_java_mem_info_t bmic_java_mem_tenured_info(bmic_handle_t *handle, gru_status_t *status) {
@@ -119,7 +123,9 @@ bmic_java_mem_info_t bmic_java_mem_tenured_info(bmic_handle_t *handle, gru_statu
                                                         "Usage", 
                                                         status);
     
-    return bmic_java_read_mem_info_any(handle, usage, status);
+    bmic_java_mem_info_t ret = bmic_java_read_mem_info_any(handle, usage, status);
+    bmic_object_destroy((bmic_object_t **)&usage);
+    return ret;
 }
 
 bmic_java_mem_info_t bmic_java_mem_code_cache_info(bmic_handle_t *handle, gru_status_t *status) {
@@ -128,7 +134,9 @@ bmic_java_mem_info_t bmic_java_mem_code_cache_info(bmic_handle_t *handle, gru_st
                                                         "Usage", 
                                                         status);
     
-    return bmic_java_read_mem_info_any(handle, usage, status);
+    bmic_java_mem_info_t ret = bmic_java_read_mem_info_any(handle, usage, status);
+    bmic_object_destroy((bmic_object_t **)&usage);
+    return ret;
 }
 
 
@@ -138,7 +146,9 @@ bmic_java_mem_info_t bmic_java_mem_metaspace_info(bmic_handle_t *handle, gru_sta
                                                         "Usage", 
                                                         status);
     
-    return bmic_java_read_mem_info_any(handle, usage, status);
+    bmic_java_mem_info_t ret = bmic_java_read_mem_info_any(handle, usage, status);
+    bmic_object_destroy((bmic_object_t **)&usage);
+    return ret;
 }
 
 bmic_java_mem_info_t bmic_java_mem_permgen_info(bmic_handle_t *handle, gru_status_t *status) {
@@ -147,7 +157,9 @@ bmic_java_mem_info_t bmic_java_mem_permgen_info(bmic_handle_t *handle, gru_statu
                                                         "Usage", 
                                                         status);
     
-    return bmic_java_read_mem_info_any(handle, usage, status);
+    bmic_java_mem_info_t ret = bmic_java_read_mem_info_any(handle, usage, status);
+    bmic_object_destroy((bmic_object_t **)&usage);
+    return ret;
 }
 
 static const char *bmic_java_get_string(const bmic_object_t *root, const char *name, 
@@ -163,7 +175,7 @@ static const char *bmic_java_get_string(const bmic_object_t *root, const char *n
         return NULL;
     }
     
-    return obj->data.str;
+    return strdup(obj->data.str);
 }
 
 static uint64_t bmic_java_get_number(const bmic_object_t *root, const char *name, 
@@ -216,34 +228,34 @@ bmic_java_info_t bmic_java_read_info(bmic_handle_t *handle, gru_status_t *status
     
     bmic_jolokia_translate_status(runtime, status);
     if (status->code != GRU_SUCCESS) {
-        return ret;
+        goto exit;
     }
     
     const bmic_object_t *jvmname = bmic_object_find_by_path(runtime, "/value/VmName");
     if (!jvmname) {
         gru_status_set(status, GRU_FAILURE, "Unable to find JVM name");
-        return ret;
+        goto exit;
     }
     if (jvmname->type != STRING) {
         gru_status_set(status, GRU_FAILURE, "Invalid data type for JVM name");
-        return ret;
+        goto exit;
     }
     
     ret.name = bmic_java_get_string(runtime, "JVM name", "/value/VmName", status);
     if (!ret.name) {
-        return ret;
+        goto exit;
     }
     
     ret.version = bmic_java_get_string(runtime, "JVM version", "/value/SpecVersion", status);
     if (!ret.version) {
-        return ret;
+        goto exit;
     }
     
     ret.jvm_package_version = bmic_java_get_string(runtime, "JVM package version", 
                                                    "/value/SystemProperties/java.version", 
                                                    status);
     if (!ret.jvm_package_version) {
-        return ret;
+        goto exit;
     }
     
     if (strncmp(ret.version, "1.6", 3) == 0 || strncmp(ret.version, "1.7", 3) == 0) {
@@ -253,6 +265,8 @@ bmic_java_info_t bmic_java_read_info(bmic_handle_t *handle, gru_status_t *status
         ret.memory_model = JAVA_MODERN;
     }
 
+    exit: 
+    bmic_object_destroy((bmic_object_t **) &runtime);
     return ret;
 }
 
@@ -269,97 +283,99 @@ bmic_java_os_info_t bmic_java_read_os_info(bmic_handle_t *handle, gru_status_t *
     
     bmic_jolokia_translate_status(runtime, status);
     if (status->code != GRU_SUCCESS) {
-        return ret;
+        goto exit;
     }
     
     
     ret.name = bmic_java_get_string(runtime, "OS name", "/value/Name", status);
     if (!ret.name) {
-        return ret;
+        goto exit;
     }
     
     ret.version = bmic_java_get_string(runtime, "OS version", "/value/Version", status);
     if (!ret.version) {
-        return ret;
+        goto exit;
     }
     
     ret.arch = bmic_java_get_string(runtime, "OS arch", "/value/Arch", status);
     if (!ret.arch) {
-        return ret;
+        goto exit;
     }
     
     
     ret.cpus = bmic_java_get_number(runtime, "processor count", 
                                     "/value/AvailableProcessors", status);
     if (status->code != GRU_SUCCESS) {
-        return ret;
+        goto exit;
     }
     
     ret.mem_total = bmic_java_get_number(runtime, "total memory", 
                                     "/value/TotalPhysicalMemorySize", status);
     if (status->code != GRU_SUCCESS) {
-        return ret;
+        goto exit;
     }
     
     ret.mem_free = bmic_java_get_number(runtime, "total free memory", 
                                     "/value/FreePhysicalMemorySize", status);
     if (status->code != GRU_SUCCESS) {
-        return ret;
+        goto exit;
     }
     
     ret.swap_total = bmic_java_get_number(runtime, "total swap memory", 
                                     "/value/FreeSwapSpaceSize", status);
     if (status->code != GRU_SUCCESS) {
-        return ret;
+        goto exit;
     }
     
     ret.swap_free = bmic_java_get_number(runtime, "total free swap memory", 
                                     "/value/FreePhysicalMemorySize", status);
     if (status->code != GRU_SUCCESS) {
-        return ret;
+        goto exit;
     }
     
     ret.swap_committed = bmic_java_get_number(runtime, "total committed swap memory", 
                                     "/value/CommittedVirtualMemorySize", status);
     if (status->code != GRU_SUCCESS) {
-        return ret;
+        goto exit;
     }
     
     ret.open_fd = bmic_java_get_number(runtime, "open file descriptors", 
                                     "/value/OpenFileDescriptorCount", status);
     if (status->code != GRU_SUCCESS) {
-        return ret;
+        goto exit;
     }
     
     ret.max_fd = bmic_java_get_number(runtime, "max file descriptors", 
                                     "/value/MaxFileDescriptorCount", status);
     if (status->code != GRU_SUCCESS) {
-        return ret;
+        goto exit;
     }
     
     ret.load_average = bmic_java_get_double(runtime, "load average", 
                                     "/value/SystemLoadAverage", status);
     if (status->code != GRU_SUCCESS) {
-        return ret;
+        goto exit;
     }
     
     ret.process_cpu_load = bmic_java_get_double(runtime, "process CPU load", 
                                     "/value/ProcessCpuLoad", status);
     if (status->code != GRU_SUCCESS) {
-        return ret;
+        goto exit;
     }
     
     ret.system_cpu_load = bmic_java_get_double(runtime, "system CPU load", 
                                     "/value/SystemCpuLoad", status);
     if (status->code != GRU_SUCCESS) {
-        return ret;
+        goto exit;
     }
     
     ret.process_cpu_time = bmic_java_get_number(runtime, "process CPU time", 
                                     "/value/ProcessCpuTime", status);
     if (status->code != GRU_SUCCESS) {
-        return ret;
+        goto exit;
     }
     
+    exit:
+    bmic_object_destroy((bmic_object_t **) &runtime);
     return ret;
 }

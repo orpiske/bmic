@@ -45,6 +45,12 @@ typedef struct bmic_java_info_t_ {
     bmic_java_memory_model_t memory_model;
 } bmic_java_info_t;
 
+static inline void bmic_java_info_cleanup(bmic_java_info_t info) {
+    gru_dealloc_string((char **) &info.name);
+    gru_dealloc_string((char **) &info.version);
+    gru_dealloc_string((char **) &info.jvm_package_version);
+};
+
 typedef struct bmic_java_os_info_t_ {
     const char *name;
     const char *arch;
@@ -67,6 +73,12 @@ typedef struct bmic_java_os_info_t_ {
     
     uint32_t cpus;
 } bmic_java_os_info_t;
+
+static inline void bmic_java_os_info_cleanup(bmic_java_os_info_t info) {
+    gru_dealloc_string((char **) &info.name);
+    gru_dealloc_string((char **) &info.arch);
+    gru_dealloc_string((char **) &info.version);
+}
 
 typedef bmic_java_info_t (*bmic_complement_api_java_info_fn)(bmic_handle_t *handle,
         gru_status_t *status);

@@ -133,14 +133,23 @@ int top_run(options_t *options)
             }
         }
         
+        bmic_java_os_info_cleanup(osinfo);
+        
         if (options->repeat != -1) {
             iteration++;
+            if (options->repeat == iteration) {
+                break;
+            }
+            
         }
         
         sleep(options->interval);
         
     }
+    
+    bmic_java_info_cleanup(jinfo);
 
+    bmic_exchange_destroy((bmic_exchange_t **) & cap);
     bmic_list_destroy((bmic_list_t **) &list);
     bmic_context_cleanup(&ctxt);
 

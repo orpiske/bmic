@@ -349,6 +349,7 @@ const bmic_list_t *bmic_activemq_queue_list(bmic_handle_t *handle,
     bmic_object_for_each_child(attributes->data_ptr, bmic_activemq_translate_queue_list,
                                &payload);
 
+    bmic_exchange_destroy((bmic_exchange_t **) &attributes);
     return ret;
 }
 
@@ -376,6 +377,7 @@ bmic_queue_stat_t bmic_activemq_queue_stats(bmic_handle_t *handle,
         else {
             logger(ERROR, "Invalid data pointer for the queue size property");
         }
+        bmic_exchange_destroy((bmic_exchange_t **) &qsize);
     }
     else {
         logger(ERROR, "Unavailable response for queue size property");
@@ -391,6 +393,8 @@ bmic_queue_stat_t bmic_activemq_queue_stats(bmic_handle_t *handle,
         else {
             logger(ERROR, "Invalid data pointer for the acknowledge message count property");
         }
+        
+        bmic_exchange_destroy((bmic_exchange_t **) &ack);
     }
     else {
         logger(ERROR, "Unavailable response for acknowledge message count property");
@@ -406,6 +410,8 @@ bmic_queue_stat_t bmic_activemq_queue_stats(bmic_handle_t *handle,
         else {
             logger(ERROR, "Invalid data pointer for the expired message count property");
         }
+        
+        bmic_exchange_destroy((bmic_exchange_t **) &exp);
     }
     else {
         logger(ERROR, "Unavailable response for expired message count property");
@@ -418,8 +424,11 @@ bmic_queue_stat_t bmic_activemq_queue_stats(bmic_handle_t *handle,
         if (cns->data_ptr && cns->data_ptr->type == INTEGER) {
             ret.consumer_count = cns->data_ptr->data.number;
         }
-
-        logger(ERROR, "Invalid data pointer for the consumers count property");
+        else { 
+            logger(ERROR, "Invalid data pointer for the consumers count property");
+        }
+        
+        bmic_exchange_destroy((bmic_exchange_t **) &cns);
     }
     else {
         logger(ERROR, "Unavailable response for consumers count property");

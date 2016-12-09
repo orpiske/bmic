@@ -233,7 +233,7 @@ static void bmic_artemis_translate_queue_list(const void *nodedata, void *payloa
     logger(INFO, "Processing node %s [%s]", nodeobj->name, nodeobj->path);
 
     if (nodeobj->type == STRING) {
-        gru_list_append(pl->list, nodeobj->data.str);
+        gru_list_append(pl->list, strdup(nodeobj->data.str));
     }
     else {
         logger(WARNING, "Invalid node type for %s: %d", nodeobj->name, nodeobj->type);
@@ -249,7 +249,7 @@ const bmic_list_t *bmic_artemis_queue_list(bmic_handle_t *handle,
                                                              status,
                                                              REG_SEARCH_NAME, ARTEMIS_CAPABILITIES_KEY_REGEX);
 
-    bmic_list_t *ret = bmic_list_new(status, NULL);
+    bmic_list_t *ret = bmic_list_new(status, gru_dealloc);
     gru_alloc_check(ret, NULL);
 
     bmic_payload_add_attr_t payload = {
@@ -259,6 +259,8 @@ const bmic_list_t *bmic_artemis_queue_list(bmic_handle_t *handle,
 
 
     bmic_object_for_each_child(attributes->data_ptr, bmic_artemis_translate_queue_list, &payload);
+    
+    bmic_exchange_destroy((bmic_exchange_t **) &attributes);
 
     return ret;
 }
@@ -345,6 +347,8 @@ bmic_queue_stat_t bmic_artemis_queue_stats(bmic_handle_t *handle,
         else {
             logger(ERROR, "Invalid data pointer for the queue size property");
         }
+        
+        bmic_exchange_destroy((bmic_exchange_t **) &qsize);
     }
     else {
         logger(ERROR, "Unavailable response for queue size property");
@@ -360,6 +364,8 @@ bmic_queue_stat_t bmic_artemis_queue_stats(bmic_handle_t *handle,
         else {
             logger(ERROR, "Invalid data pointer for the acknowledge message count property");
         }
+        
+        bmic_exchange_destroy((bmic_exchange_t **) &ack);
     }
     else {
         logger(ERROR, "Unavailable response for acknowledge message count property");
@@ -375,6 +381,8 @@ bmic_queue_stat_t bmic_artemis_queue_stats(bmic_handle_t *handle,
         else {
             logger(ERROR, "Invalid data pointer for the expired message count property");
         }
+        
+        bmic_exchange_destroy((bmic_exchange_t **) &exp);
     }
     else {
         logger(ERROR, "Unavailable response for expired message count property");
@@ -390,10 +398,14 @@ bmic_queue_stat_t bmic_artemis_queue_stats(bmic_handle_t *handle,
         else {
             logger(ERROR, "Invalid data pointer for the consumers count property");
         }
+        
+        bmic_exchange_destroy((bmic_exchange_t **) &cns);
     }
     else {
         logger(ERROR, "Unavailable response for consumers count property");
     }
 
+    
+    
     return ret;
 }
