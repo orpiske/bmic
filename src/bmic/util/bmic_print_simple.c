@@ -48,16 +48,7 @@ static void print_returned_from_list(const void *ptr, void *payload) {
         break;
     }
     }
-
 }
-
-/*
-  printf("\n%s%sDescription: %s%s\n", RESET, LIGHT_WHITE, RESET, sig->description);
-    printf("%s %s()\n", bmic_type_map(sig->ret), info->name);
-    
-    printf("%s%s%-2s %10s %-35s %s%s\n", RESET, LIGHT_WHITE, " ", "Type", 
-           "Parameter name", "Description", RESET);
- */
 
 void print_returned_object(const char *capname, const bmic_object_t *obj)
 {
