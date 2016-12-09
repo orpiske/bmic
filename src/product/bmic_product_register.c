@@ -16,24 +16,42 @@
 #include "bmic_product_register.h"
 
 void bmic_product_register(gru_status_t *status) {
+    logger_t logger = gru_logger_get();
+    
     bmic_api_interface_t *artemis = bmic_artemis_product(status);
-    if (!artemis) {
-        return;
+    if (artemis) {
+        bmic_product_registry_add(artemis, status);
+        
+        if (status->code != GRU_SUCCESS) {
+            logger(ERROR, "Unable to register Artemis management API interface");
+            return;
+        }
     }
-
-    bmic_product_registry_add(artemis, status);
-    if (status->code != GRU_SUCCESS) {
-        return;
+    else {
+        logger(ERROR, "Unable to create a new Artemis management API interface");
     }
 
     bmic_api_interface_t *activemq = bmic_activemq_product(status);
-    if (!activemq) {
-        return;
+    if (activemq) {
+        bmic_product_registry_add(activemq, status);
+        if (status->code != GRU_SUCCESS) {
+            logger(ERROR, "Unable to register Artemis management API interface");
+        }
+    }
+    else {
+        logger(ERROR, "Unable to create a new ActiveMQ management API interface");
     }
 
-    bmic_product_registry_add(activemq, status);
-    if (status->code != GRU_SUCCESS) {
-        return;
+
+    bmic_api_interface_t *jamq6 = bmic_jamq6_product(status);
+    if (jamq6) {
+        bmic_product_registry_add(jamq6, status);
+        if (status->code != GRU_SUCCESS) {
+            logger(ERROR, "Unable to register JBoss A-MQ 6 management API interface");
+        }
+    }
+    else {
+        logger(ERROR, "Unable to create a new JBoss A-MQ 6 management API interface");
     }
 }
 

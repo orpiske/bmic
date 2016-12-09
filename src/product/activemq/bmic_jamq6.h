@@ -13,25 +13,25 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-#ifndef BMIC_PRODUCT_REGISTER_H
-#define BMIC_PRODUCT_REGISTER_H
 
-#include <log/gru_logger.h>
+#ifndef BMIC_JAMQ6_H
+#define BMIC_JAMQ6_H
 
-#include "management/common/bmic_product.h"
-#include "product/activemq/bmic_activemq.h"
-#include "product/activemq/bmic_jamq6.h"
-#include "product/artemis/bmic_artemis.h"
+#include "bmic_activemq.h"
+#include "bmic_jamq6_defs.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void bmic_product_register(gru_status_t *status);
-void bmic_product_unregister();
+bmic_api_interface_t *bmic_jamq6_product(gru_status_t *status);
+const char *bmic_jamq6_base_url(const bmic_discovery_hint_t *hint);
+bmic_product_info_t *bmic_jamq6_product_info(bmic_handle_t *handle,
+                                                gru_status_t *status);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* BMIC_PRODUCT_REGISTER_H */
+#endif /* BMIC_JAMQ6_H */
+
