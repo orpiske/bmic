@@ -82,6 +82,8 @@ int top_run(options_t *options)
                osinfo.name, 
                osinfo.version);        
         
+        printf("%s%sCPUs:%s %"PRId64"\n", RESET, LIGHT_WHITE, RESET, 
+               osinfo.cpus);
         printf("%s%sLoad average:%s %-10.1f\n", RESET, LIGHT_WHITE, RESET, 
                osinfo.load_average);
         printf("%s%sFile descriptors:%s %10lu max total %10lu open %10lu free\n", 
