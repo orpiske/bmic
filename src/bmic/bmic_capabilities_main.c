@@ -76,6 +76,7 @@ void capabilities_do_read(bmic_handle_t *handle,
     else {
         if (status->code != GRU_SUCCESS) { 
             printf("%35s %s%s%s%s\n", capname, RESET, RED, status->message, RESET);
+            gru_status_reset(status);
         }
         else {
             printf("%35s %s%s%s%s\n", capname, RESET, RED, 
