@@ -109,6 +109,8 @@ int queue_run(options_t *options)
 
         if (list) {
             gru_list_for_each(list->items, print_queue, NULL);
+            
+            bmic_list_destroy((bmic_list_t **) &list);
         }
         
         break;
