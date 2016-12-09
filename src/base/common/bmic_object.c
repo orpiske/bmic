@@ -206,7 +206,9 @@ void bmic_object_set_string(bmic_object_t *obj, const char *value)
     logger(TRACE, "Setting %s [%s] to %s", obj->name, obj->path, value);
     
     obj->type = STRING;
-    asprintf(&obj->data.str, "%s", value);
+    if (asprintf(&obj->data.str, "%s", value) == -1) {
+        logger(FATAL, "Unable to allocate memory for setting the string value for the object");
+    }
 }
 
 void bmic_object_set_integer(bmic_object_t *obj, int32_t value)

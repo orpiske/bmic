@@ -22,7 +22,15 @@
  */
 static void bmic_activemq_json_op_mbean(const bmic_object_t *op, bmic_json_t *json) {
     char *mbean_value = NULL;
-    asprintf(&mbean_value, "%s:%s", ACTIVEMQ_BASE_PKG, op->name);
+    if (asprintf(&mbean_value, "%s:%s", ACTIVEMQ_BASE_PKG, op->name) == -1) {
+        logger_t logger = gru_logger_get();
+        
+        logger(FATAL, "Unable to allocate memory for setting the mbean value");
+        
+        return;
+    
+    }
+    
     json_object *mbean = json_object_new_string(mbean_value);
     free(mbean_value);
     
