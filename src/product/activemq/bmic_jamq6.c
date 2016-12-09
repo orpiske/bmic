@@ -117,4 +117,6 @@ bmic_product_info_t *bmic_jamq6_product_info(bmic_handle_t *handle,
         bmic_object_destroy(&root);
         return ret;
     }
+
+    return NULL;
 }
