@@ -30,6 +30,10 @@ bmic_op_info_t *bmic_op_info_new(gru_status_t *status) {
     return ret;
 }
 
+static void bmic_op_info_destroy_sigs(const void *nodedata, void *payload) {
+    bmic_op_sig_destroy((void **)&nodedata);
+}
+
 void bmic_op_info_destroy(bmic_op_info_t **ptr) {
     bmic_op_info_t *obj = *ptr;
 
@@ -39,6 +43,10 @@ void bmic_op_info_destroy(bmic_op_info_t **ptr) {
 
     if (obj->name != NULL) {
         gru_dealloc_string(&obj->name);
+    }
+    
+    if (obj->signature) {
+        gru_list_for_each(obj->signature, bmic_op_info_destroy_sigs, NULL);
     }
     
     gru_list_destroy(&obj->signature);

@@ -30,6 +30,9 @@ bmic_op_sig_t *bmic_op_sig_new(gru_status_t *status) {
     return ret;
 }
 
+static void bmic_op_sig_destroy_args(const void *nodedata, void *payload) {
+    bmic_op_arg_destroy((bmic_op_arg_t **)&nodedata);
+}
 
 void bmic_op_sig_destroy(bmic_op_sig_t **ptr) {
     bmic_op_sig_t *sig = *ptr;
@@ -39,6 +42,7 @@ void bmic_op_sig_destroy(bmic_op_sig_t **ptr) {
     }
     
     if (sig->args) {
+        gru_list_for_each(sig->args, bmic_op_sig_destroy_args, NULL);
         gru_list_destroy(&sig->args);
     }
     
