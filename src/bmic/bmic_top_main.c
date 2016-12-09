@@ -134,7 +134,7 @@ int top_run(options_t *options)
         
     }
 
-    bmic_list_destroy(&list);
+    bmic_list_destroy((bmic_list_t **) &list);
     bmic_context_cleanup(&ctxt);
 
     return EXIT_SUCCESS;
