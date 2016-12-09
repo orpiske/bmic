@@ -178,7 +178,7 @@ static const char *bmic_java_get_string(const bmic_object_t *root, const char *n
     return strdup(obj->data.str);
 }
 
-static uint64_t bmic_java_get_number(const bmic_object_t *root, const char *name, 
+static int64_t bmic_java_get_number(const bmic_object_t *root, const char *name, 
                                  const char *path, gru_status_t *status) {
     const bmic_object_t *obj = bmic_object_find_by_path(root, path);
     
@@ -195,6 +195,10 @@ static uint64_t bmic_java_get_number(const bmic_object_t *root, const char *name
         return 0;
     }
     else { 
+        logger_t logger = gru_logger_get();
+        
+        logger(DEBUG, "Read value %"PRId64" for %s", obj->data.number, path);
+        
         return obj->data.number;
     }
 }

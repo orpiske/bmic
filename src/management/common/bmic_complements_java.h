@@ -71,7 +71,7 @@ typedef struct bmic_java_os_info_t_ {
     int64_t open_fd;
     int64_t max_fd;
     
-    uint32_t cpus;
+    int64_t cpus;
 } bmic_java_os_info_t;
 
 static inline void bmic_java_os_info_cleanup(bmic_java_os_info_t info) {
