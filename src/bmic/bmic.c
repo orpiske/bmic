@@ -17,6 +17,7 @@
 #include <stdlib.h>
 
 #include <common/gru_status.h>
+#include <common/gru_colors.h>
 
 #include "bmic_capabilities_main.h"
 #include "bmic_discovery_main.h"
@@ -24,12 +25,26 @@
 #include "bmic_operations_main.h"
 #include "bmic_top_main.h"
 
+void print_option(const char *program, const char *description) {
+    printf("\t%s%s%-15s%s\t%s\n", RESET, LIGHT_WHITE, program, RESET, description);
+}
+
+void print_general_usage() {
+    printf("%s%sUsage:%s\nbmic <program> <options>\n\nValid programs:\n\n", 
+            RESET, LIGHT_WHITE, RESET);
+}
 
 void show_help() {
-    printf("Usage: \n");
-    printf("\t\tdiscovery\tRun a discovery on the broker to find its type and version\n");
-    printf("\t\tcapabilities\tRead/write/list broker capabilities and attributes\n");
-    printf("\t\tqueue\tRead/write/list queue capabilities and attributes\n");
+    print_general_usage();
+    
+    print_option("discovery", 
+            "Run a discovery on the broker to find its type and version");
+    print_option("capabilities", 
+            "Read/write/list broker capabilities and attributes");
+    print_option("queue", "Create/delete/list queues or read queue attributes");
+    print_option("operations", "Execute/list operations on the broker");
+    print_option("top", "A top-like performance monitor for the broker");
+    
 }
 int main(int argc, char** argv)
 {
