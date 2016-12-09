@@ -1,7 +1,3 @@
-if (${CMAKE_SYSTEM_NAME} EQUAL "Linux")
- add_definitions(-D_GNU_SOURCE -DLINUX_BUILD)
-endif (${CMAKE_SYSTEM_NAME} EQUAL "Linux")
-
 include_directories(.)
 
 add_library(
@@ -23,8 +19,8 @@ add_library(
 target_link_libraries(
 	bmic-base
 	gru
-        curl
-        ${LIBJSON}
+  curl
+  ${LIBJSON}
 )
 
 add_library(
@@ -41,10 +37,10 @@ add_library(
 
 target_link_libraries(
 	bmic-management
-        bmic-base
+  bmic-base
 	gru
-        curl
-        ${LIBJSON}
+  curl
+  ${LIBJSON}
 )
 
 add_library(
@@ -72,7 +68,7 @@ target_link_libraries(
         ${LIBJSON}
 )
 
-install(TARGETS bmic-base bmic-management bmic-product 
+install(TARGETS bmic-base bmic-management bmic-product
 	LIBRARY DESTINATION ${CPP_LIBRARY_DIR}
 )
 
