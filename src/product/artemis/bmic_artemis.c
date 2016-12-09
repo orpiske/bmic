@@ -29,10 +29,10 @@ bmic_api_interface_t *bmic_artemis_product(gru_status_t *status)
     ret->attribute_list = bmic_artemis_attribute_list;
     ret->queue_attribute_read = bmic_artemis_queue_attribute_read;
     ret->operation_list = bmic_artemis_operation_list;
-    ret->create_queue = bmic_artemis_operation_create_queue;
-    ret->delete_queue = bmic_artemis_operation_delete_queue;
+    ret->create_queue = bmic_artemis_queue_create;
+    ret->delete_queue = bmic_artemis_queue_delete;
     ret->list_queues = bmic_artemis_queue_list;
-    ret->stat_queue = bmic_artemis_queue_stat;
+    ret->stat_queue = bmic_artemis_queue_stats;
 
     ret->java.java_info = bmic_java_read_info;
     ret->java.os_info = bmic_java_read_os_info;
@@ -283,7 +283,7 @@ const bmic_list_t *bmic_artemis_operation_list(bmic_handle_t *handle,
     return ret;
 }
 
-bool bmic_artemis_operation_create_queue(bmic_handle_t *handle,
+bool bmic_artemis_queue_create(bmic_handle_t *handle,
                                          const bmic_exchange_t *cap,
                                          const char *name,
                                          gru_status_t *status)
@@ -302,7 +302,7 @@ bool bmic_artemis_operation_create_queue(bmic_handle_t *handle,
     return ret;
 }
 
-bool bmic_artemis_operation_delete_queue(bmic_handle_t *handle,
+bool bmic_artemis_queue_delete(bmic_handle_t *handle,
                                          const bmic_exchange_t *cap,
                                          const char *name,
                                          gru_status_t *status)
@@ -328,7 +328,7 @@ bool bmic_artemis_operation_delete_queue(bmic_handle_t *handle,
  * @param status
  * @return 
  */
-bmic_queue_stat_t bmic_artemis_queue_stat(bmic_handle_t *handle,
+bmic_queue_stat_t bmic_artemis_queue_stats(bmic_handle_t *handle,
                                           const bmic_exchange_t *cap,
                                           const char *queue,
                                           gru_status_t *status)

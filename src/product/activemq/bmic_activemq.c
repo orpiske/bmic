@@ -29,10 +29,10 @@ bmic_api_interface_t *bmic_activemq_product(gru_status_t *status)
     ret->attribute_list = bmic_activemq_attribute_list;
     ret->queue_attribute_read = bmic_activemq_queue_attribute_read;
     ret->operation_list = bmic_activemq_operation_list;
-    ret->create_queue = bmic_activemq_operation_create_queue;
-    ret->delete_queue = bmic_activemq_operation_delete_queue;
+    ret->create_queue = bmic_activemq_queue_create;
+    ret->delete_queue = bmic_activemq_queue_delete;
     ret->list_queues = bmic_activemq_queue_list;
-    ret->stat_queue = bmic_activemq_queue_stat;
+    ret->stat_queue = bmic_activemq_queue_stats;
 
     ret->java.java_info = bmic_java_read_info;
     ret->java.os_info = bmic_java_read_os_info;
@@ -240,7 +240,7 @@ const bmic_list_t *bmic_activemq_operation_list(bmic_handle_t *handle,
     return ret;
 }
 
-bool bmic_activemq_operation_create_queue(bmic_handle_t *handle,
+bool bmic_activemq_queue_create(bmic_handle_t *handle,
                                           const bmic_exchange_t *cap,
                                           const char *name,
                                           gru_status_t *status)
@@ -259,7 +259,7 @@ bool bmic_activemq_operation_create_queue(bmic_handle_t *handle,
     return ret;
 }
 
-bool bmic_activemq_operation_delete_queue(bmic_handle_t *handle,
+bool bmic_activemq_queue_delete(bmic_handle_t *handle,
                                           const bmic_exchange_t *cap,
                                           const char *name,
                                           gru_status_t *status)
@@ -278,7 +278,7 @@ bool bmic_activemq_operation_delete_queue(bmic_handle_t *handle,
     return ret;
 }
 
-static const char *bmic_activemq_filter_queue_name(const char *fqdn,
+static const char *bmic_activemq_queue_filter_name(const char *fqdn,
                                                    gru_status_t *status)
 {
     logger_t logger = gru_logger_get();
@@ -309,7 +309,7 @@ static void bmic_activemq_translate_queue_list(const void *nodedata, void *paylo
         const bmic_object_t *obj = bmic_object_find_by_name(nodeobj, "objectName");
 
         if (obj && obj->type == STRING) {
-            const char *queue_name = bmic_activemq_filter_queue_name(obj->data.str,
+            const char *queue_name = bmic_activemq_queue_filter_name(obj->data.str,
                                                                      pl->status);
 
             logger(INFO, "Processing node %s [%s]: %s", nodeobj->name, nodeobj->path,
@@ -359,7 +359,7 @@ const bmic_list_t *bmic_activemq_queue_list(bmic_handle_t *handle,
  * @param status
  * @return 
  */
-bmic_queue_stat_t bmic_activemq_queue_stat(bmic_handle_t *handle,
+bmic_queue_stat_t bmic_activemq_queue_stats(bmic_handle_t *handle,
                                            const bmic_exchange_t *cap,
                                            const char *queue,
                                            gru_status_t *status)

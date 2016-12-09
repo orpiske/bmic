@@ -94,7 +94,7 @@ const bmic_list_t *bmic_activemq_operation_list(bmic_handle_t *handle,
  * @param status
  * @return 
  */
-bool bmic_activemq_operation_create_queue(bmic_handle_t *handle,
+bool bmic_activemq_queue_create(bmic_handle_t *handle,
                                             const bmic_exchange_t *cap, 
                                             const char *name,
                                             gru_status_t *status);
@@ -107,7 +107,7 @@ bool bmic_activemq_operation_create_queue(bmic_handle_t *handle,
  * @param status
  * @return 
  */
-bool bmic_activemq_operation_delete_queue(bmic_handle_t *handle,
+bool bmic_activemq_queue_delete(bmic_handle_t *handle,
                                             const bmic_exchange_t *cap, 
                                             const char *name,
                                             gru_status_t *status);
@@ -132,7 +132,7 @@ const bmic_list_t *bmic_activemq_queue_list(bmic_handle_t *handle,
  * @param status
  * @return 
  */
-bmic_queue_stat_t bmic_activemq_queue_stat(bmic_handle_t *handle,
+bmic_queue_stat_t bmic_activemq_queue_stats(bmic_handle_t *handle,
                                            const bmic_exchange_t *cap,
                                            const char *queue,
                                            gru_status_t *status);
