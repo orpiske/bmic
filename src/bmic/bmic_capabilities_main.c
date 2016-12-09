@@ -22,6 +22,7 @@ typedef struct options_t_
     bool list;
     bool readall;
     char read[OPT_MAX_STR_SIZE];
+    bool show_info;
 } options_t;
 
 typedef struct cap_read_wrapper_t_ {
@@ -57,6 +58,7 @@ static void show_help(char **argv)
     print_option_help("list", "l", "list available capabilities/attributes from the server");
     print_option_help("read=<str>", "r <str>", "read the capability/attribute named <str> from the server");
     print_option_help("read-all", "R", "read all available capabilities/attributes from the server");
+    print_option_help("show-info", "S", "show server information during start-up");
 }
 
 void capabilities_do_read(bmic_handle_t *handle, 
@@ -103,24 +105,7 @@ int capabilities_run(options_t *options)
     }
     
     bmic_api_interface_t *api = ctxt.api;
-
-    if (api == NULL) {
-        fprintf(stderr, "Unable to discover server: %s\n", status.message);
-
-        return EXIT_FAILURE;
-    }
-
-    bmic_product_info_t *info = api->product_info(ctxt.handle, &status);
-    print_product_info(api, info);
-    
-    if (!info || status.code != GRU_SUCCESS) {
-        fprintf(stderr, "Unable to determine product version: %s\n",
-                status.message);
-    }
-    
-    if (info) {
-        gru_dealloc((void **) &info);
-    }
+    show_info(api, ctxt.handle, options->show_info, &status);
     
     const bmic_exchange_t *cap = api->load_capabilities(ctxt.handle, &status);
     if (!cap) {
@@ -186,6 +171,7 @@ int capabilities_main(int argc, char **argv)
 
     options.list = false;
     options.readall = false;
+    options.show_info = false;
 
     if (argc < 2) {
         show_help(argv);
@@ -196,17 +182,18 @@ int capabilities_main(int argc, char **argv)
     while (1) {
 
         static struct option long_options[] = {
-            { "help", false, 0, 'h'},
-            { "username", true, 0, 'u'},
-            { "password", true, 0, 'p'},
-            { "server", true, 0, 's'},
-            { "list", false, 0, 'l'},
-            { "read", true, 0, 'r'},
-            { "read-all", false, 0, 'R'},
+            { "help", no_argument, 0, 'h'},
+            { "username", required_argument, 0, 'u'},
+            { "password", required_argument, 0, 'p'},
+            { "server", required_argument, 0, 's'},
+            { "list", no_argument, 0, 'l'},
+            { "read", required_argument, 0, 'r'},
+            { "read-all", no_argument, 0, 'R'},
+            { "show-info", no_argument, 0, 'S'},
             { 0, 0, 0, 0}
         };
 
-        int c = getopt_long(argc, argv, "hu:p:l:s:lr:", long_options, 
+        int c = getopt_long(argc, argv, "hu:p:l:s:lr:RS", long_options, 
                             &option_index);
         if (c == -1) {
             if (optind == 1) {
@@ -233,6 +220,9 @@ int capabilities_main(int argc, char **argv)
             break;
         case 'R':
             options.readall = true;
+            break;
+        case 'S':
+            options.show_info = true;
             break;
         case 'h':
             show_help(argv);

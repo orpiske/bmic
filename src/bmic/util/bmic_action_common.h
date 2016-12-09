@@ -13,44 +13,29 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
+#ifndef BMIC_ACTION_COMMON_H
+#define BMIC_ACTION_COMMON_H
 
-#ifndef BMIC_DISCOVERY_MAIN_H
-#define BMIC_DISCOVERY_MAIN_H
-
-#include <stdio.h>
-#include <stdlib.h>
-
-#include <stdio.h>
-#include <stdlib.h>
 #include <stdbool.h>
-#include <getopt.h>
 
-#ifndef HAVE_STRLCPY
-#include <string/gru_alt.h>
-#endif // HAVE_STRLCPY
+#include <common/gru_status.h>
 
-#include "base/transport/bmic_endpoint.h"
-#include "base/transport/bmic_endpoint_http.h"
-#include "base/format/bmic_json.h"
+#include "management/common//bmic_management_api.h"
+#include "management/common//bmic_handle.h"
 
-#include "context/bmic_context.h"
-
-#include "base/common/bmic_regex.h"
-
-#include "bmic/util/bmic_print_simple.h"
-#include "bmic/util/bmic_opt_common.h"
-#include "bmic/util/bmic_action_common.h"
+#include "bmic_print_simple.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-int discovery_main(int argc, char **argv);
 
+void show_info(bmic_api_interface_t *api, bmic_handle_t *handle, bool show, 
+        gru_status_t *status);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* BMIC_DISCOVERY_MAIN_H */
+#endif /* BMIC_ACTION_COMMON_H */
 

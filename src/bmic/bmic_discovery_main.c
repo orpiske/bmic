@@ -47,19 +47,8 @@ int discovery_run(options_t *options)
         return EXIT_FAILURE;
     }
     bmic_api_interface_t *api = ctxt.api;
+    show_info(api, ctxt.handle, true, &status);
     
-    bmic_product_info_t *info = ctxt.api->product_info(ctxt.handle, &status);
-    print_product_info(api, info);
-    
-    if (!info || status.code != GRU_SUCCESS) {
-        fprintf(stderr, "Unable to determine product version: %s\n",
-                status.message);
-    }
-    
-    if (info) {
-        gru_dealloc((void **) &info);
-    }
-
     bmic_context_cleanup(&ctxt);
 
     return EXIT_SUCCESS;

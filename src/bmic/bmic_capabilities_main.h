@@ -41,6 +41,7 @@
 #include "bmic/util/bmic_print_simple.h"
 #include "bmic/util/bmic_type_map.h"
 #include "bmic/util/bmic_opt_common.h"
+#include "bmic/util/bmic_action_common.h"
 
 #ifdef __cplusplus
 extern "C" {

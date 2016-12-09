@@ -29,6 +29,7 @@ typedef struct options_t_
     bool help;
     char name[OPT_MAX_STR_SIZE];
     operations_t operation;
+    bool show_info;
 } options_t;
 
 
@@ -93,6 +94,7 @@ static void show_help(char **argv)
     print_option_help("password", "p", "password to access the management console");
     print_option_help("server", "s", "server hostname or IP address");
     print_option_help("list", "l", "list available capabilities/attributes from the server");
+    print_option_help("show-info", "S", "show server information during start-up");
 }
 
 
@@ -110,18 +112,7 @@ int operations_run(options_t *options)
     }
     
     bmic_api_interface_t *api = ctxt.api;
-
-    bmic_product_info_t *info = api->product_info(ctxt.handle, &status);
-    print_product_info(api, info);
-    
-    if (!info || status.code != GRU_SUCCESS) {
-        fprintf(stderr, "Unable to determine product version: %s\n",
-                status.message);
-    }
-    
-    if (info) {
-        gru_dealloc((void **) &info);
-    }
+    show_info(api, ctxt.handle, options->show_info, &status);
     
     const bmic_exchange_t *cap = api->load_capabilities(ctxt.handle, &status);
     if (!cap) {
@@ -165,6 +156,8 @@ int operations_main(int argc, char **argv)
     
     int option_index = 0;
     options_t options = {0};
+    
+    options.show_info = false;
 
     if (argc < 2) {
         show_help(argv);
@@ -180,10 +173,11 @@ int operations_main(int argc, char **argv)
             { "password", required_argument, 0, 'p'},
             { "server", required_argument, 0, 's'},
             { "list", no_argument, 0, 'l'},
+            { "show-info", no_argument, 0, 'S'},
             { 0, 0, 0, 0}
         };
 
-        int c = getopt_long(argc, argv, "h:u:p:s:l:", long_options, 
+        int c = getopt_long(argc, argv, "h:u:p:s:l:S", long_options, 
                             &option_index);
         if (c == -1) {
             if (optind == 1) {
@@ -201,6 +195,9 @@ int operations_main(int argc, char **argv)
             break;
         case 's':
             strlcpy(options.server, optarg, sizeof (options.server));
+            break;
+        case 'S':
+            options.show_info = true;
             break;
         case 'l':
             options.operation = OP_LIST;
