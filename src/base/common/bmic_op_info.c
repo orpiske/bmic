@@ -31,7 +31,7 @@ bmic_op_info_t *bmic_op_info_new(gru_status_t *status) {
 }
 
 static void bmic_op_info_destroy_sigs(const void *nodedata, void *payload) {
-    bmic_op_sig_destroy((void **)&nodedata);
+    bmic_op_sig_destroy((bmic_op_sig_t **)&nodedata);
 }
 
 void bmic_op_info_destroy(bmic_op_info_t **ptr) {
