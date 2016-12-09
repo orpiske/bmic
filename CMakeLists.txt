@@ -14,7 +14,7 @@ else(CMAKE_SIZEOF_VOID_P EQUAL 8)
 endif(CMAKE_SIZEOF_VOID_P EQUAL 8)
 
 if (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
-    add_definitions(-DLINUX_BUILD -D_GNU_SOURCE) 
+    add_definitions(-DLINUX_BUILD -D_GNU_SOURCE)
 
     if(EXISTS "/etc/redhat-release")
         add_definitions(-D__RH_DISTRO__)
@@ -30,6 +30,14 @@ if (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
         add_definitions(-D__UBUNTU_DISTRO__)
         set(LIBJSON json)
     endif(EXISTS "/etc/ubuntu-release")
+else (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+  message(STATUS "Compiling for " ${CMAKE_SYSTEM_NAME} "")
+  if (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+    SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+    add_definitions(-D__OSX__)
+    set(LIBJSON json-c)
+  endif (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+
 endif(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/target/bin)
