@@ -21,6 +21,8 @@ typedef struct options_t_
 {
     credential_options_t credentials;
     char server[OPT_MAX_STR_SIZE];
+    int32_t interval; 
+    int32_t repeat;
 } options_t;
 
 static void show_help()
@@ -70,7 +72,8 @@ int top_run(options_t *options)
     
     bmic_java_info_t jinfo = api->java.java_info(ctxt.handle, &status);
     
-    while (true) {
+    uint32_t iteration = 0;
+    while (iteration != options->repeat) {
         
         bmic_java_os_info_t osinfo = api->java.os_info(ctxt.handle, &status);
         
@@ -130,7 +133,11 @@ int top_run(options_t *options)
             }
         }
         
-        sleep(5);
+        if (options->repeat != -1) {
+            iteration++;
+        }
+        
+        sleep(options->interval);
         
     }
 
@@ -143,6 +150,9 @@ int top_run(options_t *options)
 int top_main(int argc, char **argv) {
     int option_index = 0;
     options_t options = {0};
+    
+    options.interval = 5;
+    options.repeat = -1;
 
     if (argc < 2) {
         show_help();
@@ -157,10 +167,12 @@ int top_main(int argc, char **argv) {
             { "username", required_argument, 0, 'u'},
             { "password", required_argument, 0, 'p'},
             { "server", required_argument, 0, 's'},
+            { "interval", required_argument, 0, 'i'},
+            { "repeat", required_argument, 0, 'r'},
             { 0, 0, 0, 0}
         };
 
-        int c = getopt_long(argc, argv, "hu:p:s:", long_options, &option_index);
+        int c = getopt_long(argc, argv, "hu:p:s:i:r:", long_options, &option_index);
         if (c == -1) {
             if (optind == 1) {
                 break;
@@ -177,6 +189,12 @@ int top_main(int argc, char **argv) {
             break;
         case 's':
             strlcpy(options.server, optarg, sizeof (options.server));
+            break;
+        case 'i':
+            options.interval = atoi(optarg);
+            break;
+        case 'r': 
+            options.repeat = atoi(optarg);
             break;
         case 'h':
             show_help();
