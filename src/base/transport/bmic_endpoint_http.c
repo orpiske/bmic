@@ -150,10 +150,8 @@ void bmic_endpoint_http_read(const bmic_endpoint_t *ep, bmic_data_t *request,
     curl_easy_setopt(easy, CURLOPT_WRITEDATA, &reply_data);
     curl_easy_setopt(easy, CURLOPT_USERAGENT, "bmic/0.0.1");
 
-    curl_easy_setopt(easy, CURLOPT_TIMEOUT, 5);
-
+    curl_easy_setopt(easy, CURLOPT_TIMEOUT, 20L);
     curl_easy_setopt(easy, CURLOPT_FOLLOWLOCATION, 1);
-
     curl_easy_setopt(easy, CURLOPT_MAXREDIRS, 3);
 
     CURLcode rcode = curl_easy_perform(easy);
@@ -220,10 +218,8 @@ void bmic_endpoint_http_write(const bmic_endpoint_t *ep, bmic_data_t *request,
     curl_easy_setopt(easy, CURLOPT_WRITEDATA, &reply_data);
     curl_easy_setopt(easy, CURLOPT_USERAGENT, "bmic/0.0.1");
 
-    curl_easy_setopt(easy, CURLOPT_TIMEOUT, 5);
-
+    curl_easy_setopt(easy, CURLOPT_TIMEOUT, 25L);
     curl_easy_setopt(easy, CURLOPT_FOLLOWLOCATION, 1);
-
     curl_easy_setopt(easy, CURLOPT_MAXREDIRS, 3);
 
     CURLcode rcode = curl_easy_perform(easy);
