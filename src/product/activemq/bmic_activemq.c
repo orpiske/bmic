@@ -24,15 +24,15 @@ bmic_api_interface_t *bmic_activemq_product(gru_status_t *status)
     ret->api_init = bmic_activemq_init;
     ret->api_cleanup = bmic_activemq_cleanup;
     ret->product_info = bmic_activemq_product_info;
-    ret->load_capabilities = bmic_activemq_load_capabilities;
+    ret->capabilities_load = bmic_activemq_load_capabilities;
     ret->attribute_read = bmic_activemq_attribute_read;
     ret->attribute_list = bmic_activemq_attribute_list;
     ret->queue_attribute_read = bmic_activemq_queue_attribute_read;
     ret->operation_list = bmic_activemq_operation_list;
-    ret->create_queue = bmic_activemq_queue_create;
-    ret->delete_queue = bmic_activemq_queue_delete;
-    ret->list_queues = bmic_activemq_queue_list;
-    ret->stat_queue = bmic_activemq_queue_stats;
+    ret->queue_create = bmic_activemq_queue_create;
+    ret->queue_delete = bmic_activemq_queue_delete;
+    ret->queue_list = bmic_activemq_queue_list;
+    ret->queue_stats = bmic_activemq_queue_stats;
 
     ret->java.java_info = bmic_java_read_info;
     ret->java.os_info = bmic_java_read_os_info;

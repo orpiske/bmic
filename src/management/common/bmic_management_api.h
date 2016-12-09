@@ -56,20 +56,21 @@ typedef const bmic_list_t *(*bmic_management_api_attr_list_fn)(bmic_handle_t *ha
 typedef const bmic_list_t *(*bmic_management_api_op_list_fn)(bmic_handle_t *handle,
         const bmic_exchange_t *cap, gru_status_t *status);
 
-typedef bool (*bmic_management_api_create_queue_fn)(bmic_handle_t *handle,
+// Queue functions
+typedef bool (*bmic_management_api_queue_create_fn)(bmic_handle_t *handle,
         const bmic_exchange_t *cap,
         const char *name,
         gru_status_t *status);
 
-typedef bool (*bmic_management_api_delete_queue_fn)(bmic_handle_t *handle,
+typedef bool (*bmic_management_api_queue_delete_fn)(bmic_handle_t *handle,
         const bmic_exchange_t *cap,
         const char *name,
         gru_status_t *status);
 
-typedef const bmic_list_t *(*bmic_management_api_list_queues_fn)(bmic_handle_t *handle, 
+typedef const bmic_list_t *(*bmic_management_api_queue_list_fn)(bmic_handle_t *handle, 
         const bmic_exchange_t *cap, gru_status_t *status);
 
-typedef bmic_queue_stat_t (*bmic_management_api_stat_queue_fn)(bmic_handle_t *handle,
+typedef bmic_queue_stat_t (*bmic_management_api_queue_stats_fn)(bmic_handle_t *handle,
         const bmic_exchange_t *cap,
         const char *name,
         gru_status_t *status);
@@ -83,15 +84,15 @@ typedef struct bmic_api_interface_t_ {
     bmic_management_api_cleanup_fn api_cleanup;
 
     bmic_management_api_info_fn product_info;
-    bmic_management_api_cap_fn load_capabilities;
+    bmic_management_api_cap_fn capabilities_load;
     bmic_management_api_attr_read_fn attribute_read;
     bmic_management_api_attr_list_fn attribute_list;
     bmic_management_api_queue_attribute_read_fn queue_attribute_read;
     bmic_management_api_op_list_fn operation_list;
-    bmic_management_api_create_queue_fn create_queue;
-    bmic_management_api_delete_queue_fn delete_queue;
-    bmic_management_api_list_queues_fn list_queues;
-    bmic_management_api_stat_queue_fn stat_queue;
+    bmic_management_api_queue_create_fn queue_create;
+    bmic_management_api_queue_delete_fn queue_delete;
+    bmic_management_api_queue_list_fn queue_list;
+    bmic_management_api_queue_stats_fn queue_stats;
     
     bmic_complements_java_api_t java; 
 } bmic_api_interface_t;

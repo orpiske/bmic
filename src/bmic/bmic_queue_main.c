@@ -83,7 +83,7 @@ int queue_run(options_t *options)
     bmic_api_interface_t *api = ctxt.api;
     show_info(api, ctxt.handle, options->show_info, &status);
 
-    const bmic_exchange_t *cap = api->load_capabilities(ctxt.handle, &status);
+    const bmic_exchange_t *cap = api->capabilities_load(ctxt.handle, &status);
     if (!cap) {
         fprintf(stderr, "Unable to load capabilities: %s\n", status.message);
 
@@ -105,7 +105,7 @@ int queue_run(options_t *options)
     }
     case OP_LIST:
     {
-        const bmic_list_t *list = api->list_queues(ctxt.handle, cap, &status);
+        const bmic_list_t *list = api->queue_list(ctxt.handle, cap, &status);
 
         if (list) {
             gru_list_for_each(list->items, print_queue, NULL);
@@ -115,7 +115,7 @@ int queue_run(options_t *options)
     }
     case OP_CREATE:
     {
-        api->create_queue(ctxt.handle, cap, options->queue, &status);
+        api->queue_create(ctxt.handle, cap, options->queue, &status);
         if (status.code != GRU_SUCCESS) {
             fprintf(stderr, "%s\n", status.message);
         }
@@ -123,7 +123,7 @@ int queue_run(options_t *options)
     }
     case OP_DELETE:
     {
-        api->delete_queue(ctxt.handle, cap, options->queue, &status);
+        api->queue_delete(ctxt.handle, cap, options->queue, &status);
         if (status.code != GRU_SUCCESS) {
             fprintf(stderr, "%s\n", status.message);
         }
@@ -131,7 +131,7 @@ int queue_run(options_t *options)
     }
     case OP_STATS:
     {
-        bmic_queue_stat_t stats = api->stat_queue(ctxt.handle, cap, options->queue, &status);
+        bmic_queue_stat_t stats = api->queue_stats(ctxt.handle, cap, options->queue, &status);
         if (status.code != GRU_SUCCESS) {
             fprintf(stderr, "%s\n", status.message);
         }

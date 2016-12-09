@@ -59,14 +59,14 @@ int top_run(options_t *options)
     }
     bmic_api_interface_t *api = ctxt.api;
     
-    const bmic_exchange_t *cap = api->load_capabilities(ctxt.handle, &status);
+    const bmic_exchange_t *cap = api->capabilities_load(ctxt.handle, &status);
     if (!cap) {
         fprintf(stderr, "Unable to load capabilities: %s\n", status.message);
 
         return EXIT_FAILURE;
     }
     
-    const bmic_list_t *list = api->list_queues(ctxt.handle, cap, &status);
+    const bmic_list_t *list = api->queue_list(ctxt.handle, cap, &status);
     
     bmic_java_info_t jinfo = api->java.java_info(ctxt.handle, &status);
     
@@ -122,7 +122,7 @@ int top_run(options_t *options)
                 if (node != NULL && node->data != NULL) { 
                     
                     bmic_queue_stat_t stat = 
-                            api->stat_queue(ctxt.handle, cap, (const char *) node->data, 
+                            api->queue_stats(ctxt.handle, cap, (const char *) node->data, 
                                             &status);
 
                     print_queue_stat((const char *) node->data, stat);

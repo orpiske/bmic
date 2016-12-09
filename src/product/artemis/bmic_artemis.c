@@ -24,15 +24,15 @@ bmic_api_interface_t *bmic_artemis_product(gru_status_t *status)
     ret->api_init = bmic_artemis_init;
     ret->product_info = bmic_artemis_product_info;
     ret->api_cleanup = bmic_artemis_cleanup;
-    ret->load_capabilities = bmic_artemis_load_capabilities;
+    ret->capabilities_load = bmic_artemis_load_capabilities;
     ret->attribute_read = bmic_artemis_attribute_read;
     ret->attribute_list = bmic_artemis_attribute_list;
     ret->queue_attribute_read = bmic_artemis_queue_attribute_read;
     ret->operation_list = bmic_artemis_operation_list;
-    ret->create_queue = bmic_artemis_queue_create;
-    ret->delete_queue = bmic_artemis_queue_delete;
-    ret->list_queues = bmic_artemis_queue_list;
-    ret->stat_queue = bmic_artemis_queue_stats;
+    ret->queue_create = bmic_artemis_queue_create;
+    ret->queue_delete = bmic_artemis_queue_delete;
+    ret->queue_list = bmic_artemis_queue_list;
+    ret->queue_stats = bmic_artemis_queue_stats;
 
     ret->java.java_info = bmic_java_read_info;
     ret->java.os_info = bmic_java_read_os_info;

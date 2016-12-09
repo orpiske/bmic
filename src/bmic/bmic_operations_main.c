@@ -114,7 +114,7 @@ int operations_run(options_t *options)
     bmic_api_interface_t *api = ctxt.api;
     show_info(api, ctxt.handle, options->show_info, &status);
     
-    const bmic_exchange_t *cap = api->load_capabilities(ctxt.handle, &status);
+    const bmic_exchange_t *cap = api->capabilities_load(ctxt.handle, &status);
     if (!cap) {
         fprintf(stderr, "Unable to load capabilities: %s\n", status.message);
 
