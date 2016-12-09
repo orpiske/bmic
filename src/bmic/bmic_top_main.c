@@ -87,6 +87,16 @@ int top_run(options_t *options)
     }
     
     printf("Reading broker information ...\n");
+    bmic_product_info_t *info = api->product_info(ctxt.handle, &status);
+    
+    if (!info || status.code != GRU_SUCCESS) {
+        fprintf(stderr, "Unable to determine product version: %s\n",
+                status.message);
+        
+        bmic_context_cleanup(&ctxt);
+        return EXIT_FAILURE;
+    }
+    
     bmic_java_info_t jinfo = api->java.java_info(ctxt.handle, &status);
     
     uint32_t iteration = 0;
@@ -168,6 +178,13 @@ int top_run(options_t *options)
             }
         }
         
+        printf("\n\n");
+        
+        printf("%s%s%s%-20s %-20s %-20s %-20s%s", RESET, BG_WHITE, 
+                LIGHT_BLACK, options->server, api->name, info->version, 
+                "Iddle", RESET);
+        
+        fflush(NULL);
         bmic_java_os_info_cleanup(osinfo);
         
         if (options->repeat != -1) {
@@ -179,11 +196,15 @@ int top_run(options_t *options)
         }
         
         sleep(options->interval);
-        
+        printf("%c[2K", 27);
+        printf("\r%s%s%s%-20s %-20s %-20s %-20s%s", RESET, BG_WHITE, 
+                LIGHT_BLACK, options->server, api->name, info->version, 
+                "Reading...", RESET);
+        fflush(NULL);
     }
     
     gru_dealloc((void **) &stat);
-    
+    gru_dealloc((void **) &info);
     bmic_java_info_cleanup(jinfo);
 
     bmic_exchange_destroy((bmic_exchange_t **) & cap);
