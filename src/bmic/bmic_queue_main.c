@@ -21,6 +21,7 @@ typedef enum operations_t_
     OP_READ,
     OP_CREATE,
     OP_DELETE,
+    OP_STATS,
 } operations_t;
 
 typedef struct options_t_
@@ -45,6 +46,7 @@ static void show_help(char **argv)
     print_option_help("name", "n", "name of the queue to manage");
     print_option_help("attribute", "a", "queue attribute to read");
     print_option_help("list", "l", "list queues from the server");
+    print_option_help("stats", "S", "show queue statistics");
     print_option_help("info", "I", "show server information during start-up");
     
 }
@@ -54,6 +56,14 @@ static void print_queue(const void *nodedata, void *payload)
     const char *name = (const char*) nodedata;
 
     printf("Queue name: %s\n", name);
+}
+
+static void print_queue_stat(const char *name, bmic_queue_stat_t stat)
+{
+    printf("Size: %"PRId64"\n", stat.queue_size);
+    printf("Consumers: %"PRId64"\n", stat.consumer_count);
+    printf("Ack Count: %"PRId64"\n", stat.msg_ack_count);
+    printf("Exp Count: %"PRId64"\n", stat.msg_exp_count);
 }
 
 int queue_run(options_t *options)
@@ -119,6 +129,17 @@ int queue_run(options_t *options)
         }
         break;
     }
+    case OP_STATS:
+    {
+        bmic_queue_stat_t stats = api->stat_queue(ctxt.handle, cap, options->queue, &status);
+        if (status.code != GRU_SUCCESS) {
+            fprintf(stderr, "%s\n", status.message);
+        }
+        else {
+            print_queue_stat(options->queue, stats);
+        }
+        break;
+    }
     default:
     {
         fprintf(stderr, "Unable to read property %s for queue %s: %s\n", options->attribute,
@@ -161,10 +182,11 @@ int queue_main(int argc, char **argv)
             { "create", no_argument, 0, 'c'},
             { "delete", no_argument, 0, 'd'},
             { "info", no_argument, 0, 'I'},
+            { "stats", no_argument, 0, 'S'},
             { 0, 0, 0, 0}
         };
 
-        int c = getopt_long(argc, argv, "hu:p:s:n:a:lrcdI", long_options, &option_index);
+        int c = getopt_long(argc, argv, "hu:p:s:n:a:lrcdIS", long_options, &option_index);
         if (c == -1) {
             if (optind == 1) {
                 break;
@@ -199,6 +221,9 @@ int queue_main(int argc, char **argv)
             break;
         case 'd':
             options.operation = OP_DELETE;
+            break;
+        case 'S':
+            options.operation = OP_STATS;
             break;
         case 'I':
             options.show_info = true;
