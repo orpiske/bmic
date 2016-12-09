@@ -74,7 +74,13 @@ void capabilities_do_read(bmic_handle_t *handle,
         bmic_exchange_destroy((bmic_exchange_t **) &obj);
     }
     else {
-        printf("%35s %s%s%s%s\n", capname, RESET, RED, "Unable to read", RESET);
+        if (status->code != GRU_SUCCESS) { 
+            printf("%35s %s%s%s%s\n", capname, RESET, RED, status->message, RESET);
+        }
+        else {
+            printf("%35s %s%s%s%s\n", capname, RESET, RED, 
+                    "(null)", RESET);
+        }
     }
     
     
