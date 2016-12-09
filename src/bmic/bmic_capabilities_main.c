@@ -58,7 +58,7 @@ static void show_help(char **argv)
     print_option_help("list", "l", "list available capabilities/attributes from the server");
     print_option_help("read=<str>", "r <str>", "read the capability/attribute named <str> from the server");
     print_option_help("read-all", "R", "read all available capabilities/attributes from the server");
-    print_option_help("show-info", "S", "show server information during start-up");
+    print_option_help("info", "I", "show server information during start-up");
 }
 
 void capabilities_do_read(bmic_handle_t *handle, 
@@ -189,11 +189,11 @@ int capabilities_main(int argc, char **argv)
             { "list", no_argument, 0, 'l'},
             { "read", required_argument, 0, 'r'},
             { "read-all", no_argument, 0, 'R'},
-            { "show-info", no_argument, 0, 'S'},
+            { "info", no_argument, 0, 'I'},
             { 0, 0, 0, 0}
         };
 
-        int c = getopt_long(argc, argv, "hu:p:l:s:lr:RS", long_options, 
+        int c = getopt_long(argc, argv, "hu:p:l:s:lr:RI", long_options, 
                             &option_index);
         if (c == -1) {
             if (optind == 1) {
@@ -221,7 +221,7 @@ int capabilities_main(int argc, char **argv)
         case 'R':
             options.readall = true;
             break;
-        case 'S':
+        case 'I':
             options.show_info = true;
             break;
         case 'h':

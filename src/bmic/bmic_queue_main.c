@@ -45,7 +45,7 @@ static void show_help(char **argv)
     print_option_help("name", "n", "name of the queue to manage");
     print_option_help("attribute", "a", "queue attribute to read");
     print_option_help("list", "l", "list queues from the server");
-    print_option_help("show-info", "S", "show server information during start-up");
+    print_option_help("info", "I", "show server information during start-up");
     
 }
 
@@ -160,11 +160,11 @@ int queue_main(int argc, char **argv)
             { "read", no_argument, 0, 'r'},
             { "create", no_argument, 0, 'c'},
             { "delete", no_argument, 0, 'd'},
-            { "show-info", no_argument, 0, 'S'},
+            { "info", no_argument, 0, 'I'},
             { 0, 0, 0, 0}
         };
 
-        int c = getopt_long(argc, argv, "hu:p:s:n:a:lrcdS", long_options, &option_index);
+        int c = getopt_long(argc, argv, "hu:p:s:n:a:lrcdI", long_options, &option_index);
         if (c == -1) {
             if (optind == 1) {
                 break;
@@ -200,7 +200,7 @@ int queue_main(int argc, char **argv)
         case 'd':
             options.operation = OP_DELETE;
             break;
-        case 'S':
+        case 'I':
             options.show_info = true;
             break;
         case 'h':

@@ -94,7 +94,7 @@ static void show_help(char **argv)
     print_option_help("password", "p", "password to access the management console");
     print_option_help("server", "s", "server hostname or IP address");
     print_option_help("list", "l", "list available capabilities/attributes from the server");
-    print_option_help("show-info", "S", "show server information during start-up");
+    print_option_help("info", "I", "show server information during start-up");
 }
 
 
@@ -173,11 +173,11 @@ int operations_main(int argc, char **argv)
             { "password", required_argument, 0, 'p'},
             { "server", required_argument, 0, 's'},
             { "list", no_argument, 0, 'l'},
-            { "show-info", no_argument, 0, 'S'},
+            { "info", no_argument, 0, 'I'},
             { 0, 0, 0, 0}
         };
 
-        int c = getopt_long(argc, argv, "h:u:p:s:l:S", long_options, 
+        int c = getopt_long(argc, argv, "h:u:p:s:l:I", long_options, 
                             &option_index);
         if (c == -1) {
             if (optind == 1) {
@@ -196,7 +196,7 @@ int operations_main(int argc, char **argv)
         case 's':
             strlcpy(options.server, optarg, sizeof (options.server));
             break;
-        case 'S':
+        case 'I':
             options.show_info = true;
             break;
         case 'l':
