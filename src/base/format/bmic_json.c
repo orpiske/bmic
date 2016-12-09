@@ -70,7 +70,7 @@ static void bmic_json_transform_simple_obj(bmic_object_t *obj, enum json_type ty
 
         break;
     case json_type_int:
-        bmic_object_set_integer(obj, json_object_get_int(val));
+        bmic_object_set_integer(obj, json_object_get_int64(val));
 
         break;
     case json_type_boolean:

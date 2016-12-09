@@ -211,12 +211,12 @@ void bmic_object_set_string(bmic_object_t *obj, const char *value)
     }
 }
 
-void bmic_object_set_integer(bmic_object_t *obj, int32_t value)
+void bmic_object_set_integer(bmic_object_t *obj, int64_t value)
 {
     assert(obj != NULL);
     
     logger_t logger = gru_logger_get();
-    logger(TRACE, "Setting %s [%s] to %i", obj->name, obj->path, value);
+    logger(TRACE, "Setting %s [%s] to %"PRId64"", obj->name, obj->path, value);
     obj->type = INTEGER;
     obj->data.number = value;
 }

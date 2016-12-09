@@ -68,7 +68,7 @@ bool bmic_object_set_name(bmic_object_t *obj, const char *name);
 bool bmic_object_set_path(bmic_object_t *obj, const char *path, ...);
 
 void bmic_object_set_string(bmic_object_t *obj, const char *value);
-void bmic_object_set_integer(bmic_object_t *obj, int32_t value);
+void bmic_object_set_integer(bmic_object_t *obj, int64_t value);
 void bmic_object_set_boolean(bmic_object_t *obj, bool value);
 void bmic_object_set_double(bmic_object_t *obj, double value);
 void bmic_object_set_null(bmic_object_t *obj);
