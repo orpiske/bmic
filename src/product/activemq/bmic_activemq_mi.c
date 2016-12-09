@@ -43,6 +43,8 @@ const bmic_exchange_t *bmic_activemq_mi_read(bmic_handle_t *handle,
     va_end(ap);
 
     if (!capabilities) {
+        gru_dealloc((void **) &ret);
+        
         return NULL;
     }
 
@@ -85,7 +87,8 @@ const bmic_exchange_t *bmic_activemq_mi_read(bmic_handle_t *handle,
     return ret;
 
 err_exit:
-    gru_dealloc((void **)&info);
-    bmic_object_destroy((bmic_object_t **)&reply_obj);
+    gru_dealloc((void **) &ret);
+    gru_dealloc((void **) &info);
+    bmic_object_destroy((bmic_object_t **) &reply_obj);
     return NULL;
 }
