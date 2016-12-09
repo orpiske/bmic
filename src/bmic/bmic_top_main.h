@@ -16,34 +16,7 @@
 #ifndef BMIC_TOP_MAIN_H
 #define BMIC_TOP_MAIN_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <getopt.h>
-
-#include <common/gru_colors.h>
-
-#ifndef HAVE_STRLCPY
-#include <string/gru_alt.h>
-#endif // HAVE_STRLCPY
-
-
-#include "base/transport/bmic_endpoint.h"
-#include "base/transport/bmic_endpoint_http.h"
-#include "base/format/bmic_json.h"
-#include "base/common/bmic_cap_info.h"
-#include "base/common/bmic_list.h"
-
-#include "context/bmic_context.h"
-
-#include "base/common/bmic_regex.h"
-
-#include "management/common/bmic_complements_java.h"
-#include "management/common/bmic_queue_stat.h"
-
-#include "bmic/util/bmic_print_simple.h"
-#include "bmic/util/bmic_type_map.h"
-#include "bmic/util/bmic_opt_common.h"
+#include "bmic_common_cli_header.h"
 
 #ifdef __cplusplus
 extern "C" {
