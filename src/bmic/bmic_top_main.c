@@ -25,14 +25,22 @@ typedef struct options_t_
     int32_t repeat;
 } options_t;
 
-static void show_help()
+
+static void show_help(char **argv)
 {
-    printf("Usage: ");
-    printf("\t-h\t--help show this help\n");
-    printf("\t-u\t--username=<str> username to access the management console\n");
-    printf("\t-p\t--password=<str> password to access the management console\n");
-    printf("\t-s\t--server=<str> hostname or IP address of the server\n");
+    print_program_usage(argv[0]);
+
+    print_option_help("help", "h", "show this help");
+    
+    print_option_help("username", "u", "username to access the management console");
+    print_option_help("password", "p", "password to access the management console");
+    print_option_help("server", "s", "server hostname or IP address");
+    print_option_help("interval", "i", "interval between each update");
+    print_option_help("attribute", "a", "queue attribute to read");
+    print_option_help("repeat", "r", 
+            "how many times to read the data (-1, the default, means repeat forever)");
 }
+
 
 static void print_queue_stat(const char *name, bmic_queue_stat_t stat)
 {
@@ -166,7 +174,7 @@ int top_main(int argc, char **argv) {
     options.repeat = -1;
 
     if (argc < 2) {
-        show_help();
+        show_help(argv);
 
         return EXIT_FAILURE;
     }
@@ -208,11 +216,11 @@ int top_main(int argc, char **argv) {
             options.repeat = atoi(optarg);
             break;
         case 'h':
-            show_help();
+            show_help(argv);
             return EXIT_SUCCESS;
         default:
             printf("Invalid or missing option\n");
-            show_help();
+            show_help(argv);
             return EXIT_FAILURE;
         }
     }
