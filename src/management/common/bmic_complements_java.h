@@ -1,23 +1,25 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+/**
+ Copyright 2016 Otavio Rodolfo Piske
 
-/* 
- * File:   bmic_complements_java.h
- * Author: opiske
- *
- * Created on December 5, 2016, 10:49 AM
- */
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
 
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ */
 #ifndef BMIC_COMPLEMENTS_JAVA_H
 #define BMIC_COMPLEMENTS_JAVA_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-    
+
 
 typedef struct bmic_java_mem_info_t_ {
     int64_t init;
@@ -31,7 +33,7 @@ typedef enum bmic_java_memory_model_t_ {
      * Memory model for Java 6 and 7 (ie.: no metaspace)
      */
     JAVA_LEGACY,
-            
+
     /**
      * Memory model for Java 8
      */
@@ -55,22 +57,22 @@ typedef struct bmic_java_os_info_t_ {
     const char *name;
     const char *arch;
     const char *version;
-    
+
     int64_t mem_total;
     int64_t mem_free;
-    
+
     int64_t swap_total;
     int64_t swap_free;
     int64_t swap_committed;
-    
+
     double load_average;
     double process_cpu_load;
     double system_cpu_load;
     int64_t process_cpu_time;
-    
+
     int64_t open_fd;
     int64_t max_fd;
-    
+
     int64_t cpus;
 } bmic_java_os_info_t;
 
@@ -95,17 +97,17 @@ typedef struct bmic_complements_java_api_t_ {
     bmic_complement_api_java_mem_info_fn survivor_info;
     // aka PS Old Gen
     bmic_complement_api_java_mem_info_fn tenured_info;
-    
+
     bmic_complement_api_java_mem_info_fn code_cache_info;
-    
+
     // Only if memory model == JAVA_MODERN
     bmic_complement_api_java_mem_info_fn metaspace_info;
-    
+
     // Only if memory model == JAVA_LEGACY
     bmic_complement_api_java_mem_info_fn permgen_info;
-    
+
     bmic_complement_api_java_os_info_fn os_info;
-    
+
 } bmic_complements_java_api_t;
 
 
@@ -114,4 +116,3 @@ typedef struct bmic_complements_java_api_t_ {
 #endif
 
 #endif /* BMIC_COMPLEMENTS_JAVA_H */
-
