@@ -41,6 +41,7 @@ typedef bmic_handle_t *(*bmic_management_api_init_fn)(const char *base_url,
 typedef void(*bmic_management_api_cleanup_fn)(bmic_handle_t **handle);
 
 typedef bmic_product_info_t *(*bmic_management_api_info_fn)(bmic_handle_t *handle,
+        const bmic_exchange_t *capabilities,
         gru_status_t *status);
 typedef const bmic_exchange_t *(*bmic_management_api_cap_fn)(bmic_handle_t *handle,
         gru_status_t *status);

@@ -112,7 +112,6 @@ int operations_run(options_t *options)
     }
     
     bmic_api_interface_t *api = ctxt.api;
-    show_info(api, ctxt.handle, options->show_info, &status);
     
     const bmic_exchange_t *cap = api->capabilities_load(ctxt.handle, &status);
     if (!cap) {
@@ -120,6 +119,9 @@ int operations_run(options_t *options)
 
         return EXIT_FAILURE;
     }    
+    
+    
+    show_info(api, ctxt.handle, cap, options->show_info, &status);
 
     switch (options->operation) {
         case OP_LIST: {

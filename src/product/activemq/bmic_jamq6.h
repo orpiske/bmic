@@ -17,6 +17,8 @@
 #ifndef BMIC_JAMQ6_H
 #define BMIC_JAMQ6_H
 
+#include <string/gru_alt.h>
+
 #include "bmic_activemq.h"
 #include "bmic_jamq6_defs.h"
 
@@ -26,8 +28,10 @@ extern "C" {
 
 bmic_api_interface_t *bmic_jamq6_product(gru_status_t *status);
 const char *bmic_jamq6_base_url(const bmic_discovery_hint_t *hint);
+
 bmic_product_info_t *bmic_jamq6_product_info(bmic_handle_t *handle,
-                                                gru_status_t *status);
+                                                    const bmic_exchange_t *cap,
+                                                    gru_status_t *status);
 
 #ifdef __cplusplus
 }

@@ -106,43 +106,21 @@ void bmic_artemis_cleanup(bmic_handle_t **handle)
 }
 
 bmic_product_info_t *bmic_artemis_product_info(bmic_handle_t *handle,
-                                               gru_status_t *status)
+                                                    const bmic_exchange_t *cap,
+                                                    gru_status_t *status)
 {
-    logger_t logger = gru_logger_get();
-    bmic_data_t reply = {0};
-    bmic_api_io_read(handle, ARTEMIS_PRODUCT_INFO_PATH, &reply, status);
-
-    if (status->code != GRU_SUCCESS) {
-        // This should be OK, we are just probing the management interface
-        logger(DEBUG, "Error trying to read from the API: %s", status->message);
-        bmic_data_release(&reply);
-        return NULL;
-    }
-
-    bmic_object_t *root = bmic_jolokia_parse(reply.data, status);
-    bmic_data_release(&reply);
-    if (!root) {
-        return NULL;
-    }
-
+    bmic_exchange_t *ex = bmic_activemq_mi_read(handle, cap->root, "Version", status,
+                                 REG_SEARCH_NAME, ARTEMIS_CAPABILITIES_KEY_REGEX);
     
-    const bmic_object_t *value = bmic_object_find_by_name(root, JOLOKIA_OBJ_VALUE_NAME);
-    if (!value) {
-        logger(ERROR, "Jolokia value object not found for Artemis");
-        
-        goto err_exit;
-    }
-
-    if (value->type == STRING) {
+    if (ex->data_ptr->type == STRING) {
         bmic_product_info_t *ret = gru_alloc(sizeof (bmic_api_interface_t), status);
-        snprintf(ret->version, sizeof (ret->version), "%s", value->data.str);
+        strlcpy(ret->version, ex->data_ptr->data.str, sizeof (ret->version));
+        strlcpy(ret->name, ARTEMIS_PRODUCT_NAME_PRETTY, sizeof (ret->name));
 
-        bmic_object_destroy(&root);
+        bmic_exchange_destroy(&ex);
         return ret;
     }
-
-err_exit:
-    bmic_object_destroy(&root);
+    
     return NULL;
 }
 

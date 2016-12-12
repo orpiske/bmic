@@ -87,7 +87,7 @@ int top_run(options_t *options)
     }
 
     printf("Reading broker information ...\n");
-    bmic_product_info_t *info = api->product_info(ctxt.handle, &status);
+    bmic_product_info_t *info = api->product_info(ctxt.handle, cap, &status);
 
     if (!info || status.code != GRU_SUCCESS) {
         fprintf(stderr, "Unable to determine product version: %s\n",

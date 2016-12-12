@@ -14,6 +14,7 @@
  limitations under the License.
  */
 #include "bmic_jamq6.h"
+#include "product/artemis/bmic_artemis.h"
 
 
 bmic_api_interface_t *bmic_jamq6_product(gru_status_t *status)
@@ -75,48 +76,30 @@ const char *bmic_jamq6_base_url(const bmic_discovery_hint_t *hint)
     return ret;
 }
 
-
 bmic_product_info_t *bmic_jamq6_product_info(bmic_handle_t *handle,
-                                                gru_status_t *status)
+                                                    const bmic_exchange_t *cap,
+                                                    gru_status_t *status)
 {
-    bmic_data_t reply = {0};
-    bmic_api_io_read(handle, ACTIVEMQ_PRODUCT_INFO_PATH, &reply, status);
-
-    if (status->code != GRU_SUCCESS) {
-        bmic_data_release(&reply);
-        return NULL;
-    }
-
-    bmic_object_t *root = bmic_jolokia_parse(reply.data, status);
-    bmic_data_release(&reply);
-    if (!root) {
-        return NULL;
-    }
-
-    
-    logger_t logger = gru_logger_get();
-    const bmic_object_t *value = bmic_object_find_by_name(root, JOLOKIA_OBJ_VALUE_NAME);
-    if (!value || value->type != STRING) {
-        /* 
-         * So, jamq6 usually prevents querying the broker version by default ... but it 
-         * does reply with a deny, so that is kind of our hint that it's jamq6
-         */
-        logger(ERROR, "Jolokia value object not found for jamq6");
+    bmic_product_info_t *ret = bmic_activemq_product_info(handle, cap, status);
+    if (ret) {
+        strlcpy(ret->name, "JBoss A-MQ6", sizeof (ret->name));
         
-        bmic_product_info_t *ret = gru_alloc(sizeof (bmic_api_interface_t), status);
-        snprintf(ret->version, sizeof (ret->version), "6.x.x (unknown)");
-
-        bmic_object_destroy(&root);
-        return ret;    
-    }
-    
-    if (value->type == STRING) {
-        bmic_product_info_t *ret = gru_alloc(sizeof (bmic_api_interface_t), status);
-        snprintf(ret->version, sizeof (ret->version), "%s", value->data.str);
-
-        bmic_object_destroy(&root);
         return ret;
     }
+    else {
+        const bmic_exchange_t *ex = bmic_activemq_mi_read(handle, cap->root, "BrokerName", status,
+                                 REG_SEARCH_NAME, ACTIVEMQ_CAPABILITIES_KEY_REGEX);
+        
+        if (ex && ex->data_ptr->type == STRING) {
+            ret = gru_alloc(sizeof (bmic_api_interface_t), status);
+            strlcpy(ret->version, "Unknown", sizeof (ret->version));
+            strlcpy(ret->name, "JBoss A-MQ6", sizeof (ret->name));
 
+            bmic_exchange_destroy((bmic_exchange_t **) &ex);
+            return ret;
+        }
+    }
+    
     return NULL;
+    
 }

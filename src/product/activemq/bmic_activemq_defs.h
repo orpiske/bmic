@@ -18,6 +18,7 @@
 #define BMIC_ACTIVEMQ_DEFS_H
 
 #define ACTIVEMQ_PRODUCT_NAME "activemq"
+#define ACTIVEMQ_PRODUCT_NAME_PRETTY "Activemq"
 #define ACTIVEMQ_API_VERSION "5.x.x"
 
 /**

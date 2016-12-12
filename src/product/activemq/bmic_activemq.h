@@ -56,7 +56,8 @@ bmic_handle_t *bmic_activemq_init(const char *base_url,
 void bmic_activemq_cleanup(bmic_handle_t **handle);
 
 bmic_product_info_t *bmic_activemq_product_info(bmic_handle_t *handle,
-        gru_status_t *status);
+                                                    const bmic_exchange_t *cap,
+                                                    gru_status_t *status);
 
 // Load all capabilites from MI
 const bmic_exchange_t *bmic_activemq_load_capabilities(bmic_handle_t *handle,

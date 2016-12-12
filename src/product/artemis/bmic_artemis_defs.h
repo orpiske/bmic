@@ -17,6 +17,7 @@
 #define BMIC_ARTEMIS_DEFS_H
 
 #define ARTEMIS_PRODUCT_NAME "artemis"
+#define ARTEMIS_PRODUCT_NAME_PRETTY "Artemis"
 #define ARTEMIS_API_VERSION "1.x.x"
 
 /**

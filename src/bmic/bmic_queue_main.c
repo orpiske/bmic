@@ -79,16 +79,16 @@ int queue_run(options_t *options)
         fprintf(stderr, "%s\n", status.message);
         return EXIT_FAILURE;
     }
-    
-    bmic_api_interface_t *api = ctxt.api;
-    show_info(api, ctxt.handle, options->show_info, &status);
 
+    bmic_api_interface_t *api = ctxt.api;    
     const bmic_exchange_t *cap = api->capabilities_load(ctxt.handle, &status);
     if (!cap) {
         fprintf(stderr, "Unable to load capabilities: %s\n", status.message);
 
         return EXIT_FAILURE;
     }
+    
+    show_info(api, ctxt.handle, cap, options->show_info, &status);
 
     switch (options->operation) {
     case OP_READ:

@@ -15,13 +15,14 @@
  */
 #include "bmic_action_common.h"
 
-void show_info(bmic_api_interface_t *api, bmic_handle_t *handle, bool show, gru_status_t *status) {
+void show_info(bmic_api_interface_t *api, bmic_handle_t *handle, const bmic_exchange_t *cap, 
+               bool show, gru_status_t *status) {
     
     if (!show) {
         return;
     }
     
-    bmic_product_info_t *info = api->product_info(handle, status);
+    bmic_product_info_t *info = api->product_info(handle, cap, status);
     
     if (!info || status->code != GRU_SUCCESS) {
         fprintf(stderr, "Unable to determine product version: %s\n",

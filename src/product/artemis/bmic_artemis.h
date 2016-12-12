@@ -57,7 +57,8 @@ bmic_handle_t *bmic_artemis_init(const char *base_url,
 void bmic_artemis_cleanup(bmic_handle_t **handle);
 
 bmic_product_info_t *bmic_artemis_product_info(bmic_handle_t *handle,
-        gru_status_t *status);
+                                                    const bmic_exchange_t *cap,
+                                                    gru_status_t *status);
 
 /**
  * Load all available management/attribute capabilites

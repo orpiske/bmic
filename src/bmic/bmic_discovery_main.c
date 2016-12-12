@@ -46,10 +46,20 @@ int discovery_run(options_t *options)
         fprintf(stderr, "%s\n", status.message);
         return EXIT_FAILURE;
     }
-    bmic_api_interface_t *api = ctxt.api;
-    show_info(api, ctxt.handle, true, &status);
     
-    bmic_context_cleanup(&ctxt);
+    bmic_api_interface_t *api = ctxt.api;
+    const bmic_exchange_t *cap = api->capabilities_load(ctxt.handle, &status);
+    if (!cap) {
+        fprintf(stderr, "Unable to load capabilities: %s\n", status.message);
+
+        return EXIT_FAILURE;
+    }    
+    
+    
+    show_info(api, ctxt.handle, cap, true, &status);
+    
+    bmic_context_cleanup((bmic_exchange_t **) &ctxt);
+    bmic_exchange_destroy(&cap);
 
     return EXIT_SUCCESS;
 }

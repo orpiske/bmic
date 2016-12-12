@@ -30,7 +30,8 @@ extern "C" {
 #endif
 
 
-void show_info(bmic_api_interface_t *api, bmic_handle_t *handle, bool show, 
+void show_info(bmic_api_interface_t *api, bmic_handle_t *handle, const bmic_exchange_t *cap, 
+        bool show, 
         gru_status_t *status);
 
 #ifdef __cplusplus

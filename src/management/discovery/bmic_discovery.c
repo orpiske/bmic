@@ -26,25 +26,39 @@ static bool bmic_try_init(bmic_api_interface_t *api,
                           bmic_handle_t **outhandle,
                           bmic_discovery_pair_t *pair)
 {
+    logger_t logger = gru_logger_get();
+    
     const char *base_url = api->base_url(pair->hint);
 
     gru_status_t status = {0};
 
+    logger(DEBUG, "Initializing base URL from API");
     bmic_handle_t *handle = api->api_init(base_url, pair->credentials, &status);
     if (!handle) {
         gru_dealloc_string((char **) &base_url);
         return false;
     }
 
-    bmic_product_info_t *info = api->product_info(handle, &status);
+    logger(DEBUG, "Trying to load product capabilities");
+    bmic_exchange_t *cap = api->capabilities_load(handle, &status); 
+    if (!cap) {
+        logger(DEBUG, "Unable to load product capabilities for %s: %s", 
+               api->name, status.message);
+        
+        return false;
+    }
+    
+    bmic_product_info_t *info = api->product_info(handle, cap, &status);
 
     if (info) {
         *outhandle = handle;
         gru_dealloc((void **) &info);
         gru_dealloc_string((char **) &base_url);
+        bmic_exchange_destroy(&cap);
         return true;
     }
 
+    bmic_exchange_destroy(&cap);
     gru_status_reset(&status);
     gru_dealloc((void **)&info);
     api->api_cleanup(&handle);
