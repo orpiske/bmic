@@ -44,12 +44,12 @@ static void show_help(char **argv)
 
 static void print_queue_stat(const char *name, bmic_queue_stat_t stat)
 {
-    printf("%-40s %-10"PRId64" %-10"PRId64" %-10"PRId64" %-10"PRId64"\n", name,
+    printf("%-40s %-9"PRId64" %-9"PRId64" %-9"PRId64" %-9"PRId64"\n", name,
            stat.queue_size, stat.consumer_count, stat.msg_ack_count, stat.msg_exp_count);
 }
 
 static void print_mem(const char *name, bmic_java_mem_info_t *mem) {
-    printf("%-20s %-15"PRId64" %-15"PRId64" %-15"PRId64" %-15"PRId64"\n", name,
+    printf("%-20s %-14"PRId64" %-14"PRId64" %-14"PRId64" %-14"PRId64"\n", name,
            as_mb(mem->init),
            as_mb(mem->committed), as_mb(mem->max), as_mb(mem->used));
 }
@@ -150,7 +150,7 @@ int top_run(options_t *options)
                RESET, LIGHT_WHITE, RESET, as_mb(osinfo.swap_total), as_mb(osinfo.swap_free),
                as_mb(osinfo.swap_committed));
 
-        printf("%s%s%s%-20s %-15s %-15s %-15s %-15s%s\n", RESET, BG_WHITE, LIGHT_BLACK,
+        printf("%s%s%s%-20s %-14s %-14s %-14s %-14s%s\n", RESET, BG_WHITE, LIGHT_BLACK,
                "Area", "Initial", "Committed", "Max", "Used", RESET);
 
         print_mem("Eden", &eden);
@@ -166,7 +166,7 @@ int top_run(options_t *options)
 
         if (list && list->items) {
             printf("\n\n");
-            printf("%s%s%s%-40s %-10s %-10s %-10s %-10s%s\n", RESET, BG_WHITE, LIGHT_BLACK,
+            printf("%s%s%s%-40s %-9s %-9s %-9s %-9s%s\n", RESET, BG_WHITE, LIGHT_BLACK,
                    "Name", "Size", "Consumers", "Ack Count", "Exp Count", RESET);
 
             for (uint32_t i = 0; i < gru_list_count(list->items); i++) {
@@ -180,7 +180,7 @@ int top_run(options_t *options)
 
         printf("\n\n");
 
-        printf("%s%s%s%-20s %-20s %-20s %-20s%s", RESET, BG_WHITE,
+        printf("%s%s%s%-32s %-9s %-17s %-19s%s", RESET, BG_WHITE,
                 LIGHT_BLACK, options->server, api->name, info->version,
                 "Iddle", RESET);
 
@@ -196,8 +196,8 @@ int top_run(options_t *options)
         }
 
         sleep(options->interval);
-        printf("%c[2K", 27);
-        printf("\r%s%s%s%-20s %-20s %-20s %-20s%s", RESET, BG_WHITE,
+        printf("%c[2K\r", 27);
+        printf("%s%s%s%-32s %-9s %-17s %-19s%s", RESET, BG_WHITE,
                 LIGHT_BLACK, options->server, api->name, info->version,
                 "Reading...", RESET);
         fflush(NULL);
