@@ -182,7 +182,7 @@ int top_run(options_t *options)
 
         printf("%s%s%s%-32s %-9s %-17s %-19s%s", RESET, BG_WHITE,
                 LIGHT_BLACK, options->server, api->name, info->version,
-                "Iddle", RESET);
+                "Idle", RESET);
 
         fflush(NULL);
         bmic_java_os_info_cleanup(osinfo);
