@@ -94,6 +94,7 @@ int top_run(options_t *options)
                 status.message);
 
         bmic_context_cleanup(&ctxt);
+        gru_dealloc((void **) &stat);
         return EXIT_FAILURE;
     }
 
