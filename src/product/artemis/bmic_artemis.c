@@ -88,7 +88,7 @@ bmic_product_info_t *bmic_artemis_product_info(bmic_handle_t *handle,
                                                     const bmic_exchange_t *cap,
                                                     gru_status_t *status)
 {
-    bmic_exchange_t *ex = bmic_activemq_mi_read(handle, cap->root, "Version", status,
+    const bmic_exchange_t *ex = bmic_artemis_mi_read(handle, cap->root, "Version", status,
                                  REG_SEARCH_NAME, ARTEMIS_CAPABILITIES_KEY_REGEX);
     
     if (ex->data_ptr->type == STRING) {

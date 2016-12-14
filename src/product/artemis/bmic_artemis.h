@@ -19,6 +19,8 @@
 #include <common/gru_status.h>
 #include <common/gru_alloc.h>
 
+#include <string/gru_alt.h>
+
 #include "base/common/bmic_credentials.h"
 #include "base/common/bmic_cap_info.h"
 #include "base/common/bmic_op_arg.h"
