@@ -19,7 +19,6 @@ typedef struct options_t_
 {
     credential_options_t credentials;
     bmic_discovery_hint_t *hint;
-    bool list;
 } options_t;
 
 static void show_help(char **argv)
@@ -74,7 +73,6 @@ int discovery_main(int argc, char **argv) {
         return EXIT_FAILURE;
     }
 
-    options.list = false;
     gru_status_t status = {0};
     options.hint = bmic_discovery_hint_new(&status);
     
