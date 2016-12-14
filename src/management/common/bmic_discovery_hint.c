@@ -18,6 +18,8 @@
 bmic_discovery_hint_t *bmic_discovery_hint_new(gru_status_t *status) {
     bmic_discovery_hint_t *ret = gru_alloc(sizeof(bmic_discovery_hint_t), status);
     gru_alloc_check(ret, NULL);
+    
+    return ret;
 }
 
 
