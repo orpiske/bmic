@@ -16,6 +16,8 @@
 #include "bmic_context.h"
 #include "management/common/bmic_product.h"
 
+static bool log_initialized = false;
+
 static void bmic_logger_default_printer(log_level_t level, const char *msg, ...) {
     if (!gru_logger_can_log(level)) {
         return;
@@ -28,6 +30,10 @@ static void bmic_logger_default_printer(log_level_t level, const char *msg, ...)
 }
 
 void bmic_log_initialization() {
+    if (log_initialized) {
+        return;
+    }
+    
     const char *log_level_str = getenv("BMIC_DEBUG");
     log_level_t log_level;
     if (!log_level_str) {
@@ -39,6 +45,8 @@ void bmic_log_initialization() {
     
     gru_logger_set_mininum(log_level);
     gru_logger_set(bmic_logger_default_printer);
+    
+    log_initialized = true;
 
 }
 
@@ -48,15 +56,37 @@ bool bmic_context_init_simple(bmic_context_t *ctxt, const char *server,
                                         gru_status_t *status) {
     
     bmic_log_initialization();
+        
+    bmic_discovery_hint_t *hint = bmic_discovery_hint_eval_addressing(server, BMIC_PORT_UNKNOWN,
+                                               status);
+    if (!hint) {
+        return false;
+    }
+    
+    bool ret = bmic_context_init_hint(ctxt, hint, username, password, status);
+    if (!ret) {
+        bmic_discovery_hint_destroy(&hint);
+    }
+    
+    return ret;
+}
+
+
+bool bmic_context_init_hint(bmic_context_t *ctxt, bmic_discovery_hint_t *hint, 
+                                        const char *username, 
+                                        const char *password,                               
+                                        gru_status_t *status) {
+    
+    bmic_log_initialization();
+    
+    if (hint == NULL) {
+        return false;
+    }
     
     bmic_product_registry_init(status);
     bmic_product_register(status);
     
-    ctxt->hint = bmic_discovery_hint_eval_addressing(server, BMIC_PORT_UNKNOWN,
-                                               status);
-    if (!ctxt->hint) {
-        return false;
-    }
+    ctxt->hint = hint;
     
     if (username && password) { 
         ctxt->credentials = bmic_credentials_init(username, password, status);

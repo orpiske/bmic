@@ -18,7 +18,7 @@
 typedef struct options_t_
 {
     credential_options_t credentials;
-    char server[OPT_MAX_STR_SIZE];
+    bmic_discovery_hint_t *hint;
     bool list;
     bool readall;
     char read[OPT_MAX_STR_SIZE];
@@ -103,7 +103,7 @@ int capabilities_run(options_t *options)
 
     bmic_context_t ctxt = {0};
     
-    bool ret = bmic_context_init_simple(&ctxt, options->server, 
+    bool ret = bmic_context_init_hint(&ctxt, options->hint, 
                                         options->credentials.username, 
                              options->credentials.password, &status);
     if (!ret) {
@@ -177,14 +177,23 @@ int capabilities_main(int argc, char **argv)
     
     int option_index = 0;
     options_t options = {0};
+    
+    if (argc < 2) {
+        show_help(argv);
+
+        return EXIT_FAILURE;
+    }
 
     options.list = false;
     options.readall = false;
     options.show_info = false;
-
-    if (argc < 2) {
-        show_help(argv);
-
+    
+    gru_status_t status = {0};
+    options.hint = bmic_discovery_hint_new(&status);
+    
+    if (!options.hint) {
+        fprintf(stderr, "%s", status.message);
+        
         return EXIT_FAILURE;
     }
 
@@ -195,6 +204,8 @@ int capabilities_main(int argc, char **argv)
             { "username", required_argument, 0, 'u'},
             { "password", required_argument, 0, 'p'},
             { "server", required_argument, 0, 's'},
+            { "port", required_argument, 0, 'P'},
+            { "url", required_argument, 0, 'U'},
             { "list", no_argument, 0, 'l'},
             { "read", required_argument, 0, 'r'},
             { "read-all", no_argument, 0, 'R'},
@@ -202,7 +213,7 @@ int capabilities_main(int argc, char **argv)
             { 0, 0, 0, 0}
         };
 
-        int c = getopt_long(argc, argv, "hu:p:l:s:lr:RI", long_options, 
+        int c = getopt_long(argc, argv, "hu:p:l:s:P:U:lr:RI", long_options, 
                             &option_index);
         if (c == -1) {
             if (optind == 1) {
@@ -219,7 +230,31 @@ int capabilities_main(int argc, char **argv)
             strlcpy(options.credentials.password, optarg, sizeof (options.credentials.password));
             break;
         case 's':
-            strlcpy(options.server, optarg, sizeof (options.server));
+            bmic_discovery_hint_set_addressing_hostname(options.hint, optarg, &status);
+            if (status.code != GRU_SUCCESS) {
+                fprintf(stderr, "%s", status.message);
+        
+                return EXIT_FAILURE;
+            }
+            
+            break;
+        case 'P':
+            bmic_discovery_hint_set_addressing_port(options.hint, atoi(optarg), &status);
+            if (status.code != GRU_SUCCESS) {
+                fprintf(stderr, "%s", status.message);
+        
+                return EXIT_FAILURE;
+            }
+            
+            break;
+        case 'U':
+            bmic_discovery_hint_set_url(options.hint, optarg, &status);
+            if (status.code != GRU_SUCCESS) {
+                fprintf(stderr, "%s", status.message);
+        
+                return EXIT_FAILURE;
+            }
+            
             break;
         case 'l':
             options.list = true;

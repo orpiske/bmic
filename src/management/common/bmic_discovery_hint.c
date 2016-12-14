@@ -15,11 +15,50 @@
  */
 #include "bmic_discovery_hint.h"
 
+bmic_discovery_hint_t *bmic_discovery_hint_new(gru_status_t *status) {
+    bmic_discovery_hint_t *ret = gru_alloc(sizeof(bmic_discovery_hint_t), status);
+    gru_alloc_check(ret, NULL);
+}
+
+
+void bmic_discovery_hint_set_url(bmic_discovery_hint_t *hint, const char *url, 
+                                 gru_status_t *status) {
+    hint->hint_type = URL;
+    
+    if (asprintf(&hint->content.url, "%s", url) == -1) {
+        gru_status_set(status, GRU_FAILURE, "Unable to eval URL: not enough memory");
+
+        return;
+    }
+}
+
+void bmic_discovery_hint_set_addressing_hostname(bmic_discovery_hint_t *hint, 
+                                                 const char *hostname, 
+                                                 gru_status_t *status)
+{
+    hint->hint_type = ADDRESSING;
+    if (hostname == NULL) {
+        if (asprintf(&hint->content.addressing.hostname, "%s", "localhost") == -1) {
+            gru_status_set(status, GRU_FAILURE, "Unable to set addressing: not enough memory");
+        }
+    }
+    else {
+        if (asprintf(&hint->content.addressing.hostname, "%s", hostname) == -1) {
+            gru_status_set(status, GRU_FAILURE, "Unable to set addressing: not enough memory");
+        }
+    }
+}
+
+void bmic_discovery_hint_set_addressing_port(bmic_discovery_hint_t *hint, 
+                                             uint16_t port, gru_status_t *status) {
+   hint->content.addressing.port = port;
+}
+
 bmic_discovery_hint_t *bmic_discovery_hint_eval_addressing(const char *hostname, 
                                                            uint16_t port,
                                                            gru_status_t *status)
 {
-    bmic_discovery_hint_t *ret = gru_alloc(sizeof(bmic_discovery_hint_t), status);
+    bmic_discovery_hint_t *ret = bmic_discovery_hint_new(status);
     gru_alloc_check(ret, NULL);
     
     ret->hint_type = ADDRESSING;
@@ -51,7 +90,6 @@ bmic_discovery_hint_t *bmic_discovery_hint_eval_url(const char *url,
                                                     gru_status_t *status) {
     bmic_discovery_hint_t *ret = gru_alloc(sizeof(bmic_discovery_hint_t), status);
     gru_alloc_check(ret, NULL);
-    
     
     if (url == NULL) {
         return bmic_discovery_hint_eval_addressing(NULL, BMIC_PORT_UNKNOWN, status);
@@ -89,7 +127,7 @@ void bmic_discovery_hint_destroy(bmic_discovery_hint_t **hint) {
 }
 
 
-const char *bmic_discovery_hint_to_url(bmic_discovery_hint_t *hint, 
+const char *bmic_discovery_hint_to_url(const bmic_discovery_hint_t *hint, 
                                        const char *url_format, 
                                        const char *addr_format,
                                        uint64_t default_port) {
@@ -127,4 +165,13 @@ const char *bmic_discovery_hint_to_url(bmic_discovery_hint_t *hint,
     }
     
     return ret;
+}
+
+const char *bmic_discovery_hint_host(const bmic_discovery_hint_t *hint) {
+    if (hint->hint_type == ADDRESSING) {
+        return hint->content.addressing.hostname;
+    }
+    else {
+        return hint->content.url;
+    }
 }

@@ -52,6 +52,51 @@ typedef struct bmic_discovery_hint_t_ {
 
 
 /**
+ * Creates a new discovery hint object
+ * @param status
+ * @return 
+ */
+bmic_discovery_hint_t *bmic_discovery_hint_new(gru_status_t *status);
+
+/**
+ * Sets the URL for the discovery hint
+ * @param hint
+ * @param url
+ * @param status
+ */
+void bmic_discovery_hint_set_url(bmic_discovery_hint_t *hint, const char *url, 
+        gru_status_t *status);
+
+
+/**
+ * Sets the hostname for the discovery hint
+ * @param hint
+ * @param url
+ * @param status
+ */
+void bmic_discovery_hint_set_addressing_hostname(bmic_discovery_hint_t *hint, 
+        const char *hostname, gru_status_t *status);
+
+
+/**
+ * Sets the portfor the discovery hint
+ * @param hint
+ * @param url
+ * @param status
+ */
+void bmic_discovery_hint_set_addressing_port(bmic_discovery_hint_t *hint, 
+        uint16_t port, gru_status_t *status);
+
+
+/**
+ * Gets the host/URL for the discovery hint
+ * @param hint
+ * @param url
+ * @param status
+ */
+const char *bmic_discovery_hint_host(const bmic_discovery_hint_t *hint);
+
+/**
  * Evaluates input parameters to build a hint structure used to figure out broker
  * parameters
  * @param hostname The hostname. If NULL is given, defaults to localhost
@@ -88,7 +133,7 @@ void bmic_discovery_hint_destroy(bmic_discovery_hint_t **hint);
  * @param default_port default port for the service or BMIC_PORT_UNKNOWN
  * @return The URL as a newly allocated char string that must be free'd
  */
-const char *bmic_discovery_hint_to_url(bmic_discovery_hint_t *hint, 
+const char *bmic_discovery_hint_to_url(const bmic_discovery_hint_t *hint, 
                                        const char *url_format, 
                                        const char *addr_format,
                                        uint64_t default_port);

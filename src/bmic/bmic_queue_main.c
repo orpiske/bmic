@@ -28,7 +28,7 @@ typedef struct options_t_
 {
     credential_options_t credentials;
     operations_t operation;
-    char server[OPT_MAX_STR_SIZE];
+    bmic_discovery_hint_t *hint;
     char queue[OPT_MAX_STR_SIZE];
     char attribute[OPT_MAX_STR_SIZE];
     bool show_info;
@@ -73,7 +73,7 @@ int queue_run(options_t *options)
 
     bmic_context_t ctxt = {0};
 
-    bool ret = bmic_context_init_simple(&ctxt, options->server, options->credentials.username,
+    bool ret = bmic_context_init_hint(&ctxt, options->hint, options->credentials.username,
                                         options->credentials.password, &status);
     if (!ret) {
         fprintf(stderr, "%s\n", status.message);
@@ -162,11 +162,19 @@ int queue_main(int argc, char **argv)
     int option_index = 0;
     options_t options = {0};
     
-    options.show_info = false;
-
     if (argc < 2) {
         show_help(argv);
 
+        return EXIT_FAILURE;
+    }
+    
+    options.show_info = false;
+    gru_status_t status = {0};
+    options.hint = bmic_discovery_hint_new(&status);
+    
+    if (!options.hint) {
+        fprintf(stderr, "%s", status.message);
+        
         return EXIT_FAILURE;
     }
 
@@ -177,6 +185,8 @@ int queue_main(int argc, char **argv)
             { "username", required_argument, 0, 'u'},
             { "password", required_argument, 0, 'p'},
             { "server", required_argument, 0, 's'},
+            { "port", required_argument, 0, 'P'},
+            { "url", required_argument, 0, 'U'},
             { "name", required_argument, 0, 'n'},
             { "attribute", required_argument, 0, 'a'},
             { "list", no_argument, 0, 'l'},
@@ -188,7 +198,7 @@ int queue_main(int argc, char **argv)
             { 0, 0, 0, 0}
         };
 
-        int c = getopt_long(argc, argv, "hu:p:s:n:a:lrcdIS", long_options, &option_index);
+        int c = getopt_long(argc, argv, "hu:p:s:P:U:n:a:lrcdIS", long_options, &option_index);
         if (c == -1) {
             if (optind == 1) {
                 break;
@@ -204,7 +214,31 @@ int queue_main(int argc, char **argv)
             strlcpy(options.credentials.password, optarg, sizeof (options.credentials.password));
             break;
         case 's':
-            strlcpy(options.server, optarg, sizeof (options.server));
+            bmic_discovery_hint_set_addressing_hostname(options.hint, optarg, &status);
+            if (status.code != GRU_SUCCESS) {
+                fprintf(stderr, "%s", status.message);
+        
+                return EXIT_FAILURE;
+            }
+            
+            break;
+        case 'P':
+            bmic_discovery_hint_set_addressing_port(options.hint, atoi(optarg), &status);
+            if (status.code != GRU_SUCCESS) {
+                fprintf(stderr, "%s", status.message);
+        
+                return EXIT_FAILURE;
+            }
+            
+            break;
+        case 'U':
+            bmic_discovery_hint_set_url(options.hint, optarg, &status);
+            if (status.code != GRU_SUCCESS) {
+                fprintf(stderr, "%s", status.message);
+        
+                return EXIT_FAILURE;
+            }
+            
             break;
         case 'n':
             strlcpy(options.queue, optarg, sizeof (options.queue));

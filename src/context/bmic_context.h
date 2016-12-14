@@ -59,6 +59,10 @@ bool bmic_context_init_simple(bmic_context_t *ctxt, const char *server,
                                         const char *password,                               
                                         gru_status_t *status);
 
+bool bmic_context_init_hint(bmic_context_t *ctxt, bmic_discovery_hint_t *hint, 
+                                        const char *username, 
+                                        const char *password,                               
+                                        gru_status_t *status);
 /**
  * Destroys the BMIC API context
  * @param context the context to destroy

@@ -25,7 +25,7 @@ typedef enum operations_t_ {
 typedef struct options_t_
 {
     credential_options_t credentials;
-    char server[OPT_MAX_STR_SIZE];
+    bmic_discovery_hint_t *hint;
     bool help;
     char name[OPT_MAX_STR_SIZE];
     operations_t operation;
@@ -104,7 +104,7 @@ int operations_run(options_t *options)
 
     bmic_context_t ctxt = {0};
     
-    bool ret = bmic_context_init_simple(&ctxt, options->server, options->credentials.username, 
+    bool ret = bmic_context_init_hint(&ctxt, options->hint, options->credentials.username, 
                              options->credentials.password, &status);
     if (!ret) {
         fprintf(stderr, "%s\n", status.message);
@@ -159,11 +159,19 @@ int operations_main(int argc, char **argv)
     int option_index = 0;
     options_t options = {0};
     
-    options.show_info = false;
-
     if (argc < 2) {
         show_help(argv);
 
+        return EXIT_FAILURE;
+    }
+    
+    options.show_info = false;
+    gru_status_t status = {0};
+    options.hint = bmic_discovery_hint_new(&status);
+    
+    if (!options.hint) {
+        fprintf(stderr, "%s", status.message);
+        
         return EXIT_FAILURE;
     }
 
@@ -174,12 +182,14 @@ int operations_main(int argc, char **argv)
             { "username", required_argument, 0, 'u'},
             { "password", required_argument, 0, 'p'},
             { "server", required_argument, 0, 's'},
+            { "port", required_argument, 0, 'P'},
+            { "url", required_argument, 0, 'U'},
             { "list", no_argument, 0, 'l'},
             { "info", no_argument, 0, 'I'},
             { 0, 0, 0, 0}
         };
 
-        int c = getopt_long(argc, argv, "h:u:p:s:l:I", long_options, 
+        int c = getopt_long(argc, argv, "h:u:p:s:P:U:l:I", long_options, 
                             &option_index);
         if (c == -1) {
             if (optind == 1) {
@@ -196,7 +206,31 @@ int operations_main(int argc, char **argv)
             strlcpy(options.credentials.password, optarg, sizeof (options.credentials.password));
             break;
         case 's':
-            strlcpy(options.server, optarg, sizeof (options.server));
+            bmic_discovery_hint_set_addressing_hostname(options.hint, optarg, &status);
+            if (status.code != GRU_SUCCESS) {
+                fprintf(stderr, "%s", status.message);
+        
+                return EXIT_FAILURE;
+            }
+            
+            break;
+        case 'P':
+            bmic_discovery_hint_set_addressing_port(options.hint, atoi(optarg), &status);
+            if (status.code != GRU_SUCCESS) {
+                fprintf(stderr, "%s", status.message);
+        
+                return EXIT_FAILURE;
+            }
+            
+            break;
+        case 'U':
+            bmic_discovery_hint_set_url(options.hint, optarg, &status);
+            if (status.code != GRU_SUCCESS) {
+                fprintf(stderr, "%s", status.message);
+        
+                return EXIT_FAILURE;
+            }
+            
             break;
         case 'I':
             options.show_info = true;
