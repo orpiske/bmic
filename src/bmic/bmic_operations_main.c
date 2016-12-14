@@ -18,21 +18,6 @@
 
 #include "bmic_operations_main.h"
 
-typedef enum operations_t_ {
-    OP_LIST,
-} operations_t;
-
-typedef struct options_t_
-{
-    credential_options_t credentials;
-    bmic_discovery_hint_t *hint;
-    bool help;
-    char name[OPT_MAX_STR_SIZE];
-    operations_t operation;
-    bool show_info;
-} options_t;
-
-
 typedef struct cap_read_wrapper_t_ {
     bmic_handle_t *handle; 
     bmic_api_interface_t *api;
@@ -121,9 +106,9 @@ int operations_run(options_t *options)
     }    
     
     
-    show_info(api, ctxt.handle, cap, options->show_info, &status);
+    show_info(api, ctxt.handle, cap, options->program.operations.show_info, &status);
 
-    switch (options->operation) {
+    switch (options->program.operations.operation) {
         case OP_LIST: {
             const bmic_list_t *list = api->operation_list(ctxt.handle, cap, &status);
 
@@ -139,7 +124,7 @@ int operations_run(options_t *options)
 
                 if (list) {
 
-                    gru_list_for_each(list->items, print_op, options->name);
+                    gru_list_for_each(list->items, print_op, options->program.operations.name);
                     bmic_list_destroy((bmic_list_t **)&list);
                 }  
             }
@@ -157,7 +142,7 @@ int operations_main(int argc, char **argv)
 {
     
     int option_index = 0;
-    options_t options = {0};
+    options_t options = options_init(OPERATIONS);
     
     if (argc < 2) {
         show_help(argv);
@@ -165,7 +150,6 @@ int operations_main(int argc, char **argv)
         return EXIT_FAILURE;
     }
     
-    options.show_info = false;
     gru_status_t status = {0};
     options.hint = bmic_discovery_hint_new(&status);
     
@@ -200,10 +184,17 @@ int operations_main(int argc, char **argv)
 
         switch (c) {
         case 'u':
-            strlcpy(options.credentials.username, optarg, sizeof (options.credentials.username));
+            if (asprintf(&options.credentials.username, "%s", optarg) == -1) {
+                fprintf(stderr, "Not enough memory to save username\n");
+                return EXIT_FAILURE;
+            }
+            
             break;
         case 'p':
-            strlcpy(options.credentials.password, optarg, sizeof (options.credentials.password));
+            if (asprintf(&options.credentials.password, "%s", optarg) == -1) {
+                fprintf(stderr, "Not enough memory to save password\n");
+                return EXIT_FAILURE;
+            }
             break;
         case 's':
             bmic_discovery_hint_set_addressing_hostname(options.hint, optarg, &status);
@@ -233,10 +224,10 @@ int operations_main(int argc, char **argv)
             
             break;
         case 'I':
-            options.show_info = true;
+            options.program.operations.show_info = true;
             break;
         case 'l':
-            options.operation = OP_LIST;
+            options.program.operations.operation = OP_LIST;
             break;
         case 'h':
             if (!optarg) {
@@ -246,7 +237,8 @@ int operations_main(int argc, char **argv)
             }
             else {
                 options.help = true;
-                strlcpy(options.name, optarg, sizeof (options.name));
+                strlcpy(options.program.operations.name, optarg, 
+                        sizeof (options.program.operations.name));
             }
             
             break;
@@ -257,7 +249,7 @@ int operations_main(int argc, char **argv)
         }
     }
 
-    if (options.operation != OP_LIST && strlen(options.name) == 0) {
+    if (options.program.operations.operation != OP_LIST && strlen(options.program.operations.name) == 0) {
         fprintf(stderr, "Either -l (--list) or -h <name> (--help=<name>) must be used\n");
 
         return EXIT_FAILURE;

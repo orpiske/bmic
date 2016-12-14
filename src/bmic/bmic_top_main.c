@@ -17,15 +17,6 @@
 
 #define as_mb(x) (x / (1024*1024))
 
-typedef struct options_t_
-{
-    credential_options_t credentials;
-    bmic_discovery_hint_t *hint;
-    int32_t interval;
-    int32_t repeat;
-} options_t;
-
-
 static void show_help(char **argv)
 {
     print_program_usage(argv[0]);
@@ -101,7 +92,7 @@ int top_run(options_t *options)
     bmic_java_info_t jinfo = api->java.java_info(ctxt.handle, &status);
 
     uint32_t iteration = 0;
-    while (iteration != options->repeat) {
+    while (iteration != options->program.top.repeat) {
 
         bmic_java_os_info_t osinfo = api->java.os_info(ctxt.handle, &status);
         bmic_java_mem_info_t eden = api->java.eden_info(ctxt.handle, &status);
@@ -188,15 +179,15 @@ int top_run(options_t *options)
         fflush(NULL);
         bmic_java_os_info_cleanup(osinfo);
 
-        if (options->repeat != -1) {
+        if (options->program.top.repeat != -1) {
             iteration++;
-            if (options->repeat == iteration) {
+            if (options->program.top.repeat == iteration) {
                 break;
             }
 
         }
 
-        sleep(options->interval);
+        sleep(options->program.top.interval);
         printf("%c[2K\r", 27);
         printf("%s%s%s%-32s %-9s %-17s %-19s%s", RESET, BG_WHITE,
                 LIGHT_BLACK, bmic_discovery_hint_host(options->hint), info->name, info->version,
@@ -217,16 +208,13 @@ int top_run(options_t *options)
 
 int top_main(int argc, char **argv) {
     int option_index = 0;
-    options_t options = {0};
+    options_t options = options_init(TOP);
     
     if (argc < 2) {
         show_help(argv);
 
         return EXIT_FAILURE;
     }
-
-    options.interval = 5;
-    options.repeat = -1;
 
     gru_status_t status = {0};
     options.hint = bmic_discovery_hint_new(&status);
@@ -261,10 +249,18 @@ int top_main(int argc, char **argv) {
 
         switch (c) {
         case 'u':
-            strlcpy(options.credentials.username, optarg, sizeof (options.credentials.username));
+            if (asprintf(&options.credentials.username, "%s", optarg) == -1) {
+                fprintf(stderr, "Not enough memory to save username\n");
+                return EXIT_FAILURE;
+            }
             break;
         case 'p':
-            strlcpy(options.credentials.password, optarg, sizeof (options.credentials.password));
+            if (asprintf(&options.credentials.password, "%s", optarg) == -1) {
+                fprintf(stderr, "Not enough memory to save password\n");
+                
+                return EXIT_FAILURE;
+            }
+            
             break;
         case 's':
             bmic_discovery_hint_set_addressing_hostname(options.hint, optarg, &status);
@@ -294,10 +290,10 @@ int top_main(int argc, char **argv) {
             
             break;
         case 'i':
-            options.interval = atoi(optarg);
+            options.program.top.interval = atoi(optarg);
             break;
         case 'r':
-            options.repeat = atoi(optarg);
+            options.program.top.repeat = atoi(optarg);
             break;
         case 'h':
             show_help(argv);

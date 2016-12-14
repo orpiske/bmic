@@ -15,12 +15,6 @@
  */
 #include "bmic_discovery_main.h"
 
-typedef struct options_t_
-{
-    credential_options_t credentials;
-    bmic_discovery_hint_t *hint;
-} options_t;
-
 static void show_help(char **argv)
 {
     print_program_usage(argv[0]);
@@ -65,7 +59,7 @@ int discovery_run(options_t *options)
 
 int discovery_main(int argc, char **argv) {
     int option_index = 0;
-    options_t options = {0};
+    options_t options = options_init(DISCOVERY);
     
      if (argc < 2) {
         show_help(argv);
@@ -81,8 +75,6 @@ int discovery_main(int argc, char **argv) {
         
         return EXIT_FAILURE;
     }
-
-   
 
     while (1) {
 
@@ -106,10 +98,16 @@ int discovery_main(int argc, char **argv) {
 
         switch (c) {
         case 'u':
-            strlcpy(options.credentials.username, optarg, sizeof (options.credentials.username));
+            if (asprintf(&options.credentials.username, "%s", optarg) == -1) {
+                fprintf(stderr, "Not enough memory to save username\n");
+                return EXIT_FAILURE;
+            }
             break;
         case 'p':
-            strlcpy(options.credentials.password, optarg, sizeof (options.credentials.password));
+            if (asprintf(&options.credentials.password, "%s", optarg) == -1) {
+                fprintf(stderr, "Not enough memory to save password\n");
+                return EXIT_FAILURE;
+            }
             break;
         case 's':
             bmic_discovery_hint_set_addressing_hostname(options.hint, optarg, &status);

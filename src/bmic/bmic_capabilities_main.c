@@ -15,16 +15,6 @@
  */
 #include "bmic_capabilities_main.h"
 
-typedef struct options_t_
-{
-    credential_options_t credentials;
-    bmic_discovery_hint_t *hint;
-    bool list;
-    bool readall;
-    char read[OPT_MAX_STR_SIZE];
-    bool show_info;
-} options_t;
-
 typedef struct cap_read_wrapper_t_ {
     bmic_handle_t *handle; 
     bmic_api_interface_t *api;
@@ -121,9 +111,9 @@ int capabilities_run(options_t *options)
     }    
     
     
-    show_info(api, ctxt.handle, cap, options->show_info, &status);
+    show_info(api, ctxt.handle, cap, options->program.capabilities.show_info, &status);
 
-    if (options->list) {
+    if (options->program.capabilities.list) {
         const bmic_list_t *list = api->attribute_list(ctxt.handle, cap, &status);
 
         if (list) {
@@ -133,7 +123,7 @@ int capabilities_run(options_t *options)
         
     }
     else {
-        if (options->readall) {
+        if (options->program.capabilities.readall) {
             const bmic_list_t *list = api->attribute_list(ctxt.handle, cap, &status);
 
             if (list) {
@@ -152,15 +142,16 @@ int capabilities_run(options_t *options)
             
         }
         else {
-            const bmic_exchange_t *obj = api->attribute_read(ctxt.handle, cap, options->read,
+            const bmic_exchange_t *obj = api->attribute_read(ctxt.handle, cap, 
+                                                             options->program.capabilities.read,
                                                      &status);
 
             if (obj) {
                 printf("\n%s%s%35s %-25s%s\n", RESET, LIGHT_WHITE, "Capability", "Value", RESET);
-                print_returned_object(options->read, obj->data_ptr);
+                print_returned_object(options->program.capabilities.read, obj->data_ptr);
             }
             else {
-                printf("%35s %s%s%s%s\n", options->read, RESET, RED, "Unable to read", RESET);
+                printf("%35s %s%s%s%s\n", options->program.capabilities.read, RESET, RED, "Unable to read", RESET);
             }
             bmic_exchange_destroy((bmic_exchange_t **)&obj);
         }
@@ -176,7 +167,7 @@ int capabilities_main(int argc, char **argv)
 {
     
     int option_index = 0;
-    options_t options = {0};
+    options_t options = options_init(CAPABILITIES);
     
     if (argc < 2) {
         show_help(argv);
@@ -184,10 +175,6 @@ int capabilities_main(int argc, char **argv)
         return EXIT_FAILURE;
     }
 
-    options.list = false;
-    options.readall = false;
-    options.show_info = false;
-    
     gru_status_t status = {0};
     options.hint = bmic_discovery_hint_new(&status);
     
@@ -224,10 +211,16 @@ int capabilities_main(int argc, char **argv)
 
         switch (c) {
         case 'u':
-            strlcpy(options.credentials.username, optarg, sizeof (options.credentials.username));
+            if (asprintf(&options.credentials.username, "%s", optarg) == -1) {
+                fprintf(stderr, "Not enough memory to save username\n");
+                return EXIT_FAILURE;
+            }
             break;
         case 'p':
-            strlcpy(options.credentials.password, optarg, sizeof (options.credentials.password));
+            if (asprintf(&options.credentials.password, "%s", optarg) == -1) {
+                fprintf(stderr, "Not enough memory to save password\n");
+                return EXIT_FAILURE;
+            }
             break;
         case 's':
             bmic_discovery_hint_set_addressing_hostname(options.hint, optarg, &status);
@@ -257,16 +250,19 @@ int capabilities_main(int argc, char **argv)
             
             break;
         case 'l':
-            options.list = true;
+            options.program.capabilities.list = true;
             break;
         case 'r':
-            strlcpy(options.read, optarg, sizeof (options.read));
+            if (asprintf(&options.program.capabilities.read, "%s", optarg) == -1) {
+                fprintf(stderr, "Not enough memory to save attribute name\n");
+                return EXIT_FAILURE;
+            }
             break;
         case 'R':
-            options.readall = true;
+            options.program.capabilities.readall = true;
             break;
         case 'I':
-            options.show_info = true;
+            options.program.capabilities.show_info = true;
             break;
         case 'h':
             show_help(argv);
@@ -278,7 +274,9 @@ int capabilities_main(int argc, char **argv)
         }
     }
 
-    if (options.list == false && strlen(options.read) == 0 && options.readall == false) {
+    if (options.program.capabilities.list == false && strlen(options.program.capabilities.read) == 0 && 
+        options.program.capabilities.readall == false) 
+    {
         fprintf(stderr, "Either -l (--list) or -r (--read) must be used\n");
 
         return EXIT_FAILURE;

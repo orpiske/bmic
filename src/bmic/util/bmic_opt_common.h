@@ -22,15 +22,75 @@
 
 #include <common/gru_colors.h>
 
+#include "management/common/bmic_discovery_hint.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+typedef enum operations_t_ {
+    OP_LIST,
+    OP_READ,
+    OP_CREATE,
+    OP_DELETE,
+    OP_STATS,
+} operations_t;
+
 typedef struct credential_options_t_ {
-    char username[OPT_MAX_STR_SIZE];
-    char password[OPT_MAX_STR_SIZE];
+    char *username;
+    char *password;
 } credential_options_t;
 
+struct cap_options_t {
+    bool list;
+    bool readall;
+    char *read;
+    bool show_info;
+};
+
+struct op_options_t {
+    char *name;
+    operations_t operation;
+    bool show_info;
+};
+
+struct queue_options_t {
+    operations_t operation;
+    char *queue;
+    char *attribute;
+    bool show_info;
+};
+
+struct top_options_t {
+    int32_t interval;
+    int32_t repeat;
+};
+
+typedef enum program_type_t_ {
+    CAPABILITIES,
+    OPERATIONS,
+    DISCOVERY,
+    QUEUE,
+    TOP,
+} program_type_t;
+
+typedef struct options_t_ {
+    program_type_t type;
+    credential_options_t credentials;
+    bmic_discovery_hint_t *hint;
+    bool help;
+
+    union program_options_t {
+        struct cap_options_t capabilities;
+        struct op_options_t operations;
+        struct queue_options_t queue;
+        struct top_options_t top;
+    } program;
+
+} options_t;
+
+options_t options_init(program_type_t type);
+void options_cleanup();
 
 void print_option_help(const char *long_opt, const char *short_opt, const char *desc);
 void print_program_usage(char *program_name);

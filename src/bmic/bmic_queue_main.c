@@ -15,25 +15,6 @@
  */
 #include "bmic_queue_main.h"
 
-typedef enum operations_t_
-{
-    OP_LIST,
-    OP_READ,
-    OP_CREATE,
-    OP_DELETE,
-    OP_STATS,
-} operations_t;
-
-typedef struct options_t_
-{
-    credential_options_t credentials;
-    operations_t operation;
-    bmic_discovery_hint_t *hint;
-    char queue[OPT_MAX_STR_SIZE];
-    char attribute[OPT_MAX_STR_SIZE];
-    bool show_info;
-} options_t;
-
 static void show_help(char **argv)
 {
     print_program_usage(argv[0]);
@@ -88,17 +69,17 @@ int queue_run(options_t *options)
         return EXIT_FAILURE;
     }
     
-    show_info(api, ctxt.handle, cap, options->show_info, &status);
+    show_info(api, ctxt.handle, cap, options->program.queue.show_info, &status);
 
-    switch (options->operation) {
+    switch (options->program.queue.operation) {
     case OP_READ:
     {
         const bmic_exchange_t *obj = api->queue_attribute_read(ctxt.handle, cap,
-                                                               options->attribute, &status,
-                                                               options->queue);
+                                                               options->program.queue.attribute, &status,
+                                                               options->program.queue.queue);
 
         if (obj) {
-            print_returned_object(options->attribute, obj->data_ptr);
+            print_returned_object(options->program.queue.attribute, obj->data_ptr);
         }
 
         break;
@@ -117,7 +98,7 @@ int queue_run(options_t *options)
     }
     case OP_CREATE:
     {
-        api->queue_create(ctxt.handle, cap, options->queue, &status);
+        api->queue_create(ctxt.handle, cap, options->program.queue.queue, &status);
         if (status.code != GRU_SUCCESS) {
             fprintf(stderr, "%s\n", status.message);
         }
@@ -125,7 +106,7 @@ int queue_run(options_t *options)
     }
     case OP_DELETE:
     {
-        api->queue_delete(ctxt.handle, cap, options->queue, &status);
+        api->queue_delete(ctxt.handle, cap, options->program.queue.queue, &status);
         if (status.code != GRU_SUCCESS) {
             fprintf(stderr, "%s\n", status.message);
         }
@@ -133,19 +114,21 @@ int queue_run(options_t *options)
     }
     case OP_STATS:
     {
-        bmic_queue_stat_t stats = api->queue_stats(ctxt.handle, cap, options->queue, &status);
+        bmic_queue_stat_t stats = api->queue_stats(ctxt.handle, cap, 
+                                                   options->program.queue.queue, &status);
         if (status.code != GRU_SUCCESS) {
             fprintf(stderr, "%s\n", status.message);
         }
         else {
-            print_queue_stat(options->queue, stats);
+            print_queue_stat(options->program.queue.queue, stats);
         }
         break;
     }
     default:
     {
-        fprintf(stderr, "Unable to read property %s for queue %s: %s\n", options->attribute,
-                options->queue, status.message);
+        fprintf(stderr, "Unable to read property %s for queue %s: %s\n", 
+                options->program.queue.attribute,
+                options->program.queue.queue, status.message);
         break;
     }
 
@@ -160,7 +143,7 @@ int queue_run(options_t *options)
 int queue_main(int argc, char **argv)
 {
     int option_index = 0;
-    options_t options = {0};
+    options_t options = options_init(QUEUE);
     
     if (argc < 2) {
         show_help(argv);
@@ -168,7 +151,6 @@ int queue_main(int argc, char **argv)
         return EXIT_FAILURE;
     }
     
-    options.show_info = false;
     gru_status_t status = {0};
     options.hint = bmic_discovery_hint_new(&status);
     
@@ -208,10 +190,18 @@ int queue_main(int argc, char **argv)
 
         switch (c) {
         case 'u':
-            strlcpy(options.credentials.username, optarg, sizeof (options.credentials.username));
+            if (asprintf(&options.credentials.username, "%s", optarg) == -1) {
+                fprintf(stderr, "Not enough memory to save username\n");
+                
+                return EXIT_FAILURE;
+            }
             break;
         case 'p':
-            strlcpy(options.credentials.password, optarg, sizeof (options.credentials.password));
+            if (asprintf(&options.credentials.password, "%s", optarg) == -1) {
+                fprintf(stderr, "Not enough memory to save password\n");
+                
+                return EXIT_FAILURE;
+            }
             break;
         case 's':
             bmic_discovery_hint_set_addressing_hostname(options.hint, optarg, &status);
@@ -241,28 +231,36 @@ int queue_main(int argc, char **argv)
             
             break;
         case 'n':
-            strlcpy(options.queue, optarg, sizeof (options.queue));
+            if (asprintf(&options.program.queue.queue, "%s", optarg) == -1) {
+                fprintf(stderr, "Not enough memory to save queue name\n");
+                
+                return EXIT_FAILURE;
+            }
             break;
         case 'a':
-            strlcpy(options.attribute, optarg, sizeof (options.attribute));
+            if (asprintf(&options.program.queue.attribute, "%s", optarg) == -1) {
+                fprintf(stderr, "Not enough memory to save attribute name\n");
+                
+                return EXIT_FAILURE;
+            }
             break;
         case 'l':
-            options.operation = OP_LIST;
+            options.program.queue.operation = OP_LIST;
             break;
         case 'r':
-            options.operation = OP_READ;
+            options.program.queue.operation = OP_READ;
             break;
         case 'c':
-            options.operation = OP_CREATE;
+            options.program.queue.operation = OP_CREATE;
             break;
         case 'd':
-            options.operation = OP_DELETE;
+            options.program.queue.operation = OP_DELETE;
             break;
         case 'S':
-            options.operation = OP_STATS;
+            options.program.queue.operation = OP_STATS;
             break;
         case 'I':
-            options.show_info = true;
+            options.program.queue.show_info = true;
             break;
         case 'h':
             show_help(argv);
@@ -274,7 +272,7 @@ int queue_main(int argc, char **argv)
         }
     }
 
-    if (options.operation != OP_LIST && strlen(options.queue) == 0) {
+    if (options.program.queue.operation != OP_LIST && strlen(options.program.queue.queue) == 0) {
         fprintf(stderr, "Option -n (--name) for all read/write operations\n");
 
         return EXIT_FAILURE;
