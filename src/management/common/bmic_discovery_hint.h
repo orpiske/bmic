@@ -21,6 +21,7 @@
 
 #include <common/gru_alloc.h>
 #include <common/gru_status.h>
+#include <log/gru_logger.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -78,6 +79,19 @@ bmic_discovery_hint_t *bmic_discovery_hint_eval_url(const char *url,
  */
 void bmic_discovery_hint_destroy(bmic_discovery_hint_t **hint);
 
+
+/**
+ * Given an URL format specification or a an address format specification, returns a URL
+ * @param hint URL and or addressing hint
+ * @param url_format URL format specification (ie.: http://%s:%i/api/jolokia)
+ * @param addr_format addressing format specification (ie: %s/api/jolokia)
+ * @param default_port default port for the service or BMIC_PORT_UNKNOWN
+ * @return The URL as a newly allocated char string that must be free'd
+ */
+const char *bmic_discovery_hint_to_url(bmic_discovery_hint_t *hint, 
+                                       const char *url_format, 
+                                       const char *addr_format,
+                                       uint64_t default_port);
 
 #ifdef __cplusplus
 }

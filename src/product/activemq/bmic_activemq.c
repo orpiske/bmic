@@ -49,29 +49,8 @@ bmic_api_interface_t *bmic_activemq_product(gru_status_t *status)
 
 const char *bmic_activemq_base_url(const bmic_discovery_hint_t *hint)
 {
-    char *ret = NULL;
-
-    if (hint->hint_type == URL) {
-        if (asprintf(&ret, ACTIVEMQ_BASE_URL_HINT_URL, hint->content.url) == -1) {
-            logger_t logger = gru_logger_get();
-
-            logger(FATAL, "Not enough memory to set URL hint");
-
-            return NULL;
-        }
-    }
-    else {
-        if (asprintf(&ret, ACTIVEMQ_BASE_URL_HINT_ADDRESSING,
-                     hint->content.addressing.hostname, 8161) == -1) {
-            logger_t logger = gru_logger_get();
-
-            logger(FATAL, "Not enough memory to set addressing hint");
-
-            return NULL;
-        }
-    }
-
-    return ret;
+    return bmic_discovery_hint_to_url(hint, ACTIVEMQ_BASE_URL_HINT_URL, 
+                                      ACTIVEMQ_BASE_URL_HINT_ADDRESSING, 8161);
 }
 
 bmic_handle_t *bmic_activemq_init(const char *base_url,

@@ -51,29 +51,8 @@ bmic_api_interface_t *bmic_jamq6_product(gru_status_t *status)
 
 const char *bmic_jamq6_base_url(const bmic_discovery_hint_t *hint)
 {
-    char *ret = NULL;
-
-    if (hint->hint_type == URL) {
-        if (asprintf(&ret, JAMQ6_BASE_URL_HINT_URL, hint->content.url) == -1) {
-            logger_t logger = gru_logger_get();
-
-            logger(FATAL, "Not enough memory to set URL hint");
-
-            return NULL;
-        }
-    }
-    else {
-        if (asprintf(&ret, JAMQ6_BASE_URL_HINT_ADDRESSING,
-                     hint->content.addressing.hostname, 8181) == -1) {
-            logger_t logger = gru_logger_get();
-
-            logger(FATAL, "Not enough memory to set addressing hint");
-
-            return NULL;
-        }
-    }
-
-    return ret;
+    return bmic_discovery_hint_to_url(hint, JAMQ6_BASE_URL_HINT_URL, 
+                                      JAMQ6_BASE_URL_HINT_ADDRESSING, 8181);
 }
 
 bmic_product_info_t *bmic_jamq6_product_info(bmic_handle_t *handle,

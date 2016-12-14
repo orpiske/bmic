@@ -87,3 +87,44 @@ void bmic_discovery_hint_destroy(bmic_discovery_hint_t **hint) {
     
     gru_dealloc((void **) hint);
 }
+
+
+const char *bmic_discovery_hint_to_url(bmic_discovery_hint_t *hint, 
+                                       const char *url_format, 
+                                       const char *addr_format,
+                                       uint64_t default_port) {
+    logger_t logger = gru_logger_get();
+    char *ret = NULL;
+    
+    if (hint->hint_type == URL) {
+        if (url_format == NULL) {
+            logger(FATAL, "Unable to format URL based on hint because URL format is NULL");
+            
+            return NULL;
+        }
+        
+        if (asprintf(&ret, url_format, hint->content.url) == -1) {
+            logger(FATAL, "Not enough memory to set URL hint");
+
+            return NULL;
+        }
+    }
+    else {
+        if (addr_format == NULL) {
+            logger(FATAL, "Unable to format URL based on hint "
+                    "because addressing format is NULL");
+            
+            return NULL;
+        }
+        uint16_t port = (hint->content.addressing.port == BMIC_PORT_UNKNOWN ? 
+            default_port : hint->content.addressing.port);
+        
+        if (asprintf(&ret, addr_format, hint->content.addressing.hostname, port) == -1) {
+            logger(FATAL, "Not enough memory to set addressing hint");
+
+            return NULL;
+        }
+    }
+    
+    return ret;
+}
