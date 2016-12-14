@@ -40,7 +40,7 @@ static bool bmic_try_init(bmic_api_interface_t *api,
     }
 
     logger(DEBUG, "Trying to load product capabilities");
-    bmic_exchange_t *cap = api->capabilities_load(handle, &status); 
+    const bmic_exchange_t *cap = api->capabilities_load(handle, &status); 
     if (!cap) {
         logger(DEBUG, "Unable to load product capabilities for %s: %s", 
                api->name, status.message);
@@ -53,16 +53,14 @@ static bool bmic_try_init(bmic_api_interface_t *api,
     if (info) {
         *outhandle = handle;
         gru_dealloc((void **) &info);
-        gru_dealloc_string((char **) &base_url);
-        bmic_exchange_destroy(&cap);
+        bmic_exchange_destroy_const(&cap);
         return true;
     }
 
-    bmic_exchange_destroy(&cap);
+    bmic_exchange_destroy_const(&cap);
     gru_status_reset(&status);
     gru_dealloc((void **)&info);
     api->api_cleanup(&handle);
-    gru_dealloc_string((char **) &base_url);
     return false;
 }
 

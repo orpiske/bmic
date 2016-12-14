@@ -29,6 +29,8 @@ extern "C" {
 bmic_api_interface_t *bmic_jamq6_product(gru_status_t *status);
 const char *bmic_jamq6_base_url(const bmic_discovery_hint_t *hint);
 
+void bmic_jamq6_cleanup(bmic_handle_t **handle);
+
 bmic_product_info_t *bmic_jamq6_product_info(bmic_handle_t *handle,
                                                     const bmic_exchange_t *cap,
                                                     gru_status_t *status);

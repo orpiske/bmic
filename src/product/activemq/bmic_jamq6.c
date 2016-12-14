@@ -16,6 +16,8 @@
 #include "bmic_jamq6.h"
 #include "product/artemis/bmic_artemis.h"
 
+static const char *jamq6_base_url;
+
 
 bmic_api_interface_t *bmic_jamq6_product(gru_status_t *status)
 {
@@ -24,7 +26,7 @@ bmic_api_interface_t *bmic_jamq6_product(gru_status_t *status)
 
     ret->base_url = bmic_jamq6_base_url;
     ret->api_init = bmic_activemq_init;
-    ret->api_cleanup = bmic_activemq_cleanup;
+    ret->api_cleanup = bmic_jamq6_cleanup;
     ret->product_info = bmic_jamq6_product_info;
     ret->capabilities_load = bmic_activemq_load_capabilities;
     ret->attribute_read = bmic_activemq_attribute_read;
@@ -51,8 +53,21 @@ bmic_api_interface_t *bmic_jamq6_product(gru_status_t *status)
 
 const char *bmic_jamq6_base_url(const bmic_discovery_hint_t *hint)
 {
-    return bmic_discovery_hint_to_url(hint, JAMQ6_BASE_URL_HINT_URL, 
+    if (jamq6_base_url == NULL) {
+        jamq6_base_url = bmic_discovery_hint_to_url(hint, JAMQ6_BASE_URL_HINT_URL, 
                                       JAMQ6_BASE_URL_HINT_ADDRESSING, 8181);
+    }
+    
+    return jamq6_base_url;
+}
+
+void bmic_jamq6_cleanup(bmic_handle_t **handle) {
+    if (jamq6_base_url) {
+        gru_dealloc_const_string(&jamq6_base_url);
+    }
+    
+    bmic_jamq6_cleanup(handle);
+
 }
 
 bmic_product_info_t *bmic_jamq6_product_info(bmic_handle_t *handle,

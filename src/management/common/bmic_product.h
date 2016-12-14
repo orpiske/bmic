@@ -39,6 +39,7 @@ void bmic_product_registry_add(const bmic_api_interface_t *product, gru_status_t
 const gru_list_t *bmic_product_registry();
 
 void bmic_exchange_destroy(bmic_exchange_t **ptr);
+void bmic_exchange_destroy_const(const bmic_exchange_t **ptr);
 
 
 #ifdef __cplusplus

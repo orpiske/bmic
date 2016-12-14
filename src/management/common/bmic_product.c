@@ -44,6 +44,10 @@ void bmic_exchange_destroy(bmic_exchange_t **ptr) {
     gru_dealloc((void **) ptr);
 }
 
+inline void bmic_exchange_destroy_const(const bmic_exchange_t **ptr) {
+    bmic_exchange_destroy((bmic_exchange_t **) ptr);
+} 
+
 
 void bmic_api_interface_destroy(bmic_api_interface_t **product) {
     bmic_api_interface_t *prod = *product;

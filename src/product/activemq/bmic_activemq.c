@@ -15,6 +15,8 @@
  */
 #include "bmic_activemq.h"
 
+static const char *activemq_base_url;
+
 bmic_api_interface_t *bmic_activemq_product(gru_status_t *status)
 {
     bmic_api_interface_t *ret = bmic_api_interface_new(ACTIVEMQ_PRODUCT_NAME,
@@ -49,8 +51,12 @@ bmic_api_interface_t *bmic_activemq_product(gru_status_t *status)
 
 const char *bmic_activemq_base_url(const bmic_discovery_hint_t *hint)
 {
-    return bmic_discovery_hint_to_url(hint, ACTIVEMQ_BASE_URL_HINT_URL, 
+    if (activemq_base_url == NULL) { 
+        activemq_base_url = bmic_discovery_hint_to_url(hint, ACTIVEMQ_BASE_URL_HINT_URL, 
                                       ACTIVEMQ_BASE_URL_HINT_ADDRESSING, 8161);
+    }
+    
+    return activemq_base_url;
 }
 
 bmic_handle_t *bmic_activemq_init(const char *base_url,
@@ -82,6 +88,10 @@ bmic_handle_t *bmic_activemq_init(const char *base_url,
 void bmic_activemq_cleanup(bmic_handle_t **handle)
 {
     bmic_handle_destroy(handle, bmic_endpoint_http_terminate);
+    
+    if (activemq_base_url) {
+        gru_dealloc_const_string(&activemq_base_url);
+    }
 }
 
 const bmic_exchange_t *bmic_activemq_load_capabilities(bmic_handle_t *handle,
@@ -147,7 +157,7 @@ bmic_product_info_t *bmic_activemq_product_info(bmic_handle_t *handle,
         strlcpy(ret->version, ex->data_ptr->data.str, sizeof (ret->version));
         strlcpy(ret->name, ACTIVEMQ_PRODUCT_NAME_PRETTY, sizeof (ret->name));
 
-        bmic_exchange_destroy(&ex);
+        bmic_exchange_destroy_const(&ex);
         return ret;
     }
     

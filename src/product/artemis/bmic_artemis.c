@@ -15,6 +15,8 @@
  */
 #include "bmic_artemis.h"
 
+static const char *artemis_base_url;
+
 bmic_api_interface_t *bmic_artemis_product(gru_status_t *status)
 {
     bmic_api_interface_t *ret = bmic_api_interface_new(ARTEMIS_PRODUCT_NAME,
@@ -49,8 +51,12 @@ bmic_api_interface_t *bmic_artemis_product(gru_status_t *status)
 
 const char *bmic_artemis_base_url(const bmic_discovery_hint_t *hint)
 {
-    return bmic_discovery_hint_to_url(hint, ARTEMIS_BASE_URL_HINT_URL, 
+    if (artemis_base_url == NULL) { 
+        artemis_base_url = bmic_discovery_hint_to_url(hint, ARTEMIS_BASE_URL_HINT_URL, 
                                       ARTEMIS_BASE_URL_HINT_ADDRESSING, 8161);
+    }
+
+    return artemis_base_url;
 }
 
 bmic_handle_t *bmic_artemis_init(const char *base_url,
@@ -82,6 +88,10 @@ bmic_handle_t *bmic_artemis_init(const char *base_url,
 void bmic_artemis_cleanup(bmic_handle_t **handle)
 {
     bmic_handle_destroy(handle, bmic_endpoint_http_terminate);
+    
+    if (artemis_base_url) {
+        gru_dealloc_const_string(&artemis_base_url);
+    }
 }
 
 bmic_product_info_t *bmic_artemis_product_info(bmic_handle_t *handle,
