@@ -96,7 +96,7 @@ bmic_product_info_t *bmic_artemis_product_info(bmic_handle_t *handle,
         strlcpy(ret->version, ex->data_ptr->data.str, sizeof (ret->version));
         strlcpy(ret->name, ARTEMIS_PRODUCT_NAME_PRETTY, sizeof (ret->name));
 
-        bmic_exchange_destroy(&ex);
+        bmic_exchange_destroy((bmic_exchange_t **)&ex);
         return ret;
     }
     
