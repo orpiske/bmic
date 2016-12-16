@@ -18,12 +18,6 @@
 
 #include "bmic_operations_main.h"
 
-typedef struct cap_read_wrapper_t_ {
-    bmic_handle_t *handle;
-    bmic_api_interface_t *api;
-    gru_status_t *status;
-} cap_read_wrapper_t;
-
 static void print_op_arguments(const void *nodedata, void *p) {
     const bmic_op_arg_t *arg = (const bmic_op_arg_t *) nodedata;
 
