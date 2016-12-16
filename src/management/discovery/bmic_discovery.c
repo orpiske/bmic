@@ -53,12 +53,10 @@ static bool bmic_try_init(bmic_api_interface_t *api,
     if (info) {
         *outhandle = handle;
         gru_dealloc((void **) &info);
-        bmic_exchange_destroy_const(&cap);
         return true;
     }
 
     err_exit:
-    bmic_exchange_destroy_const(&cap);
     gru_status_reset(&status);
     api->api_cleanup(&handle);
     
