@@ -23,8 +23,8 @@ bmic_api_interface_t *bmic_api_interface_new(const char *name, const char *versi
     gru_alloc_check(ret, NULL);
 
 
-    snprintf(ret->name, sizeof(ret->name) - 1, "%s", name);
-    snprintf(ret->version, sizeof(ret->version) - 1, "%s", version);
+    strlcpy(ret->name, name, sizeof(ret->name));
+    strlcpy(ret->version, name, sizeof(ret->version));
 
     return ret;
 }
