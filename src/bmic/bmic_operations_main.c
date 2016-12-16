@@ -132,7 +132,6 @@ int operations_run(options_t *options)
         }
     }
 
-    bmic_exchange_destroy((bmic_exchange_t **)&cap);
     bmic_context_cleanup(&ctxt);
 
     return EXIT_SUCCESS;

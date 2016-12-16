@@ -16,6 +16,7 @@
 #include "bmic_activemq.h"
 
 static const char *activemq_base_url;
+static const bmic_exchange_t *cap_cache;
 
 bmic_api_interface_t *bmic_activemq_product(gru_status_t *status)
 {
@@ -92,11 +93,17 @@ void bmic_activemq_cleanup(bmic_handle_t **handle)
     if (activemq_base_url) {
         gru_dealloc_const_string(&activemq_base_url);
     }
+    
+    bmic_exchange_destroy((bmic_exchange_t **) & cap_cache);
 }
 
 const bmic_exchange_t *bmic_activemq_load_capabilities(bmic_handle_t *handle,
                                                        gru_status_t *status)
 {
+    if (cap_cache) {
+        return cap_cache;
+    }
+    
     bmic_exchange_t *ret = gru_alloc(sizeof (bmic_exchange_t), status);
     gru_alloc_check(ret, NULL);
 
@@ -127,6 +134,8 @@ const bmic_exchange_t *bmic_activemq_load_capabilities(bmic_handle_t *handle,
     ret->root = root;
     ret->data_ptr = capabilities;
     ret->type = EX_CAP_LIST;
+    
+    cap_cache = ret;
 
     return ret;
 

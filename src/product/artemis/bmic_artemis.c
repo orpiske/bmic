@@ -16,6 +16,7 @@
 #include "bmic_artemis.h"
 
 static const char *artemis_base_url;
+static const bmic_exchange_t *cap_cache;
 
 bmic_api_interface_t *bmic_artemis_product(gru_status_t *status)
 {
@@ -92,6 +93,8 @@ void bmic_artemis_cleanup(bmic_handle_t **handle)
     if (artemis_base_url) {
         gru_dealloc_const_string(&artemis_base_url);
     }
+    
+    bmic_exchange_destroy((bmic_exchange_t **) & cap_cache);
 }
 
 bmic_product_info_t *bmic_artemis_product_info(bmic_handle_t *handle,
@@ -116,6 +119,10 @@ bmic_product_info_t *bmic_artemis_product_info(bmic_handle_t *handle,
 const bmic_exchange_t *bmic_artemis_load_capabilities(bmic_handle_t *handle,
                                                       gru_status_t *status)
 {
+    if (cap_cache) {
+        return cap_cache;
+    }
+    
     bmic_exchange_t *ret = gru_alloc(sizeof (bmic_exchange_t), status);
     gru_alloc_check(ret, NULL);
 
@@ -149,6 +156,8 @@ const bmic_exchange_t *bmic_artemis_load_capabilities(bmic_handle_t *handle,
     ret->root = root;
     ret->data_ptr = capabilities;
     ret->type = EX_CAP_LIST;
+    
+    cap_cache = ret;
 
     return ret;
 

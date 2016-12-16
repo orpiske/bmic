@@ -52,7 +52,6 @@ int discovery_run(options_t *options)
     show_info(api, ctxt.handle, cap, true, &status);
     
     bmic_context_cleanup(&ctxt);
-    bmic_exchange_destroy((bmic_exchange_t **) &cap);
 
     return EXIT_SUCCESS;
 }

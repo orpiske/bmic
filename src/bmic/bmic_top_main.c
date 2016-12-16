@@ -69,14 +69,7 @@ int top_run(options_t *options)
 
     bmic_queue_stat_t *stat;
 
-    const bmic_list_t *list = api->queue_list(ctxt.handle, cap, &status);
-    if (list && list->items) {
-        size_t size = gru_list_count(list->items);
-        if (size > 0) {
-            stat = calloc(size, sizeof(bmic_queue_stat_t));
-        }
-    }
-
+    
     printf("Reading broker information ...\n");
     bmic_product_info_t *info = api->product_info(ctxt.handle, cap, &status);
 
@@ -93,6 +86,14 @@ int top_run(options_t *options)
 
     uint32_t iteration = 0;
     while (iteration != options->program.top.repeat) {
+        const bmic_list_t *list = api->queue_list(ctxt.handle, cap, &status);
+        if (list && list->items) {
+            size_t size = gru_list_count(list->items);
+            if (size > 0) {
+                stat = calloc(size, sizeof(bmic_queue_stat_t));
+            }
+        }
+
 
         bmic_java_os_info_t osinfo = api->java.os_info(ctxt.handle, &status);
         bmic_java_mem_info_t eden = api->java.eden_info(ctxt.handle, &status);
@@ -120,7 +121,6 @@ int top_run(options_t *options)
                 }
             }
         }
-
 
 
         printf(CLEAR_SCREEN);
@@ -178,6 +178,9 @@ int top_run(options_t *options)
 
         fflush(NULL);
         bmic_java_os_info_cleanup(osinfo);
+        
+        gru_dealloc((void **) &stat);
+        bmic_list_destroy((bmic_list_t **) &list);
 
         if (options->program.top.repeat != -1) {
             iteration++;
@@ -193,14 +196,15 @@ int top_run(options_t *options)
                 LIGHT_BLACK, bmic_discovery_hint_host(options->hint), info->name, info->version,
                 "Reading...", RESET);
         fflush(NULL);
+        
+        
     }
 
-    gru_dealloc((void **) &stat);
+    
+    
     gru_dealloc((void **) &info);
     bmic_java_info_cleanup(jinfo);
-
-    bmic_exchange_destroy((bmic_exchange_t **) & cap);
-    bmic_list_destroy((bmic_list_t **) &list);
+    
     bmic_context_cleanup(&ctxt);
 
     return EXIT_SUCCESS;
