@@ -273,7 +273,7 @@ int capabilities_main(int argc, char **argv)
         }
     }
 
-    if (options.program.capabilities.list == false && strlen(options.program.capabilities.read) == 0 && 
+    if (options.program.capabilities.list == false && options.program.capabilities.read == NULL && 
         options.program.capabilities.readall == false) 
     {
         fprintf(stderr, "Either -l (--list) or -r (--read) must be used\n");

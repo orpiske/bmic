@@ -251,7 +251,7 @@ int operations_main(int argc, char **argv)
         }
     }
 
-    if (options.program.operations.operation != OP_LIST && strlen(options.program.operations.name) == 0) {
+    if (options.program.operations.operation != OP_LIST && options.program.operations.name == NULL) {
         fprintf(stderr, "Either -l (--list) or -h <name> (--help=<name>) must be used\n");
 
         return EXIT_FAILURE;

@@ -271,7 +271,7 @@ int queue_main(int argc, char **argv)
         }
     }
 
-    if (options.program.queue.operation != OP_LIST && strlen(options.program.queue.queue) == 0) {
+    if (options.program.queue.operation != OP_LIST && options.program.queue.queue == NULL) {
         fprintf(stderr, "Option -n (--name) for all read/write operations\n");
 
         return EXIT_FAILURE;
