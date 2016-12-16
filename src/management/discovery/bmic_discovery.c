@@ -45,7 +45,7 @@ static bool bmic_try_init(bmic_api_interface_t *api,
         logger(DEBUG, "Unable to load product capabilities for %s: %s", 
                api->name, status.message);
         
-        return false;
+        goto err_exit;
     }
     
     bmic_product_info_t *info = api->product_info(handle, cap, &status);
@@ -57,10 +57,11 @@ static bool bmic_try_init(bmic_api_interface_t *api,
         return true;
     }
 
+    err_exit:
     bmic_exchange_destroy_const(&cap);
     gru_status_reset(&status);
-    gru_dealloc((void **)&info);
     api->api_cleanup(&handle);
+    
     return false;
 }
 
