@@ -66,7 +66,7 @@ void bmic_jamq6_cleanup(bmic_handle_t **handle) {
         gru_dealloc_const_string(&jamq6_base_url);
     }
     
-    bmic_jamq6_cleanup(handle);
+    bmic_activemq_cleanup(handle);
 
 }
 
