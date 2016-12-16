@@ -61,7 +61,7 @@ const char *bmic_regex_find(const char *str, const char *regex, uint32_t size,
         return NULL;
     }
 
-    regmatch_t *match = calloc(size, sizeof(match));
+    regmatch_t *match = calloc(size, sizeof(regmatch_t));
     if (!match) {
         gru_status_set(status, GRU_FAILURE, "Unable to allocate memory for match object");
         
