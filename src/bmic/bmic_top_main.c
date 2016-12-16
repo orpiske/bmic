@@ -67,9 +67,7 @@ int top_run(options_t *options)
         return EXIT_FAILURE;
     }
 
-    bmic_queue_stat_t *stat;
-
-    
+ 
     printf("Reading broker information ...\n");
     bmic_product_info_t *info = api->product_info(ctxt.handle, cap, &status);
 
@@ -78,7 +76,6 @@ int top_run(options_t *options)
                 status.message);
 
         bmic_context_cleanup(&ctxt);
-        gru_dealloc((void **) &stat);
         return EXIT_FAILURE;
     }
 
@@ -86,14 +83,22 @@ int top_run(options_t *options)
 
     uint32_t iteration = 0;
     while (iteration != options->program.top.repeat) {
+        size_t size = 0;
+        bmic_queue_stat_t *stat = NULL;
+
         const bmic_list_t *list = api->queue_list(ctxt.handle, cap, &status);
         if (list && list->items) {
-            size_t size = gru_list_count(list->items);
-            if (size > 0) {
-                stat = calloc(size, sizeof(bmic_queue_stat_t));
-            }
+            size = gru_list_count(list->items);
         }
 
+        if (size > 0) {
+            stat = calloc(size, sizeof(bmic_queue_stat_t));
+            if (!stat) {
+                fprintf(stderr, "Unable to allocate memory for queue stats\n");
+
+                break;
+            }
+        }
 
         bmic_java_os_info_t osinfo = api->java.os_info(ctxt.handle, &status);
         bmic_java_mem_info_t eden = api->java.eden_info(ctxt.handle, &status);
@@ -109,19 +114,14 @@ int top_run(options_t *options)
             permgen = api->java.permgen_info(ctxt.handle, &status);
         }
 
-        if (list && list->items) {
-            for (uint32_t i = 0; i < gru_list_count(list->items); i++) {
-                const gru_node_t *node = gru_list_get(list->items, i);
+        for (uint32_t i = 0; i < size; i++) {
+            const gru_node_t *node = gru_list_get(list->items, i);
 
-                if (node != NULL && node->data != NULL) {
-
-                    stat[i] = api->queue_stats(ctxt.handle, cap,
-                                (const char *) node->data,
-                                            &status);
-                }
+            if (node != NULL && node->data != NULL) {
+                stat[i] = api->queue_stats(ctxt.handle, cap,
+                        (const char *) node->data, &status);
             }
         }
-
 
         printf(CLEAR_SCREEN);
         printf("%s %s (%s) %s %s \n", jinfo.name, jinfo.version, jinfo.jvm_package_version,
@@ -156,30 +156,30 @@ int top_run(options_t *options)
             print_mem("PermGen", &permgen);
         }
 
-        if (list && list->items) {
+        if (size > 0) {
             printf("\n\n");
             printf("%s%s%s%-40s %-9s %-9s %-9s %-9s%s\n", RESET, BG_WHITE, LIGHT_BLACK,
                    "Name", "Size", "Consumers", "Ack Count", "Exp Count", RESET);
 
-            for (uint32_t i = 0; i < gru_list_count(list->items); i++) {
+            for (uint32_t i = 0; i < size; i++) {
                 const gru_node_t *node = gru_list_get(list->items, i);
 
                 if (node != NULL && node->data != NULL) {
                     print_queue_stat((const char *) node->data, (stat[i]));
                 }
             }
+
+            free(stat);
         }
 
         printf("\n\n");
-
         printf("%s%s%s%-32s %-9s %-17s %-19s%s", RESET, BG_WHITE,
                 LIGHT_BLACK, bmic_discovery_hint_host(options->hint), info->name, info->version,
                 "Idle", RESET);
 
         fflush(NULL);
         bmic_java_os_info_cleanup(osinfo);
-        
-        gru_dealloc((void **) &stat);
+
         bmic_list_destroy((bmic_list_t **) &list);
 
         if (options->program.top.repeat != -1) {
@@ -196,15 +196,12 @@ int top_run(options_t *options)
                 LIGHT_BLACK, bmic_discovery_hint_host(options->hint), info->name, info->version,
                 "Reading...", RESET);
         fflush(NULL);
-        
-        
     }
 
-    
-    
+
     gru_dealloc((void **) &info);
     bmic_java_info_cleanup(jinfo);
-    
+
     bmic_context_cleanup(&ctxt);
 
     return EXIT_SUCCESS;
