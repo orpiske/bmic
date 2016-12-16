@@ -21,7 +21,6 @@
 typedef struct cap_read_wrapper_t_ {
     bmic_handle_t *handle;
     bmic_api_interface_t *api;
-    const bmic_exchange_t *cap;
     gru_status_t *status;
 } cap_read_wrapper_t;
 
