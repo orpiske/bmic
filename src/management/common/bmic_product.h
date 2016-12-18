@@ -17,6 +17,7 @@
 #define BMIC_PRODUCT_H
 
 #include <common/gru_status.h>
+#include <string/gru_alt.h>
 
 #include "base/common/bmic_object.h"
 #include "base/common/bmic_list.h"
