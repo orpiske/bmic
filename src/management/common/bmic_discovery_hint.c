@@ -25,7 +25,7 @@ bmic_discovery_hint_t *bmic_discovery_hint_new(gru_status_t *status) {
 
 void bmic_discovery_hint_set_url(bmic_discovery_hint_t *hint, const char *url, 
                                  gru_status_t *status) {
-    gru_dealloc(&hint->content.url);
+    gru_dealloc_string(&hint->content.url);
     
     hint->hint_type = URL;
     
@@ -40,7 +40,7 @@ void bmic_discovery_hint_set_addressing_hostname(bmic_discovery_hint_t *hint,
                                                  const char *hostname, 
                                                  gru_status_t *status)
 {
-    gru_dealloc(&hint->content.addressing.hostname);
+    gru_dealloc_string(&hint->content.addressing.hostname);
     
     hint->hint_type = ADDRESSING;
     if (hostname == NULL) {
