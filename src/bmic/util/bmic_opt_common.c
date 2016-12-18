@@ -15,7 +15,7 @@
  */
 #include "bmic_opt_common.h"
 
-options_t prg_options = {0};
+static options_t prg_options = {0};
 
 options_t options_init(program_type_t type)
 {
@@ -59,44 +59,28 @@ options_t options_init(program_type_t type)
 
 void options_cleanup()
 {
-    if (prg_options.credentials.username) {
-        gru_dealloc_string(&prg_options.credentials.username);
-    }
-
-    if (prg_options.credentials.password) {
-        gru_dealloc_string(&prg_options.credentials.password);
-    }
+    gru_dealloc_string(&prg_options.credentials.username);
+    gru_dealloc_string(&prg_options.credentials.password);
 
     switch (prg_options.type) {
     case CAPABILITIES:
     {
-        if (prg_options.program.capabilities.read) {
-            gru_dealloc_string(&prg_options.program.capabilities.read);
-        }
+        gru_dealloc_string(&prg_options.program.capabilities.read);
 
         break;
     }
     case OPERATIONS:
     {
-        if (prg_options.program.operations.name) {
-            gru_dealloc_string(&prg_options.program.operations.name);
-        }
+        gru_dealloc_string(&prg_options.program.operations.name);
 
         break;
     }
     case QUEUE:
     {
-        if (prg_options.program.queue.attribute) {
-            gru_dealloc_string(&prg_options.program.queue.attribute);
-        }
-
-        if (prg_options.program.queue.queue) {
-            gru_dealloc_string(&prg_options.program.queue.queue);
-        }
+        gru_dealloc_string(&prg_options.program.queue.attribute);
+        gru_dealloc_string(&prg_options.program.queue.queue);
 
         break;
-
-
     }
     case TOP:
     default:
