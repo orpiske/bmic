@@ -107,6 +107,7 @@ int capabilities_run(options_t *options)
     if (!cap) {
         fprintf(stderr, "Unable to load capabilities: %s\n", status.message);
 
+        bmic_context_cleanup(&ctxt);
         return EXIT_FAILURE;
     }    
     
@@ -158,7 +159,6 @@ int capabilities_run(options_t *options)
     }
 
     bmic_context_cleanup(&ctxt);
-
     return EXIT_SUCCESS;
 }
 

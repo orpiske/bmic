@@ -50,8 +50,6 @@ static void print_queue_stat(const char *name, bmic_queue_stat_t stat)
 int queue_run(options_t *options)
 {
     gru_status_t status = {0};
-
-
     bmic_context_t ctxt = {0};
 
     bool ret = bmic_context_init_hint(&ctxt, options->hint, options->credentials.username,
@@ -66,6 +64,7 @@ int queue_run(options_t *options)
     if (!cap) {
         fprintf(stderr, "Unable to load capabilities: %s\n", status.message);
 
+        bmic_context_cleanup(&ctxt);
         return EXIT_FAILURE;
     }
     
@@ -135,7 +134,6 @@ int queue_run(options_t *options)
     }
 
     bmic_context_cleanup(&ctxt);
-
     return EXIT_FAILURE;
 }
 
