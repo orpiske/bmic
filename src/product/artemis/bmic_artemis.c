@@ -104,6 +104,16 @@ bmic_product_info_t *bmic_artemis_product_info(bmic_handle_t *handle,
     const bmic_exchange_t *ex = bmic_artemis_mi_read(handle, cap->root, "Version", status,
                                  REG_SEARCH_NAME, ARTEMIS_CAPABILITIES_KEY_REGEX);
     
+    if (ex == NULL) {
+        return NULL;
+    }
+    
+    if (status->code != GRU_SUCCESS) {
+        bmic_exchange_destroy((bmic_exchange_t **) &ex);
+        
+        return NULL;
+    }
+    
     if (ex->data_ptr->type == STRING) {
         bmic_product_info_t *ret = gru_alloc(sizeof (bmic_api_interface_t), status);
         strlcpy(ret->version, ex->data_ptr->data.str, sizeof (ret->version));
@@ -182,6 +192,13 @@ const bmic_list_t *bmic_artemis_attribute_list(bmic_handle_t *handle,
     const bmic_object_t *attributes = bmic_object_find_regex(cap->data_ptr,
                                                              ARTEMIS_CORE_CAP_ATTRIBUTES,
                                                              REG_SEARCH_PATH);
+    
+    if (attributes == NULL) {
+        gru_status_set(status, GRU_FAILURE, "Attribute not found");
+        
+        return NULL;
+    }
+    
     bmic_list_t *ret = bmic_list_new(status, bmic_cap_info_destroy_list);
     gru_alloc_check(ret, NULL);
 
@@ -263,6 +280,13 @@ const bmic_list_t *bmic_artemis_operation_list(bmic_handle_t *handle,
     const bmic_object_t *attributes = bmic_object_find_regex(cap->root,
                                                              ARTEMIS_CORE_CAP_OPERATIONS,
                                                              REG_SEARCH_PATH);
+    
+    if (attributes == NULL) {
+        gru_status_set(status, GRU_FAILURE, "Attribute not found");
+        
+        return NULL;
+    }
+    
     bmic_list_t *ret = bmic_list_new(status, bmic_op_info_destroy_list);
     gru_alloc_check(ret, NULL);
 
@@ -286,6 +310,12 @@ bool bmic_artemis_queue_create(bmic_handle_t *handle,
                                                              ARTEMIS_CORE_BROKER_OPERATIONS_ROOT,
                                                              REG_SEARCH_NAME);
 
+    if (attributes == NULL) {
+        gru_status_set(status, GRU_FAILURE, "Attribute not found");
+        
+        return false;
+    }
+    
     bmic_json_t *json = bmic_json_new(status);
     gru_alloc_check(json, false);
 
@@ -305,6 +335,12 @@ bool bmic_artemis_queue_delete(bmic_handle_t *handle,
                                                              ARTEMIS_CORE_BROKER_OPERATIONS_ROOT,
                                                              REG_SEARCH_NAME);
 
+    if (attributes == NULL) {
+        gru_status_set(status, GRU_FAILURE, "Attribute not found");
+        
+        return false;
+    }
+       
     bmic_json_t *json = bmic_json_new(status);
     gru_alloc_check(json, false);
 
