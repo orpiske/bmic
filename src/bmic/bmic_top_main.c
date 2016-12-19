@@ -129,7 +129,7 @@ int top_run(options_t *options)
         }
         
         if (status.code != GRU_SUCCESS) {
-            fprintf(stderr, "%s\n", status.message);
+            fprintf(stderr, "\n%s\n", status.message);
                     
             if (list) { 
                 bmic_list_destroy((bmic_list_t **) &list);
