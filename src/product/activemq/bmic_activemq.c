@@ -346,6 +346,44 @@ const bmic_list_t *bmic_activemq_queue_list(bmic_handle_t *handle,
     return ret;
 }
 
+
+static int64_t bmic_activemq_queue_stat_reader(bmic_handle_t *handle,
+                                          const bmic_exchange_t *cap,
+                                          const char *queue,
+                                          const char *attr_name, 
+                                          gru_status_t *status) {
+    
+    const bmic_exchange_t *attribute = bmic_activemq_queue_attribute_read(handle, cap,
+                                                                     attr_name,
+                                                                     status, queue);
+    
+    logger_t logger = gru_logger_get();
+    if (!attribute) {
+        logger(ERROR, "Unavailable response for '%s' queue property", attr_name);
+        if (status->code == GRU_SUCCESS) { 
+            gru_status_set(status, GRU_FAILURE, 
+                           "Unavailable response for '%s' queue property", 
+                       attr_name);
+        }
+        
+        return -1;
+    }
+    
+    int64_t ret = -1;
+    if (attribute->data_ptr && attribute->data_ptr->type == INTEGER) {
+        ret = attribute->data_ptr->data.number;
+    }
+    else {
+        logger(ERROR, "Invalid data pointer for the '%s' property", attr_name);
+        
+        gru_status_set(status, GRU_FAILURE, "Invalid data pointer for the '%s' property",
+                       attr_name);
+    }
+        
+    bmic_exchange_destroy((bmic_exchange_t **) &attribute);
+    return ret;
+}
+
 /**
  * List queues
  * @param handle
@@ -359,73 +397,29 @@ bmic_queue_stat_t bmic_activemq_queue_stats(bmic_handle_t *handle,
                                            gru_status_t *status)
 {
     bmic_queue_stat_t ret = {0};
-    const bmic_exchange_t *qsize = bmic_activemq_queue_attribute_read(handle, cap,
-                                                                      ACTIVEMQ_QUEUE_SIZE_ATTR,
-                                                                      status, queue);
-    logger_t logger = gru_logger_get();
-    if (qsize) {
-        if (qsize->data_ptr && qsize->data_ptr->type == INTEGER) {
-            ret.queue_size = qsize->data_ptr->data.number;
-        }
-        else {
-            logger(ERROR, "Invalid data pointer for the queue size property");
-        }
-        bmic_exchange_destroy((bmic_exchange_t **) &qsize);
+    ret.queue_size = bmic_activemq_queue_stat_reader(handle, cap, queue, 
+                                                    ACTIVEMQ_QUEUE_SIZE_ATTR, status);
+    if (status->code != GRU_SUCCESS) {
+        return ret;
     }
-    else {
-        logger(ERROR, "Unavailable response for queue size property");
+    
+    ret.msg_ack_count = bmic_activemq_queue_stat_reader(handle, cap, queue, 
+                                                    ACTIVEMQ_QUEUE_ACK_CNT_ATTR, status);
+    if (status->code != GRU_SUCCESS) {
+        return ret;
     }
 
-    const bmic_exchange_t *ack = bmic_activemq_queue_attribute_read(handle, cap,
-                                                                    ACTIVEMQ_QUEUE_ACK_CNT_ATTR,
-                                                                    status, queue);
-    if (ack) {
-        if (ack->data_ptr && ack->data_ptr->type == INTEGER) {
-            ret.msg_ack_count = ack->data_ptr->data.number;
-        }
-        else {
-            logger(ERROR, "Invalid data pointer for the acknowledge message count property");
-        }
-        
-        bmic_exchange_destroy((bmic_exchange_t **) &ack);
-    }
-    else {
-        logger(ERROR, "Unavailable response for acknowledge message count property");
+    ret.msg_exp_count = bmic_activemq_queue_stat_reader(handle, cap, queue, 
+                                                    ACTIVEMQ_QUEUE_EXP_CNT_ATTR, status);
+    if (status->code != GRU_SUCCESS) {
+        return ret;
     }
 
-    const bmic_exchange_t *exp = bmic_activemq_queue_attribute_read(handle, cap,
-                                                                    ACTIVEMQ_QUEUE_EXP_CNT_ATTR,
-                                                                    status, queue);
-    if (exp) {
-        if (exp->data_ptr && exp->data_ptr->type == INTEGER) {
-            ret.msg_exp_count = exp->data_ptr->data.number;
-        }
-        else {
-            logger(ERROR, "Invalid data pointer for the expired message count property");
-        }
-        
-        bmic_exchange_destroy((bmic_exchange_t **) &exp);
-    }
-    else {
-        logger(ERROR, "Unavailable response for expired message count property");
-    }
-
-    const bmic_exchange_t *cns = bmic_activemq_queue_attribute_read(handle, cap,
-                                                                    ACTIVEMQ_QUEUE_CNS_CNT_ATTR,
-                                                                    status, queue);
-    if (cns) {
-        if (cns->data_ptr && cns->data_ptr->type == INTEGER) {
-            ret.consumer_count = cns->data_ptr->data.number;
-        }
-        else { 
-            logger(ERROR, "Invalid data pointer for the consumers count property");
-        }
-        
-        bmic_exchange_destroy((bmic_exchange_t **) &cns);
-    }
-    else {
-        logger(ERROR, "Unavailable response for consumers count property");
-    }
-
+    ret.consumer_count = bmic_activemq_queue_stat_reader(handle, cap, queue, 
+                                                    ACTIVEMQ_QUEUE_CNS_CNT_ATTR, status);
+    if (status->code != GRU_SUCCESS) {
+        return ret;
+    } 
+    
     return ret;
 }

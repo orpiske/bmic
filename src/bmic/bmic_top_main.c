@@ -121,7 +121,25 @@ int top_run(options_t *options)
             if (node != NULL && node->data != NULL) {
                 stat[i] = api->queue_stats(ctxt.handle, cap,
                         (const char *) node->data, &status);
+                
+                if (status.code != GRU_SUCCESS) {
+                    break;
+                }
             }
+        }
+        
+        if (status.code != GRU_SUCCESS) {
+            fprintf(stderr, "%s\n", status.message);
+                    
+            if (list) { 
+                bmic_list_destroy((bmic_list_t **) &list);
+            }
+            
+            if (size > 0) { 
+                free(stat);
+            }
+            
+            break;
         }
 
         printf(CLEAR_SCREEN);
