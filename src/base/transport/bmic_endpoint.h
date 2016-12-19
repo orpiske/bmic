@@ -24,12 +24,18 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+    
+typedef struct bmic_endpoint_options_t_ {
+    int64_t timeout;
+    void *transport;
+} bmic_endpoint_options_t;
 
 typedef struct bmic_endpoint_t_ {
     char *url;
     char *path;
     bmic_credentials_t *credentials;
     void *handle;
+    bmic_endpoint_options_t options;
 } bmic_endpoint_t;
 
 typedef struct bmic_endpoint_status_t_ {

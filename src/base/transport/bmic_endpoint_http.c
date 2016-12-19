@@ -72,6 +72,7 @@ void bmic_endpoint_http_begin(bmic_endpoint_t *ep, gru_status_t *status)
 
     gru_status_reset(status);
     ep->handle = easy;
+    ep->options.timeout = 35L;
 }
 
 void bmic_endpoint_http_terminate(bmic_endpoint_t *ep, gru_status_t *status)
@@ -150,7 +151,7 @@ void bmic_endpoint_http_read(const bmic_endpoint_t *ep, bmic_data_t *request,
     curl_easy_setopt(easy, CURLOPT_WRITEDATA, &reply_data);
     curl_easy_setopt(easy, CURLOPT_USERAGENT, "bmic/0.0.1");
 
-    curl_easy_setopt(easy, CURLOPT_TIMEOUT, 20L);
+    curl_easy_setopt(easy, CURLOPT_TIMEOUT, ep->options.timeout);
     curl_easy_setopt(easy, CURLOPT_FOLLOWLOCATION, 1);
     curl_easy_setopt(easy, CURLOPT_MAXREDIRS, 3);
 
@@ -168,6 +169,8 @@ void bmic_endpoint_http_read(const bmic_endpoint_t *ep, bmic_data_t *request,
                        "Unacceptable response from server (HTTP status %ld)",
                        epstatus->epcode);
     }
+    
+    
 
     logger(DEBUG, "HTTP response code %d", epstatus->epcode);
     logger(TRACE, "HTTP response data %d", bmic_data_to_string(reply_data.body));
@@ -218,7 +221,7 @@ void bmic_endpoint_http_write(const bmic_endpoint_t *ep, bmic_data_t *request,
     curl_easy_setopt(easy, CURLOPT_WRITEDATA, &reply_data);
     curl_easy_setopt(easy, CURLOPT_USERAGENT, "bmic/0.0.1");
 
-    curl_easy_setopt(easy, CURLOPT_TIMEOUT, 25L);
+    curl_easy_setopt(easy, CURLOPT_TIMEOUT, ep->options.timeout);
     curl_easy_setopt(easy, CURLOPT_FOLLOWLOCATION, 1);
     curl_easy_setopt(easy, CURLOPT_MAXREDIRS, 3);
 
