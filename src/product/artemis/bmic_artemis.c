@@ -231,6 +231,16 @@ const bmic_list_t *bmic_artemis_queue_list(bmic_handle_t *handle,
                                                              status,
                                                              REG_SEARCH_NAME, ARTEMIS_CAPABILITIES_KEY_REGEX);
 
+    if (attributes == NULL) {
+        return NULL;
+    }
+    
+    if (status->code != GRU_SUCCESS) {
+        bmic_exchange_destroy((bmic_exchange_t **) &attributes);
+        
+        return NULL;
+    }
+    
     bmic_list_t *ret = bmic_list_new(status, gru_dealloc);
     gru_alloc_check(ret, NULL);
 

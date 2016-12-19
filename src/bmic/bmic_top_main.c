@@ -181,7 +181,9 @@ int top_run(options_t *options)
         fflush(NULL);
         bmic_java_os_info_cleanup(osinfo);
 
-        bmic_list_destroy((bmic_list_t **) &list);
+        if (list) { 
+            bmic_list_destroy((bmic_list_t **) &list);
+        }
 
         if (options->program.top.repeat != -1) {
             iteration++;
