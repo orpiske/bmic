@@ -162,18 +162,18 @@ void bmic_endpoint_http_read(const bmic_endpoint_t *ep, bmic_data_t *request,
         gru_status_set(epstatus->status, GRU_FAILURE,
                        "Error while trying to read data: %s", curl_easy_strerror(rcode));
     }
-
-    curl_easy_getinfo(easy, CURLINFO_RESPONSE_CODE, &epstatus->epcode);
-    if (epstatus->epcode != HTTP_STATUS_OK) {
-        gru_status_set(epstatus->status, GRU_FAILURE,
-                       "Unacceptable response from server (HTTP status %ld)",
-                       epstatus->epcode);
+    else { 
+        curl_easy_getinfo(easy, CURLINFO_RESPONSE_CODE, &epstatus->epcode);
+        if (epstatus->epcode != HTTP_STATUS_OK) {
+            gru_status_set(epstatus->status, GRU_FAILURE,
+                           "Unacceptable response from server (HTTP status %ld)",
+                           epstatus->epcode);
+        }
+    
+        logger(DEBUG, "HTTP response code %d", epstatus->epcode);
+        logger(TRACE, "HTTP response data %d", bmic_data_to_string(reply_data.body));
     }
     
-    
-
-    logger(DEBUG, "HTTP response code %d", epstatus->epcode);
-    logger(TRACE, "HTTP response data %d", bmic_data_to_string(reply_data.body));
 }
 
 // POST + get reply
@@ -233,15 +233,15 @@ void bmic_endpoint_http_write(const bmic_endpoint_t *ep, bmic_data_t *request,
         gru_status_set(epstatus->status, GRU_FAILURE,
                        "Error while trying to write data: %s", curl_easy_strerror(rcode));
     }
+    else { 
+        curl_easy_getinfo(easy, CURLINFO_RESPONSE_CODE, &epstatus->epcode);
+        if (epstatus->epcode != HTTP_STATUS_OK) {
+            gru_status_set(epstatus->status, GRU_FAILURE,
+                           "Unacceptable response from server (HTTP status %ld)",
+                           epstatus->epcode);
+        }
 
-
-    curl_easy_getinfo(easy, CURLINFO_RESPONSE_CODE, &epstatus->epcode);
-    if (epstatus->epcode != HTTP_STATUS_OK) {
-        gru_status_set(epstatus->status, GRU_FAILURE,
-                       "Unacceptable response from server (HTTP status %ld)",
-                       epstatus->epcode);
+        logger(DEBUG, "HTTP response code %d", epstatus->epcode);
+        logger(TRACE, "HTTP response data %d", bmic_data_to_string(reply));
     }
-
-    logger(DEBUG, "HTTP response code %d", epstatus->epcode);
-    logger(TRACE, "HTTP response data %d", bmic_data_to_string(reply));
 }
