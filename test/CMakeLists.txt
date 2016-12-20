@@ -22,7 +22,7 @@ target_link_libraries(
 add_test(
 	NAME bmic-json-simple-test
 	WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/target/tests/bin
-	COMMAND bmic_json_simple_test {CMAKE_BINARY_DIR}/target/tests/share/simple.json
+	COMMAND bmic_json_simple_test ${CMAKE_BINARY_DIR}/target/tests/share/simple.json
 )
 
 
