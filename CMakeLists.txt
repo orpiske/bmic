@@ -1,42 +1,42 @@
 project(bmic)
 cmake_minimum_required(VERSION 2.6)
 
-if( CMAKE_SIZEOF_VOID_P EQUAL 8)
-    message(STATUS "64 bits compiler detected")
-    set(APP_BUILD_PLATFORM 64)
-    set(APP_BUILD_PLATFORM_NAME "x86_64")
-    set(CPP_LIBRARY_DIR "lib64")
-else(CMAKE_SIZEOF_VOID_P EQUAL 8)
-    message(STATUS "32 bits compiler detected")
-    set(APP_BUILD_PLATFORM 32)
-    set(APP_BUILD_PLATFORM_NAME "i686")
-    set(CPP_LIBRARY_DIR "lib")
-endif(CMAKE_SIZEOF_VOID_P EQUAL 8)
+if (CMAKE_SIZEOF_VOID_P EQUAL 8)
+		message(STATUS "64 bits compiler detected")
+		set(APP_BUILD_PLATFORM 64)
+		set(APP_BUILD_PLATFORM_NAME "x86_64")
+		set(CPP_LIBRARY_DIR "lib64")
+else (CMAKE_SIZEOF_VOID_P EQUAL 8)
+		message(STATUS "32 bits compiler detected")
+		set(APP_BUILD_PLATFORM 32)
+		set(APP_BUILD_PLATFORM_NAME "i686")
+		set(CPP_LIBRARY_DIR "lib")
+endif (CMAKE_SIZEOF_VOID_P EQUAL 8)
 
 if (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
-    add_definitions(-DLINUX_BUILD -D_GNU_SOURCE)
+		add_definitions(-DLINUX_BUILD -D_GNU_SOURCE)
 
-    if(EXISTS "/etc/redhat-release")
-        add_definitions(-D__RH_DISTRO__)
-        set(LIBJSON json-c)
-    endif(EXISTS "/etc/redhat-release")
+		if(EXISTS "/etc/redhat-release")
+				add_definitions(-D__RH_DISTRO__)
+				set(LIBJSON json-c)
+		endif(EXISTS "/etc/redhat-release")
 
-    if(EXISTS "/etc/debian_version")
-        add_definitions(-D__DEBIAN_DISTRO__)
-        set(LIBJSON json)
-    endif(EXISTS "/etc/debian_version")
+		if(EXISTS "/etc/debian_version")
+				add_definitions(-D__DEBIAN_DISTRO__)
+				set(LIBJSON json)
+		endif(EXISTS "/etc/debian_version")
 
-    if(EXISTS "/etc/ubuntu-release")
-        add_definitions(-D__UBUNTU_DISTRO__)
-        set(LIBJSON json)
-    endif(EXISTS "/etc/ubuntu-release")
+		if(EXISTS "/etc/ubuntu-release")
+				add_definitions(-D__UBUNTU_DISTRO__)
+				set(LIBJSON json)
+		endif(EXISTS "/etc/ubuntu-release")
 else (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
-  message(STATUS "Compiling for " ${CMAKE_SYSTEM_NAME} "")
-  if (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
-    set(CMAKE_MACOSX_RPATH TRUE)
-    add_definitions(-D__OSX__)
-    set(LIBJSON json-c)
-  endif (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+	message(STATUS "Compiling for " ${CMAKE_SYSTEM_NAME} "")
+	if (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+		set(CMAKE_MACOSX_RPATH TRUE)
+		add_definitions(-D__OSX__)
+		set(LIBJSON json-c)
+	endif (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
 
 endif(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
 
@@ -53,32 +53,32 @@ set(BUILD_WITH_EXTRA_DEBUG OFF CACHE BOOL "Build extra debug information")
 
 #### GNU Compiler flags
 if (BUILD_WITH_EXTRA_DEBUG)
-    set(BMIC_DEBUG_DEFINES "-DBMIC_DEBUG")
+		set(BMIC_DEBUG_DEFINES "-DBMIC_DEBUG")
 endif (BUILD_WITH_EXTRA_DEBUG)
 
 if (CMAKE_COMPILER_IS_GNUCXX)
-    set(CMAKE_C_FLAGS "-Wall -Wshadow -std=c99 ${CMAKE_C_FLAGS}" CACHE STRING
+	set(CMAKE_C_FLAGS "-Wall -Wshadow -std=c99 ${CMAKE_C_FLAGS}" CACHE STRING
 		"Flags used by the compiler during all build types." FORCE
 	)
 
-    set(CMAKE_C_FLAGS_DEBUG "-DNDEBUG ${BMIC_DEBUG_DEFINES} -fdiagnostics-color=auto -g" CACHE STRING
-        "Flags used by the compiler during debug build." FORCE
+	set(CMAKE_C_FLAGS_DEBUG "-DNDEBUG ${BMIC_DEBUG_DEFINES} -fdiagnostics-color=auto -g" CACHE STRING
+		"Flags used by the compiler during debug build." FORCE
 	)
 
-    set(CMAKE_C_FLAGS_RELEASE "-O2 -fomit-frame-pointer -D_FORTIFY_SOURCE=1 ${CMAKE_C_FLAGS_RELEASE}" CACHE STRING
+	set(CMAKE_C_FLAGS_RELEASE "-O2 -fomit-frame-pointer -D_FORTIFY_SOURCE=1 ${CMAKE_C_FLAGS_RELEASE}" CACHE STRING
 		"Flags used by the compiler during release build." FORCE
 	)
 endif (CMAKE_COMPILER_IS_GNUCXX)
 
 macro (FailIfNotSet VARIABLE name)
-	IF (NOT ${VARIABLE})
-		SET(MSG "** A required file, " ${name} ", was not found on your system **")
-		MESSAGE(FATAL_ERROR ${MSG})
-	ENDIF (NOT ${VARIABLE})
+	if (NOT ${VARIABLE})
+		set(MSG "** A required file, " ${name} ", was not found on your system **")
+		message(FATAL_ERROR ${MSG})
+	endif (NOT ${VARIABLE})
 endmacro(FailIfNotSet)
 
 include (CheckIncludeFiles)
-IF (UNIX)
+if (UNIX)
 	CHECK_INCLUDE_FILES(stdlib.h HAVE_STDLIB_H)
 	FailIfNotSet(HAVE_STDLIB_H stdlib.h)
 
@@ -123,38 +123,33 @@ IF (UNIX)
 
 	CHECK_INCLUDE_FILES(ctype.h HAVE_CTYPE_H)
 	FailIfNotSet(HAVE_CTYPE_H ctype.h)
-ENDIF (UNIX)
+endif (UNIX)
 
 macro (DefineIfSet VARIABLE)
-    if (${VARIABLE})
-        set(MSG "Adding definition " ${VARIABLE} "")
-        message(STATUS ${MSG})
-
-        add_definitions(-D${VARIABLE})
-    endif (${VARIABLE})
+	if (${VARIABLE})
+			set(MSG "Adding definition " ${VARIABLE} "")
+			message(STATUS ${MSG})
+			add_definitions(-D${VARIABLE})
+	endif (${VARIABLE})
 endmacro(DefineIfSet)
 
 include(CheckFunctionExists)
 if (UNIX)
-    check_function_exists(strlcpy HAVE_STRLCPY)
-    DefineIfSet(HAVE_STRLCPY)
+	check_function_exists(strlcpy HAVE_STRLCPY)
+	DefineIfSet(HAVE_STRLCPY)
 endif (UNIX)
 
 
 macro(SetLinkDirByPlatform PREFIX)
-    if (${APP_BUILD_PLATFORM} EQUAL "64")
-            link_directories(
-                ${PREFIX}/lib64
-            )
-    else(${APP_BUILD_PLATFORM} EQUAL "64")
-        link_directories(
-                ${PREFIX}/lib
-        )
-    endif(${APP_BUILD_PLATFORM} EQUAL "64")
+	if (${APP_BUILD_PLATFORM} EQUAL "64")
+		link_directories(${PREFIX}/lib64)
+	else(${APP_BUILD_PLATFORM} EQUAL "64")
+		link_directories(${PREFIX}/lib)
+	endif(${APP_BUILD_PLATFORM} EQUAL "64")
 endmacro(SetLinkDirByPlatform PREFIX)
 
 
-SET(GRU_DIR /usr CACHE String "GRU install prefix")
+set(GRU_DIR /usr CACHE String "GRU install prefix")
 add_definitions(-D__GRU_SUPPORT__)
 include_directories(${GRU_DIR}/include/gru)
 SetLinkDirByPlatform(${GRU_DIR})
@@ -163,8 +158,8 @@ include_directories(src)
 add_subdirectory(src/ objs)
 
 if (BUILD_WITH_UNIT_TESTS)
-    enable_testing()
+		enable_testing()
 
-    include_directories(test)
-    add_subdirectory(test)
+		include_directories(test)
+		add_subdirectory(test)
 endif (BUILD_WITH_UNIT_TESTS)
