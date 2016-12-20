@@ -16,6 +16,7 @@ set(
 	artemis/artemis-v130.json
 	artemis/artemis-v140.json
 	artemis/artemis-v150.json
+	artemis/artemis-v151.json
 )
 
 set(SHARED_DATA_OUTPUT_PATH ${CMAKE_BINARY_DIR}/../build/target/tests/share)
