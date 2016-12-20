@@ -1,0 +1,680 @@
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:strdup
+   fun:PR_NewLogModule
+   obj:/usr/lib64/libnspr4.so
+   obj:/usr/lib64/libcurl.so.4.4.0
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_artemis_init
+   fun:bmic_try_init
+   fun:bmic_discovery_registry_initializer
+   fun:bmic_discovery_run
+   fun:bmic_context_init_simple
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   obj:/usr/lib64/libnspr4.so
+   obj:/usr/lib64/libnspr4.so
+   obj:/usr/lib64/libcurl.so.4.4.0
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_artemis_init
+   fun:bmic_try_init
+   fun:bmic_discovery_registry_initializer
+   fun:bmic_discovery_run
+   fun:bmic_context_init_simple
+   fun:capabilities_run
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:CRYPTO_malloc
+   fun:engine_cleanup_add_last
+   fun:ENGINE_add
+   fun:ENGINE_load_dynamic
+   fun:ENGINE_load_builtin_engines
+   fun:libssh2_init
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_artemis_init
+   fun:bmic_try_init
+   fun:bmic_discovery_registry_initializer
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+   fun:PR_NewLogModule
+   obj:/usr/lib64/libnspr4.so
+   obj:/usr/lib64/libcurl.so.4.4.0
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_artemis_init
+   fun:bmic_try_init
+   fun:bmic_discovery_registry_initializer
+   fun:bmic_discovery_run
+   fun:bmic_context_init_simple
+   fun:capabilities_run
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+   obj:/usr/lib64/libnspr4.so
+   obj:/usr/lib64/libnspr4.so
+   obj:/usr/lib64/libcurl.so.4.4.0
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_artemis_init
+   fun:bmic_try_init
+   fun:bmic_discovery_registry_initializer
+   fun:bmic_discovery_run
+   fun:bmic_context_init_simple
+   fun:capabilities_run
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:PR_ErrorInstallTable
+   obj:/usr/lib64/libnspr4.so
+   obj:/usr/lib64/libcurl.so.4.4.0
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_artemis_init
+   fun:bmic_try_init
+   fun:bmic_discovery_registry_initializer
+   fun:bmic_discovery_run
+   fun:bmic_context_init_simple
+   fun:capabilities_run
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:CRYPTO_malloc
+   fun:lh_insert
+   fun:OBJ_NAME_add
+   fun:EVP_add_cipher
+   fun:OpenSSL_add_all_ciphers
+   fun:OPENSSL_add_all_algorithms_noconf
+   fun:libssh2_init
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_artemis_init
+   fun:bmic_try_init
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:CRYPTO_malloc
+   fun:lh_insert
+   fun:OBJ_NAME_add
+   fun:OpenSSL_add_all_ciphers
+   fun:OPENSSL_add_all_algorithms_noconf
+   fun:libssh2_init
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_artemis_init
+   fun:bmic_try_init
+   fun:bmic_discovery_registry_initializer
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:CRYPTO_malloc
+   fun:lh_insert
+   fun:OBJ_NAME_add
+   fun:OPENSSL_add_all_algorithms_noconf
+   fun:libssh2_init
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_artemis_init
+   fun:bmic_try_init
+   fun:bmic_discovery_registry_initializer
+   fun:bmic_discovery_run
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:CRYPTO_malloc
+   fun:lh_insert
+   fun:OBJ_NAME_add
+   fun:EVP_add_digest
+   fun:OpenSSL_add_all_digests
+   fun:libssh2_init
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_artemis_init
+   fun:bmic_try_init
+   fun:bmic_discovery_registry_initializer
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:CRYPTO_malloc
+   fun:lh_insert
+   fun:OBJ_NAME_add
+   fun:OpenSSL_add_all_digests
+   fun:libssh2_init
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_artemis_init
+   fun:bmic_try_init
+   fun:bmic_discovery_registry_initializer
+   fun:bmic_discovery_run
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:CRYPTO_malloc
+   fun:lh_insert
+   fun:OBJ_NAME_add
+   fun:EVP_add_digest
+   fun:libssh2_init
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_artemis_init
+   fun:bmic_try_init
+   fun:bmic_discovery_registry_initializer
+   fun:bmic_discovery_run
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:CRYPTO_malloc
+   obj:/usr/lib64/libcrypto.so.1.0.2j
+   obj:/usr/lib64/libcrypto.so.1.0.2j
+   fun:ENGINE_new
+   fun:ENGINE_load_dynamic
+   fun:ENGINE_load_builtin_engines
+   fun:libssh2_init
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_artemis_init
+   fun:bmic_try_init
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:CRYPTO_malloc
+   fun:lh_insert
+   obj:/usr/lib64/libcrypto.so.1.0.2j
+   obj:/usr/lib64/libcrypto.so.1.0.2j
+   fun:ENGINE_new
+   fun:ENGINE_load_dynamic
+   fun:ENGINE_load_builtin_engines
+   fun:libssh2_init
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_artemis_init
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:CRYPTO_malloc
+   fun:lh_insert
+   obj:/usr/lib64/libcrypto.so.1.0.2j
+   fun:ERR_get_state
+   fun:ERR_clear_error
+   fun:ENGINE_load_builtin_engines
+   fun:libssh2_init
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_artemis_init
+   fun:bmic_try_init
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:CRYPTO_malloc
+   fun:OBJ_NAME_add
+   fun:EVP_add_cipher
+   fun:OpenSSL_add_all_ciphers
+   fun:OPENSSL_add_all_algorithms_noconf
+   fun:libssh2_init
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_activemq_init
+   fun:bmic_try_init
+   fun:bmic_discovery_registry_initializer
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:CRYPTO_malloc
+   fun:OBJ_NAME_add
+   fun:OpenSSL_add_all_ciphers
+   fun:OPENSSL_add_all_algorithms_noconf
+   fun:libssh2_init
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_activemq_init
+   fun:bmic_try_init
+   fun:bmic_discovery_registry_initializer
+   fun:bmic_discovery_run
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:CRYPTO_malloc
+   fun:OBJ_NAME_add
+   fun:OPENSSL_add_all_algorithms_noconf
+   fun:libssh2_init
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_activemq_init
+   fun:bmic_try_init
+   fun:bmic_discovery_registry_initializer
+   fun:bmic_discovery_run
+   fun:bmic_context_init_simple
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:CRYPTO_malloc
+   fun:OBJ_NAME_add
+   fun:EVP_add_digest
+   fun:OpenSSL_add_all_digests
+   fun:libssh2_init
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_activemq_init
+   fun:bmic_try_init
+   fun:bmic_discovery_registry_initializer
+   fun:bmic_discovery_run
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:CRYPTO_malloc
+   fun:OBJ_NAME_add
+   fun:OpenSSL_add_all_digests
+   fun:libssh2_init
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_activemq_init
+   fun:bmic_try_init
+   fun:bmic_discovery_registry_initializer
+   fun:bmic_discovery_run
+   fun:bmic_context_init_simple
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:CRYPTO_malloc
+   fun:OBJ_NAME_add
+   fun:EVP_add_digest
+   fun:libssh2_init
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_activemq_init
+   fun:bmic_try_init
+   fun:bmic_discovery_registry_initializer
+   fun:bmic_discovery_run
+   fun:bmic_context_init_simple
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+   fun:_dlerror_run
+   fun:dlopen@@GLIBC_2.2.5
+   obj:/usr/lib64/libnspr4.so
+   obj:/usr/lib64/libnspr4.so
+   obj:/usr/lib64/libcurl.so.4.4.0
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_artemis_init
+   fun:bmic_try_init
+   fun:bmic_discovery_registry_initializer
+   fun:bmic_discovery_run
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:CRYPTO_malloc
+   fun:sk_new
+   obj:/usr/lib64/libcrypto.so.1.0.2j
+   obj:/usr/lib64/libcrypto.so.1.0.2j
+   fun:ENGINE_new
+   fun:ENGINE_load_dynamic
+   fun:ENGINE_load_builtin_engines
+   fun:libssh2_init
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_artemis_init
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:CRYPTO_malloc
+   fun:sk_new
+   fun:engine_cleanup_add_last
+   fun:ENGINE_add
+   fun:ENGINE_load_dynamic
+   fun:ENGINE_load_builtin_engines
+   fun:libssh2_init
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_artemis_init
+   fun:bmic_try_init
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   obj:/usr/lib64/libnspr4.so
+   obj:/usr/lib64/libnspr4.so
+   obj:/usr/lib64/libnspr4.so
+   obj:/usr/lib64/libnspr4.so
+   obj:/usr/lib64/libcurl.so.4.4.0
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_artemis_init
+   fun:bmic_try_init
+   fun:bmic_discovery_registry_initializer
+   fun:bmic_discovery_run
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:PR_NewCondVar
+   obj:/usr/lib64/libnspr4.so
+   obj:/usr/lib64/libnspr4.so
+   obj:/usr/lib64/libcurl.so.4.4.0
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_artemis_init
+   fun:bmic_try_init
+   fun:bmic_discovery_registry_initializer
+   fun:bmic_discovery_run
+   fun:bmic_context_init_simple
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:PR_NewCondVar
+   obj:/usr/lib64/libnspr4.so
+   obj:/usr/lib64/libcurl.so.4.4.0
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_artemis_init
+   fun:bmic_try_init
+   fun:bmic_discovery_registry_initializer
+   fun:bmic_discovery_run
+   fun:bmic_context_init_simple
+   fun:capabilities_run
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:CRYPTO_malloc
+   fun:lh_new
+   obj:/usr/lib64/libcrypto.so.1.0.2j
+   obj:/usr/lib64/libcrypto.so.1.0.2j
+   obj:/usr/lib64/libcrypto.so.1.0.2j
+   fun:ENGINE_new
+   fun:ENGINE_load_dynamic
+   fun:ENGINE_load_builtin_engines
+   fun:libssh2_init
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:CRYPTO_malloc
+   fun:lh_new
+   obj:/usr/lib64/libcrypto.so.1.0.2j
+   obj:/usr/lib64/libcrypto.so.1.0.2j
+   fun:ERR_get_state
+   fun:ERR_clear_error
+   fun:ENGINE_load_builtin_engines
+   fun:libssh2_init
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_artemis_init
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+   fun:PR_NewLock
+   obj:/usr/lib64/libnspr4.so
+   obj:/usr/lib64/libnspr4.so
+   obj:/usr/lib64/libcurl.so.4.4.0
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_artemis_init
+   fun:bmic_try_init
+   fun:bmic_discovery_registry_initializer
+   fun:bmic_discovery_run
+   fun:bmic_context_init_simple
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+   fun:PR_NewLock
+   obj:/usr/lib64/libnspr4.so
+   obj:/usr/lib64/libcurl.so.4.4.0
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_artemis_init
+   fun:bmic_try_init
+   fun:bmic_discovery_registry_initializer
+   fun:bmic_discovery_run
+   fun:bmic_context_init_simple
+   fun:capabilities_run
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+   fun:PR_NewLock
+   obj:/usr/lib64/libnspr4.so
+   obj:/usr/lib64/libnspr4.so
+   obj:/usr/lib64/libnspr4.so
+   obj:/usr/lib64/libcurl.so.4.4.0
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_artemis_init
+   fun:bmic_try_init
+   fun:bmic_discovery_registry_initializer
+   fun:bmic_discovery_run
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+   fun:PR_NewMonitor
+   fun:PR_NewNamedMonitor
+   obj:/usr/lib64/libnspr4.so
+   obj:/usr/lib64/libnspr4.so
+   obj:/usr/lib64/libcurl.so.4.4.0
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_artemis_init
+   fun:bmic_try_init
+   fun:bmic_discovery_registry_initializer
+   fun:bmic_discovery_run
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+   fun:PR_NewMonitor
+   obj:/usr/lib64/libnspr4.so
+   obj:/usr/lib64/libcurl.so.4.4.0
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_artemis_init
+   fun:bmic_try_init
+   fun:bmic_discovery_registry_initializer
+   fun:bmic_discovery_run
+   fun:bmic_context_init_simple
+   fun:capabilities_run
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:CRYPTO_malloc
+   fun:lh_new
+   fun:OBJ_NAME_init
+   fun:OBJ_NAME_add
+   fun:EVP_add_cipher
+   fun:OpenSSL_add_all_ciphers
+   fun:OPENSSL_add_all_algorithms_noconf
+   fun:libssh2_init
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_artemis_init
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:CRYPTO_malloc
+   fun:ENGINE_new
+   fun:ENGINE_load_dynamic
+   fun:ENGINE_load_builtin_engines
+   fun:libssh2_init
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_artemis_init
+   fun:bmic_try_init
+   fun:bmic_discovery_registry_initializer
+   fun:bmic_discovery_run
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:realloc
+   fun:curl_callback
+   obj:/usr/lib64/libcurl.so.4.4.0
+   obj:/usr/lib64/libcurl.so.4.4.0
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:curl_multi_perform
+   fun:curl_easy_perform
+   fun:bmic_endpoint_http_read
+   fun:bmic_api_io_read
+   fun:bmic_artemis_product_info
+   fun:bmic_try_init
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:CRYPTO_malloc
+   fun:ERR_get_state
+   fun:ERR_clear_error
+   fun:ENGINE_load_builtin_engines
+   fun:libssh2_init
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_artemis_init
+   fun:bmic_try_init
+   fun:bmic_discovery_registry_initializer
+   fun:bmic_discovery_run
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+   fun:PR_NewMonitor
+   obj:/usr/lib64/libnspr4.so
+   obj:/usr/lib64/libnspr4.so
+   obj:/usr/lib64/libcurl.so.4.4.0
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_artemis_init
+   fun:bmic_try_init
+   fun:bmic_discovery_registry_initializer
+   fun:bmic_discovery_run
+   fun:bmic_context_init_simple
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:realloc
+   fun:CRYPTO_realloc
+   fun:lh_insert
+   fun:OBJ_NAME_add
+   fun:OpenSSL_add_all_digests
+   fun:libssh2_init
+   obj:/usr/lib64/libcurl.so.4.4.0
+   fun:bmic_endpoint_http_begin
+   fun:bmic_artemis_init
+   fun:bmic_try_init
+   fun:bmic_discovery_registry_initializer
+   fun:bmic_discovery_run
+}
