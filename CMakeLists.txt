@@ -163,3 +163,9 @@ if (BUILD_WITH_UNIT_TESTS)
 	include_directories(test)
 	add_subdirectory(test)
 endif (BUILD_WITH_UNIT_TESTS)
+
+add_custom_target(format
+	COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/util/format.sh
+	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
