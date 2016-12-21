@@ -107,7 +107,7 @@ bmic_product_info_t *bmic_artemis_product_info(
 		return NULL;
 	}
 
-	if (ex->data_ptr->type == STRING) {
+	if (ex->data_ptr->type == BMIC_STRING) {
 		bmic_product_info_t *ret = gru_alloc(sizeof(bmic_api_interface_t), status);
 		strlcpy(ret->version, ex->data_ptr->data.str, sizeof(ret->version));
 		strlcpy(ret->name, ARTEMIS_PRODUCT_NAME_PRETTY, sizeof(ret->name));
@@ -222,7 +222,7 @@ static void bmic_artemis_translate_queue_list(const void *nodedata, void *payloa
 
 	logger(INFO, "Processing node %s [%s]", nodeobj->name, nodeobj->path);
 
-	if (nodeobj->type == STRING) {
+	if (nodeobj->type == BMIC_STRING) {
 		gru_list_append(pl->list, strdup(nodeobj->data.str));
 	} else {
 		logger(WARNING, "Invalid node type for %s: %d", nodeobj->name, nodeobj->type);
@@ -346,7 +346,7 @@ static int64_t bmic_artemis_queue_stat_reader(bmic_handle_t *handle,
 	}
 
 	int64_t ret = -1;
-	if (attribute->data_ptr && attribute->data_ptr->type == INTEGER) {
+	if (attribute->data_ptr && attribute->data_ptr->type == BMIC_INTEGER) {
 		ret = attribute->data_ptr->data.number;
 	} else {
 		logger(ERROR, "Invalid data pointer for the '%s' property for queue '%s'",

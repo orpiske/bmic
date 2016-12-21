@@ -74,7 +74,7 @@ int main(int argc, char **argv) {
 		goto err_exit;
 	}
 
-	if (name1->type != STRING) {
+	if (name1->type != BMIC_STRING) {
 		fprintf(stderr, "Invalid node type returned\n");
 
 		bmic_object_destroy(&root);

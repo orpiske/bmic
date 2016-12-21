@@ -84,17 +84,17 @@ const bmic_cap_info_t *bmic_jolokia_read_attr_info(
 
 void bmic_jolokia_translate_attr(const bmic_object_t *obj, bmic_cap_info_t *info) {
 	const bmic_object_t *rw = bmic_object_find_by_name(obj, JOLOKIA_OBJ_RW_NAME);
-	if (rw && rw->type == BOOLEAN) {
+	if (rw && rw->type == BMIC_BOOLEAN) {
 		bmic_cap_info_set_write(info, rw->data.value);
 	}
 
 	const bmic_object_t *type = bmic_object_find_by_name(obj, JOLOKIA_OBJ_TYPE_NAME);
-	if (type && type->type == STRING) {
+	if (type && type->type == BMIC_STRING) {
 		bmic_cap_info_set_typename(info, type->data.str);
 	}
 
 	const bmic_object_t *desc = bmic_object_find_by_name(obj, JOLOKIA_OBJ_DESC_NAME);
-	if (desc && desc->type == STRING) {
+	if (desc && desc->type == BMIC_STRING) {
 		bmic_cap_info_set_description(info, desc->data.str);
 	}
 }
@@ -103,7 +103,7 @@ void bmic_jolokia_translate_attr_object(const void *nodedata, void *payload) {
 	const bmic_object_t *nodeobj = (bmic_object_t *) nodedata;
 	bmic_payload_add_attr_t *pl = (bmic_payload_add_attr_t *) payload;
 
-	if (nodeobj->type == OBJECT) {
+	if (nodeobj->type == BMIC_OBJECT) {
 		if (nodeobj->name && strcmp(nodeobj->name, JOLOKIA_OBJ_ATTR_NAME) != 0) {
 			bmic_cap_info_t *info = bmic_cap_info_new(pl->status);
 
@@ -126,17 +126,17 @@ static void bmic_jolokia_translate_arg_value(const void *nodedata, void *payload
 	bmic_op_arg_t *arg = bmic_op_arg_new(NULL);
 
 	const bmic_object_t *name = bmic_object_find_by_name(node, JOLOKIA_OBJ_NAME_NAME);
-	if (name && name->type == STRING) {
+	if (name && name->type == BMIC_STRING) {
 		bmic_op_arg_set_name(arg, name->data.str);
 	}
 
 	const bmic_object_t *type = bmic_object_find_by_name(node, JOLOKIA_OBJ_TYPE_NAME);
-	if (type && type->type == STRING) {
+	if (type && type->type == BMIC_STRING) {
 		bmic_op_arg_set_type(arg, type->data.str);
 	}
 
 	const bmic_object_t *desc = bmic_object_find_by_name(node, JOLOKIA_OBJ_DESC_NAME);
-	if (desc && desc->type == STRING) {
+	if (desc && desc->type == BMIC_STRING) {
 		bmic_op_arg_set_description(arg, desc->data.str);
 	}
 
@@ -150,18 +150,18 @@ static void bmic_jolokia_translate_sigs(const void *nodedata, void *payload) {
 	const bmic_object_t *args = bmic_object_find_by_name(node, JOLOKIA_OBJ_ARGS_NAME);
 	bmic_op_sig_t *sig = bmic_op_sig_new(NULL);
 
-	if (args && args->type == LIST) {
+	if (args && args->type == BMIC_LIST) {
 		bmic_object_for_each_child(args, bmic_jolokia_translate_arg_value, sig);
 	}
 
 	const bmic_object_t *ret = bmic_object_find_child_by_name(node, JOLOKIA_OBJ_RET_NAME);
-	if (ret && ret->type == STRING) {
+	if (ret && ret->type == BMIC_STRING) {
 		bmic_op_sig_set_ret(sig, ret->data.str);
 	}
 
 	const bmic_object_t *desc =
 		bmic_object_find_child_by_name(node, JOLOKIA_OBJ_DESC_NAME);
-	if (desc && desc->type == STRING) {
+	if (desc && desc->type == BMIC_STRING) {
 		bmic_op_sig_set_description(sig, desc->data.str);
 	}
 
@@ -170,7 +170,7 @@ static void bmic_jolokia_translate_sigs(const void *nodedata, void *payload) {
 
 void bmic_jolokia_translate_op(
 	const bmic_object_t *obj, bmic_op_info_t *info, gru_status_t *status) {
-	if (obj->type == LIST) {
+	if (obj->type == BMIC_LIST) {
 		bmic_object_for_each_child(obj, bmic_jolokia_translate_sigs, info);
 	} else {
 		bmic_jolokia_translate_sigs(obj, info);
@@ -181,7 +181,7 @@ void bmic_jolokia_translate_op_object(const void *nodedata, void *payload) {
 	const bmic_object_t *nodeobj = (bmic_object_t *) nodedata;
 	bmic_payload_add_attr_t *pl = (bmic_payload_add_attr_t *) payload;
 
-	if (nodeobj->type == OBJECT || nodeobj->type == LIST) {
+	if (nodeobj->type == BMIC_OBJECT || nodeobj->type == BMIC_LIST) {
 		if (nodeobj->name && strcmp(nodeobj->name, JOLOKIA_OBJ_OP_NAME) != 0) {
 			bmic_op_info_t *info = bmic_op_info_new(pl->status);
 
@@ -201,11 +201,11 @@ bool bmic_jolokia_translate_status(const bmic_object_t *root, gru_status_t *stat
 	const bmic_object_t *response_status =
 		bmic_object_find_child_by_name(root, JOLOKIA_OBJ_STATUS_NAME);
 
-	if (response_status && response_status->type == INTEGER) {
+	if (response_status && response_status->type == BMIC_INTEGER) {
 		if (response_status->data.number != JOLOKIA_STATUS_OK) {
 			const bmic_object_t *error =
 				bmic_object_find_child_by_name(root, JOLOKIA_OBJ_ERROR_NAME);
-			if (error && error->type == STRING) {
+			if (error && error->type == BMIC_STRING) {
 				gru_status_set(status, GRU_FAILURE, "Error %d: %s",
 					response_status->data.number, error->data.str);
 			} else {

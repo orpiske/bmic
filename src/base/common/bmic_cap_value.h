@@ -21,13 +21,13 @@ extern "C" {
 #endif
 
 typedef enum bmic_value_type_t_ {
-	INTEGER,
-	STRING,
-	BOOLEAN,
-	DOUBLE,
-	NULL_TYPE,
-	LIST,
-	OBJECT,
+	BMIC_INTEGER,
+	BMIC_STRING,
+	BMIC_BOOLEAN,
+	BMIC_DOUBLE,
+	BMIC_NULL,
+	BMIC_LIST,
+	BMIC_OBJECT,
 } bmic_value_type_t;
 
 #ifdef __cplusplus

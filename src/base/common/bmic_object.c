@@ -27,28 +27,28 @@ static void print(const void *obj1, void *d2) {
 	logger(DEBUG, "Path: %s", nodeojb->path);
 
 	switch (nodeojb->type) {
-		case STRING: {
+		case BMIC_STRING: {
 			logger(DEBUG, "%s (string): %s", nodeojb->name, nodeojb->data.str);
 			break;
 		}
-		case INTEGER: {
+		case BMIC_INTEGER: {
 			logger(DEBUG, "%s (int): %i", nodeojb->name, nodeojb->data.number);
 			break;
 		}
-		case BOOLEAN: {
+		case BMIC_BOOLEAN: {
 			logger(DEBUG, "%s (bool): %s", nodeojb->name,
 				(nodeojb->data.value ? "true" : "false"));
 			break;
 		}
-		case DOUBLE: {
+		case BMIC_DOUBLE: {
 			logger(DEBUG, "%s (double): %.4f", nodeojb->name, nodeojb->data.d);
 			break;
 		}
-		case LIST: {
+		case BMIC_LIST: {
 			gru_tree_for_each_child(nodeojb->self, print, NULL);
 			break;
 		}
-		case OBJECT: {
+		case BMIC_OBJECT: {
 			if (nodeojb) {
 				if (nodeojb->name) {
 					logger(DEBUG, "Object: %s", nodeojb->name);
@@ -57,7 +57,7 @@ static void print(const void *obj1, void *d2) {
 
 			break;
 		}
-		case NULL_TYPE: {
+		case BMIC_NULL: {
 			logger(DEBUG, "%s (null)", nodeojb->name);
 
 			break;
@@ -75,7 +75,7 @@ bmic_object_t *bmic_object_new(const char *name, gru_status_t *status) {
 	ret = gru_alloc(sizeof(bmic_object_t), status);
 	gru_alloc_check(ret, NULL);
 
-	ret->type = NULL_TYPE;
+	ret->type = BMIC_NULL;
 	if (!bmic_object_set_name(ret, name)) {
 		gru_status_set(status, GRU_FAILURE, "Unable to set the object name");
 		bmic_object_destroy(&ret);
@@ -94,7 +94,7 @@ bmic_object_t *bmic_object_new_root(gru_status_t *status) {
 	bmic_object_t *ret = gru_alloc(sizeof(bmic_object_t), status);
 	gru_alloc_check(ret, NULL);
 
-	ret->type = NULL_TYPE;
+	ret->type = BMIC_NULL;
 	ret->name = NULL;
 
 	if (!bmic_object_set_path(ret, "")) {
@@ -130,13 +130,13 @@ void bmic_object_destroy(bmic_object_t **ptr) {
 	logger_t logger = gru_logger_get();
 	logger(TRACE, "Destroying object %s [%s]", obj->name, obj->path);
 
-	if (obj->type == STRING) {
+	if (obj->type == BMIC_STRING) {
 		if (obj->data.str) {
 			free(obj->data.str);
 		}
 	}
 
-	if (obj->type == OBJECT || obj->type == LIST) {
+	if (obj->type == BMIC_OBJECT || obj->type == BMIC_LIST) {
 		// ROOT element
 		if (obj->name == NULL) {
 			gru_tree_for_each(obj->self, bmic_object_destroy_element, NULL);
@@ -184,7 +184,7 @@ void bmic_object_set_string(bmic_object_t *obj, const char *value) {
 	logger_t logger = gru_logger_get();
 	logger(TRACE, "Setting %s [%s] to %s", obj->name, obj->path, value);
 
-	obj->type = STRING;
+	obj->type = BMIC_STRING;
 	if (asprintf(&obj->data.str, "%s", value) == -1) {
 		logger(FATAL,
 			"Unable to allocate memory for setting the string value for the object");
@@ -196,7 +196,7 @@ void bmic_object_set_integer(bmic_object_t *obj, int64_t value) {
 
 	logger_t logger = gru_logger_get();
 	logger(TRACE, "Setting %s [%s] to %" PRId64 "", obj->name, obj->path, value);
-	obj->type = INTEGER;
+	obj->type = BMIC_INTEGER;
 	obj->data.number = value;
 }
 
@@ -207,7 +207,7 @@ void bmic_object_set_boolean(bmic_object_t *obj, bool value) {
 	logger(
 		TRACE, "Setting %s [%s] to %s", obj->name, obj->path, (value ? "true" : "false"));
 
-	obj->type = BOOLEAN;
+	obj->type = BMIC_BOOLEAN;
 	obj->data.value = value;
 }
 
@@ -217,14 +217,14 @@ void bmic_object_set_double(bmic_object_t *obj, double value) {
 	logger_t logger = gru_logger_get();
 	logger(TRACE, "Setting %s [%s] to %.4f", obj->name, obj->path, value);
 
-	obj->type = DOUBLE;
+	obj->type = BMIC_DOUBLE;
 	obj->data.d = value;
 }
 
 void bmic_object_set_null(bmic_object_t *obj) {
 	assert(obj != NULL);
 
-	obj->type = NULL_TYPE;
+	obj->type = BMIC_NULL;
 	obj->data.str = NULL;
 }
 
@@ -232,7 +232,7 @@ void bmic_object_add_list_element(bmic_object_t *parent, bmic_object_t *element)
 	assert(parent != NULL && element != NULL);
 	logger_t logger = gru_logger_get();
 
-	parent->type = LIST;
+	parent->type = BMIC_LIST;
 	uint32_t pos = gru_tree_count_children(parent->self);
 
 	element->self = gru_tree_add_child(parent->self, element);
@@ -251,7 +251,7 @@ void bmic_object_add_object(bmic_object_t *parent, bmic_object_t *child) {
 
 	assert(parent != NULL && child != NULL);
 
-	parent->type = OBJECT;
+	parent->type = BMIC_OBJECT;
 
 	child->self = gru_tree_add_child(parent->self, child);
 	if (!child->self) {

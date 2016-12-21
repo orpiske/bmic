@@ -19,23 +19,23 @@ static void print_returned_from_list(const void *ptr, void *payload) {
 	bmic_object_t *obj = (bmic_object_t *) ptr;
 
 	switch (obj->type) {
-		case STRING: {
+		case BMIC_STRING: {
 			printf("%-35s %s\n", " ", obj->data.str);
 			break;
 		}
-		case INTEGER: {
+		case BMIC_INTEGER: {
 			printf("%-35s %" PRId64 "\n", " ", obj->data.number);
 			break;
 		}
-		case BOOLEAN: {
+		case BMIC_BOOLEAN: {
 			printf("%-35s %-25s\n", " ", (obj->data.value ? "true" : "false"));
 			break;
 		}
-		case DOUBLE: {
+		case BMIC_DOUBLE: {
 			printf("%-35s %.4f\n", " ", obj->data.d);
 			break;
 		}
-		case OBJECT: {
+		case BMIC_OBJECT: {
 			bmic_object_for_each_child(obj, print_returned_from_list, (void *) payload);
 			break;
 		}
@@ -45,33 +45,33 @@ static void print_returned_from_list(const void *ptr, void *payload) {
 
 void print_returned_object(const char *capname, const bmic_object_t *obj) {
 	switch (obj->type) {
-		case STRING: {
+		case BMIC_STRING: {
 			printf("%35s %-25s\n", capname, obj->data.str);
 			break;
 		}
-		case INTEGER: {
+		case BMIC_INTEGER: {
 			printf("%35s %" PRId64 "\n", capname, obj->data.number);
 			break;
 		}
-		case BOOLEAN: {
+		case BMIC_BOOLEAN: {
 			printf("%35s %s\n", capname, (obj->data.value ? "true" : "false"));
 			break;
 		}
-		case DOUBLE: {
+		case BMIC_DOUBLE: {
 			printf("%35s %.4f\n", capname, obj->data.d);
 			break;
 		}
-		case NULL_TYPE: {
+		case BMIC_NULL: {
 			printf("%35s (null)\n", capname);
 			break;
 		}
-		case LIST: {
+		case BMIC_LIST: {
 			printf("%35s \n", capname);
 
 			bmic_object_for_each_child(obj, print_returned_from_list, (void *) capname);
 			break;
 		}
-		case OBJECT:
+		case BMIC_OBJECT:
 		default: {
 			printf("%35s \n", capname);
 			bmic_object_for_each(obj, print_returned_from_list, (void *) capname);

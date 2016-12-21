@@ -158,7 +158,7 @@ bmic_product_info_t *bmic_activemq_product_info(
 		return NULL;
 	}
 
-	if (ex->data_ptr->type == STRING) {
+	if (ex->data_ptr->type == BMIC_STRING) {
 		bmic_product_info_t *ret = gru_alloc(sizeof(bmic_api_interface_t), status);
 		strlcpy(ret->version, ex->data_ptr->data.str, sizeof(ret->version));
 		strlcpy(ret->name, ACTIVEMQ_PRODUCT_NAME_PRETTY, sizeof(ret->name));
@@ -286,10 +286,10 @@ static void bmic_activemq_translate_queue_list(const void *nodedata, void *paylo
 
 	logger(INFO, "Processing node %s [%s]", nodeobj->name, nodeobj->path);
 
-	if (nodeobj->type == OBJECT) {
+	if (nodeobj->type == BMIC_OBJECT) {
 		const bmic_object_t *obj = bmic_object_find_by_name(nodeobj, "objectName");
 
-		if (obj && obj->type == STRING) {
+		if (obj && obj->type == BMIC_STRING) {
 			const char *queue_name =
 				bmic_activemq_queue_filter_name(obj->data.str, pl->status);
 
@@ -355,7 +355,7 @@ static int64_t bmic_activemq_queue_stat_reader(bmic_handle_t *handle,
 	}
 
 	int64_t ret = -1;
-	if (attribute->data_ptr && attribute->data_ptr->type == INTEGER) {
+	if (attribute->data_ptr && attribute->data_ptr->type == BMIC_INTEGER) {
 		ret = attribute->data_ptr->data.number;
 	} else {
 		logger(ERROR, "Invalid data pointer for the '%s' property", attr_name);

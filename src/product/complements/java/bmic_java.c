@@ -23,7 +23,7 @@ static void bmic_java_read_mem_value(const bmic_object_t *root, const char *name
 		return;
 	}
 
-	if (mem->type != INTEGER) {
+	if (mem->type != BMIC_INTEGER) {
 		gru_status_set(
 			status, GRU_FAILURE, "Invalid data type for %s memory value", name);
 		return;
@@ -59,7 +59,7 @@ static bmic_java_mem_info_t bmic_java_read_mem_info_any(
 		return ret;
 	}
 
-	if (init->type != INTEGER) {
+	if (init->type != BMIC_INTEGER) {
 		gru_status_set(status, GRU_FAILURE, "Invalid data type for initial memory value");
 		return ret;
 	}
@@ -156,7 +156,7 @@ static const char *bmic_java_get_string(
 		gru_status_set(status, GRU_FAILURE, "Unable to find %s", name);
 		return NULL;
 	}
-	if (obj->type != STRING) {
+	if (obj->type != BMIC_STRING) {
 		gru_status_set(status, GRU_FAILURE, "Invalid data type for %s", name);
 		return NULL;
 	}
@@ -172,7 +172,7 @@ static int64_t bmic_java_get_number(
 		gru_status_set(status, GRU_FAILURE, "Unable to find %s", name);
 		return 0;
 	}
-	if (obj->type != INTEGER) {
+	if (obj->type != BMIC_INTEGER) {
 		gru_status_set(status, GRU_FAILURE, "Invalid data type for %s", name);
 		return 0;
 	}
@@ -196,7 +196,7 @@ static double bmic_java_get_double(
 		gru_status_set(status, GRU_FAILURE, "Unable to find %s", name);
 		return 0;
 	}
-	if (obj->type != DOUBLE) {
+	if (obj->type != BMIC_DOUBLE) {
 		gru_status_set(status, GRU_FAILURE, "Invalid data type for %s", name);
 		return 0;
 	}
@@ -223,7 +223,7 @@ bmic_java_info_t bmic_java_read_info(bmic_handle_t *handle, gru_status_t *status
 		gru_status_set(status, GRU_FAILURE, "Unable to find JVM name");
 		goto exit;
 	}
-	if (jvmname->type != STRING) {
+	if (jvmname->type != BMIC_STRING) {
 		gru_status_set(status, GRU_FAILURE, "Invalid data type for JVM name");
 		goto exit;
 	}
