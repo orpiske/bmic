@@ -15,60 +15,57 @@
  */
 #include "bmic_op_arg.h"
 
-
-
 bmic_op_arg_t *bmic_op_arg_new(gru_status_t *status) {
-    bmic_op_arg_t *ret = gru_alloc(sizeof(bmic_op_arg_t), status);
-    gru_alloc_check(ret, NULL);
+	bmic_op_arg_t *ret = gru_alloc(sizeof(bmic_op_arg_t), status);
+	gru_alloc_check(ret, NULL);
 
-    return ret;
+	return ret;
 }
 
 void bmic_op_arg_destroy(bmic_op_arg_t **ptr) {
-    bmic_op_arg_t *obj = *ptr;
+	bmic_op_arg_t *obj = *ptr;
 
-    if (obj == NULL) {
-        return;
-    }
+	if (obj == NULL) {
+		return;
+	}
 
-    if (obj->name != NULL) {
-        gru_dealloc_string(&obj->name);
-    }
+	if (obj->name != NULL) {
+		gru_dealloc_string(&obj->name);
+	}
 
-    if (obj->description != NULL) {
-        gru_dealloc_string(&obj->description);
-    }
+	if (obj->description != NULL) {
+		gru_dealloc_string(&obj->description);
+	}
 
-    if (obj->type!= NULL) {
-        gru_dealloc_string(&obj->type);
-    }
+	if (obj->type != NULL) {
+		gru_dealloc_string(&obj->type);
+	}
 
-    gru_dealloc((void **) ptr);
+	gru_dealloc((void **) ptr);
 }
 
 void bmic_op_arg_set_name(bmic_op_arg_t *arg, const char *name) {
-    assert(arg != NULL);
+	assert(arg != NULL);
 
-    if (asprintf(&arg->name, "%s", name) == -1) {
-        logger_t logger = gru_logger_get();
-        logger(FATAL, "Unable to allocate memory for saving the argument name");
-    }
+	if (asprintf(&arg->name, "%s", name) == -1) {
+		logger_t logger = gru_logger_get();
+		logger(FATAL, "Unable to allocate memory for saving the argument name");
+	}
 }
 void bmic_op_arg_set_description(bmic_op_arg_t *arg, const char *description) {
-    assert(arg != NULL);
+	assert(arg != NULL);
 
-    if (asprintf(&arg->description, "%s", description) == -1) {
-        logger_t logger = gru_logger_get();
-        logger(FATAL, "Unable to allocate memory for saving the argument description");
-    }
+	if (asprintf(&arg->description, "%s", description) == -1) {
+		logger_t logger = gru_logger_get();
+		logger(FATAL, "Unable to allocate memory for saving the argument description");
+	}
 }
 
-
 void bmic_op_arg_set_type(bmic_op_arg_t *arg, const char *type) {
-    assert(arg != NULL);
+	assert(arg != NULL);
 
-    if (asprintf(&arg->type, "%s", type) == -1) {
-        logger_t logger = gru_logger_get();
-        logger(FATAL, "Unable to allocate memory for saving the argument typename");
-    }
+	if (asprintf(&arg->type, "%s", type) == -1) {
+		logger_t logger = gru_logger_get();
+		logger(FATAL, "Unable to allocate memory for saving the argument typename");
+	}
 }

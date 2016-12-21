@@ -16,8 +16,8 @@
 #ifndef BMIC_ACTIVEMQ_JSON_H
 #define BMIC_ACTIVEMQ_JSON_H
 
-#include <common/gru_status.h>
 #include <common/gru_alloc.h>
+#include <common/gru_status.h>
 
 #include "base/format/bmic_json.h"
 #include "bmic_activemq_mi.h"
@@ -29,17 +29,14 @@
 extern "C" {
 #endif
 
-void bmic_activemq_json_create_queue(const bmic_object_t *op, bmic_json_t *json, 
-                                    const char *name);
+void bmic_activemq_json_create_queue(
+	const bmic_object_t *op, bmic_json_t *json, const char *name);
 
-
-void bmic_activemq_json_delete_queue(const bmic_object_t *op, bmic_json_t *json, 
-                                    const char *name);
-
+void bmic_activemq_json_delete_queue(
+	const bmic_object_t *op, bmic_json_t *json, const char *name);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* BMIC_ACTIVEMQ_JSON_H */
-

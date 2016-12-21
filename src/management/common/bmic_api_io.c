@@ -15,16 +15,16 @@
  */
 #include "bmic_api_io.h"
 
-void bmic_api_io_read(bmic_handle_t *handle, const char *path,
-                                    bmic_data_t *reply, gru_status_t *status) {
-    bmic_endpoint_status_t epstatus = {0};
-    epstatus.status = status;
+void bmic_api_io_read(
+	bmic_handle_t *handle, const char *path, bmic_data_t *reply, gru_status_t *status) {
+	bmic_endpoint_status_t epstatus = {0};
+	epstatus.status = status;
 
-    bmic_endpoint_set_path(handle->ep, path, status);
-    if (status->code != GRU_SUCCESS) {
-        return;
-    }
-    
-    handle->transport.read(handle->ep, NULL, reply, &epstatus);
-    bmic_endpoint_reset_path(handle->ep);
+	bmic_endpoint_set_path(handle->ep, path, status);
+	if (status->code != GRU_SUCCESS) {
+		return;
+	}
+
+	handle->transport.read(handle->ep, NULL, reply, &epstatus);
+	bmic_endpoint_reset_path(handle->ep);
 }

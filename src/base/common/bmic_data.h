@@ -25,22 +25,21 @@ extern "C" {
 #endif
 
 typedef struct bmic_data_t_ {
-    size_t size;
-    void *data;
+	size_t size;
+	void *data;
 } bmic_data_t;
 
 static inline const char *bmic_data_to_string(bmic_data_t *data) {
-    assert(data != NULL);
-    
-    return (const char *) data->data;
+	assert(data != NULL);
+
+	return (const char *) data->data;
 }
 
 static inline void bmic_data_release(bmic_data_t *data) {
-    if (data && data->data) {
-        gru_dealloc(&data->data);
-    }
+	if (data && data->data) {
+		gru_dealloc(&data->data);
+	}
 }
-
 
 #ifdef __cplusplus
 }

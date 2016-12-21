@@ -22,10 +22,8 @@ extern "C" {
 
 #define JOLOKIA_STATUS_OK 200
 
-
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* BMIC_JOLOKIA_STATUS_H */
-

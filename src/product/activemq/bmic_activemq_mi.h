@@ -16,17 +16,17 @@
 #ifndef BMIC_ACTIVEMQ_MI_H
 #define BMIC_ACTIVEMQ_MI_H
 
-#include <common/gru_status.h>
 #include <common/gru_alloc.h>
+#include <common/gru_status.h>
 
-#include "base/common/bmic_credentials.h"
 #include "base/common/bmic_cap_info.h"
+#include "base/common/bmic_credentials.h"
 #include "base/common/bmic_op_arg.h"
-#include "base/common/bmic_op_sig.h"
 #include "base/common/bmic_op_info.h"
-#include "base/transport/bmic_transport.h"
-#include "base/transport/bmic_endpoint_http.h"
+#include "base/common/bmic_op_sig.h"
 #include "base/format/bmic_json.h"
+#include "base/transport/bmic_endpoint_http.h"
+#include "base/transport/bmic_transport.h"
 
 #include "management/common/bmic_handle.h"
 #include "management/discovery/bmic_discovery.h"
@@ -34,8 +34,8 @@
 #include "management/interfaces/jolokia/bmic_jolokia_io.h"
 #include "management/interfaces/jolokia/bmic_jolokia_parse.h"
 
-#include "product/common/bmic_path.h"
 #include "product/common/bmic_finder.h"
+#include "product/common/bmic_path.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -44,7 +44,6 @@ extern "C" {
 #define ACTIVEMQ_READ "read"
 #define ACTIVEMQ_BASE_PKG "org.apache.activemq"
 
-    
 /**
  * Reads an attribute from the management interface
  * @param handle
@@ -53,19 +52,14 @@ extern "C" {
  * @param status
  * @param flags
  * @param regex_fmt
- * @return 
+ * @return
  */
 const bmic_exchange_t *bmic_activemq_mi_read(bmic_handle_t *handle,
-                                                const bmic_object_t *root,
-                                                const char *attr_name,
-                                                gru_status_t *status,
-                                                int flags,
-                                                const char *regex_fmt,
-                                                ...);
+	const bmic_object_t *root, const char *attr_name, gru_status_t *status, int flags,
+	const char *regex_fmt, ...);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* BMIC_ACTIVEMQ_MI_H */
-

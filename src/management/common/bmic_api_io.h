@@ -40,13 +40,11 @@ extern "C" {
  * @param reply the storage for the reply
  * @param status the status for the I/O call
  */
-void bmic_api_io_read(bmic_handle_t *handle, const char *path,
-                                    bmic_data_t *reply, gru_status_t *status);
-
+void bmic_api_io_read(
+	bmic_handle_t *handle, const char *path, bmic_data_t *reply, gru_status_t *status);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* BMIC_API_IO_H */
-

@@ -15,20 +15,18 @@
  */
 #include "bmic_path.h"
 
-const char *bmic_path_formatter(const char *op, const char *interface,
-                                const char *pkg, const char *capname, 
-                                gru_status_t *status)
-{
-    char *ret;
+const char *bmic_path_formatter(const char *op, const char *interface, const char *pkg,
+	const char *capname, gru_status_t *status) {
+	char *ret;
 
-    int rc = asprintf(&ret, "%s/%s:%s/%s", op, pkg, interface, capname);
+	int rc = asprintf(&ret, "%s/%s:%s/%s", op, pkg, interface, capname);
 
-    if (rc == -1) {
-        gru_status_set(status, GRU_FAILURE, "Not enough memory to format capabilities path");
+	if (rc == -1) {
+		gru_status_set(
+			status, GRU_FAILURE, "Not enough memory to format capabilities path");
 
-        return NULL;
-    }
+		return NULL;
+	}
 
-    return ret;
+	return ret;
 }
-

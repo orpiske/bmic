@@ -31,13 +31,11 @@ const char *bmic_jamq6_base_url(const bmic_discovery_hint_t *hint);
 
 void bmic_jamq6_cleanup(bmic_handle_t **handle);
 
-bmic_product_info_t *bmic_jamq6_product_info(bmic_handle_t *handle,
-                                                    const bmic_exchange_t *cap,
-                                                    gru_status_t *status);
+bmic_product_info_t *bmic_jamq6_product_info(
+	bmic_handle_t *handle, const bmic_exchange_t *cap, gru_status_t *status);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* BMIC_JAMQ6_H */
-

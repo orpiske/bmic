@@ -21,14 +21,12 @@ extern "C" {
 #endif
 
 typedef struct bmic_product_info_t_ {
-    char name[64];
-    char version[16];
+	char name[64];
+	char version[16];
 } bmic_product_info_t;
-
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* BMIC_PRODUCT_INFO_H */
-

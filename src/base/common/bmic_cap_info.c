@@ -16,67 +16,66 @@
 #include "bmic_cap_info.h"
 
 bmic_cap_info_t *bmic_cap_info_new(gru_status_t *status) {
-    bmic_cap_info_t *ret = gru_alloc(sizeof(bmic_cap_info_t), status);
-    gru_alloc_check(ret, NULL);
+	bmic_cap_info_t *ret = gru_alloc(sizeof(bmic_cap_info_t), status);
+	gru_alloc_check(ret, NULL);
 
-    return ret;
+	return ret;
 }
 
 void bmic_cap_info_destroy(bmic_cap_info_t **ptr) {
-    bmic_cap_info_t *obj = *ptr;
+	bmic_cap_info_t *obj = *ptr;
 
-    if (obj == NULL) {
-        return;
-    }
+	if (obj == NULL) {
+		return;
+	}
 
-    if (obj->name != NULL) {
-        gru_dealloc_string(&obj->name);
-    }
+	if (obj->name != NULL) {
+		gru_dealloc_string(&obj->name);
+	}
 
-    if (obj->description != NULL) {
-        gru_dealloc_string(&obj->description);
-    }
+	if (obj->description != NULL) {
+		gru_dealloc_string(&obj->description);
+	}
 
-    if (obj->typename != NULL) {
-        gru_dealloc_string(&obj->typename);
-    }
+	if (obj->typename != NULL) {
+		gru_dealloc_string(&obj->typename);
+	}
 
-    gru_dealloc((void **) ptr);
+	gru_dealloc((void **) ptr);
 }
 
 inline void bmic_cap_info_destroy_list(void **ptr) {
-    bmic_cap_info_destroy((bmic_cap_info_t **) ptr);
+	bmic_cap_info_destroy((bmic_cap_info_t **) ptr);
 }
 
 void bmic_cap_info_set_name(bmic_cap_info_t *cap, const char *name) {
-    assert(cap != NULL);
+	assert(cap != NULL);
 
-    if (asprintf(&cap->name, "%s", name) == -1) {
-        logger_t logger = gru_logger_get();
-        logger(FATAL, "Unable to allocate memory for saving the capacity name");
-    }
+	if (asprintf(&cap->name, "%s", name) == -1) {
+		logger_t logger = gru_logger_get();
+		logger(FATAL, "Unable to allocate memory for saving the capacity name");
+	}
 }
 void bmic_cap_info_set_description(bmic_cap_info_t *cap, const char *description) {
-    assert(cap != NULL);
+	assert(cap != NULL);
 
-    if (asprintf(&cap->description, "%s", description) == -1) {
-        logger_t logger = gru_logger_get();
-        logger(FATAL, "Unable to allocate memory for saving the capacity description");
-    }
+	if (asprintf(&cap->description, "%s", description) == -1) {
+		logger_t logger = gru_logger_get();
+		logger(FATAL, "Unable to allocate memory for saving the capacity description");
+	}
 }
 
 void bmic_cap_info_set_write(bmic_cap_info_t *cap, bool write) {
-    assert(cap != NULL);
+	assert(cap != NULL);
 
-    cap->write = write;
+	cap->write = write;
 }
 
-
 void bmic_cap_info_set_typename(bmic_cap_info_t *cap, const char *typename) {
-    assert(cap != NULL);
+	assert(cap != NULL);
 
-    if (asprintf(&cap->typename, "%s", typename) == -1) {
-        logger_t logger = gru_logger_get();
-        logger(FATAL, "Unable to allocate memory for saving the capacity typename\n");
-    }
+	if (asprintf(&cap->typename, "%s", typename) == -1) {
+		logger_t logger = gru_logger_get();
+		logger(FATAL, "Unable to allocate memory for saving the capacity typename\n");
+	}
 }

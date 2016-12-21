@@ -15,74 +15,71 @@
  */
 #include "bmic_op_sig.h"
 
-
 bmic_op_sig_t *bmic_op_sig_new(gru_status_t *status) {
-    bmic_op_sig_t *ret = gru_alloc(sizeof(bmic_op_sig_t), status);
-    gru_alloc_check(ret, NULL);
-    
-    ret->args = gru_list_new(status);
-    if (!ret->args) {
-        bmic_op_sig_destroy(&ret);
-        
-        return NULL;
-    }
-    
-    return ret;
+	bmic_op_sig_t *ret = gru_alloc(sizeof(bmic_op_sig_t), status);
+	gru_alloc_check(ret, NULL);
+
+	ret->args = gru_list_new(status);
+	if (!ret->args) {
+		bmic_op_sig_destroy(&ret);
+
+		return NULL;
+	}
+
+	return ret;
 }
 
 static void bmic_op_sig_destroy_args(const void *nodedata, void *payload) {
-    bmic_op_arg_destroy((bmic_op_arg_t **)&nodedata);
+	bmic_op_arg_destroy((bmic_op_arg_t **) &nodedata);
 }
 
 void bmic_op_sig_destroy(bmic_op_sig_t **ptr) {
-    bmic_op_sig_t *sig = *ptr;
-    
-    if (!sig) {
-        return;
-    }
-    
-    if (sig->args) {
-        gru_list_for_each(sig->args, bmic_op_sig_destroy_args, NULL);
-        gru_list_destroy(&sig->args);
-    }
-    
-    if (sig->description != NULL) {
-        gru_dealloc_string(&sig->description);
-    }
+	bmic_op_sig_t *sig = *ptr;
 
-    if (sig->ret != NULL) {
-        gru_dealloc_string(&sig->ret);
-    }
-    
-    gru_dealloc((void **) ptr);
+	if (!sig) {
+		return;
+	}
+
+	if (sig->args) {
+		gru_list_for_each(sig->args, bmic_op_sig_destroy_args, NULL);
+		gru_list_destroy(&sig->args);
+	}
+
+	if (sig->description != NULL) {
+		gru_dealloc_string(&sig->description);
+	}
+
+	if (sig->ret != NULL) {
+		gru_dealloc_string(&sig->ret);
+	}
+
+	gru_dealloc((void **) ptr);
 }
 
 void bmic_op_sig_add_arg(bmic_op_sig_t *sig, const bmic_op_arg_t *arg) {
-    if (gru_list_append(sig->args, arg) == NULL) {
-        logger_t logger = gru_logger_get();
-        
-        logger(FATAL, "Unable to add new argument");
-    }
-}
+	if (gru_list_append(sig->args, arg) == NULL) {
+		logger_t logger = gru_logger_get();
 
+		logger(FATAL, "Unable to add new argument");
+	}
+}
 
 void bmic_op_sig_set_description(bmic_op_sig_t *sig, const char *description) {
-    assert(sig != NULL);
+	assert(sig != NULL);
 
-    if (asprintf(&sig->description, "%s", description) == -1) {
-        logger_t logger = gru_logger_get();
-        
-        logger(FATAL, "Unable to allocate memory for saving the signature description");
-    }
+	if (asprintf(&sig->description, "%s", description) == -1) {
+		logger_t logger = gru_logger_get();
+
+		logger(FATAL, "Unable to allocate memory for saving the signature description");
+	}
 }
 
-
 void bmic_op_sig_set_ret(bmic_op_sig_t *sig, const char *ret) {
-    assert(sig != NULL);
+	assert(sig != NULL);
 
-    if (asprintf(&sig->ret, "%s", ret) == -1) {
-        logger_t logger = gru_logger_get();
-        
-        logger(FATAL, "Unable to allocate memory for saving the signature return type");
-    }
+	if (asprintf(&sig->ret, "%s", ret) == -1) {
+		logger_t logger = gru_logger_get();
+
+		logger(FATAL, "Unable to allocate memory for saving the signature return type");
+	}
 }

@@ -15,38 +15,31 @@
  */
 #include "bmic_finder.h"
 
+const bmic_object_t *bmic_finder_varg(const bmic_object_t *root, const char *regex_fmt,
+	int flags, gru_status_t *status, va_list ap) {
+	char *regex;
 
-const bmic_object_t *bmic_finder_varg(const bmic_object_t *root,
-                                                          const char *regex_fmt, 
-                                                          int flags,
-                                                          gru_status_t *status,
-                                                          va_list ap)
-{
-    char *regex;
+	// Build the regex
+	int rc = vasprintf(&regex, regex_fmt, ap);
+	if (rc == -1) {
+		gru_status_set(status, GRU_FAILURE, "Unable to format the matching regex");
 
-    // Build the regex
-    int rc = vasprintf(&regex, regex_fmt, ap);
-    if (rc == -1) {
-        gru_status_set(status, GRU_FAILURE, 
-                       "Unable to format the matching regex");
-        
-        return NULL;
-    }
-    
-    // ... And uses it to find the matching node in the capability tree
-    const bmic_object_t *ptr = bmic_object_find_regex(root, regex, flags);
-    if (!ptr) {
+		return NULL;
+	}
+
+	// ... And uses it to find the matching node in the capability tree
+	const bmic_object_t *ptr = bmic_object_find_regex(root, regex, flags);
+	if (!ptr) {
 #ifdef DNDEBUG
-        gru_status_set(status, GRU_FAILURE, 
-                       "Unable to find the capabilities matching %s", regex);
-#else 
-        gru_status_set(status, GRU_FAILURE, 
-                        "Unable to find the requested capability");
+		gru_status_set(
+			status, GRU_FAILURE, "Unable to find the capabilities matching %s", regex);
+#else
+		gru_status_set(status, GRU_FAILURE, "Unable to find the requested capability");
 #endif
-        free(regex);
-        return NULL;
-    }
-    
-    free(regex);
-    return ptr;
+		free(regex);
+		return NULL;
+	}
+
+	free(regex);
+	return ptr;
 }

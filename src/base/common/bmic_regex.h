@@ -27,13 +27,12 @@
 extern "C" {
 #endif
 
-    
 /**
  * Matches a string with a regex
  * @param str the string to match
  * @param regex the regex
  * @param status A status object
- * @return true if it matches or false otherwise. Calling functions should check the 
+ * @return true if it matches or false otherwise. Calling functions should check the
  * status object if the return is false for checking errors
  */
 bool bmic_match(const char *str, const char *regex, gru_status_t *);
@@ -45,15 +44,14 @@ bool bmic_match(const char *str, const char *regex, gru_status_t *);
  * @param size An expected size for the matching expressions (should be bigger than 0)
  * @param group The group to match
  * @param status A status object
- * @return A pointer to the matching regex or NULL if not found. The string must be free'd 
+ * @return A pointer to the matching regex or NULL if not found. The string must be free'd
  * after use
  */
-const char *bmic_regex_find(const char *str, const char *regex, uint32_t size, 
-                            uint32_t group, gru_status_t *status);
+const char *bmic_regex_find(const char *str, const char *regex, uint32_t size,
+	uint32_t group, gru_status_t *status);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* BMIC_REGEX_H */
-

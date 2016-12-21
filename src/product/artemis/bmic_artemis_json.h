@@ -16,8 +16,8 @@
 #ifndef BMIC_ARTEMIS_JSON_H
 #define BMIC_ARTEMIS_JSON_H
 
-#include <common/gru_status.h>
 #include <common/gru_alloc.h>
+#include <common/gru_status.h>
 
 #include <log/gru_logger.h>
 
@@ -25,7 +25,7 @@
 
 /**
  * @brief this is an interim solution for writing json data. I have to think
- * more about it, but I have to get the code working. I will think more about 
+ * more about it, but I have to get the code working. I will think more about
  * this in the future.
  */
 
@@ -36,16 +36,14 @@
 extern "C" {
 #endif
 
-void bmic_artemis_json_create_queue(const bmic_object_t *op, bmic_json_t *json, 
-                                    const char *name);
+void bmic_artemis_json_create_queue(
+	const bmic_object_t *op, bmic_json_t *json, const char *name);
 
-
-void bmic_artemis_json_destroy_queue(const bmic_object_t *op, bmic_json_t *json, 
-                                    const char *name);
+void bmic_artemis_json_destroy_queue(
+	const bmic_object_t *op, bmic_json_t *json, const char *name);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* BMIC_ARTEMIS_JSON_H */
-

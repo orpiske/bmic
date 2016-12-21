@@ -16,9 +16,9 @@
 #ifndef BMIC_FINDER_H
 #define BMIC_FINDER_H
 
-#include <stdlib.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include <common/gru_status.h>
 
@@ -33,23 +33,18 @@ extern "C" {
  * Given an hierarchy (tree) of objects it navigates through it and tries
  * to find the node that matches the given regex
  * @param root The root object
- * @param regex_fmt The regex to match 
+ * @param regex_fmt The regex to match
  * @param flags The search flags as those used by bmic_regex
  * @param status The status object
  * @param ap A previously initialized va_list
  * @return The first object that matches the regex or NULL if not found (status
  * will be properly set in this case)
  */
-const bmic_object_t *bmic_finder_varg(const bmic_object_t *root,
-                                                          const char *regex_fmt, 
-                                                          int flags,
-                                                          gru_status_t *status,
-                                                          va_list ap);
-
+const bmic_object_t *bmic_finder_varg(const bmic_object_t *root, const char *regex_fmt,
+	int flags, gru_status_t *status, va_list ap);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* BMIC_FINDER_H */
-

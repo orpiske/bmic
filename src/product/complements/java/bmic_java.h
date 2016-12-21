@@ -16,11 +16,11 @@
 #ifndef BMIC_JAVA_H
 #define BMIC_JAVA_H
 
-#include <common/gru_status.h>
 #include <common/gru_alloc.h>
+#include <common/gru_status.h>
 
-#include "management/common/bmic_handle.h"
 #include "management/common/bmic_api_io.h"
+#include "management/common/bmic_handle.h"
 #include "management/common/bmic_internal_payloads.h"
 #include "management/discovery/bmic_discovery.h"
 #include "management/interfaces/jolokia/bmic_jolokia.h"
@@ -32,21 +32,23 @@
 extern "C" {
 #endif
 
-    
 bmic_java_mem_info_t bmic_java_mem_eden_info(bmic_handle_t *handle, gru_status_t *status);
-bmic_java_mem_info_t bmic_java_mem_survivor_info(bmic_handle_t *handle, gru_status_t *status);
-bmic_java_mem_info_t bmic_java_mem_tenured_info(bmic_handle_t *handle, gru_status_t *status);
-bmic_java_mem_info_t bmic_java_mem_code_cache_info(bmic_handle_t *handle, gru_status_t *status);
-bmic_java_mem_info_t bmic_java_mem_metaspace_info(bmic_handle_t *handle, gru_status_t *status);
-bmic_java_mem_info_t bmic_java_mem_permgen_info(bmic_handle_t *handle, gru_status_t *status);
-    
+bmic_java_mem_info_t bmic_java_mem_survivor_info(
+	bmic_handle_t *handle, gru_status_t *status);
+bmic_java_mem_info_t bmic_java_mem_tenured_info(
+	bmic_handle_t *handle, gru_status_t *status);
+bmic_java_mem_info_t bmic_java_mem_code_cache_info(
+	bmic_handle_t *handle, gru_status_t *status);
+bmic_java_mem_info_t bmic_java_mem_metaspace_info(
+	bmic_handle_t *handle, gru_status_t *status);
+bmic_java_mem_info_t bmic_java_mem_permgen_info(
+	bmic_handle_t *handle, gru_status_t *status);
+
 bmic_java_info_t bmic_java_read_info(bmic_handle_t *handle, gru_status_t *status);
 bmic_java_os_info_t bmic_java_read_os_info(bmic_handle_t *handle, gru_status_t *status);
-
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* BMIC_JAVA_H */
-

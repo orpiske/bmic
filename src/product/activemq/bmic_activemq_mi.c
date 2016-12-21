@@ -16,79 +16,69 @@
 #include "bmic_activemq_mi.h"
 
 const bmic_exchange_t *bmic_activemq_mi_read(bmic_handle_t *handle,
-                                                const bmic_object_t *root,
-                                                const char *attr_name,
-                                                gru_status_t *status,
-                                                int flags,
-                                                const char *regex_fmt,
-                                                ...)
-{
+	const bmic_object_t *root, const char *attr_name, gru_status_t *status, int flags,
+	const char *regex_fmt, ...) {
 
-    bmic_exchange_t *ret = gru_alloc(sizeof (bmic_exchange_t), status);
-    gru_alloc_check(ret, NULL);
+	bmic_exchange_t *ret = gru_alloc(sizeof(bmic_exchange_t), status);
+	gru_alloc_check(ret, NULL);
 
-    va_list ap;
-    va_start(ap, regex_fmt);
+	va_list ap;
+	va_start(ap, regex_fmt);
 
-    /*
-     *  First, resolve the root of the capability (and whether it even exist ...
-     * 
-     * ie.: read the previous returned capability tree and finds the pointer 
-     * to the node respective to the matching parameters (regex + flag)
-     */
-    const bmic_object_t *capabilities = bmic_finder_varg(root, regex_fmt,
-                                                         flags,
-                                                         status,
-                                                         ap);
-    va_end(ap);
+	/*
+	 *  First, resolve the root of the capability (and whether it even exist ...
+	 *
+	 * ie.: read the previous returned capability tree and finds the pointer
+	 * to the node respective to the matching parameters (regex + flag)
+	 */
+	const bmic_object_t *capabilities =
+		bmic_finder_varg(root, regex_fmt, flags, status, ap);
+	va_end(ap);
 
-    if (!capabilities) {
-        gru_dealloc((void **) &ret);
-        
-        return NULL;
-    }
+	if (!capabilities) {
+		gru_dealloc((void **) &ret);
 
-    const bmic_cap_info_t *info = bmic_jolokia_read_attr_info(capabilities, 
-                                                               attr_name, status);
+		return NULL;
+	}
 
-    ////////////////////////////    
-    /*
-     * Uses the resolved capability (only uses the name, actually) to read the 
-     * data from the BMIC.
-     */
-    const bmic_object_t *reply_obj = bmic_jolokia_io_read_attribute(handle, 
-                                                        ACTIVEMQ_BASE_PKG,
-                                                        capabilities->name,
-                                                        attr_name,
-                                                        status);
+	const bmic_cap_info_t *info =
+		bmic_jolokia_read_attr_info(capabilities, attr_name, status);
 
-    if (!reply_obj) {
-        goto err_exit;
-    }
+	////////////////////////////
+	/*
+	 * Uses the resolved capability (only uses the name, actually) to read the
+	 * data from the BMIC.
+	 */
+	const bmic_object_t *reply_obj = bmic_jolokia_io_read_attribute(
+		handle, ACTIVEMQ_BASE_PKG, capabilities->name, attr_name, status);
 
-    /*
-     * Gets the value children of the response object to transform it 
-     */
-    const bmic_object_t *value = bmic_object_find_by_name(reply_obj, "value");
+	if (!reply_obj) {
+		goto err_exit;
+	}
 
-    if (!value) {
-        goto err_exit;
-    }
-    ////////////////////////////    
+	/*
+	 * Gets the value children of the response object to transform it
+	 */
+	const bmic_object_t *value = bmic_object_find_by_name(reply_obj, "value");
 
-    /*
-     * Assign stuff to the exchange object
-     */
-    ret->root = reply_obj;
-    ret->data_ptr = value;
-    ret->type = EX_CAP_ENTRY;
-    ret->payload.capinfo = info;
+	if (!value) {
+		goto err_exit;
+	}
+	////////////////////////////
 
-    return ret;
+	/*
+	 * Assign stuff to the exchange object
+	 */
+	ret->root = reply_obj;
+	ret->data_ptr = value;
+	ret->type = EX_CAP_ENTRY;
+	ret->payload.capinfo = info;
+
+	return ret;
 
 err_exit:
-    gru_dealloc((void **) &ret);
-    gru_dealloc((void **) &info);
-    bmic_object_destroy((bmic_object_t **) &reply_obj);
-    return NULL;
+	gru_dealloc((void **) &ret);
+	gru_dealloc((void **) &info);
+	bmic_object_destroy((bmic_object_t **) &reply_obj);
+	return NULL;
 }

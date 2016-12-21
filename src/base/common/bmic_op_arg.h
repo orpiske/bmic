@@ -16,9 +16,9 @@
 #ifndef BMIC_OP_ARG_H
 #define BMIC_OP_ARG_H
 
-#include <stdlib.h>
-#include <stdbool.h>
 #include <assert.h>
+#include <stdbool.h>
+#include <stdlib.h>
 
 #include <common/gru_alloc.h>
 #include <common/gru_status.h>
@@ -30,20 +30,18 @@ extern "C" {
 #endif
 
 typedef struct bmic_op_arg_t_ {
-    char *name;
-    char *type;
-    char *description;
+	char *name;
+	char *type;
+	char *description;
 } bmic_op_arg_t;
-
 
 /**
  * Creates a new argument object
  * @param status status object to contain error information
- * @return NULL if unable to allocate memory or a pointer to a new 
+ * @return NULL if unable to allocate memory or a pointer to a new
  * bmic_op_arg_t structure
  */
 bmic_op_arg_t *bmic_op_arg_new(gru_status_t *status);
-
 
 /**
  * Destroys the argument object and free's all memory used
@@ -72,10 +70,8 @@ void bmic_op_arg_set_description(bmic_op_arg_t *arg, const char *description);
  */
 void bmic_op_arg_set_type(bmic_op_arg_t *arg, const char *type);
 
-
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* BMIC_OP_ARG_H */
-

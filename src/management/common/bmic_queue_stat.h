@@ -20,18 +20,15 @@
 extern "C" {
 #endif
 
-    
 typedef struct bmic_queue_stat_t_ {
-    int64_t consumer_count;
-    int64_t msg_ack_count;
-    int64_t msg_exp_count;
-    int64_t queue_size;
+	int64_t consumer_count;
+	int64_t msg_ack_count;
+	int64_t msg_exp_count;
+	int64_t queue_size;
 } bmic_queue_stat_t;
-
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* BMIC_QUEUE_STAT_H */
-

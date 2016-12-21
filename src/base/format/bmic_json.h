@@ -16,31 +16,28 @@
 #ifndef BMIC_FORMAT_JSON_H
 #define BMIC_FORMAT_JSON_H
 
-#include <stdbool.h>
 #include <assert.h>
+#include <stdbool.h>
 
 #if defined(__DEBIAN_DISTRO__) || defined(__UBUNTU_DISTRO__)
- #include <json/json.h>
+#include <json/json.h>
 #else
- #include <json-c/json.h>
+#include <json-c/json.h>
 #endif
 
 #include <common/gru_alloc.h>
 #include <common/gru_status.h>
 
-#include "base/common/bmic_object.h"
 #include "base/common/bmic_data.h"
+#include "base/common/bmic_object.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+typedef struct bmic_json_t_ { json_object *obj; } bmic_json_t;
 
-typedef struct bmic_json_t_ {
-    json_object *obj;
-} bmic_json_t;
-
-typedef int(*bmic_match_cond)(const char *keyname, const char *value);
+typedef int (*bmic_match_cond)(const char *keyname, const char *value);
 
 bmic_json_t *bmic_json_new(gru_status_t *status);
 bmic_json_t *bmic_json_init(const char *data, gru_status_t *status);

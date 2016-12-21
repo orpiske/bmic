@@ -29,15 +29,14 @@ extern "C" {
 #endif
 
 typedef struct bmic_op_info_t_ {
-    char *name;
-    gru_list_t *signature;
+	char *name;
+	gru_list_t *signature;
 } bmic_op_info_t;
-
 
 /**
  * Creates a new operation info object
  * @param status status object to contain error information
- * @return NULL if unable to allocate memory or a pointer to a new 
+ * @return NULL if unable to allocate memory or a pointer to a new
  * bmic_op_arg_t structure
  */
 bmic_op_info_t *bmic_op_info_new(gru_status_t *status);
@@ -48,13 +47,11 @@ bmic_op_info_t *bmic_op_info_new(gru_status_t *status);
  */
 void bmic_op_info_destroy(bmic_op_info_t **ptr);
 
-
 /**
  * Destroys an operation info object (wrapper for usage w/ bmic_list)
  * @param ptr the object to destroy
  */
 void bmic_op_info_destroy_list(void **ptr);
-
 
 /**
  * Sets the name
@@ -70,11 +67,8 @@ void bmic_op_info_set_name(bmic_op_info_t *op, const char *name);
  */
 void bmic_op_info_add_signature(bmic_op_info_t *op, const bmic_op_sig_t *sig);
 
-
-
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* BMIC_OP_INFO_H */
-

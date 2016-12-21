@@ -26,17 +26,20 @@
  */
 #define ACTIVEMQ_BASE_URL_HINT_URL "%s/api/jolokia"
 #define ACTIVEMQ_BASE_URL_HINT_ADDRESSING "http://%s:%i/api/jolokia"
-#define ACTIVEMQ_PRODUCT_INFO_PATH "read/org.apache.activemq:brokerName=localhost,type=Broker/BrokerVersion"
+#define ACTIVEMQ_PRODUCT_INFO_PATH                                                       \
+	"read/org.apache.activemq:brokerName=localhost,type=Broker/BrokerVersion"
 #define ACTIVEMQ_PRODUCT_CAPABILITIES "list/org.apache.activemq"
 
 #define ACTIVEMQ_CAPABILITIES_KEY_REGEX "(brokerName=)([a-z0-9\\.])*(,type=Broker)"
 #define ACTIVEMQ_CORE_CAP_ATTRIBUTES "(brokerName=)([a-z0-9\\.])*(,type=Broker\\/attr$)"
 
-#define ACTIVEMQ_QUEUE_CAPABILITES_REGEX "(brokerName=)([a-zA-Z0-9\\.\"]*)(,destinationName=)(%s)(,destinationType=)([a-zA-Z0-9\\.\"]*)(,type=)([a-zA-Z0-9\\.\"]*)"
+#define ACTIVEMQ_QUEUE_CAPABILITES_REGEX                                                 \
+	"(brokerName=)([a-zA-Z0-9\\.\"]*)(,destinationName=)(%s)(,destinationType=)([a-zA-"  \
+	"Z0-"                                                                                \
+	"9\\.\"]*)(,type=)([a-zA-Z0-9\\.\"]*)"
 
 #define ACTIVEMQ_CAP_OPERATIONS "(brokerName=)([a-z0-9\\.\"])*(,type=Broker\\/op$)"
 #define ACTIVEMQ_BROKER_OPERATIONS_ROOT "(brokerName=)([a-z0-9\\.\"])*(,type=Broker$)"
-
 
 #define ACTIVEMQ_QUEUE_LIST_ATTR "Queues"
 #define ACTIVEMQ_QUEUE_SIZE_ATTR "QueueSize"
@@ -45,4 +48,3 @@
 #define ACTIVEMQ_QUEUE_CNS_CNT_ATTR "ConsumerCount"
 
 #endif /* BMIC_ACTIVEMQ_DEFS_H */
-

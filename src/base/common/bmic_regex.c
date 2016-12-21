@@ -15,93 +15,88 @@
  */
 #include "bmic_regex.h"
 
-bool bmic_match(const char *str, const char *regex, gru_status_t *status)
-{
-    regex_t reg_obj;
-    int rc;
+bool bmic_match(const char *str, const char *regex, gru_status_t *status) {
+	regex_t reg_obj;
+	int rc;
 
-    rc = regcomp(&reg_obj, regex, REG_EXTENDED);
-    if (rc) {
-        gru_status_set(status, GRU_FAILURE, 
-                       "Unable to compile the give regex '%s'", regex);
-        
-        return false;
-    }
+	rc = regcomp(&reg_obj, regex, REG_EXTENDED);
+	if (rc) {
+		gru_status_set(
+			status, GRU_FAILURE, "Unable to compile the give regex '%s'", regex);
 
-    rc = regexec(&reg_obj, str, 0, NULL, 0);
-    if (rc == 0) {
-        regfree(&reg_obj);
-        
-        return true;
-    }
-    
-    regfree(&reg_obj);
-    if (rc == REG_NOMATCH) {
-        return false;
-    }
-    
-    // TODO: check the result from regerror
-    gru_status_set(status, GRU_FAILURE, 
-                   "Error while trying to match the string");
-    return false;
+		return false;
+	}
+
+	rc = regexec(&reg_obj, str, 0, NULL, 0);
+	if (rc == 0) {
+		regfree(&reg_obj);
+
+		return true;
+	}
+
+	regfree(&reg_obj);
+	if (rc == REG_NOMATCH) {
+		return false;
+	}
+
+	// TODO: check the result from regerror
+	gru_status_set(status, GRU_FAILURE, "Error while trying to match the string");
+	return false;
 }
 
+const char *bmic_regex_find(const char *str, const char *regex, uint32_t size,
+	uint32_t group, gru_status_t *status) {
+	regex_t reg_obj;
+	int rc;
 
-const char *bmic_regex_find(const char *str, const char *regex, uint32_t size, 
-                            uint32_t group, gru_status_t *status)
-{
-    regex_t reg_obj;
-    int rc;
+	rc = regcomp(&reg_obj, regex, REG_EXTENDED);
+	if (rc) {
+		gru_status_set(
+			status, GRU_FAILURE, "Unable to compile the give regex '%s'", regex);
 
-    rc = regcomp(&reg_obj, regex, REG_EXTENDED);
-    if (rc) {
-        gru_status_set(status, GRU_FAILURE, 
-                       "Unable to compile the give regex '%s'", regex);
-        
-        return NULL;
-    }
+		return NULL;
+	}
 
-    regmatch_t *match = calloc(size, sizeof(regmatch_t));
-    if (!match) {
-        gru_status_set(status, GRU_FAILURE, "Unable to allocate memory for match object");
-        
-        return NULL;
-    }
-    
-    rc = regexec(&reg_obj, str, size, match, 0);
-    if (rc == 0) {
-        logger_t logger = gru_logger_get();
-        
-        logger(TRACE, "First offset: %d\n", (match + group)->rm_so);
-        logger(TRACE, "Last offset: %d\n", (match + group)->rm_eo);
-        
-        size_t str_size = ((match + group)->rm_eo - (match + group)->rm_so) + 1;
-        char *ret = calloc(1, str_size + 1);
-        if (!ret) {
-            gru_status_set(status, GRU_FAILURE, 
-                           "Not enough memory for saving the regex match");
-            
-            regfree(&reg_obj);
-            free(match);
-            
-            return NULL;
-        }
-        
-        snprintf(ret, str_size, "%s", str + (match + group)->rm_so);
-        regfree(&reg_obj);
-        free(match);
-        
-        return ret;
-    }
-    
-    free(match);
-    regfree(&reg_obj);
-    if (rc == REG_NOMATCH) {
-        return NULL;
-    }
-    
-    // TODO: check the result from regerror
-    gru_status_set(status, GRU_FAILURE, 
-                   "Error while trying to match the string");
-    return NULL;
+	regmatch_t *match = calloc(size, sizeof(regmatch_t));
+	if (!match) {
+		gru_status_set(status, GRU_FAILURE, "Unable to allocate memory for match object");
+
+		return NULL;
+	}
+
+	rc = regexec(&reg_obj, str, size, match, 0);
+	if (rc == 0) {
+		logger_t logger = gru_logger_get();
+
+		logger(TRACE, "First offset: %d\n", (match + group)->rm_so);
+		logger(TRACE, "Last offset: %d\n", (match + group)->rm_eo);
+
+		size_t str_size = ((match + group)->rm_eo - (match + group)->rm_so) + 1;
+		char *ret = calloc(1, str_size + 1);
+		if (!ret) {
+			gru_status_set(
+				status, GRU_FAILURE, "Not enough memory for saving the regex match");
+
+			regfree(&reg_obj);
+			free(match);
+
+			return NULL;
+		}
+
+		snprintf(ret, str_size, "%s", str + (match + group)->rm_so);
+		regfree(&reg_obj);
+		free(match);
+
+		return ret;
+	}
+
+	free(match);
+	regfree(&reg_obj);
+	if (rc == REG_NOMATCH) {
+		return NULL;
+	}
+
+	// TODO: check the result from regerror
+	gru_status_set(status, GRU_FAILURE, "Error while trying to match the string");
+	return NULL;
 }

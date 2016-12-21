@@ -25,10 +25,9 @@ extern "C" {
 #endif
 
 typedef struct bmic_payload_add_attr_t_ {
-    gru_list_t *list;
-    gru_status_t *status;
+	gru_list_t *list;
+	gru_status_t *status;
 } bmic_payload_add_attr_t;
-
 
 #ifdef __cplusplus
 }

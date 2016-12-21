@@ -20,7 +20,6 @@
 extern "C" {
 #endif
 
-
 /**
  * @brief Defines common object names used by Jolokia API
  */
@@ -36,9 +35,6 @@ extern "C" {
 #define JOLOKIA_OBJ_OP_NAME "op"
 #define JOLOKIA_OBJ_STATUS_NAME "status"
 #define JOLOKIA_OBJ_ERROR_NAME "error"
-
-
-
 
 #ifdef __cplusplus
 }

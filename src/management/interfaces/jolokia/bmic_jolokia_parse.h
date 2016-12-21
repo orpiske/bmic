@@ -36,10 +36,8 @@ extern "C" {
  */
 bmic_object_t *bmic_jolokia_parse(const char *str, gru_status_t *status);
 
-
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* BMIC_JOLOKIA_PARSE_H */
-

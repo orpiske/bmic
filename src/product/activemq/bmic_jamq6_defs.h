@@ -16,7 +16,6 @@
 #ifndef BMIC_JAMQ6_DEFS_H
 #define BMIC_JAMQ6_DEFS_H
 
-
 #define JAMQ6_PRODUCT_NAME "jamq6"
 #define JAMQ6_API_VERSION "6.x.x"
 
@@ -26,17 +25,12 @@
 #define JAMQ6_BASE_URL_HINT_URL "%s/hawtio/jolokia"
 #define JAMQ6_BASE_URL_HINT_ADDRESSING "http://%s:%i/hawtio/jolokia"
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-
-
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* BMIC_JAMQ6_DEFS_H */
-

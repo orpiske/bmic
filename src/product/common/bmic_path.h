@@ -36,14 +36,11 @@ extern "C" {
  * @return The path as a malloc'd string whith must be free'd after use or NULL
  * in case of error
  */
-const char *bmic_path_formatter(const char *op, const char *interface,
-                                const char *pkg, const char *capname, 
-                                gru_status_t *status);
-
+const char *bmic_path_formatter(const char *op, const char *interface, const char *pkg,
+	const char *capname, gru_status_t *status);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* BMIC_PATH_H */
-

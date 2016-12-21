@@ -16,8 +16,8 @@
 #ifndef BMIC_OBJECT_H
 #define BMIC_OBJECT_H
 
-#include <stdbool.h>
 #include <assert.h>
+#include <stdbool.h>
 
 #include <common/gru_alloc.h>
 #include <common/gru_status.h>
@@ -30,33 +30,30 @@
 #include "bmic_cap_value.h"
 #include "bmic_regex.h"
 
-
 #define REG_SEARCH_NAME 1
 #define REG_SEARCH_PATH 2
-
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-
 typedef union bmic_value_t_ {
-    int64_t number;
-    char *str;
-    bool value;
-    double d;
+	int64_t number;
+	char *str;
+	bool value;
+	double d;
 } bmic_value_t;
 
 typedef struct bmic_object_t_ {
-    bmic_value_type_t type;
-    char *name;
-    char *path;
-    
-    /**
-     * A pointer to their position within the document tree
-     */
-    gru_tree_node_t *self;
-    bmic_value_t data;
+	bmic_value_type_t type;
+	char *name;
+	char *path;
+
+	/**
+	 * A pointer to their position within the document tree
+	 */
+	gru_tree_node_t *self;
+	bmic_value_t data;
 } bmic_object_t;
 
 bmic_object_t *bmic_object_new(const char *name, gru_status_t *status);
@@ -73,41 +70,37 @@ void bmic_object_set_boolean(bmic_object_t *obj, bool value);
 void bmic_object_set_double(bmic_object_t *obj, double value);
 void bmic_object_set_null(bmic_object_t *obj);
 
-
 // Hierarchy manipulation
 void bmic_object_add_list_element(bmic_object_t *parent, bmic_object_t *element);
 void bmic_object_add_object(bmic_object_t *parent, bmic_object_t *child);
 
 // Path searching
 
-const bmic_object_t *bmic_object_find_by_name(const bmic_object_t *parent, 
-        const char *name);
-const bmic_object_t *bmic_object_find_by_path(const bmic_object_t *parent, 
-                                              const char *path);
-const bmic_object_t *bmic_object_find(const bmic_object_t *parent, 
-                                compare_function_t compare,
-                                              void *data);
+const bmic_object_t *bmic_object_find_by_name(
+	const bmic_object_t *parent, const char *name);
+const bmic_object_t *bmic_object_find_by_path(
+	const bmic_object_t *parent, const char *path);
+const bmic_object_t *bmic_object_find(
+	const bmic_object_t *parent, compare_function_t compare, void *data);
 
-const bmic_object_t *bmic_object_find_child_by_name(const bmic_object_t *parent, 
-        const char *name);
+const bmic_object_t *bmic_object_find_child_by_name(
+	const bmic_object_t *parent, const char *name);
 
-const bmic_object_t *bmic_object_find_regex(const bmic_object_t *parent, 
-                                const char *regex, int flags);
+const bmic_object_t *bmic_object_find_regex(
+	const bmic_object_t *parent, const char *regex, int flags);
 
 // Navigates within the object tree
-void bmic_object_for_each(const bmic_object_t *obj, tree_callback_fn callback, 
-        void *payload);
+void bmic_object_for_each(
+	const bmic_object_t *obj, tree_callback_fn callback, void *payload);
 
-void bmic_object_for_each_child(const bmic_object_t *obj, tree_callback_fn callback, 
-        void *payload);
+void bmic_object_for_each_child(
+	const bmic_object_t *obj, tree_callback_fn callback, void *payload);
 
 // DEBUG
 void bmic_object_print(const bmic_object_t *parent);
-
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* BMIC_OBJECT_H */
-

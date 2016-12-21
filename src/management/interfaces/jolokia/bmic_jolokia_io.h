@@ -16,18 +16,18 @@
 #ifndef BMIC_JOLOKIA_IO_H
 #define BMIC_JOLOKIA_IO_H
 
-#include <stdlib.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 #include "base/common/bmic_object.h"
 #include "base/format/bmic_json.h"
 #include "base/transport/bmic_endpoint.h"
 
-#include "management/common/bmic_handle.h"
 #include "management/common/bmic_api_io.h"
+#include "management/common/bmic_handle.h"
 
-#include "bmic_jolokia_parse.h"
 #include "bmic_jolokia.h"
+#include "bmic_jolokia_parse.h"
 
 #define JOLOKIA_OP_READ "read"
 #define JOLOKIA_OP_EXEC "exec"
@@ -36,24 +36,16 @@
 extern "C" {
 #endif
 
-bool bmic_jolokia_io_exec(bmic_handle_t *handle,
-                                            bmic_json_t *json,
-                                            gru_status_t *status);
+bool bmic_jolokia_io_exec(bmic_handle_t *handle, bmic_json_t *json, gru_status_t *status);
 
-
-const bmic_object_t *bmic_jolokia_io_read(bmic_handle_t *handle, const char *path, 
-                                       gru_status_t *status);
-
+const bmic_object_t *bmic_jolokia_io_read(
+	bmic_handle_t *handle, const char *path, gru_status_t *status);
 
 const bmic_object_t *bmic_jolokia_io_read_attribute(bmic_handle_t *handle,
-        const char *pkg,
-        const char *cap_name,
-        const char *attr_name,
-        gru_status_t *status);
+	const char *pkg, const char *cap_name, const char *attr_name, gru_status_t *status);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* BMIC_JOLOKIA_IO_H */
-

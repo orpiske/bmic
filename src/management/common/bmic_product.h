@@ -19,8 +19,8 @@
 #include <common/gru_status.h>
 #include <string/gru_alt.h>
 
-#include "base/common/bmic_object.h"
 #include "base/common/bmic_list.h"
+#include "base/common/bmic_object.h"
 
 #include "bmic_exchange.h"
 #include "bmic_management_api.h"
@@ -29,8 +29,8 @@
 extern "C" {
 #endif
 
-bmic_api_interface_t *bmic_api_interface_new(const char *name, const char *version,
-        gru_status_t *status);
+bmic_api_interface_t *bmic_api_interface_new(
+	const char *name, const char *version, gru_status_t *status);
 void bmic_api_interface_destroy(bmic_api_interface_t **product);
 
 void bmic_product_registry_init(gru_status_t *status);
@@ -41,7 +41,6 @@ const gru_list_t *bmic_product_registry();
 
 void bmic_exchange_destroy(bmic_exchange_t **ptr);
 void bmic_exchange_destroy_const(const bmic_exchange_t **ptr);
-
 
 #ifdef __cplusplus
 }

@@ -23,7 +23,6 @@
 
 #include "bmic_op_arg.h"
 
-
 /**
  * @brief Operation signatures
  */
@@ -33,15 +32,15 @@ extern "C" {
 #endif
 
 typedef struct bmic_op_sig_t_ {
-    gru_list_t *args;
-    char *ret;
-    char *description;
+	gru_list_t *args;
+	char *ret;
+	char *description;
 } bmic_op_sig_t;
 
 /**
  * Create a new operation signature
  * @param status
- * @return 
+ * @return
  */
 bmic_op_sig_t *bmic_op_sig_new(gru_status_t *status);
 
@@ -77,4 +76,3 @@ void bmic_op_sig_set_ret(bmic_op_sig_t *sig, const char *ret);
 #endif
 
 #endif /* BMIC_OP_SIG_H */
-
