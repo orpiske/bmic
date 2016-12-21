@@ -23,6 +23,12 @@ target_link_libraries(
 	${LIBJSON}
 )
 
+install(
+	DIRECTORY base/common base/format base/transport
+	DESTINATION include/${PROJECT_NAME}
+	FILES_MATCHING PATTERN "*.h"
+)
+
 add_library(
 	bmic-management SHARED
 	management/common/bmic_handle.c
@@ -41,6 +47,12 @@ target_link_libraries(
 	gru
 	curl
 	${LIBJSON}
+)
+
+install(
+	DIRECTORY management/common management/discovery management/interfaces/jolokia
+	DESTINATION include/${PROJECT_NAME}
+	FILES_MATCHING PATTERN "*.h"
 )
 
 add_library(
@@ -69,14 +81,14 @@ target_link_libraries(
 )
 
 install(
-	TARGETS bmic-base bmic-management bmic-product
-	LIBRARY DESTINATION ${CPP_LIBRARY_DIR}
+	DIRECTORY product/common product/activemq product/artemis product/complements/java product
+	DESTINATION include/${PROJECT_NAME}
+	FILES_MATCHING PATTERN "*.h"
 )
 
 install(
-	DIRECTORY transport
-	DESTINATION include/${PROJECT_NAME}
-	FILES_MATCHING PATTERN "*.h"
+	TARGETS bmic-base bmic-management bmic-product
+	LIBRARY DESTINATION ${CPP_LIBRARY_DIR}
 )
 
 add_executable(
@@ -98,4 +110,9 @@ target_link_libraries(
 	bmic-product
 	bmic-base
 	bmic-management
+)
+
+install(
+	TARGETS bmic
+	RUNTIME DESTINATION ${RUNTIME_DIR}
 )
