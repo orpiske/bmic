@@ -246,9 +246,9 @@ bmic_java_info_t bmic_java_read_info(bmic_handle_t *handle, gru_status_t *status
 	}
 
 	if (strncmp(ret.version, "1.6", 3) == 0 || strncmp(ret.version, "1.7", 3) == 0) {
-		ret.memory_model = JAVA_LEGACY;
+		ret.memory_model = BMIC_JAVA_LEGACY;
 	} else {
-		ret.memory_model = JAVA_MODERN;
+		ret.memory_model = BMIC_JAVA_MODERN;
 	}
 
 exit:

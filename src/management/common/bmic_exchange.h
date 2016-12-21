@@ -25,8 +25,8 @@ extern "C" {
 #endif
 
 typedef enum bmic_exchange_type_t_ {
-	EX_CAP_LIST,
-	EX_CAP_ENTRY,
+	BMIC_EX_CAP_LIST,
+	BMIC_EX_CAP_ENTRY,
 } bmic_exchange_type_t;
 
 typedef union bmic_exchange_payload_t_ {

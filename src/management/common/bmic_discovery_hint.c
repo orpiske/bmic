@@ -26,7 +26,7 @@ void bmic_discovery_hint_set_url(
 	bmic_discovery_hint_t *hint, const char *url, gru_status_t *status) {
 	gru_dealloc_string(&hint->content.url);
 
-	hint->hint_type = URL;
+	hint->hint_type = BMIC_URL;
 
 	if (asprintf(&hint->content.url, "%s", url) == -1) {
 		gru_status_set(status, GRU_FAILURE, "Unable to eval URL: not enough memory");
@@ -39,7 +39,7 @@ void bmic_discovery_hint_set_addressing_hostname(
 	bmic_discovery_hint_t *hint, const char *hostname, gru_status_t *status) {
 	gru_dealloc_string(&hint->content.addressing.hostname);
 
-	hint->hint_type = ADDRESSING;
+	hint->hint_type = BMIC_ADDRESSING;
 	if (hostname == NULL) {
 		if (asprintf(&hint->content.addressing.hostname, "%s", "localhost") == -1) {
 			gru_status_set(
@@ -63,7 +63,7 @@ bmic_discovery_hint_t *bmic_discovery_hint_eval_addressing(
 	bmic_discovery_hint_t *ret = bmic_discovery_hint_new(status);
 	gru_alloc_check(ret, NULL);
 
-	ret->hint_type = ADDRESSING;
+	ret->hint_type = BMIC_ADDRESSING;
 	if (hostname == NULL) {
 		if (asprintf(&ret->content.addressing.hostname, "%s", "localhost") == -1) {
 			gru_status_set(
@@ -97,7 +97,7 @@ bmic_discovery_hint_t *bmic_discovery_hint_eval_url(
 		return bmic_discovery_hint_eval_addressing(NULL, BMIC_PORT_UNKNOWN, status);
 	}
 
-	ret->hint_type = URL;
+	ret->hint_type = BMIC_URL;
 	if (asprintf(&ret->content.url, "%s", url) == -1) {
 		gru_status_set(status, GRU_FAILURE, "Unable to eval URL: not enough memory");
 
@@ -116,10 +116,10 @@ void bmic_discovery_hint_destroy(bmic_discovery_hint_t **hint) {
 		return;
 	}
 
-	if (h->hint_type == ADDRESSING) {
+	if (h->hint_type == BMIC_ADDRESSING) {
 		free(h->content.addressing.hostname);
 	} else {
-		if (h->hint_type == URL) {
+		if (h->hint_type == BMIC_URL) {
 			free(h->content.url);
 		}
 	}
@@ -132,7 +132,7 @@ const char *bmic_discovery_hint_to_url(const bmic_discovery_hint_t *hint,
 	logger_t logger = gru_logger_get();
 	char *ret = NULL;
 
-	if (hint->hint_type == URL) {
+	if (hint->hint_type == BMIC_URL) {
 		if (url_format == NULL) {
 			logger(
 				FATAL, "Unable to format URL based on hint because URL format is NULL");
@@ -167,7 +167,7 @@ const char *bmic_discovery_hint_to_url(const bmic_discovery_hint_t *hint,
 }
 
 const char *bmic_discovery_hint_host(const bmic_discovery_hint_t *hint) {
-	if (hint->hint_type == ADDRESSING) {
+	if (hint->hint_type == BMIC_ADDRESSING) {
 		return hint->content.addressing.hostname;
 	} else {
 		return hint->content.url;

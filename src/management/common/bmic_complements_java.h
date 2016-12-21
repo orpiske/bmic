@@ -31,12 +31,12 @@ typedef enum bmic_java_memory_model_t_ {
 	/**
 	 * Memory model for Java 6 and 7 (ie.: no metaspace)
 	 */
-	JAVA_LEGACY,
+	BMIC_JAVA_LEGACY,
 
 	/**
 	 * Memory model for Java 8
 	 */
-	JAVA_MODERN,
+	BMIC_JAVA_MODERN,
 } bmic_java_memory_model_t;
 
 typedef struct bmic_java_info_t_ {

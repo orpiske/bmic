@@ -125,7 +125,7 @@ const bmic_exchange_t *bmic_activemq_load_capabilities(
 
 	ret->root = root;
 	ret->data_ptr = capabilities;
-	ret->type = EX_CAP_LIST;
+	ret->type = BMIC_EX_CAP_LIST;
 
 	cap_cache = ret;
 

@@ -30,8 +30,8 @@ extern "C" {
 #define BMIC_PORT_UNKNOWN 0
 
 typedef enum bmic_hint_type_t_ {
-	ADDRESSING,
-	URL,
+	BMIC_ADDRESSING,
+	BMIC_URL,
 } bmic_hint_type_t;
 
 typedef struct bmic_addressing_t_ {

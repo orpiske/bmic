@@ -101,7 +101,7 @@ int top_run(options_t *options) {
 		bmic_java_mem_info_t metaspace;
 		bmic_java_mem_info_t permgen;
 
-		if (jinfo.memory_model == JAVA_MODERN) {
+		if (jinfo.memory_model == BMIC_JAVA_MODERN) {
 			metaspace = api->java.metaspace_info(ctxt.handle, &status);
 		} else {
 			permgen = api->java.permgen_info(ctxt.handle, &status);
@@ -159,7 +159,7 @@ int top_run(options_t *options) {
 		print_mem("Survivor", &survivor);
 		print_mem("Tenured", &tenured);
 
-		if (jinfo.memory_model == JAVA_MODERN) {
+		if (jinfo.memory_model == BMIC_JAVA_MODERN) {
 			print_mem("Metaspace", &metaspace);
 		} else {
 			print_mem("PermGen", &permgen);

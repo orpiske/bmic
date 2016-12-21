@@ -71,7 +71,7 @@ const bmic_exchange_t *bmic_artemis_mi_read(bmic_handle_t *handle,
 	 */
 	ret->root = reply_obj;
 	ret->data_ptr = value;
-	ret->type = EX_CAP_ENTRY;
+	ret->type = BMIC_EX_CAP_ENTRY;
 	ret->payload.capinfo = info;
 
 	return ret;
