@@ -25,7 +25,7 @@ target_link_libraries(
 
 install(
 	DIRECTORY base/common base/format base/transport
-	DESTINATION include/${PROJECT_NAME}
+	DESTINATION include/${PROJECT_NAME}/base
 	FILES_MATCHING PATTERN "*.h"
 )
 
@@ -51,7 +51,7 @@ target_link_libraries(
 
 install(
 	DIRECTORY management/common management/discovery management/interfaces/jolokia
-	DESTINATION include/${PROJECT_NAME}
+	DESTINATION include/${PROJECT_NAME}/management
 	FILES_MATCHING PATTERN "*.h"
 )
 
@@ -82,7 +82,7 @@ target_link_libraries(
 
 install(
 	DIRECTORY product/common product/activemq product/artemis product/complements/java product
-	DESTINATION include/${PROJECT_NAME}
+	DESTINATION include/${PROJECT_NAME}/product
 	FILES_MATCHING PATTERN "*.h"
 )
 
