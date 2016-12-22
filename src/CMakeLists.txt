@@ -87,6 +87,12 @@ install(
 )
 
 install(
+	DIRECTORY context
+	DESTINATION include/${PROJECT_NAME}/context
+	FILES_MATCHING PATTERN "*.h"
+)
+
+install(
 	TARGETS bmic-base bmic-management bmic-product
 	LIBRARY DESTINATION ${CPP_LIBRARY_DIR}
 )
