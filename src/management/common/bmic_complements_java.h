@@ -16,6 +16,13 @@
 #ifndef BMIC_COMPLEMENTS_JAVA_H
 #define BMIC_COMPLEMENTS_JAVA_H
 
+#include <stdint.h>
+
+#include <common/gru_alloc.h>
+#include <common/gru_status.h>
+
+#include "bmic_handle.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
