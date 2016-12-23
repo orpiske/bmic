@@ -50,8 +50,14 @@ target_link_libraries(
 )
 
 install(
-	DIRECTORY management/common management/discovery management/interfaces/jolokia
+	DIRECTORY management/common management/discovery
 	DESTINATION include/${PROJECT_NAME}/management
+	FILES_MATCHING PATTERN "*.h"
+)
+
+install(
+	DIRECTORY management/interfaces/jolokia
+	DESTINATION include/${PROJECT_NAME}/management/interfaces
 	FILES_MATCHING PATTERN "*.h"
 )
 
@@ -81,14 +87,14 @@ target_link_libraries(
 )
 
 install(
-	DIRECTORY product/common product/activemq product/artemis product/complements/java product
+	DIRECTORY product/common product/activemq product/artemis product/complements/java
 	DESTINATION include/${PROJECT_NAME}/product
 	FILES_MATCHING PATTERN "*.h"
 )
 
 install(
-	DIRECTORY context
-	DESTINATION include/${PROJECT_NAME}/context
+	DIRECTORY context product
+	DESTINATION include/${PROJECT_NAME}
 	FILES_MATCHING PATTERN "*.h"
 )
 
