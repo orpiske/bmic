@@ -20,7 +20,7 @@ bmic_credentials_t bmic_credentials_init(
 	bmic_credentials_t ret = {0};
 
 	if (username != NULL) {
-		if (asprintf(&ret.username, "%s", username) == 1) {
+		if (asprintf(&ret.username, "%s", username) == -1) {
 			gru_status_set(
 				status, GRU_FAILURE, "Unable to set username: not enough memory");
 
