@@ -59,12 +59,12 @@ bool bmic_context_init_simple(bmic_context_t *ctxt, const char *server,
 		return false;
 	}
 
-	bool ret = bmic_context_init_hint(ctxt, hint, username, password, status);
-	if (!ret) {
-		bmic_discovery_hint_destroy(&hint);
-	}
+	/*
+	 * NOTE: hint will be cleaned up by bmic_context_cleanup which is called if init hint
+	 * fails.
+	 */
+	return bmic_context_init_hint(ctxt, hint, username, password, status);
 
-	return ret;
 }
 
 bool bmic_context_init_hint(bmic_context_t *ctxt, bmic_discovery_hint_t *hint,
