@@ -45,7 +45,7 @@ static void print_queue_stat(const char *name, bmic_queue_stat_t stat) {
 }
 
 int queue_run(options_t *options) {
-	gru_status_t status = {0};
+	gru_status_t status = gru_status_new();
 	bmic_context_t ctxt = {0};
 
 	bool ret = bmic_context_init_hint(&ctxt, options->hint, options->credentials.username,
@@ -134,7 +134,7 @@ int queue_main(int argc, char **argv) {
 		return EXIT_FAILURE;
 	}
 
-	gru_status_t status = {0};
+	gru_status_t status = gru_status_new();
 	options.hint = bmic_discovery_hint_new(&status);
 
 	if (!options.hint) {

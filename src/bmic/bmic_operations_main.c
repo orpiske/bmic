@@ -71,7 +71,7 @@ static void show_help(char **argv) {
 }
 
 int operations_run(options_t *options) {
-	gru_status_t status = {0};
+	gru_status_t status = gru_status_new();
 
 	bmic_context_t ctxt = {0};
 
@@ -134,7 +134,7 @@ int operations_main(int argc, char **argv) {
 		return EXIT_FAILURE;
 	}
 
-	gru_status_t status = {0};
+	gru_status_t status = gru_status_new();
 	options.hint = bmic_discovery_hint_new(&status);
 
 	if (!options.hint) {

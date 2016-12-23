@@ -26,7 +26,7 @@ static bool bmic_try_init(
 
 	const char *base_url = api->base_url(pair->hint);
 
-	gru_status_t status = {0};
+	gru_status_t status = gru_status_new();
 
 	logger(DEBUG, "Initializing base URL from API");
 	bmic_handle_t *handle = api->api_init(base_url, &pair->credentials, &status);

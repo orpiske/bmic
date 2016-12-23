@@ -355,7 +355,7 @@ static bool bmic_object_regex_name(const void *nodedata, const void *regex, void
 
 	// TODO: possibly evaluate using regex instead.
 
-	gru_status_t status = {0};
+	gru_status_t status = gru_status_new();
 	bool match = bmic_match(nodeobj->name, (const char *) regex, &status);
 
 	// TODO: improve the error handling here
@@ -374,7 +374,7 @@ static bool bmic_object_regex_path(const void *nodedata, const void *regex, void
 		return false;
 	}
 
-	gru_status_t status = {0};
+	gru_status_t status = gru_status_new();
 	bool match = bmic_match(nodeobj->path, (const char *) regex, &status);
 
 	// TODO: improve the error handling here
