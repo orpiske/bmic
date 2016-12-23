@@ -31,7 +31,7 @@
 
 typedef struct bmic_context_t_ {
 	bmic_discovery_hint_t *hint;
-	bmic_credentials_t *credentials;
+	bmic_credentials_t credentials;
 	bmic_handle_t *handle;
 	bmic_api_interface_t *api;
 } bmic_context_t;

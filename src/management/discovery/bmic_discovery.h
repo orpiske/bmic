@@ -38,7 +38,7 @@ extern "C" {
  * @return The product information
  */
 bmic_api_interface_t *bmic_discovery_run(const bmic_discovery_hint_t *hint,
-	bmic_credentials_t *credentials, bmic_handle_t **outhandle, gru_status_t *status);
+	bmic_credentials_t credentials, bmic_handle_t **outhandle, gru_status_t *status);
 
 #ifdef __cplusplus
 }

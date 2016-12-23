@@ -30,13 +30,12 @@ typedef struct bmic_credentials_t_ {
 	char *password;
 } bmic_credentials_t;
 
-bmic_credentials_t *bmic_credentials_init(
+bmic_credentials_t bmic_credentials_init(
 	const char *username, const char *password, gru_status_t *status);
 
-bmic_credentials_t *bmic_credentials_clone(
-	const bmic_credentials_t *, gru_status_t *status);
+bmic_credentials_t bmic_credentials_clone(bmic_credentials_t, gru_status_t *status);
 
-void bmic_credentials_detroy(bmic_credentials_t **credentials);
+void bmic_credentials_cleanup(bmic_credentials_t credentials);
 
 #ifdef __cplusplus
 }

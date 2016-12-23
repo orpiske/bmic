@@ -17,7 +17,7 @@
 
 typedef struct bmic_discovery_pair_t_ {
 	const bmic_discovery_hint_t *hint;
-	bmic_credentials_t *credentials;
+	bmic_credentials_t credentials;
 } bmic_discovery_pair_t;
 
 static bool bmic_try_init(
@@ -29,7 +29,7 @@ static bool bmic_try_init(
 	gru_status_t status = {0};
 
 	logger(DEBUG, "Initializing base URL from API");
-	bmic_handle_t *handle = api->api_init(base_url, pair->credentials, &status);
+	bmic_handle_t *handle = api->api_init(base_url, &pair->credentials, &status);
 	if (!handle) {
 		gru_dealloc_string((char **) &base_url);
 		return false;
@@ -85,7 +85,7 @@ static bmic_api_interface_t *bmic_discovery_registry_initializer(
 }
 
 bmic_api_interface_t *bmic_discovery_run(const bmic_discovery_hint_t *hint,
-	bmic_credentials_t *credentials, bmic_handle_t **outhandle, gru_status_t *status) {
+	bmic_credentials_t credentials, bmic_handle_t **outhandle, gru_status_t *status) {
 	const gru_list_t *list = bmic_product_registry();
 	bmic_discovery_pair_t pair = {0};
 

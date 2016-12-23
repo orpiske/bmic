@@ -83,7 +83,7 @@ bool bmic_context_init_hint(bmic_context_t *ctxt, bmic_discovery_hint_t *hint,
 
 	if (username && password) {
 		ctxt->credentials = bmic_credentials_init(username, password, status);
-		if (!ctxt->credentials) {
+		if (status->code != GRU_SUCCESS) {
 			bmic_context_cleanup(ctxt);
 
 			return false;
@@ -115,5 +115,5 @@ void bmic_context_cleanup(bmic_context_t *ctxt) {
 	bmic_product_registry_destroy();
 
 	bmic_discovery_hint_destroy(&ctxt->hint);
-	bmic_credentials_detroy(&ctxt->credentials);
+	bmic_credentials_cleanup(ctxt->credentials);
 }

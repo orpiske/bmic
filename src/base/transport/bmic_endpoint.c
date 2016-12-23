@@ -31,7 +31,7 @@ bmic_endpoint_t *bmic_endpoint_init(
 	}
 
 	ret->credentials = bmic_credentials_init(username, password, status);
-	if (!ret->credentials) {
+	if (status->code != GRU_SUCCESS) {
 		bmic_endpoint_destroy(&ret);
 
 		return NULL;
@@ -42,9 +42,9 @@ bmic_endpoint_t *bmic_endpoint_init(
 void bmic_endpoint_destroy(bmic_endpoint_t **ep) {
 	bmic_endpoint_t *e = *ep;
 
-	if (e->credentials) {
-		bmic_credentials_detroy(&e->credentials);
-	}
+
+	bmic_credentials_cleanup(e->credentials);
+
 
 	if (e->path) {
 		gru_dealloc_string(&e->path);
@@ -65,11 +65,9 @@ void bmic_endpoint_set_credentials(
 		return;
 	}
 
-	if (ep->credentials) {
-		bmic_credentials_detroy(&ep->credentials);
-	}
 
-	ep->credentials = bmic_credentials_clone(credentials, status);
+	bmic_credentials_cleanup(ep->credentials);
+	ep->credentials = bmic_credentials_clone(*credentials, status);
 }
 
 void bmic_endpoint_set_path(bmic_endpoint_t *ep, const char *path, gru_status_t *status) {

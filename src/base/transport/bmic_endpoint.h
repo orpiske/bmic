@@ -33,7 +33,7 @@ typedef struct bmic_endpoint_options_t_ {
 typedef struct bmic_endpoint_t_ {
 	char *url;
 	char *path;
-	bmic_credentials_t *credentials;
+	bmic_credentials_t credentials;
 	void *handle;
 	bmic_endpoint_options_t options;
 } bmic_endpoint_t;
