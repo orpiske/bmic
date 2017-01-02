@@ -294,12 +294,14 @@ bool bmic_artemis_queue_create(bmic_handle_t *handle, const bmic_exchange_t *cap
 		return false;
 	}
 
-	bmic_json_t *json = bmic_json_new(status);
-	gru_alloc_check(json, false);
+	bmic_json_t json = bmic_json_new(status);
+	if (status->code != GRU_SUCCESS) {
+		return false;
+	}
 
-	bmic_artemis_json_create_queue(attributes, json, name);
-	bool ret = bmic_jolokia_io_exec(handle, json, status);
-	bmic_json_destroy(&json);
+	bmic_artemis_json_create_queue(attributes, &json, name);
+	bool ret = bmic_jolokia_io_exec(handle, &json, status);
+	bmic_json_cleanup(json);
 
 	return ret;
 }
@@ -315,12 +317,14 @@ bool bmic_artemis_queue_delete(bmic_handle_t *handle, const bmic_exchange_t *cap
 		return false;
 	}
 
-	bmic_json_t *json = bmic_json_new(status);
-	gru_alloc_check(json, false);
+	bmic_json_t json = bmic_json_new(status);
+	if (status->code != GRU_SUCCESS) {
+		return false;
+	}
 
-	bmic_artemis_json_destroy_queue(attributes, json, name);
-	bool ret = bmic_jolokia_io_exec(handle, json, status);
-	bmic_json_destroy(&json);
+	bmic_artemis_json_destroy_queue(attributes, &json, name);
+	bool ret = bmic_jolokia_io_exec(handle, &json, status);
+	bmic_json_cleanup(json);
 
 	return ret;
 }
@@ -414,12 +418,14 @@ bool bmic_artemis_queue_purge(bmic_handle_t *handle, const bmic_exchange_t *cap,
 		return false;
 	}
 
-	bmic_json_t *json = bmic_json_new(status);
-	gru_alloc_check(json, false);
+	bmic_json_t json = bmic_json_new(status);
+	if (status->code != GRU_SUCCESS) {
+		return false;
+	}
 
-	bmic_artemis_json_purge_queue(operation, json);
-	bool ret = bmic_jolokia_io_exec(handle, json, status);
-	bmic_json_destroy(&json);
+	bmic_artemis_json_purge_queue(operation, &json);
+	bool ret = bmic_jolokia_io_exec(handle, &json, status);
+	bmic_json_cleanup(json);
 
 	return ret;
 }

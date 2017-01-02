@@ -21,14 +21,14 @@ bmic_object_t *bmic_jolokia_parse(const char *str, gru_status_t *status) {
 		return NULL;
 	}
 
-	bmic_json_t *json = bmic_json_init(str, status);
-	if (json == NULL || status->code != GRU_SUCCESS) {
+	bmic_json_t json = bmic_json_init(str, status);
+	if (status->code != GRU_SUCCESS) {
 		bmic_object_destroy(&root);
 		return NULL;
 	}
 
-	bmic_json_transform(json, root);
-	bmic_json_destroy(&json);
+	bmic_json_transform(&json, root);
+	bmic_json_cleanup(json);
 
 	return root;
 }

@@ -43,22 +43,22 @@ static bool open_file(const char *path, bmic_object_t **root, gru_status_t *stat
 
 	printf("Read %lu bytes from the file\n", size);
 
-	bmic_json_t *json = bmic_json_init(buff, status);
-	if (json == NULL) {
+	bmic_json_t json = bmic_json_init(buff, status);
+	if (status->code != GRU_SUCCESS) {
 		goto err_exit;
 	}
 	gru_dealloc_string(&buff);
 
 	bmic_object_t *ret_root = bmic_object_new_root(status);
 	if (!ret_root) {
-		bmic_json_destroy(&json);
+		bmic_json_cleanup(json);
 		goto err_exit;
 	}
 
-	bmic_json_transform(json, ret_root);
+	bmic_json_transform(&json, ret_root);
 
 	*root = ret_root;
-	bmic_json_destroy(&json);
+	bmic_json_cleanup(json);
 	return true;
 
 err_exit:

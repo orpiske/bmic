@@ -15,48 +15,37 @@
  */
 #include "bmic_json.h"
 
-bmic_json_t *bmic_json_new(gru_status_t *status) {
-	bmic_json_t *ret = gru_alloc(sizeof(bmic_json_t), status);
-	gru_alloc_check(ret, NULL);
+bmic_json_t bmic_json_new(gru_status_t *status) {
+	bmic_json_t ret = {0};
 
-	ret->obj = json_object_new_object();
-	if (!ret->obj) {
-		gru_dealloc((void **) &ret);
+	ret.obj = json_object_new_object();
+	if (!ret.obj) {
 		gru_status_set(status, GRU_FAILURE, "Unable to create the json object");
-
-		return NULL;
 	}
 
 	return ret;
 }
 
-bmic_json_t *bmic_json_init(const char *data, gru_status_t *status) {
+bmic_json_t bmic_json_init(const char *data, gru_status_t *status) {
 	enum json_tokener_error jerr = json_tokener_success;
 
-	bmic_json_t *ret = gru_alloc(sizeof(bmic_json_t), status);
-	gru_alloc_check(ret, NULL);
+	bmic_json_t ret = {0};
 
-	json_object *json = json_tokener_parse_verbose(data, &jerr);
+	ret.obj = json_tokener_parse_verbose(data, &jerr);
 
 	if (jerr != json_tokener_success) {
 		gru_status_set(status, GRU_FAILURE, "Unable to parse the JSON data");
 
-		bmic_json_destroy(&ret);
-		return NULL;
+		bmic_json_cleanup(ret);
 	}
 
-	ret->obj = json;
 	return ret;
 }
 
-void bmic_json_destroy(bmic_json_t **json) {
-	bmic_json_t *jobj = *json;
-
-	if (jobj && jobj->obj) {
-		json_object_put(jobj->obj);
+void bmic_json_cleanup(bmic_json_t json) {
+	if (json.obj) {
+		json_object_put(json.obj);
 	}
-
-	gru_dealloc((void **) json);
 }
 
 static void bmic_json_transform_simple_obj(

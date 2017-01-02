@@ -45,8 +45,8 @@ int main(int argc, char **argv) {
 
 	printf("Read %lu bytes from the file\n", size);
 
-	bmic_json_t *json = bmic_json_init(buff, &status);
-	if (json == NULL) {
+	bmic_json_t json = bmic_json_init(buff, &status);
+	if (status.code != GRU_SUCCESS) {
 		goto err_exit;
 	}
 	gru_dealloc_string(&buff);
@@ -56,7 +56,7 @@ int main(int argc, char **argv) {
 		goto err_exit;
 	}
 
-	bmic_json_transform(json, root);
+	bmic_json_transform(&json, root);
 
 	const bmic_object_t *type = bmic_object_find_by_name(root, "status");
 	if (type == NULL) {
@@ -108,7 +108,7 @@ int main(int argc, char **argv) {
 	}
 	printf("Node found: %s [%s]\n", child3->name, child3->path);
 
-	bmic_json_destroy(&json);
+	bmic_json_cleanup(json);
 	bmic_object_destroy(&root);
 	return EXIT_SUCCESS;
 
@@ -120,7 +120,7 @@ err_exit:
 
 	gru_dealloc_string(&buff);
 	gru_status_reset(&status);
-	bmic_json_destroy(&json);
+	bmic_json_cleanup(json);
 
 	return EXIT_FAILURE;
 }

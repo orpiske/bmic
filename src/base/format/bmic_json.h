@@ -39,9 +39,9 @@ typedef struct bmic_json_t_ { json_object *obj; } bmic_json_t;
 
 typedef int (*bmic_match_cond)(const char *keyname, const char *value);
 
-bmic_json_t *bmic_json_new(gru_status_t *status);
-bmic_json_t *bmic_json_init(const char *data, gru_status_t *status);
-void bmic_json_destroy(bmic_json_t **json);
+bmic_json_t bmic_json_new(gru_status_t *status);
+bmic_json_t bmic_json_init(const char *data, gru_status_t *status);
+void bmic_json_cleanup(bmic_json_t json);
 
 void bmic_json_transform(const bmic_json_t *jobj, bmic_object_t *ret);
 bmic_data_t bmic_json_to_data(const bmic_json_t *jobj, gru_status_t *status);
