@@ -43,6 +43,20 @@ extern "C" {
 const bmic_object_t *bmic_finder_varg(const bmic_object_t *root, const char *regex_fmt,
 	int flags, gru_status_t *status, va_list ap);
 
+/**
+ * Given an hierarchy (tree) of objects it navigates through it and tries to find the
+ * node that matches the given regex
+ * @param root The root object
+ * @param regex_fmt The regex to match
+ * @param flags The search flags as those used by bmic_regex
+ * @param status The status object
+ * @param ...
+ * @return The first object that matches the regex or NULL if not found (status
+ * will be properly set in this case)
+ */
+const bmic_object_t *bmic_finder_simple(const bmic_object_t *root, gru_status_t *status,
+        int flags, const char *regex_fmt, ...);
+
 #ifdef __cplusplus
 }
 #endif

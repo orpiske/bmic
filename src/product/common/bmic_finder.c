@@ -32,9 +32,9 @@ const bmic_object_t *bmic_finder_varg(const bmic_object_t *root, const char *reg
 	if (!ptr) {
 #ifdef DNDEBUG
 		gru_status_set(
-			status, GRU_FAILURE, "Unable to find the capabilities matching %s", regex);
+			status, GRU_FAILURE, "Unable to find the objects matching %s", regex);
 #else
-		gru_status_set(status, GRU_FAILURE, "Unable to find the requested capability");
+		gru_status_set(status, GRU_FAILURE, "Unable to find the requested object");
 #endif
 		free(regex);
 		return NULL;
@@ -42,4 +42,16 @@ const bmic_object_t *bmic_finder_varg(const bmic_object_t *root, const char *reg
 
 	free(regex);
 	return ptr;
+}
+
+const bmic_object_t *bmic_finder_simple(const bmic_object_t *root, gru_status_t *status,
+										int flags, const char *regex_fmt, ...)
+{
+	va_list ap;
+	va_start(ap, regex_fmt);
+
+	const bmic_object_t *ret = bmic_finder_varg(root, regex_fmt, flags, status, ap);
+	va_end(ap);
+
+	return ret;
 }

@@ -35,6 +35,7 @@ bmic_api_interface_t *bmic_artemis_product(gru_status_t *status) {
 	ret->queue_delete = bmic_artemis_queue_delete;
 	ret->queue_list = bmic_artemis_queue_list;
 	ret->queue_stats = bmic_artemis_queue_stats;
+	ret->queue_purge = bmic_artemis_queue_purge;
 
 	ret->java.java_info = bmic_java_read_info;
 	ret->java.os_info = bmic_java_read_os_info;
@@ -394,6 +395,31 @@ bmic_queue_stat_t bmic_artemis_queue_stats(bmic_handle_t *handle,
 	if (status->code != GRU_SUCCESS) {
 		return ret;
 	}
+
+	return ret;
+}
+
+
+bool bmic_artemis_queue_purge(bmic_handle_t *handle, const bmic_exchange_t *cap,
+	const char *name, gru_status_t *status)
+{
+	const bmic_object_t *operation = bmic_finder_simple(
+		cap->root, status, REG_SEARCH_NAME, ARTEMIS_QUEUE_CAPABILITES_REGEX, name);
+
+	if (operation == NULL) {
+		logger_t logger = gru_logger_get();
+
+		logger(ERROR,  "Queue operation not found for queue %s", name);
+
+		return false;
+	}
+
+	bmic_json_t *json = bmic_json_new(status);
+	gru_alloc_check(json, false);
+
+	bmic_artemis_json_purge_queue(operation, json, name);
+	bool ret = bmic_jolokia_io_exec(handle, json, status);
+	bmic_json_destroy(&json);
 
 	return ret;
 }

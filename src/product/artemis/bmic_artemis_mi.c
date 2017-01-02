@@ -26,7 +26,7 @@ const bmic_exchange_t *bmic_artemis_mi_read(bmic_handle_t *handle,
 	va_start(ap, regex_fmt);
 
 	/*
-	 *  First, resolve the root of the capability (and whether it even exist ...
+	 * First, resolve the root of the capability (and whether it even exist) ...
 	 *
 	 * ie.: read the previous returned capability tree and finds the pointer
 	 * to the node respective to the matching parameters (regex + flag)
