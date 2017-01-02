@@ -42,9 +42,7 @@ bmic_endpoint_t *bmic_endpoint_init(
 void bmic_endpoint_destroy(bmic_endpoint_t **ep) {
 	bmic_endpoint_t *e = *ep;
 
-
 	bmic_credentials_cleanup(e->credentials);
-
 
 	if (e->path) {
 		gru_dealloc_string(&e->path);
@@ -64,7 +62,6 @@ void bmic_endpoint_set_credentials(
 
 		return;
 	}
-
 
 	bmic_credentials_cleanup(ep->credentials);
 	ep->credentials = bmic_credentials_clone(*credentials, status);

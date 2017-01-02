@@ -64,7 +64,6 @@ bool bmic_context_init_simple(bmic_context_t *ctxt, const char *server,
 	 * fails.
 	 */
 	return bmic_context_init_hint(ctxt, hint, username, password, status);
-
 }
 
 bool bmic_context_init_hint(bmic_context_t *ctxt, bmic_discovery_hint_t *hint,

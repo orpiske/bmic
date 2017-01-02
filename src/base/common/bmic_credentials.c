@@ -43,7 +43,8 @@ bmic_credentials_t bmic_credentials_init(
 	return ret;
 }
 
-bmic_credentials_t bmic_credentials_clone(bmic_credentials_t other, gru_status_t *status) {
+bmic_credentials_t bmic_credentials_clone(
+	bmic_credentials_t other, gru_status_t *status) {
 	bmic_credentials_t ret = {0};
 
 	if (other.username != NULL) {
