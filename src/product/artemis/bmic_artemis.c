@@ -417,7 +417,7 @@ bool bmic_artemis_queue_purge(bmic_handle_t *handle, const bmic_exchange_t *cap,
 	bmic_json_t *json = bmic_json_new(status);
 	gru_alloc_check(json, false);
 
-	bmic_artemis_json_purge_queue(operation, json, name);
+	bmic_artemis_json_purge_queue(operation, json);
 	bool ret = bmic_jolokia_io_exec(handle, json, status);
 	bmic_json_destroy(&json);
 

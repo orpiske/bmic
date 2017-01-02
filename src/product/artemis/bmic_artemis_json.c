@@ -96,8 +96,7 @@ void bmic_artemis_json_destroy_queue(
 }
 
 
-void bmic_artemis_json_purge_queue(
-	const bmic_object_t *op, bmic_json_t *json, const char *name) {
+void bmic_artemis_json_purge_queue(const bmic_object_t *op, bmic_json_t *json) {
 	bmic_artemis_json_op_exec(op, json);
 
 	bmic_artemis_json_op_mbean(op, json);
