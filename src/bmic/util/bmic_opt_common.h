@@ -34,6 +34,7 @@ typedef enum operations_t_ {
 	OP_CREATE,
 	OP_DELETE,
 	OP_STATS,
+        OP_PURGE,
 } operations_t;
 
 typedef struct credential_options_t_ {
