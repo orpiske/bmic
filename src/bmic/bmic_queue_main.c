@@ -31,6 +31,7 @@ static void show_help(char **argv) {
 	print_option_help("info", "I", "show server information during start-up");
 	print_option_help("create", "c", "create a queue on the server");
 	print_option_help("delete", "d", "create a queue on the server");
+	print_option_help("purge", "G", "remove all messages from the queue");
 }
 
 static void print_queue(const void *nodedata, void *payload) {
@@ -104,6 +105,13 @@ int queue_run(options_t *options) {
 			}
 			break;
 		}
+		case OP_PURGE: {
+			api->queue_purge(ctxt.handle, cap, options->program.queue.queue, &status);
+			if (status.code != GRU_SUCCESS) {
+				fprintf(stderr, "%s\n", status.message);
+			}
+			break;
+		}
 		case OP_STATS: {
 			bmic_queue_stat_t stats =
 				api->queue_stats(ctxt.handle, cap, options->program.queue.queue, &status);
@@ -153,12 +161,16 @@ int queue_main(int argc, char **argv) {
 			{"server", required_argument, 0, 's'}, {"port", required_argument, 0, 'P'},
 			{"url", required_argument, 0, 'U'}, {"name", required_argument, 0, 'n'},
 			{"attribute", required_argument, 0, 'a'}, {"list", no_argument, 0, 'l'},
-			{"read", no_argument, 0, 'r'}, {"create", no_argument, 0, 'c'},
-			{"delete", no_argument, 0, 'd'}, {"info", no_argument, 0, 'I'},
-			{"stats", no_argument, 0, 'S'}, {0, 0, 0, 0}};
+			{"read", no_argument, 0, 'r'},
+			{"create", no_argument, 0, 'c'},
+			{"delete", no_argument, 0, 'd'},
+			{"purge", no_argument, 0, 'G'},
+			{"info", no_argument, 0, 'I'},
+			{"stats", no_argument, 0, 'S'},
+			{0, 0, 0, 0}};
 
 		int c =
-			getopt_long(argc, argv, "hu:p:s:P:U:n:a:lrcdIS", long_options, &option_index);
+			getopt_long(argc, argv, "hu:p:s:P:U:n:a:lrcdGIS", long_options, &option_index);
 		if (c == -1) {
 			if (optind == 1) {
 				break;
@@ -235,6 +247,9 @@ int queue_main(int argc, char **argv) {
 				break;
 			case 'd':
 				options.program.queue.operation = OP_DELETE;
+				break;
+			case 'G':
+				options.program.queue.operation = OP_PURGE;
 				break;
 			case 'S':
 				options.program.queue.operation = OP_STATS;
