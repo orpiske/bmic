@@ -152,7 +152,7 @@ void bmic_endpoint_http_read(const bmic_endpoint_t *ep, bmic_data_t *request,
 		}
 
 		logger(DEBUG, "HTTP response code %d", epstatus->epcode);
-		logger(TRACE, "HTTP response data %d", bmic_data_to_string(reply_data.body));
+		logger(TRACE, "HTTP response data %s", bmic_data_to_string(reply_data.body));
 	}
 }
 
@@ -219,6 +219,6 @@ void bmic_endpoint_http_write(const bmic_endpoint_t *ep, bmic_data_t *request,
 		}
 
 		logger(DEBUG, "HTTP response code %d", epstatus->epcode);
-		logger(TRACE, "HTTP response data %d", bmic_data_to_string(reply));
+		logger(TRACE, "HTTP response data %s", bmic_data_to_string(reply));
 	}
 }
