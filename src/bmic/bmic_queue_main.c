@@ -29,6 +29,8 @@ static void show_help(char **argv) {
 	print_option_help("list", "l", "list queues from the server");
 	print_option_help("stats", "S", "show queue statistics");
 	print_option_help("info", "I", "show server information during start-up");
+	print_option_help("create", "c", "create a queue on the server");
+	print_option_help("delete", "d", "create a queue on the server");
 }
 
 static void print_queue(const void *nodedata, void *payload) {
