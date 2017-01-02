@@ -35,7 +35,8 @@ bmic_api_interface_t *bmic_jamq6_product(gru_status_t *status) {
 	ret->queue_delete = bmic_activemq_queue_delete;
 	ret->queue_list = bmic_activemq_queue_list;
 	ret->queue_stats = bmic_activemq_queue_stats;
-
+	ret->queue_purge = bmic_activemq_queue_purge;
+	
 	ret->java.java_info = bmic_java_read_info;
 	ret->java.os_info = bmic_java_read_os_info;
 
