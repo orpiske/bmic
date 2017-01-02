@@ -186,7 +186,7 @@ int operations_main(int argc, char **argv) {
 				break;
 			case 'P':
 				bmic_discovery_hint_set_addressing_port(
-					options.hint, atoi(optarg), &status);
+					options.hint, (uint16_t) atoi(optarg), &status);
 				if (status.code != GRU_SUCCESS) {
 					fprintf(stderr, "%s", status.message);
 

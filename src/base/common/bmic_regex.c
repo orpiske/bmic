@@ -65,14 +65,14 @@ const char *bmic_regex_find(const char *str, const char *regex, uint32_t size,
 	}
 
 	rc = regexec(&reg_obj, str, size, match, 0);
-	if (rc == 0) {
+	if (rc == 0 && ((match + group)->rm_so != -1)) {
 		logger_t logger = gru_logger_get();
 
 		logger(TRACE, "First offset: %d\n", (match + group)->rm_so);
 		logger(TRACE, "Last offset: %d\n", (match + group)->rm_eo);
 
-		size_t str_size = ((match + group)->rm_eo - (match + group)->rm_so) + 1;
-		char *ret = calloc(1, str_size + 1);
+		int str_size = ((int) (match + group)->rm_eo - (match + group)->rm_so) + 1;
+		char *ret = calloc(1, (size_t) str_size + 1);
 		if (!ret) {
 			gru_status_set(
 				status, GRU_FAILURE, "Not enough memory for saving the regex match");
@@ -83,7 +83,7 @@ const char *bmic_regex_find(const char *str, const char *regex, uint32_t size,
 			return NULL;
 		}
 
-		snprintf(ret, str_size, "%s", str + (match + group)->rm_so);
+		snprintf(ret, (size_t) str_size, "%s", str + (match + group)->rm_so);
 		regfree(&reg_obj);
 		free(match);
 

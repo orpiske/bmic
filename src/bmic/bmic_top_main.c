@@ -200,7 +200,7 @@ int top_run(options_t *options) {
 			}
 		}
 
-		sleep(options->program.top.interval);
+		sleep((uint32_t) options->program.top.interval);
 		printf("%c[2K\r", 27);
 		printf("%s%s%s%-32s %-9s %-17s %-19s%s", RESET, BG_WHITE, LIGHT_BLACK,
 			bmic_discovery_hint_host(options->hint), info->name, info->version,
@@ -278,7 +278,7 @@ int top_main(int argc, char **argv) {
 				break;
 			case 'P':
 				bmic_discovery_hint_set_addressing_port(
-					options.hint, atoi(optarg), &status);
+					options.hint, (uint16_t) atoi(optarg), &status);
 				if (status.code != GRU_SUCCESS) {
 					fprintf(stderr, "%s", status.message);
 
