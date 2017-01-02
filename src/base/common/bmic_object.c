@@ -127,7 +127,6 @@ void bmic_object_destroy(bmic_object_t **ptr) {
 		return;
 	}
 
-	logger_t logger = gru_logger_get();
 	bmic_trace("Destroying object %s [%s]", obj->name, obj->path);
 
 	if (obj->type == BMIC_STRING) {
@@ -181,12 +180,12 @@ bool bmic_object_set_path(bmic_object_t *obj, const char *path, ...) {
 void bmic_object_set_string(bmic_object_t *obj, const char *value) {
 	assert(obj != NULL && value != NULL);
 
-	logger_t logger = gru_logger_get();
-
 	bmic_trace("Setting %s [%s] to %s", obj->name, obj->path, value);
 
 	obj->type = BMIC_STRING;
 	if (asprintf(&obj->data.str, "%s", value) == -1) {
+		logger_t logger = gru_logger_get();
+
 		logger(FATAL,
 			"Unable to allocate memory for setting the string value for the object");
 	}
@@ -195,7 +194,6 @@ void bmic_object_set_string(bmic_object_t *obj, const char *value) {
 void bmic_object_set_integer(bmic_object_t *obj, int64_t value) {
 	assert(obj != NULL);
 
-	logger_t logger = gru_logger_get();
 	bmic_trace("Setting %s [%s] to %" PRId64 "", obj->name, obj->path, value);
 	obj->type = BMIC_INTEGER;
 	obj->data.number = value;
@@ -204,7 +202,6 @@ void bmic_object_set_integer(bmic_object_t *obj, int64_t value) {
 void bmic_object_set_boolean(bmic_object_t *obj, bool value) {
 	assert(obj != NULL);
 
-	logger_t logger = gru_logger_get();
 	bmic_trace("Setting %s [%s] to %s", obj->name, obj->path, (value ? "true" : "false"));
 
 	obj->type = BMIC_BOOLEAN;
@@ -214,7 +211,6 @@ void bmic_object_set_boolean(bmic_object_t *obj, bool value) {
 void bmic_object_set_double(bmic_object_t *obj, double value) {
 	assert(obj != NULL);
 
-	logger_t logger = gru_logger_get();
 	bmic_trace("Setting %s [%s] to %.4f", obj->name, obj->path, value);
 
 	obj->type = BMIC_DOUBLE;
@@ -230,13 +226,13 @@ void bmic_object_set_null(bmic_object_t *obj) {
 
 void bmic_object_add_list_element(bmic_object_t *parent, bmic_object_t *element) {
 	assert(parent != NULL && element != NULL);
-	logger_t logger = gru_logger_get();
-
 	parent->type = BMIC_LIST;
 	uint32_t pos = gru_tree_count_children(parent->self);
 
 	element->self = gru_tree_add_child(parent->self, element);
 	if (!element->self) {
+		logger_t logger = gru_logger_get();
+
 		logger(FATAL, "Unable to create a new tree storage for the child object");
 
 		return;
@@ -276,7 +272,6 @@ static bool bmic_compare_name(const void *nodedata, const void *data, void *r) {
 	}
 
 	if (nodeobj->name != NULL) {
-		logger_t logger = gru_logger_get();
 		bmic_trace("Comparing %s [%s] %d with %s", nodeobj->name, nodeobj->path,
 			nodeobj->type, (const char *) data);
 		if (strcmp(nodeobj->name, (const char *) data) == 0) {
