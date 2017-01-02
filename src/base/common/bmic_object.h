@@ -29,6 +29,7 @@
 
 #include "bmic_cap_value.h"
 #include "bmic_regex.h"
+#include "bmic_debug.h"
 
 #define REG_SEARCH_NAME 1
 #define REG_SEARCH_PATH 2

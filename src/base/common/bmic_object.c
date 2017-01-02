@@ -128,7 +128,7 @@ void bmic_object_destroy(bmic_object_t **ptr) {
 	}
 
 	logger_t logger = gru_logger_get();
-	logger(TRACE, "Destroying object %s [%s]", obj->name, obj->path);
+	bmic_trace("Destroying object %s [%s]", obj->name, obj->path);
 
 	if (obj->type == BMIC_STRING) {
 		if (obj->data.str) {
@@ -182,7 +182,8 @@ void bmic_object_set_string(bmic_object_t *obj, const char *value) {
 	assert(obj != NULL && value != NULL);
 
 	logger_t logger = gru_logger_get();
-	logger(TRACE, "Setting %s [%s] to %s", obj->name, obj->path, value);
+
+	bmic_trace("Setting %s [%s] to %s", obj->name, obj->path, value);
 
 	obj->type = BMIC_STRING;
 	if (asprintf(&obj->data.str, "%s", value) == -1) {
@@ -195,7 +196,7 @@ void bmic_object_set_integer(bmic_object_t *obj, int64_t value) {
 	assert(obj != NULL);
 
 	logger_t logger = gru_logger_get();
-	logger(TRACE, "Setting %s [%s] to %" PRId64 "", obj->name, obj->path, value);
+	bmic_trace("Setting %s [%s] to %" PRId64 "", obj->name, obj->path, value);
 	obj->type = BMIC_INTEGER;
 	obj->data.number = value;
 }
@@ -204,8 +205,7 @@ void bmic_object_set_boolean(bmic_object_t *obj, bool value) {
 	assert(obj != NULL);
 
 	logger_t logger = gru_logger_get();
-	logger(
-		TRACE, "Setting %s [%s] to %s", obj->name, obj->path, (value ? "true" : "false"));
+	bmic_trace("Setting %s [%s] to %s", obj->name, obj->path, (value ? "true" : "false"));
 
 	obj->type = BMIC_BOOLEAN;
 	obj->data.value = value;
@@ -215,7 +215,7 @@ void bmic_object_set_double(bmic_object_t *obj, double value) {
 	assert(obj != NULL);
 
 	logger_t logger = gru_logger_get();
-	logger(TRACE, "Setting %s [%s] to %.4f", obj->name, obj->path, value);
+	bmic_trace("Setting %s [%s] to %.4f", obj->name, obj->path, value);
 
 	obj->type = BMIC_DOUBLE;
 	obj->data.d = value;
@@ -244,7 +244,7 @@ void bmic_object_add_list_element(bmic_object_t *parent, bmic_object_t *element)
 
 	bmic_object_set_path(element, "%s/%s[%i]", parent->path, element->name, pos);
 
-	logger(TRACE, "Adding %s [%s] to %s", element->name, element->path, parent->name);
+	bmic_trace("Adding %s [%s] to %s", element->name, element->path, parent->name);
 }
 
 void bmic_object_add_object(bmic_object_t *parent, bmic_object_t *child) {
@@ -277,7 +277,7 @@ static bool bmic_compare_name(const void *nodedata, const void *data, void *r) {
 
 	if (nodeobj->name != NULL) {
 		logger_t logger = gru_logger_get();
-		logger(TRACE, "Comparing %s [%s] %d with %s", nodeobj->name, nodeobj->path,
+		bmic_trace("Comparing %s [%s] %d with %s", nodeobj->name, nodeobj->path,
 			nodeobj->type, (const char *) data);
 		if (strcmp(nodeobj->name, (const char *) data) == 0) {
 			return true;
