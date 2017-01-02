@@ -24,6 +24,7 @@
 
 #define ACTIVEMQ_CREATE_QUEUE_SIG "addQueue(java.lang.String)"
 #define ACTIVEMQ_REMOVE_QUEUE_SIG "removeQueue(java.lang.String)"
+#define ACTIVEMQ_PURGE_QUEUE_SIG "purge()"
 
 #ifdef __cplusplus
 extern "C" {
@@ -34,6 +35,8 @@ void bmic_activemq_json_create_queue(
 
 void bmic_activemq_json_delete_queue(
 	const bmic_object_t *op, bmic_json_t *json, const char *name);
+
+void bmic_activemq_json_purge_queue(	const bmic_object_t *op, bmic_json_t *json);
 
 #ifdef __cplusplus
 }

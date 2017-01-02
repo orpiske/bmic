@@ -126,6 +126,18 @@ const bmic_list_t *bmic_activemq_queue_list(
 bmic_queue_stat_t bmic_activemq_queue_stats(bmic_handle_t *handle,
 	const bmic_exchange_t *cap, const char *queue, gru_status_t *status);
 
+
+/**
+ * Purge a queue
+ * @param handle
+ * @param cap
+ * @param name
+ * @param status
+ * @return
+ */
+bool bmic_activemq_queue_purge(bmic_handle_t *handle, const bmic_exchange_t *cap,
+	const char *name, gru_status_t *status);
+
 #ifdef __cplusplus
 }
 #endif
