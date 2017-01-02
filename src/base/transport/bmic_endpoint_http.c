@@ -41,7 +41,7 @@ static size_t curl_callback(void *contents, size_t size, size_t nmemb, void *use
 			p->status, GRU_FAILURE, "Unable to allocate memory for reply data");
 
 		free(p->body->data);
-		return -1;
+		return 0;
 	}
 
 	memcpy(&(((char *) p->body->data)[p->body->size]), contents, realsize);
