@@ -128,7 +128,7 @@ void bmic_discovery_hint_destroy(bmic_discovery_hint_t **hint);
  * @return The URL as a newly allocated char string that must be free'd
  */
 const char *bmic_discovery_hint_to_url(const bmic_discovery_hint_t *hint,
-	const char *url_format, const char *addr_format, uint64_t default_port);
+	const char *url_format, const char *addr_format, uint16_t default_port);
 
 #ifdef __cplusplus
 }

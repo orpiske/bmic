@@ -128,7 +128,7 @@ void bmic_discovery_hint_destroy(bmic_discovery_hint_t **hint) {
 }
 
 const char *bmic_discovery_hint_to_url(const bmic_discovery_hint_t *hint,
-	const char *url_format, const char *addr_format, uint64_t default_port) {
+	const char *url_format, const char *addr_format, uint16_t default_port) {
 	logger_t logger = gru_logger_get();
 	char *ret = NULL;
 
