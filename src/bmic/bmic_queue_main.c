@@ -24,6 +24,7 @@ static void show_help(char **argv) {
 	print_option_help("username", "u", "username to access the management console");
 	print_option_help("password", "p", "password to access the management console");
 	print_option_help("server", "s", "server hostname or IP address");
+	print_option_help("url", "U", "management interface URL");
 	print_option_help("name", "n", "name of the queue to manage");
 	print_option_help("attribute", "a", "queue attribute to read");
 	print_option_help("list", "l", "list queues from the server");

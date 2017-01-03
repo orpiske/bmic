@@ -24,6 +24,7 @@ static void show_help(char **argv) {
 
 	print_option_help("username", "u", "username to access the management console");
 	print_option_help("password", "p", "password to access the management console");
+	print_option_help("url", "U", "management interface URL");
 	print_option_help("server", "s", "server hostname or IP address");
 	print_option_help("interval", "i", "interval between each update");
 	print_option_help("attribute", "a", "queue attribute to read");
@@ -111,6 +112,7 @@ int top_run(options_t *options) {
 			const gru_node_t *node = gru_list_get(list->items, i);
 
 			if (node != NULL && node->data != NULL) {
+
 				stat[i] = api->queue_stats(
 					ctxt.handle, cap, (const char *) node->data, &status);
 

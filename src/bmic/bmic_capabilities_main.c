@@ -41,6 +41,7 @@ static void show_help(char **argv) {
 	print_option_help("username", "u", "username to access the management console");
 	print_option_help("password", "p", "password to access the management console");
 	print_option_help("server", "s", "server hostname or IP address");
+	print_option_help("url", "U", "management interface URL");
 	print_option_help(
 		"list", "l", "list available capabilities/attributes from the server");
 	print_option_help("read=<str>", "r <str>",
