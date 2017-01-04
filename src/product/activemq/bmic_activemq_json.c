@@ -100,3 +100,14 @@ void bmic_activemq_json_purge_queue(	const bmic_object_t *op, bmic_json_t *json)
 	json_object_object_add(json->obj, "operation", purge_queue);
 
 }
+
+
+void bmic_activemq_json_reset_queue(const bmic_object_t *op, bmic_json_t *json) {
+	bmic_activemq_json_op_exec(op, json);
+
+	bmic_activemq_json_op_mbean(op, json);
+
+	json_object *purge_queue = json_object_new_string(ACTIVEMQ_RESET_QUEUE_SIG);
+	json_object_object_add(json->obj, "operation", purge_queue);
+
+}

@@ -36,6 +36,7 @@ bmic_api_interface_t *bmic_artemis_product(gru_status_t *status) {
 	ret->queue_list = bmic_artemis_queue_list;
 	ret->queue_stats = bmic_artemis_queue_stats;
 	ret->queue_purge = bmic_artemis_queue_purge;
+	ret->queue_reset = bmic_artemis_queue_reset;
 
 	ret->java.java_info = bmic_java_read_info;
 	ret->java.os_info = bmic_java_read_os_info;
@@ -426,6 +427,58 @@ bool bmic_artemis_queue_purge(bmic_handle_t *handle, const bmic_exchange_t *cap,
 	bmic_artemis_json_purge_queue(operation, &json);
 	bool ret = bmic_jolokia_io_exec(handle, &json, status);
 	bmic_json_cleanup(json);
+
+	return ret;
+}
+
+static bool bmic_artemis_queue_reset_ack(bmic_handle_t *handle,
+				const bmic_object_t *operation, gru_status_t *status)
+{
+	bmic_json_t json = bmic_json_new(status);
+	if (status->code != GRU_SUCCESS) {
+		return false;
+	}
+
+	bmic_artemis_json_reset_ack_queue(operation, &json);
+	bool ret = bmic_jolokia_io_exec(handle, &json, status);
+	bmic_json_cleanup(json);
+
+	return ret;
+}
+
+static bool bmic_artemis_queue_reset_exp(bmic_handle_t *handle,
+				const bmic_object_t *operation, gru_status_t *status)
+{
+	bmic_json_t json = bmic_json_new(status);
+	if (status->code != GRU_SUCCESS) {
+		return false;
+	}
+
+	bmic_artemis_json_reset_exp_queue(operation, &json);
+	bool ret = bmic_jolokia_io_exec(handle, &json, status);
+	bmic_json_cleanup(json);
+
+	return ret;
+}
+
+bool bmic_artemis_queue_reset(bmic_handle_t *handle, const bmic_exchange_t *cap,
+	const char *name, gru_status_t *status)
+{
+	const bmic_object_t *operation = bmic_finder_simple(
+		cap->root, status, REG_SEARCH_NAME, ARTEMIS_QUEUE_CAPABILITES_REGEX, name);
+
+	if (operation == NULL) {
+		logger_t logger = gru_logger_get();
+
+		logger(ERROR,  "Queue operation not found for queue %s", name);
+
+		return false;
+	}
+
+	bool ret = bmic_artemis_queue_reset_ack(handle, operation, status);
+	if (ret) {
+		ret = bmic_artemis_queue_reset_exp(handle, operation, status);
+	}
 
 	return ret;
 }

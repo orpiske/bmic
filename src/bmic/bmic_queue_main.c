@@ -33,6 +33,7 @@ static void show_help(char **argv) {
 	print_option_help("create", "c", "create a queue on the server");
 	print_option_help("delete", "d", "create a queue on the server");
 	print_option_help("purge", "G", "remove all messages from the queue");
+	print_option_help("reset", "R", "reset message counters on the queue");
 }
 
 static void print_queue(const void *nodedata, void *payload) {
@@ -113,6 +114,13 @@ int queue_run(options_t *options) {
 			}
 			break;
 		}
+		case OP_RESET: {
+			api->queue_reset(ctxt.handle, cap, options->program.queue.queue, &status);
+			if (status.code != GRU_SUCCESS) {
+				fprintf(stderr, "%s\n", status.message);
+			}
+			break;
+		}
 		case OP_STATS: {
 			bmic_queue_stat_t stats =
 				api->queue_stats(ctxt.handle, cap, options->program.queue.queue, &status);
@@ -156,22 +164,27 @@ int queue_main(int argc, char **argv) {
 
 	while (1) {
 
-		static struct option long_options[] = {{"help", no_argument, 0, 'h'},
+		static struct option long_options[] = {
+			{"help", no_argument, 0, 'h'},
 			{"username", required_argument, 0, 'u'},
 			{"password", required_argument, 0, 'p'},
-			{"server", required_argument, 0, 's'}, {"port", required_argument, 0, 'P'},
-			{"url", required_argument, 0, 'U'}, {"name", required_argument, 0, 'n'},
-			{"attribute", required_argument, 0, 'a'}, {"list", no_argument, 0, 'l'},
+			{"server", required_argument, 0, 's'},
+			{"port", required_argument, 0, 'P'},
+			{"url", required_argument, 0, 'U'},
+			{"name", required_argument, 0, 'n'},
+			{"attribute", required_argument, 0, 'a'},
+			{"list", no_argument, 0, 'l'},
 			{"read", no_argument, 0, 'r'},
 			{"create", no_argument, 0, 'c'},
 			{"delete", no_argument, 0, 'd'},
 			{"purge", no_argument, 0, 'G'},
+			{"reset", no_argument, 0, 'R'},
 			{"info", no_argument, 0, 'I'},
 			{"stats", no_argument, 0, 'S'},
 			{0, 0, 0, 0}};
 
 		int c =
-			getopt_long(argc, argv, "hu:p:s:P:U:n:a:lrcdGIS", long_options, &option_index);
+			getopt_long(argc, argv, "hu:p:s:P:U:n:a:lrcdGRIS", long_options, &option_index);
 		if (c == -1) {
 			if (optind == 1) {
 				break;
@@ -251,6 +264,9 @@ int queue_main(int argc, char **argv) {
 				break;
 			case 'G':
 				options.program.queue.operation = OP_PURGE;
+				break;
+			case 'R':
+				options.program.queue.operation = OP_RESET;
 				break;
 			case 'S':
 				options.program.queue.operation = OP_STATS;

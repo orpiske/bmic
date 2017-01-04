@@ -32,6 +32,8 @@
 #define ARTEMIS_CREATE_CORE_QUEUE_SIG "createQueue(java.lang.String,java.lang.String)"
 #define ARTEMIS_DESTROY_CORE_QUEUE_SIG "destroyQueue(java.lang.String)"
 #define ARTEMIS_PURGE_CORE_QUEUE_SIG "removeMessages(java.lang.String)"
+#define ARTEMIS_RESET_ACK_CORE_QUEUE_SIG "resetMessagesAcknowledged()"
+#define ARTEMIS_RESET_EXP_CORE_QUEUE_SIG "resetMessagesExpired()"
 
 #ifdef __cplusplus
 extern "C" {
@@ -44,6 +46,10 @@ void bmic_artemis_json_destroy_queue(
 	const bmic_object_t *op, bmic_json_t *json, const char *name);
 
 void bmic_artemis_json_purge_queue(const bmic_object_t *op, bmic_json_t *json);
+
+void bmic_artemis_json_reset_ack_queue(const bmic_object_t *op, bmic_json_t *json);
+
+void bmic_artemis_json_reset_exp_queue(const bmic_object_t *op, bmic_json_t *json);
 
 #ifdef __cplusplus
 }

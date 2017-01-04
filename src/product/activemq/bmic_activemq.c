@@ -36,6 +36,7 @@ bmic_api_interface_t *bmic_activemq_product(gru_status_t *status) {
 	ret->queue_list = bmic_activemq_queue_list;
 	ret->queue_stats = bmic_activemq_queue_stats;
 	ret->queue_purge = bmic_activemq_queue_purge;
+	ret->queue_reset = bmic_activemq_queue_reset;
 
 	ret->java.java_info = bmic_java_read_info;
 	ret->java.os_info = bmic_java_read_os_info;
@@ -431,6 +432,33 @@ bool bmic_activemq_queue_purge(bmic_handle_t *handle, const bmic_exchange_t *cap
 	}
 
 	bmic_activemq_json_purge_queue(operation, &json);
+	bool ret = bmic_jolokia_io_exec(handle, &json, status);
+	bmic_json_cleanup(json);
+
+	return ret;
+}
+
+
+bool bmic_activemq_queue_reset(bmic_handle_t *handle, const bmic_exchange_t *cap,
+	const char *name, gru_status_t *status)
+{
+	const bmic_object_t *operation = bmic_finder_simple(
+		cap->root, status, REG_SEARCH_NAME, ACTIVEMQ_QUEUE_CAPABILITES_REGEX, name);
+
+	if (operation == NULL) {
+		logger_t logger = gru_logger_get();
+
+		logger(ERROR,  "Queue operation not found for queue %s", name);
+
+		return false;
+	}
+
+	bmic_json_t json = bmic_json_new(status);
+	if (status->code != GRU_SUCCESS) {
+		return false;
+	}
+
+	bmic_activemq_json_reset_queue(operation, &json);
 	bool ret = bmic_jolokia_io_exec(handle, &json, status);
 	bmic_json_cleanup(json);
 
