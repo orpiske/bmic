@@ -18,17 +18,17 @@
 #define as_mb(x) (x / (1024 * 1024))
 
 static void show_help(char **argv) {
-	print_program_usage(argv[0]);
+	gru_cli_program_usage("bmic", argv[0]);
 
-	print_option_help("help", "h", "show this help");
+	gru_cli_option_help("help", "h", "show this help");
 
-	print_option_help("username", "u", "username to access the management console");
-	print_option_help("password", "p", "password to access the management console");
-	print_option_help("url", "U", "management interface URL");
-	print_option_help("server", "s", "server hostname or IP address");
-	print_option_help("interval", "i", "interval between each update");
-	print_option_help("attribute", "a", "queue attribute to read");
-	print_option_help("repeat", "r",
+	gru_cli_option_help("username", "u", "username to access the management console");
+	gru_cli_option_help("password", "p", "password to access the management console");
+	gru_cli_option_help("url", "U", "management interface URL");
+	gru_cli_option_help("server", "s", "server hostname or IP address");
+	gru_cli_option_help("interval", "i", "interval between each update");
+	gru_cli_option_help("attribute", "a", "queue attribute to read");
+	gru_cli_option_help("repeat", "r",
 		"how many times to read the data (-1, the default, means repeat forever)");
 }
 

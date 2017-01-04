@@ -35,20 +35,20 @@ static void print_cap(const void *nodedata, void *payload) {
 }
 
 static void show_help(char **argv) {
-	print_program_usage(argv[0]);
+	gru_cli_program_usage("bmic", argv[0]);
 
-	print_option_help("help", "h", "show this help");
-	print_option_help("username", "u", "username to access the management console");
-	print_option_help("password", "p", "password to access the management console");
-	print_option_help("server", "s", "server hostname or IP address");
-	print_option_help("url", "U", "management interface URL");
-	print_option_help(
+	gru_cli_option_help("help", "h", "show this help");
+	gru_cli_option_help("username", "u", "username to access the management console");
+	gru_cli_option_help("password", "p", "password to access the management console");
+	gru_cli_option_help("server", "s", "server hostname or IP address");
+	gru_cli_option_help("url", "U", "management interface URL");
+	gru_cli_option_help(
 		"list", "l", "list available capabilities/attributes from the server");
-	print_option_help("read=<str>", "r <str>",
+	gru_cli_option_help("read=<str>", "r <str>",
 		"read the capability/attribute named <str> from the server");
-	print_option_help(
+	gru_cli_option_help(
 		"read-all", "R", "read all available capabilities/attributes from the server");
-	print_option_help("info", "I", "show server information during start-up");
+	gru_cli_option_help("info", "I", "show server information during start-up");
 }
 
 void capabilities_do_read(bmic_handle_t *handle, bmic_api_interface_t *api,

@@ -16,24 +16,24 @@
 #include "bmic_queue_main.h"
 
 static void show_help(char **argv) {
-	print_program_usage(argv[0]);
+	gru_cli_program_usage("bmic", argv[0]);
 
-	print_option_help("help", "h", "show this help");
-	print_option_help(
+	gru_cli_option_help("help", "h", "show this help");
+	gru_cli_option_help(
 		"help=[operation]", "h [operation]", "show help for the given operation");
-	print_option_help("username", "u", "username to access the management console");
-	print_option_help("password", "p", "password to access the management console");
-	print_option_help("server", "s", "server hostname or IP address");
-	print_option_help("url", "U", "management interface URL");
-	print_option_help("name", "n", "name of the queue to manage");
-	print_option_help("attribute", "a", "queue attribute to read");
-	print_option_help("list", "l", "list queues from the server");
-	print_option_help("stats", "S", "show queue statistics");
-	print_option_help("info", "I", "show server information during start-up");
-	print_option_help("create", "c", "create a queue on the server");
-	print_option_help("delete", "d", "create a queue on the server");
-	print_option_help("purge", "G", "remove all messages from the queue");
-	print_option_help("reset", "R", "reset message counters on the queue");
+	gru_cli_option_help("username", "u", "username to access the management console");
+	gru_cli_option_help("password", "p", "password to access the management console");
+	gru_cli_option_help("server", "s", "server hostname or IP address");
+	gru_cli_option_help("url", "U", "management interface URL");
+	gru_cli_option_help("name", "n", "name of the queue to manage");
+	gru_cli_option_help("attribute", "a", "queue attribute to read");
+	gru_cli_option_help("list", "l", "list queues from the server");
+	gru_cli_option_help("stats", "S", "show queue statistics");
+	gru_cli_option_help("info", "I", "show server information during start-up");
+	gru_cli_option_help("create", "c", "create a queue on the server");
+	gru_cli_option_help("delete", "d", "create a queue on the server");
+	gru_cli_option_help("purge", "G", "remove all messages from the queue");
+	gru_cli_option_help("reset", "R", "reset message counters on the queue");
 }
 
 static void print_queue(const void *nodedata, void *payload) {

@@ -77,13 +77,3 @@ void options_cleanup() {
 		default: { break; }
 	}
 }
-
-void print_option_help(const char *long_opt, const char *short_opt, const char *desc) {
-	printf("\t%s%s--%s (-%s short option) %s\n\t\t%s\n\n", RESET, LIGHT_WHITE, long_opt,
-		short_opt, RESET, desc);
-}
-
-void print_program_usage(char *program_name) {
-	printf("%s%sUsage:%s\nbmic %s <options>\n\nValid options:\n\n", RESET, LIGHT_WHITE,
-		RESET, program_name);
-}

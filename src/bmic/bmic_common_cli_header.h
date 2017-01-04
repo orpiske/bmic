@@ -23,6 +23,7 @@
 #include <stdlib.h>
 
 #include <common/gru_colors.h>
+#include <cli/gru_cli_opt.h>
 
 #ifndef HAVE_STRLCPY
 #include <string/gru_alt.h>

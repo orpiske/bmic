@@ -94,9 +94,6 @@ typedef struct options_t_ {
 options_t options_init(program_type_t type);
 void options_cleanup();
 
-void print_option_help(const char *long_opt, const char *short_opt, const char *desc);
-void print_program_usage(char *program_name);
-
 #ifdef __cplusplus
 }
 #endif
