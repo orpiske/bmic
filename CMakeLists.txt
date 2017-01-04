@@ -57,7 +57,7 @@ if (BUILD_WITH_EXTRA_DEBUG)
 endif (BUILD_WITH_EXTRA_DEBUG)
 
 if (CMAKE_COMPILER_IS_GNUCXX)
-	set(CMAKE_C_FLAGS "-Wall -Wshadow -Wconversion -std=c99 ${CMAKE_C_FLAGS}" CACHE STRING
+	set(CMAKE_C_FLAGS "-Wall -Wshadow -Wconversion -std=c99 -fstrict-aliasing -fstack-protector-all -fstack-protector-strong ${CMAKE_C_FLAGS}" CACHE STRING
 		"Flags used by the compiler during all build types." FORCE
 	)
 
