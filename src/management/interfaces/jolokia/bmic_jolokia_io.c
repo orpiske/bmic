@@ -16,7 +16,7 @@
 #include "bmic_jolokia_io.h"
 
 bool bmic_jolokia_io_exec(
-	bmic_handle_t *handle, bmic_json_t *json, gru_status_t *status) {
+	bmic_handle_t *handle, const bmic_json_t *json, gru_status_t *status) {
 	bmic_data_t request = bmic_json_to_data(json, status);
 
 	bmic_endpoint_status_t epstatus = {

@@ -36,7 +36,8 @@
 extern "C" {
 #endif
 
-bool bmic_jolokia_io_exec(bmic_handle_t *handle, bmic_json_t *json, gru_status_t *status);
+bool bmic_jolokia_io_exec(bmic_handle_t *handle, const bmic_json_t *json,
+        gru_status_t *status);
 
 const bmic_object_t *bmic_jolokia_io_read(
 	bmic_handle_t *handle, const char *path, gru_status_t *status);
