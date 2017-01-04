@@ -19,9 +19,7 @@ bool bmic_jolokia_io_exec(
 	bmic_handle_t *handle, const bmic_json_t *json, gru_status_t *status) {
 	bmic_data_t request = bmic_json_to_data(json, status);
 
-	bmic_endpoint_status_t epstatus = {
-		.status = status,
-	};
+	bmic_endpoint_status_t epstatus = bmic_endpoint_status_new(status);
 
 	bmic_endpoint_set_path(handle->ep, JOLOKIA_OP_EXEC, status);
 	if (status->code != GRU_SUCCESS) {

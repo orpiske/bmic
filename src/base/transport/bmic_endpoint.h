@@ -44,6 +44,16 @@ typedef struct bmic_endpoint_status_t_ {
 	char *message;
 } bmic_endpoint_status_t;
 
+static inline bmic_endpoint_status_t bmic_endpoint_status_new(gru_status_t *status) {
+    bmic_endpoint_status_t ret = {
+        .status = status,
+        .epcode = 0,
+        .message = NULL,
+    };
+
+    return ret;
+}
+
 bmic_endpoint_t *bmic_endpoint_init(
 	const char *url, const char *username, const char *password, gru_status_t *status);
 

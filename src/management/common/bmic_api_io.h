@@ -22,6 +22,7 @@
 
 #include "base/common/bmic_data.h"
 #include "base/format/bmic_json.h"
+#include "base/transport/bmic_endpoint.h"
 
 #include "management/common/bmic_handle.h"
 
