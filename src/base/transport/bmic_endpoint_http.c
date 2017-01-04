@@ -129,7 +129,8 @@ void bmic_endpoint_http_read(const bmic_endpoint_t *ep, const bmic_data_t *reque
 	logger_t logger = gru_logger_get();
 
 	CURL *easy = bmic_curl_easy_const(ep);
-	
+	curl_easy_reset(easy);
+
 	char *full_path = bmic_endpoint_http_path_join(ep, easy, epstatus->status);
 
 	if (full_path == NULL) {
@@ -186,6 +187,8 @@ void bmic_endpoint_http_write(const bmic_endpoint_t *ep, const bmic_data_t *requ
 	assert(ep != NULL);
 
 	CURL *easy = bmic_curl_easy_const(ep);
+	curl_easy_reset(easy);
+	
 	char *full_path = bmic_endpoint_http_path_join(ep, easy, epstatus->status);
 	logger_t logger = gru_logger_get();
 
