@@ -54,7 +54,7 @@ void bmic_endpoint_http_terminate(bmic_endpoint_t *ep, gru_status_t *status);
  * @param reply response data
  * @param status endpoint status
  */
-void bmic_endpoint_http_read(const bmic_endpoint_t *ep, bmic_data_t *request,
+void bmic_endpoint_http_read(const bmic_endpoint_t *ep, const bmic_data_t *request,
 	bmic_data_t *reply, bmic_endpoint_status_t *epstatus);
 
 /**
@@ -64,7 +64,7 @@ void bmic_endpoint_http_read(const bmic_endpoint_t *ep, bmic_data_t *request,
  * @param reply response data
  * @param status endpoint status
  */
-void bmic_endpoint_http_write(const bmic_endpoint_t *ep, bmic_data_t *request,
+void bmic_endpoint_http_write(const bmic_endpoint_t *ep, const bmic_data_t *request,
 	bmic_data_t *reply, bmic_endpoint_status_t *status);
 
 #ifdef __cplusplus

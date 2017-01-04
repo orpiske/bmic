@@ -123,7 +123,7 @@ static char *bmic_endpoint_http_path_join(
 
 static void bmic_endpoint_http_path_cleanup(char **path) { gru_dealloc_string(path); }
 
-void bmic_endpoint_http_read(const bmic_endpoint_t *ep, bmic_data_t *request,
+void bmic_endpoint_http_read(const bmic_endpoint_t *ep, const bmic_data_t *request,
 	bmic_data_t *reply, bmic_endpoint_status_t *epstatus) {
 	assert(ep != NULL);
 	logger_t logger = gru_logger_get();
@@ -177,7 +177,7 @@ void bmic_endpoint_http_read(const bmic_endpoint_t *ep, bmic_data_t *request,
 
 // POST + get reply
 
-void bmic_endpoint_http_write(const bmic_endpoint_t *ep, bmic_data_t *request,
+void bmic_endpoint_http_write(const bmic_endpoint_t *ep, const bmic_data_t *request,
 	bmic_data_t *reply, bmic_endpoint_status_t *epstatus) {
 	assert(ep != NULL);
 
