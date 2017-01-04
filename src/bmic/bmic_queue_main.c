@@ -154,13 +154,6 @@ int queue_main(int argc, char **argv) {
 	}
 
 	gru_status_t status = gru_status_new();
-	options.hint = bmic_discovery_hint_new(&status);
-
-	if (!options.hint) {
-		fprintf(stderr, "%s", status.message);
-
-		return EXIT_FAILURE;
-	}
 
 	while (1) {
 
@@ -209,7 +202,7 @@ int queue_main(int argc, char **argv) {
 				break;
 			case 's':
 				bmic_discovery_hint_set_addressing_hostname(
-					options.hint, optarg, &status);
+					&options.hint, optarg, &status);
 				if (status.code != GRU_SUCCESS) {
 					fprintf(stderr, "%s", status.message);
 
@@ -219,7 +212,7 @@ int queue_main(int argc, char **argv) {
 				break;
 			case 'P':
 				bmic_discovery_hint_set_addressing_port(
-					options.hint, (uint16_t) atoi(optarg), &status);
+					&options.hint, (uint16_t) atoi(optarg), &status);
 				if (status.code != GRU_SUCCESS) {
 					fprintf(stderr, "%s", status.message);
 
@@ -228,7 +221,7 @@ int queue_main(int argc, char **argv) {
 
 				break;
 			case 'U':
-				bmic_discovery_hint_set_url(options.hint, optarg, &status);
+				bmic_discovery_hint_set_url(&options.hint, optarg, &status);
 				if (status.code != GRU_SUCCESS) {
 					fprintf(stderr, "%s", status.message);
 

@@ -30,7 +30,7 @@
 #include "product/bmic_product_register.h"
 
 typedef struct bmic_context_t_ {
-	bmic_discovery_hint_t *hint;
+	bmic_discovery_hint_t hint;
 	bmic_credentials_t credentials;
 	bmic_handle_t *handle;
 	bmic_api_interface_t *api;
@@ -58,7 +58,7 @@ void bmic_log_initialization();
 bool bmic_context_init_simple(bmic_context_t *ctxt, const char *server,
 	const char *username, const char *password, gru_status_t *status);
 
-bool bmic_context_init_hint(bmic_context_t *ctxt, bmic_discovery_hint_t *hint,
+bool bmic_context_init_hint(bmic_context_t *ctxt, bmic_discovery_hint_t hint,
 	const char *username, const char *password, gru_status_t *status);
 /**
  * Destroys the BMIC API context

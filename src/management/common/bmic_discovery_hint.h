@@ -54,7 +54,7 @@ typedef struct bmic_discovery_hint_t_ {
  * @param status
  * @return
  */
-bmic_discovery_hint_t *bmic_discovery_hint_new(gru_status_t *status);
+bmic_discovery_hint_t bmic_discovery_hint_new();
 
 /**
  * Sets the URL for the discovery hint
@@ -99,7 +99,7 @@ const char *bmic_discovery_hint_host(const bmic_discovery_hint_t *hint);
  * @param status A status struct that will contain error data if the function failed
  * @return A hint structure that can be used to find out details about the broker
  */
-bmic_discovery_hint_t *bmic_discovery_hint_eval_addressing(
+bmic_discovery_hint_t bmic_discovery_hint_eval_addressing(
 	const char *hostname, uint16_t port, gru_status_t *status);
 
 /**
@@ -110,14 +110,14 @@ bmic_discovery_hint_t *bmic_discovery_hint_eval_addressing(
  * @param status A status struct that will contain error data if the function failed
  * @return A hint structure that can be used to find out details about the broker
  */
-bmic_discovery_hint_t *bmic_discovery_hint_eval_url(
+bmic_discovery_hint_t bmic_discovery_hint_eval_url(
 	const char *url, gru_status_t *status);
 
 /**
  * Destroy the hint structure and frees all memory used by it
  * @param hint
  */
-void bmic_discovery_hint_destroy(bmic_discovery_hint_t **hint);
+void bmic_discovery_hint_cleanup(bmic_discovery_hint_t *hint);
 
 /**
  * Given an URL format specification or a an address format specification, returns a URL

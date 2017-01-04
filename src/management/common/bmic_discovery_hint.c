@@ -15,10 +15,8 @@
  */
 #include "bmic_discovery_hint.h"
 
-bmic_discovery_hint_t *bmic_discovery_hint_new(gru_status_t *status) {
-	bmic_discovery_hint_t *ret = gru_alloc(sizeof(bmic_discovery_hint_t), status);
-	gru_alloc_check(ret, NULL);
-
+bmic_discovery_hint_t bmic_discovery_hint_new() {
+	bmic_discovery_hint_t ret = {0};
 	return ret;
 }
 
@@ -58,73 +56,61 @@ void bmic_discovery_hint_set_addressing_port(
 	hint->content.addressing.port = port;
 }
 
-bmic_discovery_hint_t *bmic_discovery_hint_eval_addressing(
+bmic_discovery_hint_t bmic_discovery_hint_eval_addressing(
 	const char *hostname, uint16_t port, gru_status_t *status) {
-	bmic_discovery_hint_t *ret = bmic_discovery_hint_new(status);
-	gru_alloc_check(ret, NULL);
+	bmic_discovery_hint_t ret = bmic_discovery_hint_new();
 
-	ret->hint_type = BMIC_ADDRESSING;
+	ret.hint_type = BMIC_ADDRESSING;
 	if (hostname == NULL) {
-		if (asprintf(&ret->content.addressing.hostname, "%s", "localhost") == -1) {
+		if (asprintf(&ret.content.addressing.hostname, "%s", "localhost") == -1) {
 			gru_status_set(
 				status, GRU_FAILURE, "Unable to set addressing: not enough memory");
 
-			bmic_discovery_hint_destroy(&ret);
-
-			return NULL;
+			bmic_discovery_hint_cleanup(&ret);
 		}
 	} else {
-		if (asprintf(&ret->content.addressing.hostname, "%s", hostname) == -1) {
+		if (asprintf(&ret.content.addressing.hostname, "%s", hostname) == -1) {
 			gru_status_set(
 				status, GRU_FAILURE, "Unable to set addressing: not enough memory");
 
-			bmic_discovery_hint_destroy(&ret);
-
-			return NULL;
+			bmic_discovery_hint_cleanup(&ret);
 		}
 	}
 
-	ret->content.addressing.port = port;
+	ret.content.addressing.port = port;
 	return ret;
 }
 
-bmic_discovery_hint_t *bmic_discovery_hint_eval_url(
+bmic_discovery_hint_t bmic_discovery_hint_eval_url(
 	const char *url, gru_status_t *status) {
-	bmic_discovery_hint_t *ret = gru_alloc(sizeof(bmic_discovery_hint_t), status);
-	gru_alloc_check(ret, NULL);
+	bmic_discovery_hint_t ret = bmic_discovery_hint_new();
 
 	if (url == NULL) {
 		return bmic_discovery_hint_eval_addressing(NULL, BMIC_PORT_UNKNOWN, status);
 	}
 
-	ret->hint_type = BMIC_URL;
-	if (asprintf(&ret->content.url, "%s", url) == -1) {
+	ret.hint_type = BMIC_URL;
+	if (asprintf(&ret.content.url, "%s", url) == -1) {
 		gru_status_set(status, GRU_FAILURE, "Unable to eval URL: not enough memory");
 
-		bmic_discovery_hint_destroy(&ret);
-
-		return NULL;
+		bmic_discovery_hint_cleanup(&ret);
 	}
 
 	return ret;
 }
 
-void bmic_discovery_hint_destroy(bmic_discovery_hint_t **hint) {
-	bmic_discovery_hint_t *h = *hint;
-
-	if (h == NULL) {
+void bmic_discovery_hint_cleanup(bmic_discovery_hint_t *hint) {
+	if (hint == NULL) {
 		return;
 	}
 
-	if (h->hint_type == BMIC_ADDRESSING) {
-		free(h->content.addressing.hostname);
+	if (hint->hint_type == BMIC_ADDRESSING) {
+		gru_dealloc_string(&hint->content.addressing.hostname);
 	} else {
-		if (h->hint_type == BMIC_URL) {
-			free(h->content.url);
+		if (hint->hint_type == BMIC_URL) {
+			gru_dealloc_string(&hint->content.url);
 		}
 	}
-
-	gru_dealloc((void **) hint);
 }
 
 const char *bmic_discovery_hint_to_url(const bmic_discovery_hint_t *hint,

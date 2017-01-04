@@ -20,6 +20,7 @@ static options_t prg_options = {0};
 options_t options_init(program_type_t type) {
 	prg_options.type = type;
 
+	prg_options.hint = bmic_discovery_hint_new();
 	atexit(options_cleanup);
 
 	switch (prg_options.type) {

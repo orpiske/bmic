@@ -79,7 +79,7 @@ typedef enum program_type_t_ {
 typedef struct options_t_ {
 	program_type_t type;
 	credential_options_t credentials;
-	bmic_discovery_hint_t *hint;
+	bmic_discovery_hint_t hint;
 	bool help;
 
 	union program_options_t {

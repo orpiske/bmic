@@ -53,11 +53,8 @@ bool bmic_context_init_simple(bmic_context_t *ctxt, const char *server,
 
 	bmic_log_initialization();
 
-	bmic_discovery_hint_t *hint =
+	bmic_discovery_hint_t hint =
 		bmic_discovery_hint_eval_addressing(server, BMIC_PORT_UNKNOWN, status);
-	if (!hint) {
-		return false;
-	}
 
 	/*
 	 * NOTE: hint will be cleaned up by bmic_context_cleanup which is called if init hint
@@ -66,14 +63,10 @@ bool bmic_context_init_simple(bmic_context_t *ctxt, const char *server,
 	return bmic_context_init_hint(ctxt, hint, username, password, status);
 }
 
-bool bmic_context_init_hint(bmic_context_t *ctxt, bmic_discovery_hint_t *hint,
+bool bmic_context_init_hint(bmic_context_t *ctxt, bmic_discovery_hint_t hint,
 	const char *username, const char *password, gru_status_t *status) {
 
 	bmic_log_initialization();
-
-	if (hint == NULL) {
-		return false;
-	}
 
 	bmic_product_registry_init(status);
 	bmic_product_register(status);
@@ -89,7 +82,7 @@ bool bmic_context_init_hint(bmic_context_t *ctxt, bmic_discovery_hint_t *hint,
 		}
 	}
 
-	ctxt->api = bmic_discovery_run(ctxt->hint, ctxt->credentials, &ctxt->handle, status);
+	ctxt->api = bmic_discovery_run(&ctxt->hint, ctxt->credentials, &ctxt->handle, status);
 	if (!ctxt->api) {
 		bmic_context_cleanup(ctxt);
 
@@ -113,6 +106,6 @@ void bmic_context_cleanup(bmic_context_t *ctxt) {
 	bmic_product_unregister();
 	bmic_product_registry_destroy();
 
-	bmic_discovery_hint_destroy(&ctxt->hint);
+	bmic_discovery_hint_cleanup(&ctxt->hint);
 	bmic_credentials_cleanup(ctxt->credentials);
 }
