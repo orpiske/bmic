@@ -53,8 +53,27 @@ static size_t curl_callback(void *contents, size_t size, size_t nmemb, void *use
 
 void bmic_endpoint_http_begin(bmic_endpoint_t *ep, gru_status_t *status) {
 	CURL *easy = NULL;
+	static bool initialized = false;
 
-	curl_global_init(CURL_GLOBAL_DEFAULT);
+	logger_t logger = gru_logger_get();
+
+	if (!initialized) {
+		logger(DEBUG, "Initializing global curl data");
+
+		if (strstr(ep->url, "https")) {
+			curl_global_init(CURL_GLOBAL_DEFAULT);
+		}
+		else  {
+			curl_global_init(CURL_GLOBAL_NOTHING);
+		}
+
+		initialized = true;
+
+		atexit(curl_global_cleanup);
+	}
+	else {
+		logger(DEBUG, "Curl global data already initialized ... skipping");
+	}
 
 	easy = curl_easy_init();
 	if (!easy) {
@@ -72,7 +91,7 @@ void bmic_endpoint_http_terminate(bmic_endpoint_t *ep, gru_status_t *status) {
 	CURL *easy = bmic_curl_easy(ep);
 
 	curl_easy_cleanup(easy);
-	curl_global_cleanup();
+	logger_t logger = gru_logger_get();
 
 	gru_status_reset(status);
 

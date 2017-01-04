@@ -17,6 +17,8 @@
 #ifndef BMIC_TRANSPORT_HTTP_H
 #define BMIC_TRANSPORT_HTTP_H
 
+#include <stdlib.h>
+
 #include <common/gru_status.h>
 #include <log/gru_logger.h>
 
