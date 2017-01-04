@@ -29,7 +29,7 @@ typedef struct bmic_data_t_ {
 	void *data;
 } bmic_data_t;
 
-static inline const char *bmic_data_to_string(bmic_data_t *data) {
+static inline const char *bmic_data_to_string(const bmic_data_t *data) {
 	assert(data != NULL);
 
 	return (const char *) data->data;
