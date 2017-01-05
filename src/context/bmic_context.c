@@ -107,5 +107,5 @@ void bmic_context_cleanup(bmic_context_t *ctxt) {
 	bmic_product_registry_destroy();
 
 	bmic_discovery_hint_cleanup(&ctxt->hint);
-	bmic_credentials_cleanup(ctxt->credentials);
+	bmic_credentials_cleanup(&ctxt->credentials);
 }

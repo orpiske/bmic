@@ -24,7 +24,7 @@ bmic_credentials_t bmic_credentials_init(
 			gru_status_set(
 				status, GRU_FAILURE, "Unable to set username: not enough memory");
 
-			bmic_credentials_cleanup(ret);
+			bmic_credentials_cleanup(&ret);
 			return ret;
 		}
 	}
@@ -34,7 +34,7 @@ bmic_credentials_t bmic_credentials_init(
 			gru_status_set(
 				status, GRU_FAILURE, "Unable to set password: not enough memory");
 
-			bmic_credentials_cleanup(ret);
+			bmic_credentials_cleanup(&ret);
 
 			return ret;
 		}
@@ -52,7 +52,7 @@ bmic_credentials_t bmic_credentials_clone(
 			gru_status_set(
 				status, GRU_FAILURE, "Unable to set username: not enough memory");
 
-			bmic_credentials_cleanup(ret);
+			bmic_credentials_cleanup(&ret);
 			return ret;
 		}
 	}
@@ -62,7 +62,7 @@ bmic_credentials_t bmic_credentials_clone(
 			gru_status_set(
 				status, GRU_FAILURE, "Unable to set password: not enough memory");
 
-			bmic_credentials_cleanup(ret);
+			bmic_credentials_cleanup(&ret);
 
 			return ret;
 		}
@@ -71,12 +71,16 @@ bmic_credentials_t bmic_credentials_clone(
 	return ret;
 }
 
-void bmic_credentials_cleanup(bmic_credentials_t credentials) {
-	if (credentials.username) {
-		gru_dealloc_string(&credentials.username);
+void bmic_credentials_cleanup(bmic_credentials_t *credentials) {
+	if (!credentials) {
+		return;
 	}
 
-	if (credentials.password) {
-		gru_dealloc_string(&credentials.password);
+	if (credentials->username) {
+		gru_dealloc_string(&credentials->username);
+	}
+
+	if (credentials->password) {
+		gru_dealloc_string(&credentials->password);
 	}
 }
