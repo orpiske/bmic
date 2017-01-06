@@ -203,7 +203,8 @@ int top_run(options_t *options) {
 		}
 
 		sleep((uint32_t) options->program.top.interval);
-		printf("%c[2K\r", 27);
+		printf(CLEAR_LINE);
+
 		printf("%s%s%s%-32s %-9s %-17s %-19s%s", RESET, BG_WHITE, LIGHT_BLACK,
 			bmic_discovery_hint_host(&options->hint), info->name, info->version,
 			"Reading...", RESET);
@@ -228,7 +229,7 @@ int top_main(int argc, char **argv) {
 	}
 
 	gru_status_t status = gru_status_new();
-	
+
 	while (1) {
 
 		static struct option long_options[] = {{"help", no_argument, 0, 'h'},
