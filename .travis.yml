@@ -24,8 +24,9 @@ before_script:
 script:
   - mkdir -p build
   - cd build
-  - cmake -DCMAKE_BUILD_TYPE=RELEASE -DBUILD_WITH_UNIT_TESTS=OFF ..
+  - cmake -DCMAKE_BUILD_TYPE=Debug-DCMAKE_VERBOSE_MAKEFILE=On -DBUILD_WITH_UNIT_TESTS=OFF ..
   - make all
+  - ctest -VV
   - cd ..
 addons:
   apt:

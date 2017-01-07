@@ -78,11 +78,11 @@ endmacro(FailIfNotSet)
 
 include (CheckIncludeFiles)
 if (UNIX)
-	CHECK_INCLUDE_FILES(stdlib.h HAVE_STDLIB_H)
-	FailIfNotSet(HAVE_STDLIB_H stdlib.h)
-
 	CHECK_INCLUDE_FILES(stdio.h HAVE_STDIO_H)
 	FailIfNotSet(HAVE_STDIO_H stdio.h)
+	
+	CHECK_INCLUDE_FILES(stdlib.h HAVE_STDLIB_H)
+	FailIfNotSet(HAVE_STDLIB_H stdlib.h)
 
 	CHECK_INCLUDE_FILES(stdarg.h HAVE_STDARG_H)
 	FailIfNotSet(HAVE_STDARG_H stdarg.h)
