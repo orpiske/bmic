@@ -1,6 +1,7 @@
 if (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
 	add_definitions(-DLINUX_BUILD -D_GNU_SOURCE)
 	set(LIBJSON json-c)
+	set(DEFAULT_PREFIX /usr)
 
 	if (CMAKE_SIZEOF_VOID_P EQUAL 8)
 		message(STATUS "64 bits compiler detected")
@@ -34,6 +35,8 @@ else (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
 
 	if (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
 		set(CMAKE_MACOSX_RPATH TRUE)
+		set(DEFAULT_PREFIX /usr/local)
+
 		add_definitions(-D__OSX__)
 		include_directories(/usr/local/include)
 		link_directories(/usr/local/lib)
