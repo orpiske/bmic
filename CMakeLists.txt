@@ -47,16 +47,15 @@ set (CTEST_BINARY_DIRECTORY ${CMAKE_BINARY_DIR}/target/tests/bin)
 set(RUNTIME_DIR "bin")
 set(CPP_INCLUDE_DIR "include")
 set(SHARED_DIR "share")
-set(GRU_SHARED_DIR ${SHARED_DIR}/gru)
 set(BUILD_WITH_UNIT_TESTS ON CACHE BOOL "Build unit tests")
 set(BUILD_WITH_EXTRA_DEBUG OFF CACHE BOOL "Build extra debug information")
 
 #### GNU Compiler flags
-if (BUILD_WITH_EXTRA_DEBUG)
-		set(BMIC_DEBUG_DEFINES "-DBMIC_DEBUG=2")
-endif (BUILD_WITH_EXTRA_DEBUG)
-
 if (CMAKE_COMPILER_IS_GNUCXX)
+	if (BUILD_WITH_EXTRA_DEBUG)
+			set(BMIC_DEBUG_DEFINES "-DBMIC_DEBUG=2")
+	endif (BUILD_WITH_EXTRA_DEBUG)
+	
 	set(CMAKE_C_FLAGS "-Wall -Wshadow -Wconversion -std=c99 -fstrict-aliasing -fstack-protector-all -fstack-protector-strong ${CMAKE_USER_C_FLAGS}" CACHE STRING
 		"Flags used by the compiler during all build types." FORCE
 	)
