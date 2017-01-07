@@ -6,6 +6,7 @@ env:
 
 os:
   - linux
+
 sudo: true
 language:
   - c
@@ -24,6 +25,7 @@ script:
 addons:
   apt:
     packages:
+      - liburiparser-dev
       - libjson0-dev
       - libcurl4-openssl-dev
   coverity_scan:
