@@ -241,9 +241,6 @@ int top_main(int argc, char **argv) {
 
 		int c = getopt_long(argc, argv, "hu:p:s:P:U:i:r:", long_options, &option_index);
 		if (c == -1) {
-			if (optind == 1) {
-				break;
-			}
 			break;
 		}
 
@@ -306,6 +303,6 @@ int top_main(int argc, char **argv) {
 				return EXIT_FAILURE;
 		}
 	}
-
+	
 	return top_run(&options);
 }

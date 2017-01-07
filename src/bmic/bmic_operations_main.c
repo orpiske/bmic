@@ -148,9 +148,6 @@ int operations_main(int argc, char **argv) {
 
 		int c = getopt_long(argc, argv, "h:u:p:s:P:U:l:I", long_options, &option_index);
 		if (c == -1) {
-			if (optind == 1) {
-				break;
-			}
 			break;
 		}
 

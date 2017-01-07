@@ -173,9 +173,6 @@ int capabilities_main(int argc, char **argv) {
 		int c =
 			getopt_long(argc, argv, "hu:p:l:s:P:U:lr:RI", long_options, &option_index);
 		if (c == -1) {
-			if (optind == 1) {
-				break;
-			}
 			break;
 		}
 
