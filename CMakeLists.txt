@@ -17,7 +17,6 @@ else (UNIX)
 	endif (WIN32)
 endif(UNIX)
 
-
 set(GRU_DIR /usr CACHE String "GRU install prefix")
 add_definitions(-D__GRU_SUPPORT__)
 include_directories(${GRU_DIR}/include/gru)
