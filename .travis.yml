@@ -26,7 +26,6 @@ script:
   - cd build
   - cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_VERBOSE_MAKEFILE=On -DBUILD_WITH_UNIT_TESTS=ON ..
   - make all
-  - ctest -VV
   - cd ..
 addons:
   apt:
