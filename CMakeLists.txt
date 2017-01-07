@@ -55,7 +55,7 @@ if (CMAKE_COMPILER_IS_GNUCXX)
 	if (BUILD_WITH_EXTRA_DEBUG)
 			set(BMIC_DEBUG_DEFINES "-DBMIC_DEBUG=2")
 	endif (BUILD_WITH_EXTRA_DEBUG)
-	
+
 	set(CMAKE_C_FLAGS "-Wall -Wshadow -Wconversion -std=c99 -fstrict-aliasing -fstack-protector-all -fstack-protector-strong ${CMAKE_USER_C_FLAGS}" CACHE STRING
 		"Flags used by the compiler during all build types." FORCE
 	)
@@ -80,7 +80,7 @@ include (CheckIncludeFiles)
 if (UNIX)
 	CHECK_INCLUDE_FILES(stdio.h HAVE_STDIO_H)
 	FailIfNotSet(HAVE_STDIO_H stdio.h)
-	
+
 	CHECK_INCLUDE_FILES(stdlib.h HAVE_STDLIB_H)
 	FailIfNotSet(HAVE_STDLIB_H stdlib.h)
 
@@ -140,11 +140,17 @@ endif (UNIX)
 
 
 macro(SetLinkDirByPlatform PREFIX)
-	if (${APP_BUILD_PLATFORM} EQUAL "64")
-		link_directories(${PREFIX}/lib64)
-	else(${APP_BUILD_PLATFORM} EQUAL "64")
-		link_directories(${PREFIX}/lib)
-	endif(${APP_BUILD_PLATFORM} EQUAL "64")
+	if (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+		if (${APP_BUILD_PLATFORM} EQUAL "64")
+			link_directories(${PREFIX}/lib64)
+		else(${APP_BUILD_PLATFORM} EQUAL "64")
+			link_directories(${PREFIX}/lib)
+		endif(${APP_BUILD_PLATFORM} EQUAL "64")
+	else (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
+		if (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+			link_directories(${PREFIX}/lib)
+		endif (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+	endif (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
 endmacro(SetLinkDirByPlatform PREFIX)
 
 
@@ -167,4 +173,3 @@ add_custom_target(format
 	COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/util/format.sh
 	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
-
