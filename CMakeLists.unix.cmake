@@ -1,8 +1,6 @@
 if (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
 	add_definitions(-DLINUX_BUILD -D_GNU_SOURCE)
-	set(DEFAULT_PREFIX /usr)
-	set(CPP_LIBRARY_DIR "lib")
-
+	
 	if (CMAKE_SIZEOF_VOID_P EQUAL 8)
 		message(STATUS "64 bits compiler detected")
 		set(APP_BUILD_PLATFORM 64)
@@ -12,8 +10,7 @@ if (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
 		message(STATUS "32 bits compiler detected")
 		set(APP_BUILD_PLATFORM 32)
 		set(APP_BUILD_PLATFORM_NAME "i686")
-		set(CPP_LIBRARY_DIR "lib")
-	endif (CMAKE_SIZEOF_VOID_P EQUAL 8)
+			endif (CMAKE_SIZEOF_VOID_P EQUAL 8)
 
 	if(EXISTS "/etc/debian_version")
 		set(CPP_LIBRARY_DIR "lib")
@@ -24,8 +21,6 @@ else (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
 
 	if (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
 		set(CMAKE_MACOSX_RPATH TRUE)
-		set(DEFAULT_PREFIX /usr/local)
-
 		add_definitions(-D__OSX__)
 	endif (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
 endif(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
