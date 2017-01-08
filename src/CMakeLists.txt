@@ -18,9 +18,9 @@ add_library(
 
 target_link_libraries(
 	bmic-base
-	gru
-	curl
-	${LIBJSON}
+	${GRU_LIB}
+	${CURL_LIB}
+	${JSON_LIB}
 )
 
 install(
@@ -44,9 +44,7 @@ add_library(
 target_link_libraries(
 	bmic-management
 	bmic-base
-	gru
-	curl
-	${LIBJSON}
+	${GRU_LIB}
 )
 
 install(
@@ -81,9 +79,7 @@ target_link_libraries(
 	bmic-product
 	bmic-base
 	bmic-management
-	gru
-	curl
-	${LIBJSON}
+	${GRU_LIB}
 )
 
 install(
