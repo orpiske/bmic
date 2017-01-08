@@ -6,7 +6,7 @@ set(BMIC_VERSION_MAJOR 0)
 set(BMIC_VERSION_MINOR 0)
 set(BMIC_VERSION_PATCH 1)
 
-add_definitions(-DBMIC_VERSION=${BMIC_VERSION})
+add_definitions(-DPROJECT_NAME="${PROJECT_NAME}" -DBMIC_VERSION="${BMIC_VERSION}")
 
 include(CheckLists.cmake)
 include(CMakeLists.default.cmake)

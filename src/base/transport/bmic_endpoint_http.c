@@ -153,7 +153,7 @@ void bmic_endpoint_http_read(const bmic_endpoint_t *ep, const bmic_data_t *reque
 
 	curl_easy_setopt(easy, CURLOPT_WRITEFUNCTION, curl_callback);
 	curl_easy_setopt(easy, CURLOPT_WRITEDATA, (void *) &reply_data);
-	curl_easy_setopt(easy, CURLOPT_USERAGENT, "bmic/0.0.1");
+	curl_easy_setopt(easy, CURLOPT_USERAGENT, PROJECT_NAME "/" BMIC_VERSION);
 
 	curl_easy_setopt(easy, CURLOPT_TIMEOUT, ep->options.timeout);
 	curl_easy_setopt(easy, CURLOPT_FOLLOWLOCATION, 1);
@@ -224,7 +224,7 @@ void bmic_endpoint_http_write(const bmic_endpoint_t *ep, const bmic_data_t *requ
 
 	curl_easy_setopt(easy, CURLOPT_WRITEFUNCTION, curl_callback);
 	curl_easy_setopt(easy, CURLOPT_WRITEDATA, (void *) &reply_data);
-	curl_easy_setopt(easy, CURLOPT_USERAGENT, "bmic/0.0.1");
+	curl_easy_setopt(easy, CURLOPT_USERAGENT, PROJECT_NAME "/" BMIC_VERSION);
 
 	curl_easy_setopt(easy, CURLOPT_TIMEOUT, ep->options.timeout);
 	curl_easy_setopt(easy, CURLOPT_FOLLOWLOCATION, 1);
