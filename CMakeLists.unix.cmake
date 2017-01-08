@@ -27,8 +27,6 @@ else (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
 		set(DEFAULT_PREFIX /usr/local)
 
 		add_definitions(-D__OSX__)
-		include_directories(/usr/local/include)
-		link_directories(/usr/local/lib)
 	endif (${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
 endif(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
 
