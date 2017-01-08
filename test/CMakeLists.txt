@@ -14,9 +14,9 @@ add_executable(bmic_json_simple_test
 
 target_link_libraries(
 	bmic_json_simple_test
-	bmic-base
-	bmic-management
-	bmic-product
+	bmic-base-${BMIC_VERSION_MAJOR}
+	bmic-management-${BMIC_VERSION_MAJOR}
+	bmic-product-${BMIC_VERSION_MAJOR}
 )
 
 add_test(
@@ -32,9 +32,9 @@ add_executable(bmic_artemis_test
 
 target_link_libraries(
 	bmic_artemis_test
-	bmic-base
-	bmic-management
-	bmic-product
+	bmic-base-${BMIC_VERSION_MAJOR}
+	bmic-management-${BMIC_VERSION_MAJOR}
+	bmic-product-${BMIC_VERSION_MAJOR}
 )
 
 
@@ -66,9 +66,9 @@ add_executable(
 
 target_link_libraries(
 	bmic_activemq_test
-	bmic-base
-	bmic-management
-	bmic-product
+	bmic-base-${BMIC_VERSION_MAJOR}
+	bmic-management-${BMIC_VERSION_MAJOR}
+	bmic-product-${BMIC_VERSION_MAJOR}
 )
 
 

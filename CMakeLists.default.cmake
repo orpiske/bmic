@@ -1,3 +1,12 @@
+# uninstall
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/dist/cmake_uninstall.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/dist/cmake_uninstall.cmake"
+    IMMEDIATE @ONLY)
+
+add_custom_target(uninstall
+    COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/dist/cmake_uninstall.cmake)
+
 set(RUNTIME_DIR "bin")
 set(CPP_INCLUDE_DIR "include")
 set(SHARED_DIR "share")

@@ -1,7 +1,7 @@
 include_directories(.)
 
 add_library(
-	bmic-base SHARED
+	bmic-base-${BMIC_VERSION_MAJOR} SHARED
 	base/common/bmic_credentials.c
 	base/common/bmic_object.c
 	base/common/bmic_regex.c
@@ -17,7 +17,7 @@ add_library(
 )
 
 target_link_libraries(
-	bmic-base
+	bmic-base-${BMIC_VERSION_MAJOR}
 	${GRU_LIB}
 	${CURL_LIB}
 	${JSON_LIB}
@@ -25,12 +25,12 @@ target_link_libraries(
 
 install(
 	DIRECTORY base/common base/format base/transport
-	DESTINATION include/${PROJECT_NAME}/base
+	DESTINATION include/${PROJECT_NAME}-${BMIC_VERSION_MAJOR}/base
 	FILES_MATCHING PATTERN "*.h"
 )
 
 add_library(
-	bmic-management SHARED
+	bmic-management-${BMIC_VERSION_MAJOR} SHARED
 	management/common/bmic_handle.c
 	management/common/bmic_discovery_hint.c
 	management/common/bmic_product.c
@@ -42,25 +42,25 @@ add_library(
 )
 
 target_link_libraries(
-	bmic-management
-	bmic-base
+	bmic-management-${BMIC_VERSION_MAJOR}
+	bmic-base-${BMIC_VERSION_MAJOR}
 	${GRU_LIB}
 )
 
 install(
 	DIRECTORY management/common management/discovery
-	DESTINATION include/${PROJECT_NAME}/management
+	DESTINATION include/${PROJECT_NAME}-${BMIC_VERSION_MAJOR}/management
 	FILES_MATCHING PATTERN "*.h"
 )
 
 install(
 	DIRECTORY management/interfaces/jolokia
-	DESTINATION include/${PROJECT_NAME}/management/interfaces
+	DESTINATION include/${PROJECT_NAME}-${BMIC_VERSION_MAJOR}/management/interfaces
 	FILES_MATCHING PATTERN "*.h"
 )
 
 add_library(
-	bmic-product SHARED
+	bmic-product-${BMIC_VERSION_MAJOR} SHARED
 	product/common/bmic_path.c
 	product/common/bmic_finder.c
 	product/artemis/bmic_artemis_mi.c
@@ -76,26 +76,26 @@ add_library(
 )
 
 target_link_libraries(
-	bmic-product
-	bmic-base
-	bmic-management
+	bmic-product-${BMIC_VERSION_MAJOR}
+	bmic-base-${BMIC_VERSION_MAJOR}
+	bmic-management-${BMIC_VERSION_MAJOR}
 	${GRU_LIB}
 )
 
 install(
 	DIRECTORY product/common product/activemq product/artemis product/complements/java
-	DESTINATION include/${PROJECT_NAME}/product
+	DESTINATION include/${PROJECT_NAME}-${BMIC_VERSION_MAJOR}/product
 	FILES_MATCHING PATTERN "*.h"
 )
 
 install(
 	DIRECTORY context product
-	DESTINATION include/${PROJECT_NAME}
+	DESTINATION include/${PROJECT_NAME}-${BMIC_VERSION_MAJOR}
 	FILES_MATCHING PATTERN "*.h"
 )
 
 install(
-	TARGETS bmic-base bmic-management bmic-product
+	TARGETS bmic-base-${BMIC_VERSION_MAJOR} bmic-management-${BMIC_VERSION_MAJOR} bmic-product-${BMIC_VERSION_MAJOR}
 	LIBRARY DESTINATION ${CPP_LIBRARY_DIR}
 )
 
@@ -115,9 +115,9 @@ add_executable(
 
 target_link_libraries(
 	bmic
-	bmic-product
-	bmic-base
-	bmic-management
+	bmic-product-${BMIC_VERSION_MAJOR}
+	bmic-base-${BMIC_VERSION_MAJOR}
+	bmic-management-${BMIC_VERSION_MAJOR}
 )
 
 install(
