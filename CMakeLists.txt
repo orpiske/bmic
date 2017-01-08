@@ -17,10 +17,8 @@ else (UNIX)
 	endif (WIN32)
 endif(UNIX)
 
-set(GRU_DIR ${DEFAULT_PREFIX} CACHE String "GRU install prefix")
-add_definitions(-D__GRU_SUPPORT__)
-include_directories(${GRU_DIR}/include/gru)
-SetLinkDirByPlatform(${GRU_DIR})
+include_directories(${GRU_INCLUDE_DIR} ${JSON_INCLUDE_DIR})
+link_libraries(${GRU_LIB})
 
 include_directories(src)
 add_subdirectory(src/ objs)

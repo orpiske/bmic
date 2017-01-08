@@ -19,11 +19,3 @@ if (CMAKE_COMPILER_IS_GNUCXX)
 		"Flags used by the compiler during release build." FORCE
 	)
 endif (CMAKE_COMPILER_IS_GNUCXX)
-
-macro(SetLinkDirByPlatform PREFIX)
-		if ("${APP_BUILD_PLATFORM}" STREQUAL "64")
-			link_directories(${PREFIX}/lib64 ${PREFIX}/lib)
-		else("${APP_BUILD_PLATFORM}" STREQUAL "64")
-			link_directories(${PREFIX}/lib)
-		endif("${APP_BUILD_PLATFORM}" STREQUAL "64")
-endmacro(SetLinkDirByPlatform PREFIX)
