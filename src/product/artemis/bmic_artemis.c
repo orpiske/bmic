@@ -309,7 +309,7 @@ bool bmic_artemis_queue_create(bmic_handle_t *handle, const bmic_exchange_t *cap
 	if (!bmic_artemis_valid_name(name)) {
 		gru_status_set(status, GRU_FAILURE, "The queue name %s is invalid", name);
 
-		return;
+		return false;
 	}
 
 	const bmic_object_t *attributes = bmic_object_find_regex(
@@ -341,7 +341,7 @@ bool bmic_artemis_queue_delete(bmic_handle_t *handle, const bmic_exchange_t *cap
 	if (!bmic_artemis_valid_name(name)) {
 		gru_status_set(status, GRU_FAILURE, "The queue name %s is invalid", name);
 
-		return;
+		return false;
 	}
 
 	const bmic_object_t *attributes = bmic_object_find_regex(
@@ -454,7 +454,7 @@ bool bmic_artemis_queue_purge(bmic_handle_t *handle, const bmic_exchange_t *cap,
 	if (!bmic_artemis_valid_name(name)) {
 		gru_status_set(status, GRU_FAILURE, "The queue name %s is invalid", name);
 
-		return;
+		return false;
 	}
 
 	const bmic_object_t *operation = bmic_finder_simple(
