@@ -79,6 +79,14 @@ int queue_run(options_t *options) {
 			if (obj) {
 				print_returned_object(options->program.queue.attribute, obj->data_ptr);
 			}
+			else {
+				if (status.code != GRU_SUCCESS) {
+					fprintf(stderr, "%s\n", status.message);
+				}
+				else {
+					fprintf(stderr, "Invalid response from the server\n");
+				}
+			}
 
 			break;
 		}
