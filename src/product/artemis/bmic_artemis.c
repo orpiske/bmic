@@ -18,6 +18,14 @@
 static const char *artemis_base_url;
 static const bmic_exchange_t *cap_cache;
 
+static bool bmic_artemis_valid_name(const char *name) {
+	if (strstr(name, "$sys") != NULL) {
+		return false;
+	}
+
+	return true;
+}
+
 bmic_api_interface_t *bmic_artemis_product(gru_status_t *status) {
 	bmic_api_interface_t *ret =
 		bmic_api_interface_new(ARTEMIS_PRODUCT_NAME, ARTEMIS_API_VERSION, status);
@@ -213,6 +221,13 @@ const bmic_list_t *bmic_artemis_attribute_list(
 const bmic_exchange_t *bmic_artemis_queue_attribute_read(bmic_handle_t *handle,
 	const bmic_exchange_t *capabilities, const char *name, gru_status_t *status,
 	const char *queue) {
+
+	if (!bmic_artemis_valid_name(queue)) {
+		gru_status_set(status, GRU_FAILURE, "The queue name %s is invalid", queue);
+
+		return NULL;
+	}
+
 	return bmic_artemis_mi_read(handle, capabilities->root, name, status, REG_SEARCH_NAME,
 		ARTEMIS_QUEUE_CAPABILITES_REGEX, queue);
 }
@@ -225,7 +240,11 @@ static void bmic_artemis_translate_queue_list(const void *nodedata, void *payloa
 	logger(INFO, "Processing node %s [%s]", nodeobj->name, nodeobj->path);
 
 	if (nodeobj->type == BMIC_STRING) {
-		gru_list_append(pl->list, strdup(nodeobj->data.str));
+		const char *name = nodeobj->data.str;
+
+		if (bmic_artemis_valid_name(name)) {
+			gru_list_append(pl->list, strdup(name));
+		}
 	} else {
 		logger(WARNING, "Invalid node type for %s: %d", nodeobj->name, nodeobj->type);
 	}
@@ -286,8 +305,17 @@ const bmic_list_t *bmic_artemis_operation_list(
 
 bool bmic_artemis_queue_create(bmic_handle_t *handle, const bmic_exchange_t *cap,
 	const char *name, gru_status_t *status) {
+
+	if (!bmic_artemis_valid_name(name)) {
+		gru_status_set(status, GRU_FAILURE, "The queue name %s is invalid", name);
+
+		return;
+	}
+
 	const bmic_object_t *attributes = bmic_object_find_regex(
 		cap->root, ARTEMIS_CORE_BROKER_OPERATIONS_ROOT, REG_SEARCH_NAME);
+
+
 
 	if (attributes == NULL) {
 		gru_status_set(status, GRU_FAILURE, "Attribute not found");
@@ -309,6 +337,13 @@ bool bmic_artemis_queue_create(bmic_handle_t *handle, const bmic_exchange_t *cap
 
 bool bmic_artemis_queue_delete(bmic_handle_t *handle, const bmic_exchange_t *cap,
 	const char *name, gru_status_t *status) {
+
+	if (!bmic_artemis_valid_name(name)) {
+		gru_status_set(status, GRU_FAILURE, "The queue name %s is invalid", name);
+
+		return;
+	}
+
 	const bmic_object_t *attributes = bmic_object_find_regex(
 		cap->root, ARTEMIS_CORE_BROKER_OPERATIONS_ROOT, REG_SEARCH_NAME);
 
@@ -376,7 +411,15 @@ static int64_t bmic_artemis_queue_stat_reader(bmic_handle_t *handle,
  */
 bmic_queue_stat_t bmic_artemis_queue_stats(bmic_handle_t *handle,
 	const bmic_exchange_t *cap, const char *queue, gru_status_t *status) {
+
 	bmic_queue_stat_t ret = {0};
+
+	if (!bmic_artemis_valid_name(queue)) {
+		gru_status_set(status, GRU_FAILURE, "The queue name %s is invalid", queue);
+
+		return ret;
+	}
+
 	ret.queue_size = bmic_artemis_queue_stat_reader(
 		handle, cap, queue, ARTEMIS_QUEUE_SIZE_ATTR, status);
 	if (status->code != GRU_SUCCESS) {
@@ -408,6 +451,12 @@ bmic_queue_stat_t bmic_artemis_queue_stats(bmic_handle_t *handle,
 bool bmic_artemis_queue_purge(bmic_handle_t *handle, const bmic_exchange_t *cap,
 	const char *name, gru_status_t *status)
 {
+	if (!bmic_artemis_valid_name(name)) {
+		gru_status_set(status, GRU_FAILURE, "The queue name %s is invalid", name);
+
+		return;
+	}
+
 	const bmic_object_t *operation = bmic_finder_simple(
 		cap->root, status, REG_SEARCH_NAME, ARTEMIS_QUEUE_CAPABILITES_REGEX, name);
 
@@ -464,6 +513,13 @@ static bool bmic_artemis_queue_reset_exp(bmic_handle_t *handle,
 bool bmic_artemis_queue_reset(bmic_handle_t *handle, const bmic_exchange_t *cap,
 	const char *name, gru_status_t *status)
 {
+	if (!bmic_artemis_valid_name(name)) {
+		gru_status_set(status, GRU_FAILURE, "The queue name %s is invalid", name);
+
+		return false;
+	}
+
+
 	const bmic_object_t *operation = bmic_finder_simple(
 		cap->root, status, REG_SEARCH_NAME, ARTEMIS_QUEUE_CAPABILITES_REGEX, name);
 
