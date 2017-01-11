@@ -72,8 +72,10 @@ void bmic_object_set_double(bmic_object_t *obj, double value);
 void bmic_object_set_null(bmic_object_t *obj);
 
 // Hierarchy manipulation
-void bmic_object_add_list_element(bmic_object_t *parent, bmic_object_t *element);
-void bmic_object_add_object(bmic_object_t *parent, bmic_object_t *child);
+void bmic_object_add_list_element(bmic_object_t * gru_restrict parent,
+        bmic_object_t * gru_restrict element);
+void bmic_object_add_object(bmic_object_t * gru_restrict parent,
+        bmic_object_t * gru_restrict child);
 
 // Path searching
 
