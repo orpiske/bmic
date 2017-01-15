@@ -40,13 +40,12 @@ typedef struct bmic_addressing_t_ {
 } bmic_addressing_t;
 
 typedef struct bmic_discovery_hint_t_ {
-	bmic_hint_type_t hint_type;
-
 	union {
 		bmic_addressing_t addressing;
 		char *url;
 	} content;
 
+	bmic_hint_type_t hint_type;
 } bmic_discovery_hint_t;
 
 /**

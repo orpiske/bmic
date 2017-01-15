@@ -44,10 +44,10 @@ typedef struct credential_options_t_ {
 } credential_options_t;
 
 struct cap_options_t {
-	bool list;
-	bool readall;
-	char *read;
-	bool show_info;
+    char *read;
+    bool list;
+    bool readall;
+    bool show_info;
 };
 
 struct op_options_t {
@@ -57,9 +57,9 @@ struct op_options_t {
 };
 
 struct queue_options_t {
-	operations_t operation;
 	char *queue;
 	char *attribute;
+	operations_t operation;
 	bool show_info;
 };
 

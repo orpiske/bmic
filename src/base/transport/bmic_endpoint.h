@@ -40,8 +40,8 @@ typedef struct bmic_endpoint_t_ {
 
 typedef struct bmic_endpoint_status_t_ {
 	gru_status_t *status;
-	int32_t epcode;
 	char *message;
+	int32_t epcode;
 } bmic_endpoint_status_t;
 
 static inline bmic_endpoint_status_t bmic_endpoint_status_new(gru_status_t *status) {

@@ -46,7 +46,6 @@ typedef union bmic_value_t_ {
 } bmic_value_t;
 
 typedef struct bmic_object_t_ {
-	bmic_value_type_t type;
 	char *name;
 	char *path;
 
@@ -55,6 +54,7 @@ typedef struct bmic_object_t_ {
 	 */
 	gru_tree_node_t *self;
 	bmic_value_t data;
+	bmic_value_type_t type;
 } bmic_object_t;
 
 bmic_object_t *bmic_object_new(const char *name, gru_status_t *status);

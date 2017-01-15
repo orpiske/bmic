@@ -34,10 +34,10 @@ typedef union bmic_exchange_payload_t_ {
 } bmic_exchange_payload_t;
 
 typedef struct bmic_exchange_t_ {
-	bmic_exchange_type_t type;
 	const bmic_object_t *root;
 	const bmic_object_t *data_ptr;
 	bmic_exchange_payload_t payload;
+	bmic_exchange_type_t type;
 } bmic_exchange_t;
 
 #ifdef __cplusplus

@@ -32,8 +32,8 @@ extern "C" {
 typedef struct bmic_cap_info_t_ {
 	char *name;
 	char *description;
-	bool write;
 	char *typename;
+	bool write;
 } bmic_cap_info_t;
 
 bmic_cap_info_t *bmic_cap_info_new(gru_status_t *status);
