@@ -1,6 +1,6 @@
 if (${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
 	add_definitions(-DLINUX_BUILD -D_GNU_SOURCE)
-	
+
 	if (CMAKE_SIZEOF_VOID_P EQUAL 8)
 		message(STATUS "64 bits compiler detected")
 		set(APP_BUILD_PLATFORM 64)
@@ -39,8 +39,11 @@ message(STATUS "JSON headers found at ${JSON_INCLUDE_DIR}")
 message(STATUS "JSON library found at ${JSON_LIB}")
 
 find_path(GRU_INCLUDE_DIR common/gru_base.h
-          PATH_SUFFIXES gru-0)
-find_library(GRU_LIB NAMES gru-0)
+        PATH_SUFFIXES gru-0
+	HINTS ${GRU_DIR}/include)
+find_library(GRU_LIB NAMES gru-0
+	HINTS ${GRU_DIR}/lib ${GRU_DIR}/lib64)
+
 
 message(STATUS "GRU headers found at ${GRU_INCLUDE_DIR}")
 message(STATUS "GRU library found at ${GRU_LIB}")

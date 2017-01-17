@@ -13,6 +13,7 @@ include(CMakeLists.default.cmake)
 
 set(BUILD_WITH_UNIT_TESTS ON CACHE BOOL "Build unit tests")
 set(BUILD_WITH_EXTRA_DEBUG OFF CACHE BOOL "Build extra debug information")
+set(GRU_DIR "/usr" CACHE STRING "GRU directory")
 
 if (UNIX)
 	message(STATUS "Adding Unix related build rules")
