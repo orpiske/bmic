@@ -150,6 +150,28 @@ bool bmic_activemq_queue_purge(bmic_handle_t *handle, const bmic_exchange_t *cap
 bool bmic_activemq_queue_reset(bmic_handle_t *handle, const bmic_exchange_t *cap,
 	const char *name, gru_status_t *status);
 
+
+/**
+ * List topics
+ * @param handle
+ * @param cap
+ * @param status
+ * @return
+ */
+const bmic_list_t *bmic_activemq_topic_list(
+	bmic_handle_t *handle, const bmic_exchange_t *cap, gru_status_t *status);
+
+/**
+ * Query queue stats
+ * @param handle
+ * @param cap
+ * @param queue
+ * @param status
+ * @return
+ */
+bmic_queue_stat_t bmic_activemq_topic_stats(bmic_handle_t *handle,
+	const bmic_exchange_t *cap, const char *queue, gru_status_t *status);
+
 #ifdef __cplusplus
 }
 #endif

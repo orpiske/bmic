@@ -47,4 +47,8 @@
 #define ACTIVEMQ_QUEUE_EXP_CNT_ATTR "ExpiredCount"
 #define ACTIVEMQ_QUEUE_CNS_CNT_ATTR "ConsumerCount"
 
+#define ACTIVEMQ_TOPIC_LIST_ATTR "Topics"
+#define ACTIVEMQ_TOPIC_DEQ_CNT_ATTR "DequeueCount"
+#define ACTIVEMQ_TOPIC_ENQ_CNT_ATTR "EnqueueCount"
+
 #endif /* BMIC_ACTIVEMQ_DEFS_H */

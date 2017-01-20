@@ -89,6 +89,8 @@ typedef struct bmic_api_interface_t_ {
 	bmic_management_api_queue_stats_fn queue_stats;
         bmic_management_api_queue_exec_fn queue_purge;
         bmic_management_api_queue_exec_fn queue_reset;
+        bmic_management_api_queue_list_fn topic_list;
+        bmic_management_api_queue_stats_fn topic_stats;
 
 	bmic_complements_java_api_t java;
 } bmic_api_interface_t;

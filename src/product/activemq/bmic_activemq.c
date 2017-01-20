@@ -38,6 +38,9 @@ bmic_api_interface_t *bmic_activemq_product(gru_status_t *status) {
 	ret->queue_purge = bmic_activemq_queue_purge;
 	ret->queue_reset = bmic_activemq_queue_reset;
 
+	ret->topic_list = bmic_activemq_topic_list;
+	ret->topic_stats = bmic_activemq_topic_stats;
+
 	ret->java.java_info = bmic_java_read_info;
 	ret->java.os_info = bmic_java_read_os_info;
 
@@ -461,6 +464,65 @@ bool bmic_activemq_queue_reset(bmic_handle_t *handle, const bmic_exchange_t *cap
 	bmic_activemq_json_reset_queue(operation, &json);
 	bool ret = bmic_jolokia_io_exec(handle, &json, status);
 	bmic_json_cleanup(json);
+
+	return ret;
+}
+
+const bmic_list_t *bmic_activemq_topic_list(
+	bmic_handle_t *handle, const bmic_exchange_t *cap, gru_status_t *status) {
+	const bmic_exchange_t *attributes =
+		bmic_activemq_mi_read(handle, cap->root, ACTIVEMQ_TOPIC_LIST_ATTR, status,
+			REG_SEARCH_NAME, ACTIVEMQ_CAPABILITIES_KEY_REGEX);
+
+	if (attributes == NULL) {
+		return NULL;
+	}
+
+	if (status->code != GRU_SUCCESS) {
+		bmic_exchange_destroy((bmic_exchange_t **) &attributes);
+
+		return NULL;
+	}
+
+	bmic_list_t *ret = bmic_list_new(status, gru_dealloc);
+	gru_alloc_check(ret, NULL);
+
+	bmic_payload_add_attr_t payload = {
+		.list = ret->items, .status = status,
+	};
+
+	bmic_object_for_each_child(
+		attributes->data_ptr, bmic_activemq_translate_queue_list, &payload);
+
+	bmic_exchange_destroy((bmic_exchange_t **) &attributes);
+	return ret;
+}
+
+
+bmic_queue_stat_t bmic_activemq_topic_stats(bmic_handle_t *handle,
+	const bmic_exchange_t *cap, const char *queue, gru_status_t *status) {
+	bmic_queue_stat_t ret = {0};
+
+	int64_t enq = bmic_activemq_queue_stat_reader(
+		handle, cap, queue, ACTIVEMQ_TOPIC_ENQ_CNT_ATTR, status);
+	if (status->code != GRU_SUCCESS) {
+		return ret;
+	}
+
+	ret.msg_ack_count = bmic_activemq_queue_stat_reader(
+		handle, cap, queue, ACTIVEMQ_TOPIC_DEQ_CNT_ATTR, status);
+	if (status->code != GRU_SUCCESS) {
+		return ret;
+	}
+
+	ret.queue_size = enq - ret.msg_ack_count;
+
+
+	ret.consumer_count = bmic_activemq_queue_stat_reader(
+		handle, cap, queue, ACTIVEMQ_QUEUE_CNS_CNT_ATTR, status);
+	if (status->code != GRU_SUCCESS) {
+		return ret;
+	}
 
 	return ret;
 }
