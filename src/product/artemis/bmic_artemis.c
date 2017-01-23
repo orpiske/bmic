@@ -46,6 +46,11 @@ bmic_api_interface_t *bmic_artemis_product(gru_status_t *status) {
 	ret->queue_purge = bmic_artemis_queue_purge;
 	ret->queue_reset = bmic_artemis_queue_reset;
 
+	// Artemis treats queues and topics, mostly, the same way and
+	// topics are listed along w/ queues
+	ret->topic_list = bmic_artemis_queue_list;
+	ret->topic_stats = bmic_artemis_topic_stats;
+
 	ret->java.java_info = bmic_java_read_info;
 	ret->java.os_info = bmic_java_read_os_info;
 
@@ -534,6 +539,42 @@ bool bmic_artemis_queue_reset(bmic_handle_t *handle, const bmic_exchange_t *cap,
 	bool ret = bmic_artemis_queue_reset_ack(handle, operation, status);
 	if (ret) {
 		ret = bmic_artemis_queue_reset_exp(handle, operation, status);
+	}
+
+	return ret;
+}
+
+
+
+bmic_topic_stat_t bmic_artemis_topic_stats(bmic_handle_t *handle,
+	const bmic_exchange_t *cap, const char *queue, gru_status_t *status) {
+
+	bmic_topic_stat_t ret = {0};
+
+	if (!bmic_artemis_valid_name(queue)) {
+		gru_status_set(status, GRU_FAILURE, "The queue name %s is invalid", queue);
+
+		return ret;
+	}
+
+	ret.queue_size = bmic_artemis_queue_stat_reader(
+		handle, cap, queue, ARTEMIS_QUEUE_SIZE_ATTR, status);
+	if (status->code != GRU_SUCCESS) {
+		return ret;
+	}
+
+	ret.msg_deq_count = bmic_artemis_queue_stat_reader(
+		handle, cap, queue, ARTEMIS_QUEUE_ACK_CNT_ATTR, status);
+	if (status->code != GRU_SUCCESS) {
+		return ret;
+	}
+
+	ret.msg_enq_count = ret.queue_size;
+
+	ret.consumer_count = bmic_artemis_queue_stat_reader(
+		handle, cap, queue, ARTEMIS_QUEUE_CNS_CNT_ATTR, status);
+	if (status->code != GRU_SUCCESS) {
+		return ret;
 	}
 
 	return ret;

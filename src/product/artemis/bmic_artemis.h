@@ -177,6 +177,18 @@ bool bmic_artemis_queue_purge(bmic_handle_t *handle, const bmic_exchange_t *cap,
 bool bmic_artemis_queue_reset(bmic_handle_t *handle, const bmic_exchange_t *cap,
 	const char *name, gru_status_t *status);
 
+
+
+/**
+ * Query topic stats
+ * @param handle
+ * @param cap
+ * @param status
+ * @return
+ */
+bmic_topic_stat_t bmic_artemis_topic_stats(bmic_handle_t *handle,
+	const bmic_exchange_t *cap, const char *queue, gru_status_t *status);
+
 #ifdef __cplusplus
 }
 #endif
