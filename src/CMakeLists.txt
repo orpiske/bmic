@@ -108,6 +108,7 @@ add_executable(
 	bmic/bmic_capabilities_main.c
 	bmic/bmic_discovery_main.c
 	bmic/bmic_queue_main.c
+	bmic/bmic_topic_main.c
 	bmic/bmic_operations_main.c
 	bmic/bmic_top_main.c
 	bmic/bmic.c

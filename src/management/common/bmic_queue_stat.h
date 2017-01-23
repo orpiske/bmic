@@ -27,6 +27,13 @@ typedef struct bmic_queue_stat_t_ {
 	int64_t queue_size;
 } bmic_queue_stat_t;
 
+typedef struct bmic_topic_stat_t_ {
+	int64_t consumer_count;
+	int64_t msg_enq_count;
+	int64_t msg_deq_count;
+	int64_t queue_size;
+} bmic_topic_stat_t;
+
 #ifdef __cplusplus
 }
 #endif

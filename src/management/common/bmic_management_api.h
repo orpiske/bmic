@@ -69,6 +69,9 @@ typedef bmic_queue_stat_t (*bmic_management_api_queue_stats_fn)(bmic_handle_t *h
 typedef bool (*bmic_management_api_queue_exec_fn)(bmic_handle_t *handle,
 	const bmic_exchange_t *cap, const char *name, gru_status_t *status);
 
+typedef bmic_topic_stat_t (*bmic_management_api_topic_stats_fn)(bmic_handle_t *handle,
+	const bmic_exchange_t *cap, const char *name, gru_status_t *status);
+
 typedef struct bmic_api_interface_t_ {
 	char name[64];
 	char version[16];
@@ -90,7 +93,7 @@ typedef struct bmic_api_interface_t_ {
         bmic_management_api_queue_exec_fn queue_purge;
         bmic_management_api_queue_exec_fn queue_reset;
         bmic_management_api_queue_list_fn topic_list;
-        bmic_management_api_queue_stats_fn topic_stats;
+        bmic_management_api_topic_stats_fn topic_stats;
 
 	bmic_complements_java_api_t java;
 } bmic_api_interface_t;

@@ -24,6 +24,7 @@
 #include "bmic_discovery_main.h"
 #include "bmic_operations_main.h"
 #include "bmic_queue_main.h"
+#include "bmic_topic_main.h"
 #include "bmic_top_main.h"
 
 
@@ -34,6 +35,7 @@ void show_help() {
 		"discovery", "Run a discovery on the broker to find its type and version");
 	gru_cli_program_description("capabilities", "Read/write/list broker capabilities and attributes");
 	gru_cli_program_description("queue", "Create/delete/list queues or read queue attributes");
+	gru_cli_program_description("topic", "Create/delete/list topics or read topics attributes");
 	gru_cli_program_description("operations", "Execute/list operations on the broker");
 	gru_cli_program_description("top", "A top-like performance monitor for the broker");
 }
@@ -54,6 +56,10 @@ int main(int argc, char **argv) {
 
 		if (strcmp(argv[1], "queue") == 0) {
 			return queue_main((argc - 1), &argv[1]);
+		}
+
+		if (strcmp(argv[1], "topic") == 0) {
+			return topic_main((argc - 1), &argv[1]);
 		}
 
 		if (strcmp(argv[1], "operations") == 0) {

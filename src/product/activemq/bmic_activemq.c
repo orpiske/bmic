@@ -499,24 +499,21 @@ const bmic_list_t *bmic_activemq_topic_list(
 }
 
 
-bmic_queue_stat_t bmic_activemq_topic_stats(bmic_handle_t *handle,
+bmic_topic_stat_t bmic_activemq_topic_stats(bmic_handle_t *handle,
 	const bmic_exchange_t *cap, const char *queue, gru_status_t *status) {
-	bmic_queue_stat_t ret = {0};
+	bmic_topic_stat_t ret = {0};
 
-	int64_t enq = bmic_activemq_queue_stat_reader(
+	ret.msg_enq_count = bmic_activemq_queue_stat_reader(
 		handle, cap, queue, ACTIVEMQ_TOPIC_ENQ_CNT_ATTR, status);
 	if (status->code != GRU_SUCCESS) {
 		return ret;
 	}
 
-	ret.msg_ack_count = bmic_activemq_queue_stat_reader(
+	ret.msg_deq_count = bmic_activemq_queue_stat_reader(
 		handle, cap, queue, ACTIVEMQ_TOPIC_DEQ_CNT_ATTR, status);
 	if (status->code != GRU_SUCCESS) {
 		return ret;
 	}
-
-	ret.queue_size = enq - ret.msg_ack_count;
-
 
 	ret.consumer_count = bmic_activemq_queue_stat_reader(
 		handle, cap, queue, ACTIVEMQ_QUEUE_CNS_CNT_ATTR, status);
