@@ -35,7 +35,7 @@ void show_help() {
 		"discovery", "Run a discovery on the broker to find its type and version");
 	gru_cli_program_description("capabilities", "Read/write/list broker capabilities and attributes");
 	gru_cli_program_description("queue", "Create/delete/list queues or read queue attributes");
-	gru_cli_program_description("topic", "Create/delete/list topics or read topics attributes");
+	gru_cli_program_description("topic", "(EXPERIMENTAL) Create/delete/list topics or read topics attributes");
 	gru_cli_program_description("operations", "Execute/list operations on the broker");
 	gru_cli_program_description("top", "A top-like performance monitor for the broker");
 }
