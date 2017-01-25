@@ -94,7 +94,7 @@ int discovery_main(int argc, char **argv) {
 			case 's':
 				bmic_discovery_hint_set_addressing_hostname(
 					&options.hint, optarg, &status);
-				if (status.code != GRU_SUCCESS) {
+				if (gru_status_error(&status)) {
 					fprintf(stderr, "%s", status.message);
 
 					return EXIT_FAILURE;
@@ -104,7 +104,7 @@ int discovery_main(int argc, char **argv) {
 			case 'P':
 				bmic_discovery_hint_set_addressing_port(
 					&options.hint, (uint16_t) atoi(optarg), &status);
-				if (status.code != GRU_SUCCESS) {
+				if (gru_status_error(&status)) {
 					fprintf(stderr, "%s", status.message);
 
 					return EXIT_FAILURE;
@@ -113,7 +113,7 @@ int discovery_main(int argc, char **argv) {
 				break;
 			case 'U':
 				bmic_discovery_hint_set_url(&options.hint, optarg, &status);
-				if (status.code != GRU_SUCCESS) {
+				if (gru_status_error(&status)) {
 					fprintf(stderr, "%s", status.message);
 
 					return EXIT_FAILURE;

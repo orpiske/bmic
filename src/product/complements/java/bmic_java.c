@@ -49,7 +49,7 @@ static bmic_java_mem_info_t bmic_java_read_mem_info_any(
 	}
 
 	bmic_jolokia_translate_status(usage, status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		return ret;
 	}
 
@@ -65,23 +65,23 @@ static bmic_java_mem_info_t bmic_java_read_mem_info_any(
 	}
 
 	bmic_java_read_mem_value(usage, "init", "/value/init", &ret.init, status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		return ret;
 	}
 
 	bmic_java_read_mem_value(
 		usage, "committed", "/value/committed", &ret.committed, status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		return ret;
 	}
 
 	bmic_java_read_mem_value(usage, "max", "/value/max", &ret.max, status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		return ret;
 	}
 
 	bmic_java_read_mem_value(usage, "used", "/value/used", &ret.used, status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		return ret;
 	}
 
@@ -214,7 +214,7 @@ bmic_java_info_t bmic_java_read_info(bmic_handle_t *handle, gru_status_t *status
 	}
 
 	bmic_jolokia_translate_status(runtime, status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		goto exit;
 	}
 
@@ -266,7 +266,7 @@ bmic_java_os_info_t bmic_java_read_os_info(bmic_handle_t *handle, gru_status_t *
 	}
 
 	bmic_jolokia_translate_status(runtime, status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		goto exit;
 	}
 
@@ -287,73 +287,73 @@ bmic_java_os_info_t bmic_java_read_os_info(bmic_handle_t *handle, gru_status_t *
 
 	ret.cpus = bmic_java_get_number(
 		runtime, "processor count", "/value/AvailableProcessors", status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		goto exit;
 	}
 
 	ret.mem_total = bmic_java_get_number(
 		runtime, "total memory", "/value/TotalPhysicalMemorySize", status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		goto exit;
 	}
 
 	ret.mem_free = bmic_java_get_number(
 		runtime, "total free memory", "/value/FreePhysicalMemorySize", status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		goto exit;
 	}
 
 	ret.swap_total = bmic_java_get_number(
 		runtime, "total swap memory", "/value/FreeSwapSpaceSize", status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		goto exit;
 	}
 
 	ret.swap_free = bmic_java_get_number(
 		runtime, "total free swap memory", "/value/FreePhysicalMemorySize", status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		goto exit;
 	}
 
 	ret.swap_committed = bmic_java_get_number(runtime, "total committed swap memory",
 		"/value/CommittedVirtualMemorySize", status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		goto exit;
 	}
 
 	ret.open_fd = bmic_java_get_number(
 		runtime, "open file descriptors", "/value/OpenFileDescriptorCount", status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		goto exit;
 	}
 
 	ret.max_fd = bmic_java_get_number(
 		runtime, "max file descriptors", "/value/MaxFileDescriptorCount", status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		goto exit;
 	}
 
 	ret.load_average =
 		bmic_java_get_double(runtime, "load average", "/value/SystemLoadAverage", status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		goto exit;
 	}
 
 	ret.process_cpu_load = bmic_java_get_double(
 		runtime, "process CPU load", "/value/ProcessCpuLoad", status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		goto exit;
 	}
 
 	ret.system_cpu_load =
 		bmic_java_get_double(runtime, "system CPU load", "/value/SystemCpuLoad", status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		goto exit;
 	}
 
 	ret.process_cpu_time = bmic_java_get_number(
 		runtime, "process CPU time", "/value/ProcessCpuTime", status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		goto exit;
 	}
 

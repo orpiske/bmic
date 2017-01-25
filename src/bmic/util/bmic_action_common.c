@@ -24,7 +24,7 @@ void show_info(bmic_api_interface_t *api, bmic_handle_t *handle,
 
 	bmic_product_info_t *info = api->product_info(handle, cap, status);
 
-	if (!info || status->code != GRU_SUCCESS) {
+	if (!info || gru_status_error(status)) {
 		fprintf(stderr, "Unable to determine product version: %s\n", status->message);
 	}
 

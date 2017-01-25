@@ -109,7 +109,7 @@ const bmic_exchange_t *bmic_activemq_load_capabilities(
 	bmic_data_t reply = {0};
 	bmic_api_io_read(handle, ACTIVEMQ_PRODUCT_CAPABILITIES, &reply, status);
 
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		goto err_exit;
 	}
 
@@ -157,7 +157,7 @@ bmic_product_info_t *bmic_activemq_product_info(
 		return NULL;
 	}
 
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		bmic_exchange_destroy((bmic_exchange_t **) &ex);
 
 		return NULL;
@@ -238,7 +238,7 @@ bool bmic_activemq_queue_create(bmic_handle_t *handle, const bmic_exchange_t *ca
 	}
 
 	bmic_json_t json = bmic_json_new(status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		return false;
 	}
 
@@ -260,7 +260,7 @@ bool bmic_activemq_queue_delete(bmic_handle_t *handle, const bmic_exchange_t *ca
 	}
 
 	bmic_json_t json = bmic_json_new(status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		return false;
 	}
 
@@ -325,7 +325,7 @@ const bmic_list_t *bmic_activemq_queue_list(
 		return NULL;
 	}
 
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		bmic_exchange_destroy((bmic_exchange_t **) &attributes);
 
 		return NULL;
@@ -355,7 +355,7 @@ static int64_t bmic_activemq_queue_stat_reader(bmic_handle_t *handle,
 	logger_t logger = gru_logger_get();
 	if (!attribute) {
 		logger(ERROR, "Unavailable response for '%s' queue property", attr_name);
-		if (status->code == GRU_SUCCESS) {
+		if (gru_status_success(status)) {
 			gru_status_set(status, GRU_FAILURE,
 				"Unavailable response for '%s' queue property", attr_name);
 		}
@@ -389,25 +389,25 @@ bmic_queue_stat_t bmic_activemq_queue_stats(bmic_handle_t *handle,
 	bmic_queue_stat_t ret = {0};
 	ret.queue_size = bmic_activemq_queue_stat_reader(
 		handle, cap, queue, ACTIVEMQ_QUEUE_SIZE_ATTR, status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		return ret;
 	}
 
 	ret.msg_ack_count = bmic_activemq_queue_stat_reader(
 		handle, cap, queue, ACTIVEMQ_QUEUE_ACK_CNT_ATTR, status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		return ret;
 	}
 
 	ret.msg_exp_count = bmic_activemq_queue_stat_reader(
 		handle, cap, queue, ACTIVEMQ_QUEUE_EXP_CNT_ATTR, status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		return ret;
 	}
 
 	ret.consumer_count = bmic_activemq_queue_stat_reader(
 		handle, cap, queue, ACTIVEMQ_QUEUE_CNS_CNT_ATTR, status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		return ret;
 	}
 
@@ -430,7 +430,7 @@ bool bmic_activemq_queue_purge(bmic_handle_t *handle, const bmic_exchange_t *cap
 	}
 
 	bmic_json_t json = bmic_json_new(status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		return false;
 	}
 
@@ -457,7 +457,7 @@ bool bmic_activemq_queue_reset(bmic_handle_t *handle, const bmic_exchange_t *cap
 	}
 
 	bmic_json_t json = bmic_json_new(status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		return false;
 	}
 
@@ -478,7 +478,7 @@ const bmic_list_t *bmic_activemq_topic_list(
 		return NULL;
 	}
 
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		bmic_exchange_destroy((bmic_exchange_t **) &attributes);
 
 		return NULL;
@@ -505,19 +505,19 @@ bmic_topic_stat_t bmic_activemq_topic_stats(bmic_handle_t *handle,
 
 	ret.msg_enq_count = bmic_activemq_queue_stat_reader(
 		handle, cap, queue, ACTIVEMQ_TOPIC_ENQ_CNT_ATTR, status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		return ret;
 	}
 
 	ret.msg_deq_count = bmic_activemq_queue_stat_reader(
 		handle, cap, queue, ACTIVEMQ_TOPIC_DEQ_CNT_ATTR, status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		return ret;
 	}
 
 	ret.consumer_count = bmic_activemq_queue_stat_reader(
 		handle, cap, queue, ACTIVEMQ_QUEUE_CNS_CNT_ATTR, status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		return ret;
 	}
 

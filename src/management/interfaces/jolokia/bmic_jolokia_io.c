@@ -22,14 +22,14 @@ bool bmic_jolokia_io_exec(
 	bmic_endpoint_status_t epstatus = bmic_endpoint_status_new(status);
 
 	bmic_endpoint_set_path(handle->ep, JOLOKIA_OP_EXEC, status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		return false;
 	}
 
 	bmic_data_t reply = {0};
 	handle->transport.write(handle->ep, &request, &reply, &epstatus);
 	bmic_endpoint_reset_path(handle->ep);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		return false;
 	}
 
@@ -54,7 +54,7 @@ const bmic_object_t *bmic_jolokia_io_read(
 
 	bmic_api_io_read(handle, path, &reply, status);
 
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		bmic_data_release(&reply);
 		return NULL;
 	}

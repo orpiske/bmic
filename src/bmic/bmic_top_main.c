@@ -67,7 +67,7 @@ int top_run(options_t *options) {
 	printf("Reading broker information ...\n");
 	bmic_product_info_t *info = api->product_info(ctxt.handle, cap, &status);
 
-	if (!info || status.code != GRU_SUCCESS) {
+	if (!info || gru_status_error(&status)) {
 		fprintf(stderr, "Unable to determine product version: %s\n", status.message);
 
 		bmic_context_cleanup(&ctxt);
@@ -116,13 +116,13 @@ int top_run(options_t *options) {
 				stat[i] = api->queue_stats(
 					ctxt.handle, cap, (const char *) node->data, &status);
 
-				if (status.code != GRU_SUCCESS) {
+				if (gru_status_error(&status)) {
 					break;
 				}
 			}
 		}
 
-		if (status.code != GRU_SUCCESS) {
+		if (gru_status_error(&status)) {
 			fprintf(stderr, "\n%s\n", status.message);
 
 			if (list) {
@@ -262,7 +262,7 @@ int top_main(int argc, char **argv) {
 			case 's':
 				bmic_discovery_hint_set_addressing_hostname(
 					&options.hint, optarg, &status);
-				if (status.code != GRU_SUCCESS) {
+				if (gru_status_error(&status)) {
 					fprintf(stderr, "%s", status.message);
 
 					return EXIT_FAILURE;
@@ -272,7 +272,7 @@ int top_main(int argc, char **argv) {
 			case 'P':
 				bmic_discovery_hint_set_addressing_port(
 					&options.hint, (uint16_t) atoi(optarg), &status);
-				if (status.code != GRU_SUCCESS) {
+				if (gru_status_error(&status)) {
 					fprintf(stderr, "%s", status.message);
 
 					return EXIT_FAILURE;
@@ -281,7 +281,7 @@ int top_main(int argc, char **argv) {
 				break;
 			case 'U':
 				bmic_discovery_hint_set_url(&options.hint, optarg, &status);
-				if (status.code != GRU_SUCCESS) {
+				if (gru_status_error(&status)) {
 					fprintf(stderr, "%s", status.message);
 
 					return EXIT_FAILURE;
@@ -303,6 +303,6 @@ int top_main(int argc, char **argv) {
 				return EXIT_FAILURE;
 		}
 	}
-	
+
 	return top_run(&options);
 }

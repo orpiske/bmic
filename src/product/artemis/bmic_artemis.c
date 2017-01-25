@@ -116,7 +116,7 @@ bmic_product_info_t *bmic_artemis_product_info(
 		return NULL;
 	}
 
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		bmic_exchange_destroy((bmic_exchange_t **) &ex);
 
 		return NULL;
@@ -148,7 +148,7 @@ const bmic_exchange_t *bmic_artemis_load_capabilities(
 	bmic_data_t reply = {0};
 	bmic_api_io_read(handle, ARTEMIS_PRODUCT_CAPABILITIES, &reply, status);
 
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		goto err_exit;
 	}
 
@@ -264,7 +264,7 @@ const bmic_list_t *bmic_artemis_queue_list(
 		return NULL;
 	}
 
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		bmic_exchange_destroy((bmic_exchange_t **) &attributes);
 
 		return NULL;
@@ -329,7 +329,7 @@ bool bmic_artemis_queue_create(bmic_handle_t *handle, const bmic_exchange_t *cap
 	}
 
 	bmic_json_t json = bmic_json_new(status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		return false;
 	}
 
@@ -359,7 +359,7 @@ bool bmic_artemis_queue_delete(bmic_handle_t *handle, const bmic_exchange_t *cap
 	}
 
 	bmic_json_t json = bmic_json_new(status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		return false;
 	}
 
@@ -382,7 +382,7 @@ static int64_t bmic_artemis_queue_stat_reader(bmic_handle_t *handle,
 		logger(ERROR, "Unavailable response for '%s' queue property for queue '%s'",
 			attr_name, queue);
 
-		if (status->code == GRU_SUCCESS) {
+		if (gru_status_success(status)) {
 			gru_status_set(status, GRU_FAILURE,
 				"Unavailable response for '%s' queue property for queue '%s'", attr_name,
 				queue);
@@ -427,25 +427,25 @@ bmic_queue_stat_t bmic_artemis_queue_stats(bmic_handle_t *handle,
 
 	ret.queue_size = bmic_artemis_queue_stat_reader(
 		handle, cap, queue, ARTEMIS_QUEUE_SIZE_ATTR, status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		return ret;
 	}
 
 	ret.msg_ack_count = bmic_artemis_queue_stat_reader(
 		handle, cap, queue, ARTEMIS_QUEUE_ACK_CNT_ATTR, status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		return ret;
 	}
 
 	ret.msg_exp_count = bmic_artemis_queue_stat_reader(
 		handle, cap, queue, ARTEMIS_QUEUE_EXP_CNT_ATTR, status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		return ret;
 	}
 
 	ret.consumer_count = bmic_artemis_queue_stat_reader(
 		handle, cap, queue, ARTEMIS_QUEUE_CNS_CNT_ATTR, status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		return ret;
 	}
 
@@ -474,7 +474,7 @@ bool bmic_artemis_queue_purge(bmic_handle_t *handle, const bmic_exchange_t *cap,
 	}
 
 	bmic_json_t json = bmic_json_new(status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		return false;
 	}
 
@@ -489,7 +489,7 @@ static bool bmic_artemis_queue_reset_ack(bmic_handle_t *handle,
 				const bmic_object_t *operation, gru_status_t *status)
 {
 	bmic_json_t json = bmic_json_new(status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		return false;
 	}
 
@@ -504,7 +504,7 @@ static bool bmic_artemis_queue_reset_exp(bmic_handle_t *handle,
 				const bmic_object_t *operation, gru_status_t *status)
 {
 	bmic_json_t json = bmic_json_new(status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		return false;
 	}
 
@@ -559,13 +559,13 @@ bmic_topic_stat_t bmic_artemis_topic_stats(bmic_handle_t *handle,
 
 	ret.queue_size = bmic_artemis_queue_stat_reader(
 		handle, cap, queue, ARTEMIS_QUEUE_SIZE_ATTR, status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		return ret;
 	}
 
 	ret.msg_deq_count = bmic_artemis_queue_stat_reader(
 		handle, cap, queue, ARTEMIS_QUEUE_ACK_CNT_ATTR, status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		return ret;
 	}
 
@@ -573,7 +573,7 @@ bmic_topic_stat_t bmic_artemis_topic_stats(bmic_handle_t *handle,
 
 	ret.consumer_count = bmic_artemis_queue_stat_reader(
 		handle, cap, queue, ARTEMIS_QUEUE_CNS_CNT_ATTR, status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		return ret;
 	}
 

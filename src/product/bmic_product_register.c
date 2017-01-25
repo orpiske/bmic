@@ -22,7 +22,7 @@ void bmic_product_register(gru_status_t *status) {
 	if (artemis) {
 		bmic_product_registry_add(artemis, status);
 
-		if (status->code != GRU_SUCCESS) {
+		if (gru_status_error(status)) {
 			logger(ERROR, "Unable to register Artemis management API interface");
 			return;
 		}
@@ -33,7 +33,7 @@ void bmic_product_register(gru_status_t *status) {
 	bmic_api_interface_t *activemq = bmic_activemq_product(status);
 	if (activemq) {
 		bmic_product_registry_add(activemq, status);
-		if (status->code != GRU_SUCCESS) {
+		if (gru_status_error(status)) {
 			logger(ERROR, "Unable to register Artemis management API interface");
 		}
 	} else {
@@ -43,7 +43,7 @@ void bmic_product_register(gru_status_t *status) {
 	bmic_api_interface_t *jamq6 = bmic_jamq6_product(status);
 	if (jamq6) {
 		bmic_product_registry_add(jamq6, status);
-		if (status->code != GRU_SUCCESS) {
+		if (gru_status_error(status)) {
 			logger(ERROR, "Unable to register JBoss A-MQ 6 management API interface");
 		}
 	} else {

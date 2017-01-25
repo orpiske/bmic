@@ -22,7 +22,7 @@ bmic_object_t *bmic_jolokia_parse(const char *str, gru_status_t *status) {
 	}
 
 	bmic_json_t json = bmic_json_init(str, status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		bmic_object_destroy(&root);
 		return NULL;
 	}

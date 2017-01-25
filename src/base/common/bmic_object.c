@@ -354,7 +354,7 @@ static bool bmic_object_regex_name(const void *nodedata, const void *regex, void
 	bool match = bmic_match(nodeobj->name, (const char *) regex, &status);
 
 	// TODO: improve the error handling here
-	if (status.code == GRU_FAILURE) {
+	if (gru_status_error(&status)) {
 		logger_t logger = gru_logger_get();
 		logger(FATAL, "%s", status.message);
 	}
@@ -373,7 +373,7 @@ static bool bmic_object_regex_path(const void *nodedata, const void *regex, void
 	bool match = bmic_match(nodeobj->path, (const char *) regex, &status);
 
 	// TODO: improve the error handling here
-	if (status.code == GRU_FAILURE) {
+	if (gru_status_error(&status)) {
 		logger_t logger = gru_logger_get();
 
 		logger(FATAL, "%s", status.message);

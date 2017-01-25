@@ -31,7 +31,7 @@ bmic_endpoint_t *bmic_endpoint_init(
 	}
 
 	ret->credentials = bmic_credentials_init(username, password, status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		bmic_endpoint_destroy(&ret);
 
 		return NULL;

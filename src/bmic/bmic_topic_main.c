@@ -81,7 +81,7 @@ int topic_run(options_t *options) {
 				print_returned_object(options->program.queue.attribute, obj->data_ptr);
 			}
 			else {
-				if (status.code != GRU_SUCCESS) {
+				if (gru_status_error(&status)) {
 					fprintf(stderr, "%s\n", status.message);
 				}
 				else {
@@ -104,28 +104,28 @@ int topic_run(options_t *options) {
 		}
 		case OP_CREATE: {
 			api->queue_create(ctxt.handle, cap, options->program.queue.queue, &status);
-			if (status.code != GRU_SUCCESS) {
+			if (gru_status_error(&status)) {
 				fprintf(stderr, "%s\n", status.message);
 			}
 			break;
 		}
 		case OP_DELETE: {
 			api->queue_delete(ctxt.handle, cap, options->program.queue.queue, &status);
-			if (status.code != GRU_SUCCESS) {
+			if (gru_status_error(&status)) {
 				fprintf(stderr, "%s\n", status.message);
 			}
 			break;
 		}
 		case OP_PURGE: {
 			api->queue_purge(ctxt.handle, cap, options->program.queue.queue, &status);
-			if (status.code != GRU_SUCCESS) {
+			if (gru_status_error(&status)) {
 				fprintf(stderr, "%s\n", status.message);
 			}
 			break;
 		}
 		case OP_RESET: {
 			api->queue_reset(ctxt.handle, cap, options->program.queue.queue, &status);
-			if (status.code != GRU_SUCCESS) {
+			if (gru_status_error(&status)) {
 				fprintf(stderr, "%s\n", status.message);
 			}
 			break;
@@ -133,7 +133,7 @@ int topic_run(options_t *options) {
 		case OP_STATS: {
 			bmic_topic_stat_t stats =
 				api->topic_stats(ctxt.handle, cap, options->program.queue.queue, &status);
-			if (status.code != GRU_SUCCESS) {
+			if (gru_status_error(&status)) {
 				fprintf(stderr, "%s\n", status.message);
 			} else {
 				print_topic_stat(options->program.queue.queue, stats);
@@ -209,7 +209,7 @@ int topic_main(int argc, char **argv) {
 			case 's':
 				bmic_discovery_hint_set_addressing_hostname(
 					&options.hint, optarg, &status);
-				if (status.code != GRU_SUCCESS) {
+				if (gru_status_error(&status)) {
 					fprintf(stderr, "%s", status.message);
 
 					return EXIT_FAILURE;
@@ -219,7 +219,7 @@ int topic_main(int argc, char **argv) {
 			case 'P':
 				bmic_discovery_hint_set_addressing_port(
 					&options.hint, (uint16_t) atoi(optarg), &status);
-				if (status.code != GRU_SUCCESS) {
+				if (gru_status_error(&status)) {
 					fprintf(stderr, "%s", status.message);
 
 					return EXIT_FAILURE;
@@ -228,7 +228,7 @@ int topic_main(int argc, char **argv) {
 				break;
 			case 'U':
 				bmic_discovery_hint_set_url(&options.hint, optarg, &status);
-				if (status.code != GRU_SUCCESS) {
+				if (gru_status_error(&status)) {
 					fprintf(stderr, "%s", status.message);
 
 					return EXIT_FAILURE;

@@ -27,7 +27,7 @@ static bool open_file(const char *path, bmic_object_t **root, gru_status_t *stat
 
 	FILE *file = gru_io_open_file_read_path(path, status);
 
-	if (!file || status->code != GRU_SUCCESS) {
+	if (!file || gru_status_error(status)) {
 		fprintf(stderr, "%s", status->message);
 		return EXIT_FAILURE;
 	}
@@ -44,7 +44,7 @@ static bool open_file(const char *path, bmic_object_t **root, gru_status_t *stat
 	printf("Read %lu bytes from the file\n", size);
 
 	bmic_json_t json = bmic_json_init(buff, status);
-	if (status->code != GRU_SUCCESS) {
+	if (gru_status_error(status)) {
 		goto err_exit;
 	}
 	gru_dealloc_string(&buff);
@@ -108,7 +108,7 @@ int main(int argc, char **argv) {
 
 err_exit:
 
-	if (status.code != GRU_SUCCESS) {
+	if (gru_status_error(&status)) {
 		fprintf(stderr, "%s", status.message);
 	}
 

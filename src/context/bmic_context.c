@@ -75,7 +75,7 @@ bool bmic_context_init_hint(bmic_context_t *ctxt, bmic_discovery_hint_t hint,
 
 	if (username && password) {
 		ctxt->credentials = bmic_credentials_init(username, password, status);
-		if (status->code != GRU_SUCCESS) {
+		if (gru_status_error(status)) {
 			bmic_context_cleanup(ctxt);
 
 			return false;
@@ -85,11 +85,11 @@ bool bmic_context_init_hint(bmic_context_t *ctxt, bmic_discovery_hint_t hint,
 	ctxt->api = bmic_discovery_run(&ctxt->hint, ctxt->credentials, &ctxt->handle, status);
 	if (!ctxt->api) {
 		bmic_context_cleanup(ctxt);
-		
+
 		if (status->message == NULL) {
 				gru_status_set(status, GRU_FAILURE, "Unable to discover broker on the host");
 		}
- 
+
 		return false;
 	}
 

@@ -29,7 +29,7 @@ int main(int argc, char **argv) {
 
 	FILE *file = gru_io_open_file_read_path(argv[1], &status);
 
-	if (!file || status.code != GRU_SUCCESS) {
+	if (!file || gru_status_error(&status)) {
 		fprintf(stderr, "%s", status.message);
 		return EXIT_FAILURE;
 	}
@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
 	printf("Read %lu bytes from the file\n", size);
 
 	bmic_json_t json = bmic_json_init(buff, &status);
-	if (status.code != GRU_SUCCESS) {
+	if (gru_status_error(&status)) {
 		goto err_exit;
 	}
 	gru_dealloc_string(&buff);
@@ -114,7 +114,7 @@ int main(int argc, char **argv) {
 
 err_exit:
 
-	if (status.code != GRU_SUCCESS) {
+	if (gru_status_error(&status)) {
 		fprintf(stderr, "%s", status.message);
 	}
 
