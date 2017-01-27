@@ -109,8 +109,7 @@ bmic_discovery_hint_t bmic_discovery_hint_eval_addressing(
  * @param status A status struct that will contain error data if the function failed
  * @return A hint structure that can be used to find out details about the broker
  */
-bmic_discovery_hint_t bmic_discovery_hint_eval_url(
-	const char *url, gru_status_t *status);
+bmic_discovery_hint_t bmic_discovery_hint_eval_url(const char *url, gru_status_t *status);
 
 /**
  * Destroy the hint structure and frees all memory used by it

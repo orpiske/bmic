@@ -54,8 +54,11 @@ int topic_run(options_t *options) {
 	gru_status_t status = gru_status_new();
 	bmic_context_t ctxt = {0};
 
-	bool ret = bmic_context_init_hint(&ctxt, options->hint, options->credentials.username,
-		options->credentials.password, &status);
+	bool ret = bmic_context_init_hint(&ctxt,
+		options->hint,
+		options->credentials.username,
+		options->credentials.password,
+		&status);
 	if (!ret) {
 		fprintf(stderr, "%s\n", status.message);
 		return EXIT_FAILURE;
@@ -74,17 +77,18 @@ int topic_run(options_t *options) {
 
 	switch (options->program.queue.operation) {
 		case OP_READ: {
-			const bmic_exchange_t *obj = api->queue_attribute_read(ctxt.handle, cap,
-				options->program.queue.attribute, &status, options->program.queue.queue);
+			const bmic_exchange_t *obj = api->queue_attribute_read(ctxt.handle,
+				cap,
+				options->program.queue.attribute,
+				&status,
+				options->program.queue.queue);
 
 			if (obj) {
 				print_returned_object(options->program.queue.attribute, obj->data_ptr);
-			}
-			else {
+			} else {
 				if (gru_status_error(&status)) {
 					fprintf(stderr, "%s\n", status.message);
-				}
-				else {
+				} else {
 					fprintf(stderr, "Invalid response from the server\n");
 				}
 			}
@@ -141,8 +145,10 @@ int topic_run(options_t *options) {
 			break;
 		}
 		default: {
-			fprintf(stderr, "Unable to read property %s for queue %s: %s\n",
-				options->program.queue.attribute, options->program.queue.queue,
+			fprintf(stderr,
+				"Unable to read property %s for queue %s: %s\n",
+				options->program.queue.attribute,
+				options->program.queue.queue,
 				status.message);
 			break;
 		}
@@ -166,8 +172,7 @@ int topic_main(int argc, char **argv) {
 
 	while (1) {
 
-		static struct option long_options[] = {
-			{"help", no_argument, 0, 'h'},
+		static struct option long_options[] = {{"help", no_argument, 0, 'h'},
 			{"username", required_argument, 0, 'u'},
 			{"password", required_argument, 0, 'p'},
 			{"server", required_argument, 0, 's'},
@@ -185,8 +190,8 @@ int topic_main(int argc, char **argv) {
 			{"stats", no_argument, 0, 'S'},
 			{0, 0, 0, 0}};
 
-		int c =
-			getopt_long(argc, argv, "hu:p:s:P:U:n:a:lrcdGRIS", long_options, &option_index);
+		int c = getopt_long(
+			argc, argv, "hu:p:s:P:U:n:a:lrcdGRIS", long_options, &option_index);
 		if (c == -1) {
 			break;
 		}

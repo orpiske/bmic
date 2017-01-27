@@ -87,7 +87,7 @@ bool bmic_context_init_hint(bmic_context_t *ctxt, bmic_discovery_hint_t hint,
 		bmic_context_cleanup(ctxt);
 
 		if (status->message == NULL) {
-				gru_status_set(status, GRU_FAILURE, "Unable to discover broker on the host");
+			gru_status_set(status, GRU_FAILURE, "Unable to discover broker on the host");
 		}
 
 		return false;

@@ -38,7 +38,9 @@ static bool bmic_try_init(
 	logger(DEBUG, "Trying to load product capabilities");
 	const bmic_exchange_t *cap = api->capabilities_load(handle, &status);
 	if (!cap) {
-		logger(DEBUG, "Unable to load product capabilities for %s: %s", api->name,
+		logger(DEBUG,
+			"Unable to load product capabilities for %s: %s",
+			api->name,
 			status.message);
 
 		goto err_exit;

@@ -76,8 +76,12 @@ bmic_product_info_t *bmic_jamq6_product_info(
 
 		return ret;
 	} else {
-		const bmic_exchange_t *ex = bmic_activemq_mi_read(handle, cap->root, "BrokerName",
-			status, REG_SEARCH_NAME, ACTIVEMQ_CAPABILITIES_KEY_REGEX);
+		const bmic_exchange_t *ex = bmic_activemq_mi_read(handle,
+			cap->root,
+			"BrokerName",
+			status,
+			REG_SEARCH_NAME,
+			ACTIVEMQ_CAPABILITIES_KEY_REGEX);
 
 		if (ex && ex->data_ptr->type == BMIC_STRING) {
 			ret = gru_alloc(sizeof(bmic_api_interface_t), status);

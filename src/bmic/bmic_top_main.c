@@ -28,18 +28,27 @@ static void show_help(char **argv) {
 	gru_cli_option_help("server", "s", "server hostname or IP address");
 	gru_cli_option_help("interval", "i", "interval between each update");
 	gru_cli_option_help("attribute", "a", "queue attribute to read");
-	gru_cli_option_help("repeat", "r",
+	gru_cli_option_help("repeat",
+		"r",
 		"how many times to read the data (-1, the default, means repeat forever)");
 }
 
 static void print_queue_stat(const char *name, bmic_queue_stat_t stat) {
-	printf("%-40s %-9" PRId64 " %-9" PRId64 " %-9" PRId64 " %-9" PRId64 "\n", name,
-		stat.queue_size, stat.consumer_count, stat.msg_ack_count, stat.msg_exp_count);
+	printf("%-40s %-9" PRId64 " %-9" PRId64 " %-9" PRId64 " %-9" PRId64 "\n",
+		name,
+		stat.queue_size,
+		stat.consumer_count,
+		stat.msg_ack_count,
+		stat.msg_exp_count);
 }
 
 static void print_mem(const char *name, bmic_java_mem_info_t *mem) {
-	printf("%-20s %-14" PRId64 " %-14" PRId64 " %-14" PRId64 " %-14" PRId64 "\n", name,
-		as_mb(mem->init), as_mb(mem->committed), as_mb(mem->max), as_mb(mem->used));
+	printf("%-20s %-14" PRId64 " %-14" PRId64 " %-14" PRId64 " %-14" PRId64 "\n",
+		name,
+		as_mb(mem->init),
+		as_mb(mem->committed),
+		as_mb(mem->max),
+		as_mb(mem->used));
 }
 
 int top_run(options_t *options) {
@@ -47,8 +56,11 @@ int top_run(options_t *options) {
 
 	bmic_context_t ctxt = {0};
 
-	bool ret = bmic_context_init_hint(&ctxt, options->hint, options->credentials.username,
-		options->credentials.password, &status);
+	bool ret = bmic_context_init_hint(&ctxt,
+		options->hint,
+		options->credentials.username,
+		options->credentials.password,
+		&status);
 
 	if (!ret) {
 		fprintf(stderr, "%s\n", status.message);
@@ -137,25 +149,52 @@ int top_run(options_t *options) {
 		}
 
 		printf(CLEAR_SCREEN);
-		printf("%s %s (%s) %s %s \n", jinfo.name, jinfo.version,
-			jinfo.jvm_package_version, osinfo.name, osinfo.version);
+		printf("%s %s (%s) %s %s \n",
+			jinfo.name,
+			jinfo.version,
+			jinfo.jvm_package_version,
+			osinfo.name,
+			osinfo.version);
 
 		printf("%s%sCPUs:%s %" PRId64 "\n", RESET, LIGHT_WHITE, RESET, osinfo.cpus);
-		printf("%s%sLoad average:%s %-10.1f\n", RESET, LIGHT_WHITE, RESET,
+		printf("%s%sLoad average:%s %-10.1f\n",
+			RESET,
+			LIGHT_WHITE,
+			RESET,
 			osinfo.load_average);
 		printf("%s%sFile descriptors:%s %10" PRId64 " max total %10" PRId64
 			   " open %10" PRId64 " free\n",
-			RESET, LIGHT_WHITE, RESET, osinfo.max_fd, osinfo.open_fd,
+			RESET,
+			LIGHT_WHITE,
+			RESET,
+			osinfo.max_fd,
+			osinfo.open_fd,
 			(osinfo.max_fd - osinfo.open_fd));
-		printf("%s%sPhysical memory:%s %10" PRId64 " total %10" PRId64 " free\n", RESET,
-			LIGHT_WHITE, RESET, as_mb(osinfo.mem_total), as_mb(osinfo.mem_free));
+		printf("%s%sPhysical memory:%s %10" PRId64 " total %10" PRId64 " free\n",
+			RESET,
+			LIGHT_WHITE,
+			RESET,
+			as_mb(osinfo.mem_total),
+			as_mb(osinfo.mem_free));
 		printf("%s%sSwap memory:%s %10" PRId64 " total %10" PRId64 " free %10" PRId64
 			   " used\n\n",
-			RESET, LIGHT_WHITE, RESET, as_mb(osinfo.swap_total), as_mb(osinfo.swap_free),
+			RESET,
+			LIGHT_WHITE,
+			RESET,
+			as_mb(osinfo.swap_total),
+			as_mb(osinfo.swap_free),
 			as_mb(osinfo.swap_committed));
 
-		printf("%s%s%s%-20s %-14s %-14s %-14s %-14s%s\n", RESET, BG_WHITE, LIGHT_BLACK,
-			"Area", "Initial", "Committed", "Max", "Used", RESET);
+		printf("%s%s%s%-20s %-14s %-14s %-14s %-14s%s\n",
+			RESET,
+			BG_WHITE,
+			LIGHT_BLACK,
+			"Area",
+			"Initial",
+			"Committed",
+			"Max",
+			"Used",
+			RESET);
 
 		print_mem("Eden", &eden);
 		print_mem("Survivor", &survivor);
@@ -169,8 +208,16 @@ int top_run(options_t *options) {
 
 		if (size > 0) {
 			printf("\n\n");
-			printf("%s%s%s%-40s %-9s %-9s %-9s %-9s%s\n", RESET, BG_WHITE, LIGHT_BLACK,
-				"Name", "Size", "Consumers", "Ack Count", "Exp Count", RESET);
+			printf("%s%s%s%-40s %-9s %-9s %-9s %-9s%s\n",
+				RESET,
+				BG_WHITE,
+				LIGHT_BLACK,
+				"Name",
+				"Size",
+				"Consumers",
+				"Ack Count",
+				"Exp Count",
+				RESET);
 
 			for (uint32_t i = 0; i < size; i++) {
 				const gru_node_t *node = gru_list_get(list->items, i);
@@ -184,8 +231,14 @@ int top_run(options_t *options) {
 		}
 
 		printf("\n\n");
-		printf("%s%s%s%-32s %-9s %-17s %-19s%s", RESET, BG_WHITE, LIGHT_BLACK,
-			bmic_discovery_hint_host(&options->hint), info->name, info->version, "Idle",
+		printf("%s%s%s%-32s %-9s %-17s %-19s%s",
+			RESET,
+			BG_WHITE,
+			LIGHT_BLACK,
+			bmic_discovery_hint_host(&options->hint),
+			info->name,
+			info->version,
+			"Idle",
 			RESET);
 
 		fflush(NULL);
@@ -205,9 +258,15 @@ int top_run(options_t *options) {
 		sleep((uint32_t) options->program.top.interval);
 		printf(CLEAR_LINE);
 
-		printf("%s%s%s%-32s %-9s %-17s %-19s%s", RESET, BG_WHITE, LIGHT_BLACK,
-			bmic_discovery_hint_host(&options->hint), info->name, info->version,
-			"Reading...", RESET);
+		printf("%s%s%s%-32s %-9s %-17s %-19s%s",
+			RESET,
+			BG_WHITE,
+			LIGHT_BLACK,
+			bmic_discovery_hint_host(&options->hint),
+			info->name,
+			info->version,
+			"Reading...",
+			RESET);
 		fflush(NULL);
 	}
 
@@ -235,9 +294,12 @@ int top_main(int argc, char **argv) {
 		static struct option long_options[] = {{"help", no_argument, 0, 'h'},
 			{"username", required_argument, 0, 'u'},
 			{"password", required_argument, 0, 'p'},
-			{"server", required_argument, 0, 's'}, {"port", required_argument, 0, 'P'},
-			{"url", required_argument, 0, 'U'}, {"interval", required_argument, 0, 'i'},
-			{"repeat", required_argument, 0, 'r'}, {0, 0, 0, 0}};
+			{"server", required_argument, 0, 's'},
+			{"port", required_argument, 0, 'P'},
+			{"url", required_argument, 0, 'U'},
+			{"interval", required_argument, 0, 'i'},
+			{"repeat", required_argument, 0, 'r'},
+			{0, 0, 0, 0}};
 
 		int c = getopt_long(argc, argv, "hu:p:s:P:U:i:r:", long_options, &option_index);
 		if (c == -1) {

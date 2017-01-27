@@ -36,7 +36,9 @@ static void print(const void *obj1, void *d2) {
 			break;
 		}
 		case BMIC_BOOLEAN: {
-			logger(DEBUG, "%s (bool): %s", nodeojb->name,
+			logger(DEBUG,
+				"%s (bool): %s",
+				nodeojb->name,
 				(nodeojb->data.value ? "true" : "false"));
 			break;
 		}
@@ -272,8 +274,11 @@ static bool bmic_compare_name(const void *nodedata, const void *data, void *r) {
 	}
 
 	if (nodeobj->name != NULL) {
-		bmic_trace("Comparing %s [%s] %d with %s", nodeobj->name, nodeobj->path,
-			nodeobj->type, (const char *) data);
+		bmic_trace("Comparing %s [%s] %d with %s",
+			nodeobj->name,
+			nodeobj->path,
+			nodeobj->type,
+			(const char *) data);
 		if (strcmp(nodeobj->name, (const char *) data) == 0) {
 			return true;
 		}

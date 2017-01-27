@@ -133,8 +133,9 @@ const char *bmic_discovery_hint_to_url(const bmic_discovery_hint_t *hint,
 		}
 	} else {
 		if (addr_format == NULL) {
-			logger(FATAL, "Unable to format URL based on hint "
-						  "because addressing format is NULL");
+			logger(FATAL,
+				"Unable to format URL based on hint "
+				"because addressing format is NULL");
 
 			return NULL;
 		}

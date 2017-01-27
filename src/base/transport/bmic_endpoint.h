@@ -45,13 +45,11 @@ typedef struct bmic_endpoint_status_t_ {
 } bmic_endpoint_status_t;
 
 static inline bmic_endpoint_status_t bmic_endpoint_status_new(gru_status_t *status) {
-    bmic_endpoint_status_t ret = {
-        .status = status,
-        .epcode = 0,
-        .message = NULL,
-    };
+	bmic_endpoint_status_t ret = {
+		.status = status, .epcode = 0, .message = NULL,
+	};
 
-    return ret;
+	return ret;
 }
 
 bmic_endpoint_t *bmic_endpoint_init(

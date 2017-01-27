@@ -28,8 +28,8 @@
 #include <collection/gru_tree.h>
 
 #include "bmic_cap_value.h"
-#include "bmic_regex.h"
 #include "bmic_debug.h"
+#include "bmic_regex.h"
 
 #define REG_SEARCH_NAME 1
 #define REG_SEARCH_PATH 2
@@ -72,10 +72,10 @@ void bmic_object_set_double(bmic_object_t *obj, double value);
 void bmic_object_set_null(bmic_object_t *obj);
 
 // Hierarchy manipulation
-void bmic_object_add_list_element(bmic_object_t * gru_restrict parent,
-        bmic_object_t * gru_restrict element);
-void bmic_object_add_object(bmic_object_t * gru_restrict parent,
-        bmic_object_t * gru_restrict child);
+void bmic_object_add_list_element(
+	bmic_object_t *gru_restrict parent, bmic_object_t *gru_restrict element);
+void bmic_object_add_object(
+	bmic_object_t *gru_restrict parent, bmic_object_t *gru_restrict child);
 
 // Path searching
 

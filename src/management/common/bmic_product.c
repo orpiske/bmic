@@ -72,11 +72,15 @@ void bmic_product_registry_init(gru_status_t *status) {
 	}
 }
 
-void bmic_product_registry_destroy() { gru_list_destroy(&registry); }
+void bmic_product_registry_destroy() {
+	gru_list_destroy(&registry);
+}
 
 void bmic_product_registry_add(
 	const bmic_api_interface_t *product, gru_status_t *status) {
 	gru_list_append(registry, product);
 }
 
-const gru_list_t *bmic_product_registry() { return (const gru_list_t *) registry; }
+const gru_list_t *bmic_product_registry() {
+	return (const gru_list_t *) registry;
+}

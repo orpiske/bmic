@@ -144,14 +144,22 @@ err_exit:
 
 const bmic_exchange_t *bmic_activemq_attribute_read(bmic_handle_t *handle,
 	const bmic_exchange_t *cap, const char *name, gru_status_t *status) {
-	return bmic_activemq_mi_read(handle, cap->root, name, status, REG_SEARCH_NAME,
+	return bmic_activemq_mi_read(handle,
+		cap->root,
+		name,
+		status,
+		REG_SEARCH_NAME,
 		ACTIVEMQ_CAPABILITIES_KEY_REGEX);
 }
 
 bmic_product_info_t *bmic_activemq_product_info(
 	bmic_handle_t *handle, const bmic_exchange_t *cap, gru_status_t *status) {
-	const bmic_exchange_t *ex = bmic_activemq_mi_read(handle, cap->root, "BrokerVersion",
-		status, REG_SEARCH_NAME, ACTIVEMQ_CAPABILITIES_KEY_REGEX);
+	const bmic_exchange_t *ex = bmic_activemq_mi_read(handle,
+		cap->root,
+		"BrokerVersion",
+		status,
+		REG_SEARCH_NAME,
+		ACTIVEMQ_CAPABILITIES_KEY_REGEX);
 
 	if (ex == NULL) {
 		return NULL;
@@ -200,8 +208,13 @@ const bmic_list_t *bmic_activemq_attribute_list(
 const bmic_exchange_t *bmic_activemq_queue_attribute_read(bmic_handle_t *handle,
 	const bmic_exchange_t *capabilities, const char *name, gru_status_t *status,
 	const char *queue) {
-	return bmic_activemq_mi_read(handle, capabilities->root, name, status,
-		REG_SEARCH_NAME, ACTIVEMQ_QUEUE_CAPABILITES_REGEX, queue);
+	return bmic_activemq_mi_read(handle,
+		capabilities->root,
+		name,
+		status,
+		REG_SEARCH_NAME,
+		ACTIVEMQ_QUEUE_CAPABILITES_REGEX,
+		queue);
 }
 
 const bmic_list_t *bmic_activemq_operation_list(
@@ -302,7 +315,10 @@ static void bmic_activemq_translate_queue_list(const void *nodedata, void *paylo
 			const char *queue_name =
 				bmic_activemq_queue_filter_name(obj->data.str, pl->status);
 
-			logger(INFO, "Processing node %s [%s]: %s", nodeobj->name, nodeobj->path,
+			logger(INFO,
+				"Processing node %s [%s]: %s",
+				nodeobj->name,
+				nodeobj->path,
 				queue_name);
 			gru_list_append(pl->list, queue_name);
 		} else {
@@ -317,9 +333,12 @@ static void bmic_activemq_translate_queue_list(const void *nodedata, void *paylo
 
 const bmic_list_t *bmic_activemq_queue_list(
 	bmic_handle_t *handle, const bmic_exchange_t *cap, gru_status_t *status) {
-	const bmic_exchange_t *attributes =
-		bmic_activemq_mi_read(handle, cap->root, ACTIVEMQ_QUEUE_LIST_ATTR, status,
-			REG_SEARCH_NAME, ACTIVEMQ_CAPABILITIES_KEY_REGEX);
+	const bmic_exchange_t *attributes = bmic_activemq_mi_read(handle,
+		cap->root,
+		ACTIVEMQ_QUEUE_LIST_ATTR,
+		status,
+		REG_SEARCH_NAME,
+		ACTIVEMQ_CAPABILITIES_KEY_REGEX);
 
 	if (attributes == NULL) {
 		return NULL;
@@ -356,8 +375,10 @@ static int64_t bmic_activemq_queue_stat_reader(bmic_handle_t *handle,
 	if (!attribute) {
 		logger(ERROR, "Unavailable response for '%s' queue property", attr_name);
 		if (gru_status_success(status)) {
-			gru_status_set(status, GRU_FAILURE,
-				"Unavailable response for '%s' queue property", attr_name);
+			gru_status_set(status,
+				GRU_FAILURE,
+				"Unavailable response for '%s' queue property",
+				attr_name);
 		}
 
 		return -1;
@@ -414,17 +435,15 @@ bmic_queue_stat_t bmic_activemq_queue_stats(bmic_handle_t *handle,
 	return ret;
 }
 
-
 bool bmic_activemq_queue_purge(bmic_handle_t *handle, const bmic_exchange_t *cap,
-	const char *name, gru_status_t *status)
-{
+	const char *name, gru_status_t *status) {
 	const bmic_object_t *operation = bmic_finder_simple(
 		cap->root, status, REG_SEARCH_NAME, ACTIVEMQ_QUEUE_CAPABILITES_REGEX, name);
 
 	if (operation == NULL) {
 		logger_t logger = gru_logger_get();
 
-		logger(ERROR,  "Queue operation not found for queue %s", name);
+		logger(ERROR, "Queue operation not found for queue %s", name);
 
 		return false;
 	}
@@ -441,17 +460,15 @@ bool bmic_activemq_queue_purge(bmic_handle_t *handle, const bmic_exchange_t *cap
 	return ret;
 }
 
-
 bool bmic_activemq_queue_reset(bmic_handle_t *handle, const bmic_exchange_t *cap,
-	const char *name, gru_status_t *status)
-{
+	const char *name, gru_status_t *status) {
 	const bmic_object_t *operation = bmic_finder_simple(
 		cap->root, status, REG_SEARCH_NAME, ACTIVEMQ_QUEUE_CAPABILITES_REGEX, name);
 
 	if (operation == NULL) {
 		logger_t logger = gru_logger_get();
 
-		logger(ERROR,  "Queue operation not found for queue %s", name);
+		logger(ERROR, "Queue operation not found for queue %s", name);
 
 		return false;
 	}
@@ -470,9 +487,12 @@ bool bmic_activemq_queue_reset(bmic_handle_t *handle, const bmic_exchange_t *cap
 
 const bmic_list_t *bmic_activemq_topic_list(
 	bmic_handle_t *handle, const bmic_exchange_t *cap, gru_status_t *status) {
-	const bmic_exchange_t *attributes =
-		bmic_activemq_mi_read(handle, cap->root, ACTIVEMQ_TOPIC_LIST_ATTR, status,
-			REG_SEARCH_NAME, ACTIVEMQ_CAPABILITIES_KEY_REGEX);
+	const bmic_exchange_t *attributes = bmic_activemq_mi_read(handle,
+		cap->root,
+		ACTIVEMQ_TOPIC_LIST_ATTR,
+		status,
+		REG_SEARCH_NAME,
+		ACTIVEMQ_CAPABILITIES_KEY_REGEX);
 
 	if (attributes == NULL) {
 		return NULL;
@@ -497,7 +517,6 @@ const bmic_list_t *bmic_activemq_topic_list(
 	bmic_exchange_destroy((bmic_exchange_t **) &attributes);
 	return ret;
 }
-
 
 bmic_topic_stat_t bmic_activemq_topic_stats(bmic_handle_t *handle,
 	const bmic_exchange_t *cap, const char *queue, gru_status_t *status) {

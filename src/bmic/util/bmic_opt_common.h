@@ -34,8 +34,8 @@ typedef enum operations_t_ {
 	OP_CREATE,
 	OP_DELETE,
 	OP_STATS,
-        OP_PURGE,
-        OP_RESET,
+	OP_PURGE,
+	OP_RESET,
 } operations_t;
 
 typedef struct credential_options_t_ {
@@ -44,10 +44,10 @@ typedef struct credential_options_t_ {
 } credential_options_t;
 
 struct cap_options_t {
-    char *read;
-    bool list;
-    bool readall;
-    bool show_info;
+	char *read;
+	bool list;
+	bool readall;
+	bool show_info;
 };
 
 struct op_options_t {

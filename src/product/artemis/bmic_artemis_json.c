@@ -95,7 +95,6 @@ void bmic_artemis_json_destroy_queue(
 	json_object_object_add(json->obj, "arguments", arguments);
 }
 
-
 void bmic_artemis_json_purge_queue(const bmic_object_t *op, bmic_json_t *json) {
 	bmic_artemis_json_op_exec(op, json);
 
@@ -110,7 +109,6 @@ void bmic_artemis_json_purge_queue(const bmic_object_t *op, bmic_json_t *json) {
 	json_object_array_add(arguments, arg_name);
 	json_object_object_add(json->obj, "arguments", arguments);
 }
-
 
 void bmic_artemis_json_reset_ack_queue(const bmic_object_t *op, bmic_json_t *json) {
 	bmic_artemis_json_op_exec(op, json);

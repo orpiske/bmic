@@ -16,26 +16,28 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <cli/gru_cli_opt.h>
 #include <common/gru_colors.h>
 #include <common/gru_status.h>
-#include <cli/gru_cli_opt.h>
 
 #include "bmic_capabilities_main.h"
 #include "bmic_discovery_main.h"
 #include "bmic_operations_main.h"
 #include "bmic_queue_main.h"
-#include "bmic_topic_main.h"
 #include "bmic_top_main.h"
-
+#include "bmic_topic_main.h"
 
 void show_help() {
 	gru_cli_general_usage("bmic");
 
 	gru_cli_program_description(
 		"discovery", "Run a discovery on the broker to find its type and version");
-	gru_cli_program_description("capabilities", "Read/write/list broker capabilities and attributes");
-	gru_cli_program_description("queue", "Create/delete/list queues or read queue attributes");
-	gru_cli_program_description("topic", "(EXPERIMENTAL) Create/delete/list topics or read topics attributes");
+	gru_cli_program_description(
+		"capabilities", "Read/write/list broker capabilities and attributes");
+	gru_cli_program_description(
+		"queue", "Create/delete/list queues or read queue attributes");
+	gru_cli_program_description(
+		"topic", "(EXPERIMENTAL) Create/delete/list topics or read topics attributes");
 	gru_cli_program_description("operations", "Execute/list operations on the broker");
 	gru_cli_program_description("top", "A top-like performance monitor for the broker");
 }

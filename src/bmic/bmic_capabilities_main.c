@@ -25,8 +25,11 @@ typedef struct cap_read_wrapper_t_ {
 static void print_cap_info(const bmic_cap_info_t *info) {
 	const char *typename_short = bmic_type_map(info->typename);
 
-	printf("- %-35s %-5s %-15s %s\n", info->name, (info->write ? "rw" : "ro"),
-		typename_short, info->description);
+	printf("- %-35s %-5s %-15s %s\n",
+		info->name,
+		(info->write ? "rw" : "ro"),
+		typename_short,
+		info->description);
 }
 
 static void print_cap(const void *nodedata, void *payload) {
@@ -44,7 +47,8 @@ static void show_help(char **argv) {
 	gru_cli_option_help("url", "U", "management interface URL");
 	gru_cli_option_help(
 		"list", "l", "list available capabilities/attributes from the server");
-	gru_cli_option_help("read=<str>", "r <str>",
+	gru_cli_option_help("read=<str>",
+		"r <str>",
 		"read the capability/attribute named <str> from the server");
 	gru_cli_option_help(
 		"read-all", "R", "read all available capabilities/attributes from the server");
@@ -82,8 +86,11 @@ int capabilities_run(options_t *options) {
 
 	bmic_context_t ctxt = {0};
 
-	bool ret = bmic_context_init_hint(&ctxt, options->hint, options->credentials.username,
-		options->credentials.password, &status);
+	bool ret = bmic_context_init_hint(&ctxt,
+		options->hint,
+		options->credentials.username,
+		options->credentials.password,
+		&status);
 	if (!ret) {
 		fprintf(stderr, "%s\n", status.message);
 		return EXIT_FAILURE;
@@ -120,7 +127,11 @@ int capabilities_run(options_t *options) {
 				wrapper.handle = ctxt.handle;
 				wrapper.status = &status;
 
-				printf("\n%s%s%35s %-25s%s\n", RESET, LIGHT_WHITE, "Capability", "Value",
+				printf("\n%s%s%35s %-25s%s\n",
+					RESET,
+					LIGHT_WHITE,
+					"Capability",
+					"Value",
 					RESET);
 				gru_list_for_each(list->items, capabilities_read, &wrapper);
 
@@ -132,12 +143,20 @@ int capabilities_run(options_t *options) {
 				ctxt.handle, cap, options->program.capabilities.read, &status);
 
 			if (obj) {
-				printf("\n%s%s%35s %-25s%s\n", RESET, LIGHT_WHITE, "Capability", "Value",
+				printf("\n%s%s%35s %-25s%s\n",
+					RESET,
+					LIGHT_WHITE,
+					"Capability",
+					"Value",
 					RESET);
 				print_returned_object(options->program.capabilities.read, obj->data_ptr);
 			} else {
-				printf("%35s %s%s%s%s\n", options->program.capabilities.read, RESET, RED,
-					"Unable to read", RESET);
+				printf("%35s %s%s%s%s\n",
+					options->program.capabilities.read,
+					RESET,
+					RED,
+					"Unable to read",
+					RESET);
 			}
 			bmic_exchange_destroy((bmic_exchange_t **) &obj);
 		}
@@ -165,10 +184,14 @@ int capabilities_main(int argc, char **argv) {
 		static struct option long_options[] = {{"help", no_argument, 0, 'h'},
 			{"username", required_argument, 0, 'u'},
 			{"password", required_argument, 0, 'p'},
-			{"server", required_argument, 0, 's'}, {"port", required_argument, 0, 'P'},
-			{"url", required_argument, 0, 'U'}, {"list", no_argument, 0, 'l'},
-			{"read", required_argument, 0, 'r'}, {"read-all", no_argument, 0, 'R'},
-			{"info", no_argument, 0, 'I'}, {0, 0, 0, 0}};
+			{"server", required_argument, 0, 's'},
+			{"port", required_argument, 0, 'P'},
+			{"url", required_argument, 0, 'U'},
+			{"list", no_argument, 0, 'l'},
+			{"read", required_argument, 0, 'r'},
+			{"read-all", no_argument, 0, 'R'},
+			{"info", no_argument, 0, 'I'},
+			{0, 0, 0, 0}};
 
 		int c =
 			getopt_long(argc, argv, "hu:p:l:s:P:U:lr:RI", long_options, &option_index);

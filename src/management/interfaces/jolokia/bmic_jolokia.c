@@ -58,8 +58,10 @@ const bmic_cap_info_t *bmic_jolokia_read_attr_info(
 	const bmic_object_t *value_attributes = bmic_object_find_by_path(capabilities, rev);
 	gru_dealloc_string((char **) &rev);
 	if (!value_attributes) {
-		gru_status_set(status, GRU_FAILURE,
-			"Unable to find a capability/attribute named %s", attr_name);
+		gru_status_set(status,
+			GRU_FAILURE,
+			"Unable to find a capability/attribute named %s",
+			attr_name);
 
 		return NULL;
 	}
@@ -71,8 +73,10 @@ const bmic_cap_info_t *bmic_jolokia_read_attr_info(
 	 */
 	bmic_cap_info_t *info = bmic_cap_info_new(status);
 	if (!info) {
-		gru_status_set(status, GRU_FAILURE,
-			"Unable to allocate memory for the capability metadata", attr_name);
+		gru_status_set(status,
+			GRU_FAILURE,
+			"Unable to allocate memory for the capability metadata",
+			attr_name);
 
 		return NULL;
 	}
@@ -206,10 +210,15 @@ bool bmic_jolokia_translate_status(const bmic_object_t *root, gru_status_t *stat
 			const bmic_object_t *error =
 				bmic_object_find_child_by_name(root, JOLOKIA_OBJ_ERROR_NAME);
 			if (error && error->type == BMIC_STRING) {
-				gru_status_set(status, GRU_FAILURE, "Error %d: %s",
-					response_status->data.number, error->data.str);
+				gru_status_set(status,
+					GRU_FAILURE,
+					"Error %d: %s",
+					response_status->data.number,
+					error->data.str);
 			} else {
-				gru_status_set(status, GRU_FAILURE, "Unknown error: %d",
+				gru_status_set(status,
+					GRU_FAILURE,
+					"Unknown error: %d",
 					response_status->data.number);
 			}
 		}

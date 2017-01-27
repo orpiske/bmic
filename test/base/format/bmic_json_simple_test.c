@@ -83,8 +83,10 @@ int main(int argc, char **argv) {
 	printf("Node found: %s [%s]\n", name1->name, name1->path);
 
 	if (strcmp(name1->data.str, "maximumMessages") != 0) {
-		fprintf(stderr, "The node data is not the expected value: %s != %s\n",
-			name1->data.str, "maximumMessages");
+		fprintf(stderr,
+			"The node data is not the expected value: %s != %s\n",
+			name1->data.str,
+			"maximumMessages");
 
 		bmic_object_destroy(&root);
 		goto err_exit;

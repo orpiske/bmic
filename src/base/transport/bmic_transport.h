@@ -34,8 +34,8 @@ typedef void (*bmic_transport_read)(const bmic_endpoint_t *ep, const bmic_data_t
 /**
  * Writer function for the transport
  */
-typedef void (*bmic_transport_write)(const bmic_endpoint_t *ep, const bmic_data_t *request,
-	bmic_data_t *reply, bmic_endpoint_status_t *status);
+typedef void (*bmic_transport_write)(const bmic_endpoint_t *ep,
+	const bmic_data_t *request, bmic_data_t *reply, bmic_endpoint_status_t *status);
 
 typedef struct bmic_transport_t_ {
 	bmic_transport_read read;

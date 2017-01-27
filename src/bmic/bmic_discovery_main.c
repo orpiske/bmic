@@ -30,8 +30,11 @@ int discovery_run(options_t *options) {
 
 	bmic_context_t ctxt = {0};
 
-	bool ret = bmic_context_init_hint(&ctxt, options->hint, options->credentials.username,
-		options->credentials.password, &status);
+	bool ret = bmic_context_init_hint(&ctxt,
+		options->hint,
+		options->credentials.username,
+		options->credentials.password,
+		&status);
 
 	if (!ret) {
 		fprintf(stderr, "%s\n", status.message);
@@ -70,8 +73,10 @@ int discovery_main(int argc, char **argv) {
 		static struct option long_options[] = {{"help", no_argument, 0, 'h'},
 			{"username", required_argument, 0, 'u'},
 			{"password", required_argument, 0, 'p'},
-			{"server", required_argument, 0, 's'}, {"port", required_argument, 0, 'P'},
-			{"url", required_argument, 0, 'U'}, {0, 0, 0, 0}};
+			{"server", required_argument, 0, 's'},
+			{"port", required_argument, 0, 'P'},
+			{"url", required_argument, 0, 'U'},
+			{0, 0, 0, 0}};
 
 		int c = getopt_long(argc, argv, "hu:p:s:P:U:", long_options, &option_index);
 		if (c == -1) {

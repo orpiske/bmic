@@ -21,7 +21,9 @@ typedef struct bmic_reply_data_t_ {
 	gru_status_t *status;
 } bmic_reply_data_t;
 
-static inline CURL *bmic_curl_easy(bmic_endpoint_t *ep) { return (CURL *) ep->handle; }
+static inline CURL *bmic_curl_easy(bmic_endpoint_t *ep) {
+	return (CURL *) ep->handle;
+}
 
 static inline CURL *bmic_curl_easy_const(const bmic_endpoint_t *ep) {
 	return (CURL *) ep->handle;
@@ -62,16 +64,14 @@ void bmic_endpoint_http_begin(bmic_endpoint_t *ep, gru_status_t *status) {
 
 		if (strstr(ep->url, "https")) {
 			curl_global_init(CURL_GLOBAL_DEFAULT);
-		}
-		else  {
+		} else {
 			curl_global_init(CURL_GLOBAL_NOTHING);
 		}
 
 		initialized = true;
 
 		atexit(curl_global_cleanup);
-	}
-	else {
+	} else {
 		logger(DEBUG, "Curl global data already initialized ... skipping");
 	}
 
@@ -121,7 +121,9 @@ static char *bmic_endpoint_http_path_join(
 	return full_url;
 }
 
-static void bmic_endpoint_http_path_cleanup(char **path) { gru_dealloc_string(path); }
+static void bmic_endpoint_http_path_cleanup(char **path) {
+	gru_dealloc_string(path);
+}
 
 void bmic_endpoint_http_read(const bmic_endpoint_t *ep, const bmic_data_t *request,
 	bmic_data_t *reply, bmic_endpoint_status_t *epstatus) {
@@ -163,13 +165,17 @@ void bmic_endpoint_http_read(const bmic_endpoint_t *ep, const bmic_data_t *reque
 	bmic_endpoint_http_path_cleanup(&full_path);
 
 	if (rcode != CURLE_OK) {
-		gru_status_set(epstatus->status, GRU_FAILURE,
-			"Error while trying to read data: %s", curl_easy_strerror(rcode));
+		gru_status_set(epstatus->status,
+			GRU_FAILURE,
+			"Error while trying to read data: %s",
+			curl_easy_strerror(rcode));
 	} else {
 		curl_easy_getinfo(easy, CURLINFO_RESPONSE_CODE, &epstatus->epcode);
 		if (epstatus->epcode != HTTP_STATUS_OK) {
-			gru_status_set(epstatus->status, GRU_FAILURE,
-				"Unacceptable response from server (HTTP status %ld)", epstatus->epcode);
+			gru_status_set(epstatus->status,
+				GRU_FAILURE,
+				"Unacceptable response from server (HTTP status %ld)",
+				epstatus->epcode);
 		}
 
 		logger(DEBUG, "HTTP response code %d", epstatus->epcode);
@@ -188,7 +194,7 @@ void bmic_endpoint_http_write(const bmic_endpoint_t *ep, const bmic_data_t *requ
 
 	CURL *easy = bmic_curl_easy_const(ep);
 	curl_easy_reset(easy);
-	
+
 	char *full_path = bmic_endpoint_http_path_join(ep, easy, epstatus->status);
 	logger_t logger = gru_logger_get();
 
@@ -235,13 +241,17 @@ void bmic_endpoint_http_write(const bmic_endpoint_t *ep, const bmic_data_t *requ
 	curl_slist_free_all(headers);
 
 	if (rcode != CURLE_OK) {
-		gru_status_set(epstatus->status, GRU_FAILURE,
-			"Error while trying to write data: %s", curl_easy_strerror(rcode));
+		gru_status_set(epstatus->status,
+			GRU_FAILURE,
+			"Error while trying to write data: %s",
+			curl_easy_strerror(rcode));
 	} else {
 		curl_easy_getinfo(easy, CURLINFO_RESPONSE_CODE, &epstatus->epcode);
 		if (epstatus->epcode != HTTP_STATUS_OK) {
-			gru_status_set(epstatus->status, GRU_FAILURE,
-				"Unacceptable response from server (HTTP status %ld)", epstatus->epcode);
+			gru_status_set(epstatus->status,
+				GRU_FAILURE,
+				"Unacceptable response from server (HTTP status %ld)",
+				epstatus->epcode);
 		}
 
 		logger(DEBUG, "HTTP response code %d", epstatus->epcode);

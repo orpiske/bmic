@@ -30,4 +30,3 @@ int topic_main(int argc, char **argv);
 #endif
 
 #endif /* BMIC_TOPIC_MAIN_H */
-

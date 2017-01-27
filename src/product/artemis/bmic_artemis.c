@@ -109,8 +109,12 @@ void bmic_artemis_cleanup(bmic_handle_t **handle) {
 
 bmic_product_info_t *bmic_artemis_product_info(
 	bmic_handle_t *handle, const bmic_exchange_t *cap, gru_status_t *status) {
-	const bmic_exchange_t *ex = bmic_artemis_mi_read(handle, cap->root, "Version", status,
-		REG_SEARCH_NAME, ARTEMIS_CAPABILITIES_KEY_REGEX);
+	const bmic_exchange_t *ex = bmic_artemis_mi_read(handle,
+		cap->root,
+		"Version",
+		status,
+		REG_SEARCH_NAME,
+		ARTEMIS_CAPABILITIES_KEY_REGEX);
 
 	if (ex == NULL) {
 		return NULL;
@@ -233,8 +237,13 @@ const bmic_exchange_t *bmic_artemis_queue_attribute_read(bmic_handle_t *handle,
 		return NULL;
 	}
 
-	return bmic_artemis_mi_read(handle, capabilities->root, name, status, REG_SEARCH_NAME,
-		ARTEMIS_QUEUE_CAPABILITES_REGEX, queue);
+	return bmic_artemis_mi_read(handle,
+		capabilities->root,
+		name,
+		status,
+		REG_SEARCH_NAME,
+		ARTEMIS_QUEUE_CAPABILITES_REGEX,
+		queue);
 }
 
 static void bmic_artemis_translate_queue_list(const void *nodedata, void *payload) {
@@ -257,8 +266,12 @@ static void bmic_artemis_translate_queue_list(const void *nodedata, void *payloa
 
 const bmic_list_t *bmic_artemis_queue_list(
 	bmic_handle_t *handle, const bmic_exchange_t *cap, gru_status_t *status) {
-	const bmic_exchange_t *attributes = bmic_artemis_mi_read(handle, cap->root,
-		ARTEMIS_QUEUE_LIST_ATTR, status, REG_SEARCH_NAME, ARTEMIS_CAPABILITIES_KEY_REGEX);
+	const bmic_exchange_t *attributes = bmic_artemis_mi_read(handle,
+		cap->root,
+		ARTEMIS_QUEUE_LIST_ATTR,
+		status,
+		REG_SEARCH_NAME,
+		ARTEMIS_CAPABILITIES_KEY_REGEX);
 
 	if (attributes == NULL) {
 		return NULL;
@@ -320,8 +333,6 @@ bool bmic_artemis_queue_create(bmic_handle_t *handle, const bmic_exchange_t *cap
 	const bmic_object_t *attributes = bmic_object_find_regex(
 		cap->root, ARTEMIS_CORE_BROKER_OPERATIONS_ROOT, REG_SEARCH_NAME);
 
-
-
 	if (attributes == NULL) {
 		gru_status_set(status, GRU_FAILURE, "Attribute not found");
 
@@ -379,12 +390,16 @@ static int64_t bmic_artemis_queue_stat_reader(bmic_handle_t *handle,
 
 	logger_t logger = gru_logger_get();
 	if (!attribute) {
-		logger(ERROR, "Unavailable response for '%s' queue property for queue '%s'",
-			attr_name, queue);
+		logger(ERROR,
+			"Unavailable response for '%s' queue property for queue '%s'",
+			attr_name,
+			queue);
 
 		if (gru_status_success(status)) {
-			gru_status_set(status, GRU_FAILURE,
-				"Unavailable response for '%s' queue property for queue '%s'", attr_name,
+			gru_status_set(status,
+				GRU_FAILURE,
+				"Unavailable response for '%s' queue property for queue '%s'",
+				attr_name,
 				queue);
 		}
 
@@ -395,11 +410,15 @@ static int64_t bmic_artemis_queue_stat_reader(bmic_handle_t *handle,
 	if (attribute->data_ptr && attribute->data_ptr->type == BMIC_INTEGER) {
 		ret = attribute->data_ptr->data.number;
 	} else {
-		logger(ERROR, "Invalid data pointer for the '%s' property for queue '%s'",
-			attr_name, queue);
+		logger(ERROR,
+			"Invalid data pointer for the '%s' property for queue '%s'",
+			attr_name,
+			queue);
 
-		gru_status_set(status, GRU_FAILURE,
-			"Invalid data pointer for the '%s' property for queue '%s'", attr_name,
+		gru_status_set(status,
+			GRU_FAILURE,
+			"Invalid data pointer for the '%s' property for queue '%s'",
+			attr_name,
 			queue);
 	}
 
@@ -452,10 +471,8 @@ bmic_queue_stat_t bmic_artemis_queue_stats(bmic_handle_t *handle,
 	return ret;
 }
 
-
 bool bmic_artemis_queue_purge(bmic_handle_t *handle, const bmic_exchange_t *cap,
-	const char *name, gru_status_t *status)
-{
+	const char *name, gru_status_t *status) {
 	if (!bmic_artemis_valid_name(name)) {
 		gru_status_set(status, GRU_FAILURE, "The queue name %s is invalid", name);
 
@@ -468,7 +485,7 @@ bool bmic_artemis_queue_purge(bmic_handle_t *handle, const bmic_exchange_t *cap,
 	if (operation == NULL) {
 		logger_t logger = gru_logger_get();
 
-		logger(ERROR,  "Queue operation not found for queue %s", name);
+		logger(ERROR, "Queue operation not found for queue %s", name);
 
 		return false;
 	}
@@ -485,9 +502,8 @@ bool bmic_artemis_queue_purge(bmic_handle_t *handle, const bmic_exchange_t *cap,
 	return ret;
 }
 
-static bool bmic_artemis_queue_reset_ack(bmic_handle_t *handle,
-				const bmic_object_t *operation, gru_status_t *status)
-{
+static bool bmic_artemis_queue_reset_ack(
+	bmic_handle_t *handle, const bmic_object_t *operation, gru_status_t *status) {
 	bmic_json_t json = bmic_json_new(status);
 	if (gru_status_error(status)) {
 		return false;
@@ -500,9 +516,8 @@ static bool bmic_artemis_queue_reset_ack(bmic_handle_t *handle,
 	return ret;
 }
 
-static bool bmic_artemis_queue_reset_exp(bmic_handle_t *handle,
-				const bmic_object_t *operation, gru_status_t *status)
-{
+static bool bmic_artemis_queue_reset_exp(
+	bmic_handle_t *handle, const bmic_object_t *operation, gru_status_t *status) {
 	bmic_json_t json = bmic_json_new(status);
 	if (gru_status_error(status)) {
 		return false;
@@ -516,14 +531,12 @@ static bool bmic_artemis_queue_reset_exp(bmic_handle_t *handle,
 }
 
 bool bmic_artemis_queue_reset(bmic_handle_t *handle, const bmic_exchange_t *cap,
-	const char *name, gru_status_t *status)
-{
+	const char *name, gru_status_t *status) {
 	if (!bmic_artemis_valid_name(name)) {
 		gru_status_set(status, GRU_FAILURE, "The queue name %s is invalid", name);
 
 		return false;
 	}
-
 
 	const bmic_object_t *operation = bmic_finder_simple(
 		cap->root, status, REG_SEARCH_NAME, ARTEMIS_QUEUE_CAPABILITES_REGEX, name);
@@ -531,7 +544,7 @@ bool bmic_artemis_queue_reset(bmic_handle_t *handle, const bmic_exchange_t *cap,
 	if (operation == NULL) {
 		logger_t logger = gru_logger_get();
 
-		logger(ERROR,  "Queue operation not found for queue %s", name);
+		logger(ERROR, "Queue operation not found for queue %s", name);
 
 		return false;
 	}
@@ -543,8 +556,6 @@ bool bmic_artemis_queue_reset(bmic_handle_t *handle, const bmic_exchange_t *cap,
 
 	return ret;
 }
-
-
 
 bmic_topic_stat_t bmic_artemis_topic_stats(bmic_handle_t *handle,
 	const bmic_exchange_t *cap, const char *queue, gru_status_t *status) {

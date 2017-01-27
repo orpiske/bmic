@@ -45,8 +45,7 @@ const bmic_object_t *bmic_finder_varg(const bmic_object_t *root, const char *reg
 }
 
 const bmic_object_t *bmic_finder_simple(const bmic_object_t *root, gru_status_t *status,
-										int flags, const char *regex_fmt, ...)
-{
+	int flags, const char *regex_fmt, ...) {
 	va_list ap;
 	va_start(ap, regex_fmt);
 

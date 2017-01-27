@@ -28,18 +28,18 @@
 extern "C" {
 #endif
 
-#if defined(BMIC_DEBUG) && BMIC_DEBUG >=2
- #define bmic_trace(message, ...) { logger_t btlogger = gru_logger_get(); btlogger(TRACE, message, __VA_ARGS__) }
+#if defined(BMIC_DEBUG) && BMIC_DEBUG >= 2
+#define bmic_trace(message, ...)                                                         \
+	{                                                                                    \
+		logger_t btlogger = gru_logger_get();                                            \
+		btlogger(TRACE, message, __VA_ARGS__)                                            \
+	}
 #else
- #define bmic_trace(level, message, ...)
+#define bmic_trace(level, message, ...)
 #endif
-
-
-
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* BMIC_DEBUG_H */
-

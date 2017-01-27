@@ -24,7 +24,10 @@ static void print_op_arguments(const void *nodedata, void *p) {
 	if (strncmp(arg->type, "void", 4) == 0) {
 		printf("%-2s %-35s (void) %s\n", " ", arg->name, arg->description);
 	} else {
-		printf("%-2s %10s %-35s %s \n", " ", bmic_type_map(arg->type), arg->name,
+		printf("%-2s %10s %-35s %s \n",
+			" ",
+			bmic_type_map(arg->type),
+			arg->name,
 			arg->description);
 	}
 }
@@ -36,8 +39,14 @@ static void print_op_signature(const void *nodedata, void *p) {
 	printf("\n%s%sDescription: %s%s\n", RESET, LIGHT_WHITE, RESET, sig->description);
 	printf("%s %s()\n", bmic_type_map(sig->ret), info->name);
 
-	printf("%s%s%-2s %10s %-35s %s%s\n", RESET, LIGHT_WHITE, " ", "Type",
-		"Parameter name", "Description", RESET);
+	printf("%s%s%-2s %10s %-35s %s%s\n",
+		RESET,
+		LIGHT_WHITE,
+		" ",
+		"Type",
+		"Parameter name",
+		"Description",
+		RESET);
 	gru_list_for_each(sig->args, print_op_arguments, NULL);
 }
 
@@ -76,8 +85,11 @@ int operations_run(options_t *options) {
 
 	bmic_context_t ctxt = {0};
 
-	bool ret = bmic_context_init_hint(&ctxt, options->hint, options->credentials.username,
-		options->credentials.password, &status);
+	bool ret = bmic_context_init_hint(&ctxt,
+		options->hint,
+		options->credentials.username,
+		options->credentials.password,
+		&status);
 	if (!ret) {
 		fprintf(stderr, "%s\n", status.message);
 		return EXIT_FAILURE;
@@ -142,9 +154,12 @@ int operations_main(int argc, char **argv) {
 		static struct option long_options[] = {{"help", optional_argument, 0, 'h'},
 			{"username", required_argument, 0, 'u'},
 			{"password", required_argument, 0, 'p'},
-			{"server", required_argument, 0, 's'}, {"port", required_argument, 0, 'P'},
-			{"url", required_argument, 0, 'U'}, {"list", no_argument, 0, 'l'},
-			{"info", no_argument, 0, 'I'}, {0, 0, 0, 0}};
+			{"server", required_argument, 0, 's'},
+			{"port", required_argument, 0, 'P'},
+			{"url", required_argument, 0, 'U'},
+			{"list", no_argument, 0, 'l'},
+			{"info", no_argument, 0, 'I'},
+			{0, 0, 0, 0}};
 
 		int c = getopt_long(argc, argv, "h:u:p:s:P:U:l:I", long_options, &option_index);
 		if (c == -1) {

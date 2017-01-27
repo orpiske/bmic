@@ -315,8 +315,10 @@ bmic_java_os_info_t bmic_java_read_os_info(bmic_handle_t *handle, gru_status_t *
 		goto exit;
 	}
 
-	ret.swap_committed = bmic_java_get_number(runtime, "total committed swap memory",
-		"/value/CommittedVirtualMemorySize", status);
+	ret.swap_committed = bmic_java_get_number(runtime,
+		"total committed swap memory",
+		"/value/CommittedVirtualMemorySize",
+		status);
 	if (gru_status_error(status)) {
 		goto exit;
 	}
