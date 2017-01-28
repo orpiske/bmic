@@ -25,7 +25,7 @@ target_link_libraries(
 
 install(
 	DIRECTORY base/common base/format base/transport
-	DESTINATION include/${PROJECT_NAME}-${BMIC_VERSION_MAJOR}/base
+	DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}-${BMIC_VERSION_MAJOR}/base
 	FILES_MATCHING PATTERN "*.h"
 )
 
@@ -49,13 +49,13 @@ target_link_libraries(
 
 install(
 	DIRECTORY management/common management/discovery
-	DESTINATION include/${PROJECT_NAME}-${BMIC_VERSION_MAJOR}/management
+	DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}-${BMIC_VERSION_MAJOR}/management
 	FILES_MATCHING PATTERN "*.h"
 )
 
 install(
 	DIRECTORY management/interfaces/jolokia
-	DESTINATION include/${PROJECT_NAME}-${BMIC_VERSION_MAJOR}/management/interfaces
+	DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}-${BMIC_VERSION_MAJOR}/management/interfaces
 	FILES_MATCHING PATTERN "*.h"
 )
 
@@ -84,19 +84,19 @@ target_link_libraries(
 
 install(
 	DIRECTORY product/common product/activemq product/artemis product/complements/java
-	DESTINATION include/${PROJECT_NAME}-${BMIC_VERSION_MAJOR}/product
+	DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}-${BMIC_VERSION_MAJOR}/product
 	FILES_MATCHING PATTERN "*.h"
 )
 
 install(
 	DIRECTORY context product
-	DESTINATION include/${PROJECT_NAME}-${BMIC_VERSION_MAJOR}
+	DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}-${BMIC_VERSION_MAJOR}
 	FILES_MATCHING PATTERN "*.h"
 )
 
 install(
 	TARGETS bmic-base-${BMIC_VERSION_MAJOR} bmic-management-${BMIC_VERSION_MAJOR} bmic-product-${BMIC_VERSION_MAJOR}
-	LIBRARY DESTINATION ${CPP_LIBRARY_DIR}
+	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
 add_executable(
@@ -123,5 +123,5 @@ target_link_libraries(
 
 install(
 	TARGETS bmic
-	RUNTIME DESTINATION ${RUNTIME_DIR}
+	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )

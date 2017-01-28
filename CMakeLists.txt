@@ -8,6 +8,7 @@ set(BMIC_VERSION_PATCH 1)
 
 add_definitions(-DPROJECT_NAME="${PROJECT_NAME}" -DBMIC_VERSION="${BMIC_VERSION}")
 
+include(GNUInstallDirs)
 include(CheckLists.cmake)
 include(CMakeLists.default.cmake)
 

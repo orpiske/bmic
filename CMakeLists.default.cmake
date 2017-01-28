@@ -7,10 +7,6 @@ configure_file(
 add_custom_target(uninstall
     COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/dist/cmake_uninstall.cmake)
 
-set(RUNTIME_DIR "bin")
-set(CPP_INCLUDE_DIR "include")
-set(SHARED_DIR "share")
-
 if (CMAKE_COMPILER_IS_GNUCXX)
 	if (BUILD_WITH_EXTRA_DEBUG)
 			set(BMIC_DEBUG_DEFINES "-DBMIC_DEBUG=2")
