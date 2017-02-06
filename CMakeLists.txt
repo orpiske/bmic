@@ -26,7 +26,7 @@ else (UNIX)
 	endif (WIN32)
 endif(UNIX)
 
-include_directories(${GRU_INCLUDE_DIR} ${JSON_INCLUDE_DIR})
+include_directories(${GRU_INCLUDE_DIR} ${JSON_INCLUDE_DIR} ${CURL_INCLUDE_DIR})
 link_libraries(${GRU_LIB})
 
 include_directories(src)
