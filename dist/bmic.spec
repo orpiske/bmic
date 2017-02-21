@@ -12,7 +12,8 @@ URL:                https://github.com/orpiske/bmic
 BuildRequires:      cmake
 BuildRequires:      make
 BuildRequires:      gcc
-BuildRequires:      json-c
+BuildRequires:      json-c-devel
+BuildRequires:      curl-devel
 
 
 %description
@@ -23,6 +24,8 @@ ActiveMQ and Artemis
 %package devel
 Summary:            Broker Management Interface Client (BMIC) development kit
 Requires:           gcc
+Requires:           json-c-devel
+Requires:           curl-devel
 Group:              Development/Libraries
 
 %description devel
