@@ -14,6 +14,7 @@ include(CMakeLists.default.cmake)
 
 set(BUILD_WITH_UNIT_TESTS ON CACHE BOOL "Build unit tests")
 set(BUILD_WITH_EXTRA_DEBUG OFF CACHE BOOL "Build extra debug information")
+set(BUILD_WITH_DOCUMENTATION OFF CACHE BOOL "Build documentation")
 set(GRU_DIR "/usr" CACHE STRING "GRU directory")
 
 if (UNIX)
@@ -43,3 +44,12 @@ add_custom_target(format
 	COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/util/format.sh
 	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
+
+if (BUILD_WITH_DOCUMENTATION)
+	add_custom_target(documentation
+		COMMAND ${CMAKE_COMMAND} -P ../documentation.cmake)
+	install(
+		DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/target/share/doc 
+		DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}-${BMIC_VERSION_MAJOR}
+	)
+endif(BUILD_WITH_DOCUMENTATION)

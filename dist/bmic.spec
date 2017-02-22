@@ -40,7 +40,7 @@ Development packages for the BMIC
 
 %build
 mkdir build && cd build
-cmake -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=%{buildroot}/usr ..
+cmake -DCMAKE_BUILD_TYPE=RELEASE -DBUILD_WITH_DOCUMENTATION=ON -DCMAKE_INSTALL_PREFIX=%{buildroot}/usr ..
 make
 
 %install
