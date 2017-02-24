@@ -14,6 +14,7 @@ BuildRequires:      make
 BuildRequires:      gcc
 BuildRequires:      json-c-devel
 BuildRequires:      curl-devel
+BuildRequires:      gru
 BuildRequires:      gru-devel
 Requires:           json-c
 Requires:           curl
