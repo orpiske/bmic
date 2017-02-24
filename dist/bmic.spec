@@ -59,8 +59,5 @@ make install
 
 
 %changelog
-* Tue Nov 04 2016 Otavio R. Piske <angusyoung@gmail.com> - 20161104
-- Changed non-write interfaces of the list to use a const pointer
-
-* Tue Sep 07 2016 Otavio R. Piske <angusyoung@gmail.com> - 20160907
+* Fri Feb 24 2017 Otavio R. Piske <angusyoung@gmail.com> - 20170224
 - Initial release
