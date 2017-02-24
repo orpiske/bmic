@@ -27,9 +27,10 @@ ActiveMQ and Artemis
 
 %package devel
 Summary:            Broker Management Interface Client (BMIC) development kit
-Requires:           gcc
 Requires:           json-c-devel
 Requires:           curl-devel
+Requires:           gru-devel
+Requires:           bmic
 Group:              Development/Libraries
 
 %description devel
