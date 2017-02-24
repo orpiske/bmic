@@ -51,6 +51,7 @@ make install
 
 %files
 %doc AUTHORS README.md LICENSE COPYING
+%{_bindir}/*
 %{_libdir}/*
 
 
