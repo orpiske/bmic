@@ -3,7 +3,7 @@
 
 Summary:            Broker Management Interface Client (BMIC)
 Name:               bmic
-Version:            0.0.1
+Version:            0.0.2
 Release:            1%{?dist}
 License:            Apache-2.0
 Group:              Development/Tools
