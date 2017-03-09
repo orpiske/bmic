@@ -41,15 +41,14 @@ static void show_help(char **argv) {
 	gru_cli_program_usage("bmic", argv[0]);
 
 	gru_cli_option_help("help", "h", "show this help");
-	gru_cli_option_help("username", "u", "username to access the management console");
-	gru_cli_option_help("password", "p", "password to access the management console");
-	gru_cli_option_help("server", "s", "server hostname or IP address");
-	gru_cli_option_help("url", "U", "management interface URL");
+	gru_cli_option_help("username [username]", "u [username]", "username to access the management console");
+	gru_cli_option_help("password [password]", "p [password]", "password to access the management console");
+	gru_cli_option_help("server [server]", "s [server]", "server hostname or IP address");
+	gru_cli_option_help("url [url]", "U [url]", "management interface URL");
 	gru_cli_option_help(
 		"list", "l", "list available capabilities/attributes from the server");
-	gru_cli_option_help("read=<str>",
-		"r <str>",
-		"read the capability/attribute named <str> from the server");
+	gru_cli_option_help("read [str]", "r [str]",
+		"read the capability/attribute named [str] from the server");
 	gru_cli_option_help(
 		"read-all", "R", "read all available capabilities/attributes from the server");
 	gru_cli_option_help("info", "I", "show server information during start-up");
