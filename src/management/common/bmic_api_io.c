@@ -19,6 +19,7 @@ void bmic_api_io_read(
 	bmic_handle_t *handle, const char *path, bmic_data_t *reply, gru_status_t *status) {
 	bmic_endpoint_status_t epstatus = bmic_endpoint_status_new(status);
 
+	gru_status_reset(status);
 	bmic_endpoint_set_path(handle->ep, path, status);
 	if (gru_status_error(status)) {
 		return;

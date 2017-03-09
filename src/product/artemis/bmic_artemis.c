@@ -138,6 +138,36 @@ bmic_product_info_t *bmic_artemis_product_info(
 	return NULL;
 }
 
+const bmic_object_t *bmic_artemis_try_load(const bmic_object_t *root) {
+	const bmic_object_t *ret = NULL;
+	logger_t logger = gru_logger_get();
+
+	logger(DEBUG, "Trying to load legacy capabilities (version < 1.5.0)");
+	ret = bmic_object_find_regex(root, ARTEMIS_CAPABILITIES_KEY_REGEX, REG_SEARCH_NAME);
+	if (ret) {
+		return ret;
+	}
+	logger(DEBUG, "Legacy Artemis capabilities not found");
+	
+	logger(DEBUG, "Trying to load 1.5.x capabilities");
+	ret = bmic_object_find_regex(root, ARTEMIS_CAPABILITIES_KEY_V15_REGEX, 
+		REG_SEARCH_NAME);
+	if (ret) {
+		return ret;
+	}
+	logger(DEBUG, "Artemis 1.5.x capabilities not found");
+
+	logger(DEBUG, "Trying to load 2.0.x capabilities");
+	ret = bmic_object_find_regex(root, ARTEMIS_CAPABILITIES_KEY_V20_REGEX, 
+		REG_SEARCH_NAME);
+	if (ret) {
+		return ret;
+	}
+
+	logger(DEBUG, "Artemis 2.0.x capabilities not found");
+	return ret;
+}
+
 const bmic_exchange_t *bmic_artemis_load_capabilities(
 	bmic_handle_t *handle, gru_status_t *status) {
 	logger_t logger = gru_logger_get();
@@ -160,28 +190,21 @@ const bmic_exchange_t *bmic_artemis_load_capabilities(
 	if (!root) {
 		goto err_exit;
 	}
+	
 
-	const bmic_object_t *capabilities =
-		bmic_object_find_regex(root, ARTEMIS_CAPABILITIES_KEY_REGEX, REG_SEARCH_NAME);
+	const bmic_object_t *capabilities = bmic_artemis_try_load(root);
 
 	if (!capabilities) {
-		logger(DEBUG, "Capabilities not found, trying new path");
-		// ... successful response (200) but no capabilities. Likely to be using the new
-		// path for attributes.
-		capabilities = bmic_object_find_regex(
-			root, ARTEMIS_CAPABILITIES_KEY_NEW_REGEX, REG_SEARCH_NAME);
+		logger(DEBUG, "Capabilities not found");
+		gru_status_set(status, GRU_FAILURE, "Capabilities not found");
+		
+		bmic_object_destroy(&root);
 
-		if (!capabilities) {
-			logger(DEBUG, "Capabilities not found in the newer path");
-
-			gru_status_set(status, GRU_FAILURE, "Capabilities not found");
-			bmic_object_destroy(&root);
-
-			goto err_exit;
-		} else {
-			logger(DEBUG, "Successfully loaded capabilities from the newer path");
-		}
-	}
+		goto err_exit;
+	} 
+	
+	logger(DEBUG, "Successfully loaded capabilities");
+	
 	bmic_data_release(&reply);
 
 	ret->root = root;
@@ -237,13 +260,17 @@ const bmic_exchange_t *bmic_artemis_queue_attribute_read(bmic_handle_t *handle,
 		return NULL;
 	}
 
-	return bmic_artemis_mi_read(handle,
-		capabilities->root,
-		name,
-		status,
-		REG_SEARCH_NAME,
-		ARTEMIS_QUEUE_CAPABILITES_REGEX,
-		queue);
+
+	const bmic_exchange_t *ret = bmic_artemis_mi_read(handle,
+		capabilities->root, name, status, REG_SEARCH_NAME,
+		ARTEMIS_QUEUE_CAPABILITIES_V1_REGEX, queue);
+	
+	if (!ret) {
+		ret = bmic_artemis_mi_read(handle, capabilities->root, name, status, REG_SEARCH_NAME,
+			ARTEMIS_QUEUE_CAPABILITIES_V2_REGEX, queue);
+	}
+
+	return ret;
 }
 
 static void bmic_artemis_translate_queue_list(const void *nodedata, void *payload) {
@@ -480,14 +507,18 @@ bool bmic_artemis_queue_purge(bmic_handle_t *handle, const bmic_exchange_t *cap,
 	}
 
 	const bmic_object_t *operation = bmic_finder_simple(
-		cap->root, status, REG_SEARCH_NAME, ARTEMIS_QUEUE_CAPABILITES_REGEX, name);
+		cap->root, status, REG_SEARCH_NAME, ARTEMIS_QUEUE_CAPABILITIES_V1_REGEX, name);
 
-	if (operation == NULL) {
-		logger_t logger = gru_logger_get();
+	if (!operation) {
+		operation = bmic_finder_simple(cap->root, status, REG_SEARCH_NAME, 
+			ARTEMIS_QUEUE_CAPABILITIES_V2_REGEX, name);
+		if (!operation) {
+			logger_t logger = gru_logger_get();
 
-		logger(ERROR, "Queue operation not found for queue %s", name);
+			logger(ERROR, "Queue operation not found for queue %s", name);
 
-		return false;
+			return false;
+		}
 	}
 
 	bmic_json_t json = bmic_json_new(status);
@@ -539,14 +570,18 @@ bool bmic_artemis_queue_reset(bmic_handle_t *handle, const bmic_exchange_t *cap,
 	}
 
 	const bmic_object_t *operation = bmic_finder_simple(
-		cap->root, status, REG_SEARCH_NAME, ARTEMIS_QUEUE_CAPABILITES_REGEX, name);
+		cap->root, status, REG_SEARCH_NAME, ARTEMIS_QUEUE_CAPABILITIES_V1_REGEX, name);
 
-	if (operation == NULL) {
-		logger_t logger = gru_logger_get();
+	if (!operation) {
+		operation = bmic_finder_simple(cap->root, status, REG_SEARCH_NAME, 
+			ARTEMIS_QUEUE_CAPABILITIES_V2_REGEX, name);
+		if (!operation) {
+			logger_t logger = gru_logger_get();
 
-		logger(ERROR, "Queue operation not found for queue %s", name);
+			logger(ERROR, "Queue operation not found for queue %s", name);
 
-		return false;
+			return false;
+		}
 	}
 
 	bool ret = bmic_artemis_queue_reset_ack(handle, operation, status);

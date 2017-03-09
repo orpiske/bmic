@@ -28,5 +28,9 @@ const char *bmic_path_formatter(const char *op, const char *interface, const cha
 		return NULL;
 	}
 
+	logger_t logger = gru_logger_get();
+
+	logger(DEBUG, "Formatted path: %s", ret);
+
 	return ret;
 }

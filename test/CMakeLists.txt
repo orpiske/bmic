@@ -59,6 +59,21 @@ add_test(
 			${CMAKE_BINARY_DIR}/target/tests/share/artemis-v150.json
 )
 
+add_test(
+	NAME bmic-artemis-cap-test-151
+	WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/target/tests/bin
+	COMMAND bmic_artemis_test "1.5.1"
+			${CMAKE_BINARY_DIR}/target/tests/share/artemis-v151.json
+)
+
+
+add_test(
+	NAME bmic-artemis-cap-test-200
+	WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/target/tests/bin
+	COMMAND bmic_artemis_test "2.0.0"
+			${CMAKE_BINARY_DIR}/target/tests/share/artemis-v200.json
+)
+
 add_executable(
 	bmic_activemq_test
 	product/activemq/bmic_activemq_test.c
