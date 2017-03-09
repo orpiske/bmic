@@ -29,7 +29,7 @@
  * this in the future.
  */
 
-#define ARTEMIS_CREATE_CORE_QUEUE_SIG "createQueue(java.lang.String,java.lang.String)"
+#define ARTEMIS_CREATE_CORE_QUEUE_SIG "createQueue(java.lang.String,java.lang.String,java.lang.String)"
 #define ARTEMIS_DESTROY_CORE_QUEUE_SIG "destroyQueue(java.lang.String)"
 #define ARTEMIS_PURGE_CORE_QUEUE_SIG "removeMessages(java.lang.String)"
 #define ARTEMIS_RESET_ACK_CORE_QUEUE_SIG "resetMessagesAcknowledged()"

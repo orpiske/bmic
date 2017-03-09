@@ -56,8 +56,8 @@
 #define ARTEMIS_CORE_CAP_OPERATIONS                                                      \
 	"(brokerName=)([a-z0-9\\.\"])*(,module=Core,serviceType=Server,type=Broker\\/op$)"
 #define ARTEMIS_CORE_BROKER_OPERATIONS_ROOT                                              \
-	"(brokerName=)([a-z0-9\\.\"])*((,module=Core)?,serviceType=(Server|Broker),type="    \
-	"Broker$)"
+	"((brokerName=)([a-z0-9\\.\"])*((,module=Core)?,serviceType=(Server|Broker),type="    \
+	"Broker$)|((broker=)([a-zA-Z0-9\\.\"]*)$))"
 
 #define ARTEMIS_QUEUE_LIST_ATTR "QueueNames"
 #define ARTEMIS_QUEUE_SIZE_ATTR "MessageCount"

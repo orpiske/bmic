@@ -268,6 +268,8 @@ const bmic_exchange_t *bmic_artemis_queue_attribute_read(bmic_handle_t *handle,
 	if (!ret) {
 		ret = bmic_artemis_mi_read(handle, capabilities->root, name, status, REG_SEARCH_NAME,
 			ARTEMIS_QUEUE_CAPABILITIES_V2_REGEX, queue);
+
+		gru_status_reset(status);	
 	}
 
 	return ret;
@@ -519,6 +521,8 @@ bool bmic_artemis_queue_purge(bmic_handle_t *handle, const bmic_exchange_t *cap,
 
 			return false;
 		}
+
+		gru_status_reset(status);
 	}
 
 	bmic_json_t json = bmic_json_new(status);
@@ -582,6 +586,8 @@ bool bmic_artemis_queue_reset(bmic_handle_t *handle, const bmic_exchange_t *cap,
 
 			return false;
 		}
+
+		gru_status_reset(status);
 	}
 
 	bool ret = bmic_artemis_queue_reset_ack(handle, operation, status);

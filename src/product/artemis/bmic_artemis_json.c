@@ -74,8 +74,10 @@ void bmic_artemis_json_create_queue(
 	json_object *arguments = json_object_new_array();
 	json_object *arg_name = json_object_new_string(name);
 	json_object *address = json_object_new_string(name);
+	json_object *rtype = json_object_new_string("ANYCAST");
 	json_object_array_add(arguments, arg_name);
 	json_object_array_add(arguments, address);
+	json_object_array_add(arguments, rtype);
 	json_object_object_add(json->obj, "arguments", arguments);
 }
 
