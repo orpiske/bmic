@@ -23,6 +23,8 @@ Runtime/Compilation:
 * cmake
 * gcc or clang
 * [gru](https://github.com/orpiske/gru)
+* [json-c](https://github.com/json-c/json-c)
+
 
 Usage Example:
 ----
