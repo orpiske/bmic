@@ -7,6 +7,13 @@ configure_file(
 add_custom_target(uninstall
     COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/dist/cmake_uninstall.cmake)
 
+if (NOT CMAKE_BUILD_TYPE)
+	set(CMAKE_BUILD_TYPE Debug CACHE STRING
+      	"Choose the type of build, options are: Debug Release."
+      	FORCE
+	)
+endif(NOT CMAKE_BUILD_TYPE)
+
 if (CMAKE_COMPILER_IS_GNUCXX)
 	if (BUILD_WITH_EXTRA_DEBUG)
 			set(BMIC_DEBUG_DEFINES "-DBMIC_DEBUG=2")
