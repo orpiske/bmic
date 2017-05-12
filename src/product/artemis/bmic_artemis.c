@@ -565,6 +565,20 @@ static bool bmic_artemis_queue_reset_exp(
 	return ret;
 }
 
+static bool bmic_artemis_queue_reset_added(
+	bmic_handle_t *handle, const bmic_object_t *operation, gru_status_t *status) {
+	bmic_json_t json = bmic_json_new(status);
+	if (gru_status_error(status)) {
+		return false;
+	}
+
+	bmic_artemis_json_reset_added_queue(operation, &json);
+	bool ret = bmic_jolokia_io_exec(handle, &json, status);
+	bmic_json_cleanup(json);
+
+	return ret;
+}
+
 bool bmic_artemis_queue_reset(bmic_handle_t *handle, const bmic_exchange_t *cap,
 	const char *name, gru_status_t *status) {
 	if (!bmic_artemis_valid_name(name)) {
@@ -593,6 +607,9 @@ bool bmic_artemis_queue_reset(bmic_handle_t *handle, const bmic_exchange_t *cap,
 	bool ret = bmic_artemis_queue_reset_ack(handle, operation, status);
 	if (ret) {
 		ret = bmic_artemis_queue_reset_exp(handle, operation, status);
+		if (ret) {
+			ret = bmic_artemis_queue_reset_added(handle, operation, status);
+		}
 	}
 
 	return ret;
