@@ -91,7 +91,6 @@ void bmic_endpoint_http_terminate(bmic_endpoint_t *ep, gru_status_t *status) {
 	CURL *easy = bmic_curl_easy(ep);
 
 	curl_easy_cleanup(easy);
-	logger_t logger = gru_logger_get();
 
 	gru_status_reset(status);
 
