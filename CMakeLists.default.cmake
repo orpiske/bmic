@@ -19,7 +19,7 @@ if (CMAKE_COMPILER_IS_GNUCXX)
 			set(BMIC_DEBUG_DEFINES "-DBMIC_DEBUG=2")
 	endif (BUILD_WITH_EXTRA_DEBUG)
 
-	set(CMAKE_C_FLAGS "-Wall -Wshadow -Wconversion -std=c99 -fstrict-aliasing -fstack-protector-all ${CMAKE_USER_C_FLAGS}" CACHE STRING
+	set(CMAKE_C_FLAGS "-Wall -Wshadow -Wconversion -std=c99 -pedantic-errors -fstrict-aliasing -fstack-protector-all ${CMAKE_USER_C_FLAGS}" CACHE STRING
 		"Flags used by the compiler during all build types." FORCE
 	)
 
