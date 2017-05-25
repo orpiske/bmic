@@ -57,7 +57,7 @@ static inline void bmic_java_info_cleanup(bmic_java_info_t info) {
 	gru_dealloc_string((char **) &info.name);
 	gru_dealloc_string((char **) &info.version);
 	gru_dealloc_string((char **) &info.jvm_package_version);
-};
+}
 
 typedef struct bmic_java_os_info_t_ {
 	const char *name;
