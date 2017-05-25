@@ -28,14 +28,15 @@
 extern "C" {
 #endif
 
-typedef void (*node_destructor)(void **);
+// typedef void (*node_destructor)(void **);
+
 
 typedef struct bmic_list_t_ {
 	gru_list_t *items;
-	node_destructor destructor;
+	gru_nodedata_destructor destructor;
 } bmic_list_t;
 
-bmic_list_t *bmic_list_new(gru_status_t *status, node_destructor destructor);
+bmic_list_t *bmic_list_new(gru_status_t *status, gru_nodedata_destructor destructor);
 void bmic_list_destroy(bmic_list_t **ptr);
 
 #ifdef __cplusplus
