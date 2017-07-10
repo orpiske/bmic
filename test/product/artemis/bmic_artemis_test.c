@@ -87,7 +87,7 @@ int main(int argc, char **argv) {
 	}
 
 	const bmic_object_t *capabilities =
-		bmic_object_find_regex(root, ARTEMIS_CAPABILITIES_KEY_REGEX, REG_SEARCH_NAME);
+		bmic_object_find_regex(root, ARTEMIS_CAPABILITIES_KEY_V20_REGEX, REG_SEARCH_NAME);
 	if (capabilities == NULL) {
 		bmic_object_destroy(&root);
 		fprintf(stderr, "Child not found\n");

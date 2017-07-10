@@ -13,10 +13,6 @@ endforeach(file)
 # Artemis files
 set(
 	json-artemis-files
-	artemis/artemis-v130.json
-	artemis/artemis-v140.json
-	artemis/artemis-v150.json
-	artemis/artemis-v151.json
 	artemis/artemis-v200.json
 )
 

@@ -31,33 +31,14 @@
 	"type=Broker/Version"
 #define ARTEMIS_PRODUCT_CAPABILITIES "list/org.apache.activemq.artemis"
 
-//
-#define ARTEMIS_CAPABILITIES_KEY_REGEX                                                   \
-	"((brokerName=)([a-zA-Z0-9\\.\"])*((,module=Core)?,serviceType=(Server|Broker),type=" \
-	"Broker)|((broker=)([a-zA-Z0-9\\.\"]*)$))"
-
-// Artemis 1.5.1 and beyond have a different path
-#define ARTEMIS_CAPABILITIES_KEY_V15_REGEX                                               \
-	"(brokerName=)([a-z0-9\\.\"])*(,serviceType=Broker,type=Broker)"
-
 // Artemis 2.0.0 and beyond have a different path
-#define ARTEMIS_CAPABILITIES_KEY_V20_REGEX                                               \
-	"(broker=)([a-z0-9\\.\"])"
+#define ARTEMIS_CAPABILITIES_KEY_V20_REGEX "(broker=)([^,]*)$"
 
-#define ARTEMIS_CORE_CAP_ATTRIBUTES                                                      \
-	"(brokerName=)([a-z0-9\\.\"])*((,module=Core)?,serviceType=(Server|Broker),type="    \
-	"Broker\\/attr$)"
-#define ARTEMIS_QUEUE_CAPABILITIES_V1_REGEX                                                  \
-	"(.*)(,brokerName=)([a-zA-Z0-9\\.\"]*)(((,module=)([a-zA-Z0-9\\.\"]*))?)(,name=)("   \
-	"\"%s\")(.*)(,serviceType=Queue)(.*)"
+#define ARTEMIS_CORE_CAP_ATTRIBUTES	"(broker=)([^,]*)\\/attr$"
 
 #define ARTEMIS_QUEUE_CAPABILITIES_V2_REGEX "(.*,queue=\"%s\".*)"
 
-#define ARTEMIS_CORE_CAP_OPERATIONS                                                      \
-	"(brokerName=)([a-z0-9\\.\"])*(,module=Core,serviceType=Server,type=Broker\\/op$)"
-#define ARTEMIS_CORE_BROKER_OPERATIONS_ROOT                                              \
-	"((brokerName=)([a-z0-9\\.\"])*((,module=Core)?,serviceType=(Server|Broker),type="    \
-	"Broker$)|((broker=)([a-zA-Z0-9\\.\"]*)$))"
+#define ARTEMIS_CORE_CAP_OPERATIONS "(broker=)([^,]*)\\/op$"
 
 #define ARTEMIS_QUEUE_LIST_ATTR "QueueNames"
 #define ARTEMIS_QUEUE_SIZE_ATTR "MessageCount"
