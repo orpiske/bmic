@@ -1,4 +1,7 @@
-VERSION=0.0.1
+VERSION=0.0.2
+
+check:
+	rpmlint -i dist/bmic.spec
 
 rpm-prep:
 	mkdir -p ${HOME}/rpmbuild/SOURCES/

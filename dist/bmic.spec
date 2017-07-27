@@ -1,10 +1,7 @@
-%global _enable_debug_package 0
-%global debug_package %{nil}
-
 Summary:            Broker Management Interface Client (BMIC)
 Name:               bmic
 Version:            0.0.2
-Release:            1%{?dist}
+Release:            2%{?dist}
 License:            Apache-2.0
 Group:              Development/Tools
 Source:             bmic-%{version}.tar.gz
@@ -42,12 +39,12 @@ Development packages for the BMIC
 
 %build
 mkdir build && cd build
-cmake -DCMAKE_BUILD_TYPE=RELEASE -DBUILD_WITH_DOCUMENTATION=ON -DCMAKE_INSTALL_PREFIX=%{buildroot}/usr ..
+%cmake -DBUILD_WITH_DOCUMENTATION=ON ..
 make all documentation
 
 %install
 cd build
-make install
+make install DESTDIR=%{buildroot}
 
 %files
 %doc AUTHORS README.md LICENSE COPYING
@@ -60,5 +57,9 @@ make install
 
 
 %changelog
+* Thu Jul 27 2017 Otavio R. Piske <angusyoung@gmail.com> - 0.0.2-2
+- Updated package to comply with Fedora packaging guidelines
+- Enabled generation of debuginfo package
+
 * Fri Feb 24 2017 Otavio R. Piske <angusyoung@gmail.com> - 20170224
 - Initial release
