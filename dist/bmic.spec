@@ -39,7 +39,7 @@ Development packages for the BMIC
 
 %build
 mkdir build && cd build
-%cmake -DBUILD_WITH_DOCUMENTATION=ON ..
+%cmake -DBUILD_WITH_DOCUMENTATION=ON -DCMAKE_USER_C_FLAGS="-fPIC" ..
 make all documentation
 
 %install
