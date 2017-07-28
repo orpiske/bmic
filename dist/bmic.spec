@@ -1,3 +1,7 @@
+# Debug info package generation currently breaks the RPM build
+%global _enable_debug_package 0
+%global debug_package %{nil}
+
 Summary:            Broker Management Interface Client (BMIC)
 Name:               bmic
 Version:            0.0.2
@@ -59,7 +63,6 @@ make install DESTDIR=%{buildroot}
 %changelog
 * Thu Jul 27 2017 Otavio R. Piske <angusyoung@gmail.com> - 0.0.2-2
 - Updated package to comply with Fedora packaging guidelines
-- Enabled generation of debuginfo package
 
 * Fri Feb 24 2017 Otavio R. Piske <angusyoung@gmail.com> - 20170224
 - Initial release
