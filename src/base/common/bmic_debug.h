@@ -32,7 +32,7 @@ extern "C" {
 #define bmic_trace(message, ...)                                                         \
 	{                                                                                    \
 		logger_t btlogger = gru_logger_get();                                            \
-		btlogger(TRACE, message, __VA_ARGS__)                                            \
+		btlogger(GRU_TRACE, message, __VA_ARGS__)                                            \
 	}
 #else
 #define bmic_trace(level, message, ...)

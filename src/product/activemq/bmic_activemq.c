@@ -291,12 +291,12 @@ static const char *bmic_activemq_queue_filter_name(
 
 	const char *ret = bmic_regex_find(fqdn, regex, 2, 1, status);
 	if (!ret) {
-		logger(ERROR, "Unable to parse the queue data for %s", fqdn);
+		logger(GRU_ERROR, "Unable to parse the queue data for %s", fqdn);
 
 		return NULL;
 	}
 
-	logger(DEBUG, "Found queue name %s for %s", ret, fqdn);
+	logger(GRU_DEBUG, "Found queue name %s for %s", ret, fqdn);
 
 	return ret;
 }
@@ -306,7 +306,7 @@ static void bmic_activemq_translate_queue_list(const void *nodedata, void *paylo
 	bmic_payload_add_attr_t *pl = (bmic_payload_add_attr_t *) payload;
 	logger_t logger = gru_logger_get();
 
-	logger(INFO, "Processing node %s [%s]", nodeobj->name, nodeobj->path);
+	logger(GRU_INFO, "Processing node %s [%s]", nodeobj->name, nodeobj->path);
 
 	if (nodeobj->type == BMIC_OBJECT) {
 		const bmic_object_t *obj = bmic_object_find_by_name(nodeobj, "objectName");
@@ -315,7 +315,7 @@ static void bmic_activemq_translate_queue_list(const void *nodedata, void *paylo
 			const char *queue_name =
 				bmic_activemq_queue_filter_name(obj->data.str, pl->status);
 
-			logger(INFO,
+			logger(GRU_INFO,
 				"Processing node %s [%s]: %s",
 				nodeobj->name,
 				nodeobj->path,
@@ -323,11 +323,11 @@ static void bmic_activemq_translate_queue_list(const void *nodedata, void *paylo
 			gru_list_append(pl->list, queue_name);
 		} else {
 			if (obj) {
-				logger(WARNING, "Invalid sub node type for %s: %d", obj->name, obj->type);
+				logger(GRU_WARNING, "Invalid sub node type for %s: %d", obj->name, obj->type);
 			}
 		}
 	} else {
-		logger(WARNING, "Invalid node type for %s: %d", nodeobj->name, nodeobj->type);
+		logger(GRU_WARNING, "Invalid node type for %s: %d", nodeobj->name, nodeobj->type);
 	}
 }
 
@@ -373,7 +373,7 @@ static int64_t bmic_activemq_queue_stat_reader(bmic_handle_t *handle,
 
 	logger_t logger = gru_logger_get();
 	if (!attribute) {
-		logger(ERROR, "Unavailable response for '%s' queue property", attr_name);
+		logger(GRU_ERROR, "Unavailable response for '%s' queue property", attr_name);
 		if (gru_status_success(status)) {
 			gru_status_set(status,
 				GRU_FAILURE,
@@ -388,7 +388,7 @@ static int64_t bmic_activemq_queue_stat_reader(bmic_handle_t *handle,
 	if (attribute->data_ptr && attribute->data_ptr->type == BMIC_INTEGER) {
 		ret = attribute->data_ptr->data.number;
 	} else {
-		logger(ERROR, "Invalid data pointer for the '%s' property", attr_name);
+		logger(GRU_ERROR, "Invalid data pointer for the '%s' property", attr_name);
 
 		gru_status_set(
 			status, GRU_FAILURE, "Invalid data pointer for the '%s' property", attr_name);
@@ -443,7 +443,7 @@ bool bmic_activemq_queue_purge(bmic_handle_t *handle, const bmic_exchange_t *cap
 	if (operation == NULL) {
 		logger_t logger = gru_logger_get();
 
-		logger(ERROR, "Queue operation not found for queue %s", name);
+		logger(GRU_ERROR, "Queue operation not found for queue %s", name);
 
 		return false;
 	}
@@ -468,7 +468,7 @@ bool bmic_activemq_queue_reset(bmic_handle_t *handle, const bmic_exchange_t *cap
 	if (operation == NULL) {
 		logger_t logger = gru_logger_get();
 
-		logger(ERROR, "Queue operation not found for queue %s", name);
+		logger(GRU_ERROR, "Queue operation not found for queue %s", name);
 
 		return false;
 	}

@@ -60,7 +60,7 @@ void bmic_op_sig_add_arg(bmic_op_sig_t *sig, const bmic_op_arg_t *arg) {
 	if (gru_list_append(sig->args, arg) == NULL) {
 		logger_t logger = gru_logger_get();
 
-		logger(FATAL, "Unable to add new argument");
+		logger(GRU_FATAL, "Unable to add new argument");
 	}
 }
 
@@ -70,7 +70,7 @@ void bmic_op_sig_set_description(bmic_op_sig_t *sig, const char *description) {
 	if (asprintf(&sig->description, "%s", description) == -1) {
 		logger_t logger = gru_logger_get();
 
-		logger(FATAL, "Unable to allocate memory for saving the signature description");
+		logger(GRU_FATAL, "Unable to allocate memory for saving the signature description");
 	}
 }
 
@@ -80,6 +80,6 @@ void bmic_op_sig_set_ret(bmic_op_sig_t *sig, const char *ret) {
 	if (asprintf(&sig->ret, "%s", ret) == -1) {
 		logger_t logger = gru_logger_get();
 
-		logger(FATAL, "Unable to allocate memory for saving the signature return type");
+		logger(GRU_FATAL, "Unable to allocate memory for saving the signature return type");
 	}
 }

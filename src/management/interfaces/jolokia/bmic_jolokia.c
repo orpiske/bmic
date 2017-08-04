@@ -225,7 +225,7 @@ bool bmic_jolokia_translate_status(const bmic_object_t *root, gru_status_t *stat
 
 		logger_t logger = gru_logger_get();
 
-		logger(DEBUG, "Jolokia response status: %d", response_status->data.number);
+		logger(GRU_DEBUG, "Jolokia response status: %d", response_status->data.number);
 		return true;
 	}
 

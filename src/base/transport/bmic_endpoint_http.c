@@ -34,7 +34,7 @@ static size_t curl_callback(void *contents, size_t size, size_t nmemb, void *use
 	bmic_reply_data_t *p = (bmic_reply_data_t *) userp;
 	logger_t logger = gru_logger_get();
 
-	logger(TRACE, "Reading data: %s", (char *) contents);
+	logger(GRU_TRACE, "Reading data: %s", (char *) contents);
 
 	p->body->data = (char *) realloc(p->body->data, p->body->size + realsize + 1);
 
@@ -60,7 +60,7 @@ void bmic_endpoint_http_begin(bmic_endpoint_t *ep, gru_status_t *status) {
 	logger_t logger = gru_logger_get();
 
 	if (!initialized) {
-		logger(DEBUG, "Initializing global curl data");
+		logger(GRU_DEBUG, "Initializing global curl data");
 
 		if (strstr(ep->url, "https")) {
 			curl_global_init(CURL_GLOBAL_DEFAULT);
@@ -72,7 +72,7 @@ void bmic_endpoint_http_begin(bmic_endpoint_t *ep, gru_status_t *status) {
 
 		atexit(curl_global_cleanup);
 	} else {
-		logger(DEBUG, "Curl global data already initialized ... skipping");
+		logger(GRU_DEBUG, "Curl global data already initialized ... skipping");
 	}
 
 	easy = curl_easy_init();
@@ -138,7 +138,7 @@ void bmic_endpoint_http_read(const bmic_endpoint_t *ep, const bmic_data_t *reque
 		return;
 	}
 
-	logger(DEBUG, "Sending request to %s", full_path);
+	logger(GRU_DEBUG, "Sending request to %s", full_path);
 	curl_easy_setopt(easy, CURLOPT_URL, full_path);
 
 	bmic_reply_data_t reply_data = {0};
@@ -177,10 +177,10 @@ void bmic_endpoint_http_read(const bmic_endpoint_t *ep, const bmic_data_t *reque
 				epstatus->epcode);
 		}
 
-		logger(DEBUG, "HTTP response code %d", epstatus->epcode);
+		logger(GRU_DEBUG, "HTTP response code %d", epstatus->epcode);
 
 		if (reply->size > 0) {
-			logger(TRACE, "HTTP response data %s", bmic_data_to_string(reply_data.body));
+			logger(GRU_TRACE, "HTTP response data %s", bmic_data_to_string(reply_data.body));
 		}
 	}
 }
@@ -202,7 +202,7 @@ void bmic_endpoint_http_write(const bmic_endpoint_t *ep, const bmic_data_t *requ
 	}
 
 	curl_easy_setopt(easy, CURLOPT_URL, full_path);
-	logger(DEBUG, "Sending request to %s", full_path);
+	logger(GRU_DEBUG, "Sending request to %s", full_path);
 
 	bmic_reply_data_t reply_data = {0};
 	reply_data.body = reply;
@@ -225,7 +225,7 @@ void bmic_endpoint_http_write(const bmic_endpoint_t *ep, const bmic_data_t *requ
 
 	const char *postdata = bmic_data_to_string(request);
 	curl_easy_setopt(easy, CURLOPT_POSTFIELDS, postdata);
-	logger(TRACE, "Sending data %s", postdata);
+	logger(GRU_TRACE, "Sending data %s", postdata);
 
 	curl_easy_setopt(easy, CURLOPT_WRITEFUNCTION, curl_callback);
 	curl_easy_setopt(easy, CURLOPT_WRITEDATA, (void *) &reply_data);
@@ -253,10 +253,10 @@ void bmic_endpoint_http_write(const bmic_endpoint_t *ep, const bmic_data_t *requ
 				epstatus->epcode);
 		}
 
-		logger(DEBUG, "HTTP response code %d", epstatus->epcode);
+		logger(GRU_DEBUG, "HTTP response code %d", epstatus->epcode);
 
 		if (reply->size > 0) {
-			logger(TRACE, "HTTP response data %s", bmic_data_to_string(reply));
+			logger(GRU_TRACE, "HTTP response data %s", bmic_data_to_string(reply));
 		}
 	}
 }

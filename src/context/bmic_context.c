@@ -37,7 +37,7 @@ void bmic_log_initialization() {
 	const char *log_level_str = getenv("BMIC_DEBUG");
 	log_level_t log_level;
 	if (!log_level_str) {
-		log_level = FATAL;
+		log_level = GRU_FATAL;
 	} else {
 		log_level = gru_logger_get_level(log_level_str);
 	}

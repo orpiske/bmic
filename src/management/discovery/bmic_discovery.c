@@ -28,17 +28,17 @@ static bool bmic_try_init(
 
 	gru_status_t status = gru_status_new();
 
-	logger(DEBUG, "Initializing base URL from API");
+	logger(GRU_DEBUG, "Initializing base URL from API");
 	bmic_handle_t *handle = api->api_init(base_url, &pair->credentials, &status);
 	if (!handle) {
 		gru_dealloc_string((char **) &base_url);
 		return false;
 	}
 
-	logger(DEBUG, "Trying to load product capabilities");
+	logger(GRU_DEBUG, "Trying to load product capabilities");
 	const bmic_exchange_t *cap = api->capabilities_load(handle, &status);
 	if (!cap) {
-		logger(DEBUG,
+		logger(GRU_DEBUG,
 			"Unable to load product capabilities for %s: %s",
 			api->name,
 			status.message);

@@ -120,20 +120,19 @@ const char *bmic_discovery_hint_to_url(const bmic_discovery_hint_t *hint,
 
 	if (hint->hint_type == BMIC_URL) {
 		if (url_format == NULL) {
-			logger(
-				FATAL, "Unable to format URL based on hint because URL format is NULL");
+			logger(GRU_FATAL, "Unable to format URL based on hint because URL format is NULL");
 
 			return NULL;
 		}
 
 		if (asprintf(&ret, url_format, hint->content.url) == -1) {
-			logger(FATAL, "Not enough memory to set URL hint");
+			logger(GRU_FATAL, "Not enough memory to set URL hint");
 
 			return NULL;
 		}
 	} else {
 		if (addr_format == NULL) {
-			logger(FATAL,
+			logger(GRU_FATAL,
 				"Unable to format URL based on hint "
 				"because addressing format is NULL");
 
@@ -144,7 +143,7 @@ const char *bmic_discovery_hint_to_url(const bmic_discovery_hint_t *hint,
 				: hint->content.addressing.port);
 
 		if (asprintf(&ret, addr_format, hint->content.addressing.hostname, port) == -1) {
-			logger(FATAL, "Not enough memory to set addressing hint");
+			logger(GRU_FATAL, "Not enough memory to set addressing hint");
 
 			return NULL;
 		}

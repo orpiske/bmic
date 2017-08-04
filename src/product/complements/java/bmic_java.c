@@ -182,7 +182,7 @@ static int64_t bmic_java_get_number(
 	} else {
 		logger_t logger = gru_logger_get();
 
-		logger(DEBUG, "Read value %" PRId64 " for %s", obj->data.number, path);
+		logger(GRU_DEBUG, "Read value %" PRId64 " for %s", obj->data.number, path);
 
 		return obj->data.number;
 	}

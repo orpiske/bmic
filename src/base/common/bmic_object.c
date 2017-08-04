@@ -24,26 +24,26 @@ static void print(const void *obj1, void *d2) {
 
 	logger_t logger = gru_logger_get();
 
-	logger(DEBUG, "Path: %s", nodeojb->path);
+	logger(GRU_DEBUG, "Path: %s", nodeojb->path);
 
 	switch (nodeojb->type) {
 		case BMIC_STRING: {
-			logger(DEBUG, "%s (string): %s", nodeojb->name, nodeojb->data.str);
+			logger(GRU_DEBUG, "%s (string): %s", nodeojb->name, nodeojb->data.str);
 			break;
 		}
 		case BMIC_INTEGER: {
-			logger(DEBUG, "%s (int): %i", nodeojb->name, nodeojb->data.number);
+			logger(GRU_DEBUG, "%s (int): %i", nodeojb->name, nodeojb->data.number);
 			break;
 		}
 		case BMIC_BOOLEAN: {
-			logger(DEBUG,
+			logger(GRU_DEBUG,
 				"%s (bool): %s",
 				nodeojb->name,
 				(nodeojb->data.value ? "true" : "false"));
 			break;
 		}
 		case BMIC_DOUBLE: {
-			logger(DEBUG, "%s (double): %.4f", nodeojb->name, nodeojb->data.d);
+			logger(GRU_DEBUG, "%s (double): %.4f", nodeojb->name, nodeojb->data.d);
 			break;
 		}
 		case BMIC_LIST: {
@@ -53,14 +53,14 @@ static void print(const void *obj1, void *d2) {
 		case BMIC_OBJECT: {
 			if (nodeojb) {
 				if (nodeojb->name) {
-					logger(DEBUG, "Object: %s", nodeojb->name);
+					logger(GRU_DEBUG, "Object: %s", nodeojb->name);
 				}
 			}
 
 			break;
 		}
 		case BMIC_NULL: {
-			logger(DEBUG, "%s (null)", nodeojb->name);
+			logger(GRU_DEBUG, "%s (null)", nodeojb->name);
 
 			break;
 		}
@@ -188,7 +188,7 @@ void bmic_object_set_string(bmic_object_t *obj, const char *value) {
 	if (asprintf(&obj->data.str, "%s", value) == -1) {
 		logger_t logger = gru_logger_get();
 
-		logger(FATAL,
+		logger(GRU_FATAL,
 			"Unable to allocate memory for setting the string value for the object");
 	}
 }
@@ -235,7 +235,7 @@ void bmic_object_add_list_element(bmic_object_t *parent, bmic_object_t *element)
 	if (!element->self) {
 		logger_t logger = gru_logger_get();
 
-		logger(FATAL, "Unable to create a new tree storage for the child object");
+		logger(GRU_FATAL, "Unable to create a new tree storage for the child object");
 
 		return;
 	}
@@ -254,7 +254,7 @@ void bmic_object_add_object(bmic_object_t *parent, bmic_object_t *child) {
 	child->self = gru_tree_add_child(parent->self, child);
 	if (!child->self) {
 		logger_t logger = gru_logger_get();
-		logger(FATAL, "Unable to create a new tree storage for the child object");
+		logger(GRU_FATAL, "Unable to create a new tree storage for the child object");
 
 		return;
 	}
@@ -361,7 +361,7 @@ static bool bmic_object_regex_name(const void *nodedata, const void *regex, void
 	// TODO: improve the error handling here
 	if (gru_status_error(&status)) {
 		logger_t logger = gru_logger_get();
-		logger(FATAL, "%s", status.message);
+		logger(GRU_FATAL, "%s", status.message);
 	}
 
 	return match;
@@ -381,7 +381,7 @@ static bool bmic_object_regex_path(const void *nodedata, const void *regex, void
 	if (gru_status_error(&status)) {
 		logger_t logger = gru_logger_get();
 
-		logger(FATAL, "%s", status.message);
+		logger(GRU_FATAL, "%s", status.message);
 	}
 
 	return match;

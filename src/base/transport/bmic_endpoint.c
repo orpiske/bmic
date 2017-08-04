@@ -84,7 +84,7 @@ void bmic_endpoint_set_path(bmic_endpoint_t *ep, const char *path, gru_status_t 
 	if (asprintf(&ep->path, "%s", path) == -1) {
 		logger_t logger = gru_logger_get();
 
-		logger(FATAL, "Unable to set URL: not enough memory (%s)", path);
+		logger(GRU_FATAL, "Unable to set URL: not enough memory (%s)", path);
 		gru_status_set(status, GRU_FAILURE, "Unable to set URL: not enough memory");
 	}
 }

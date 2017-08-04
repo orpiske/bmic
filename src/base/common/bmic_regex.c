@@ -68,8 +68,8 @@ const char *bmic_regex_find(const char *str, const char *regex, uint32_t size,
 	if (rc == 0 && ((match + group)->rm_so != -1)) {
 		logger_t logger = gru_logger_get();
 
-		logger(TRACE, "First offset: %d\n", (match + group)->rm_so);
-		logger(TRACE, "Last offset: %d\n", (match + group)->rm_eo);
+		logger(GRU_TRACE, "First offset: %d\n", (match + group)->rm_so);
+		logger(GRU_TRACE, "Last offset: %d\n", (match + group)->rm_eo);
 
 		int str_size = ((int) (match + group)->rm_eo - (match + group)->rm_so) + 1;
 		char *ret = calloc(1, (size_t) str_size + 1);

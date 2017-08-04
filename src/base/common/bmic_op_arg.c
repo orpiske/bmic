@@ -49,7 +49,7 @@ void bmic_op_arg_set_name(bmic_op_arg_t *arg, const char *name) {
 
 	if (asprintf(&arg->name, "%s", name) == -1) {
 		logger_t logger = gru_logger_get();
-		logger(FATAL, "Unable to allocate memory for saving the argument name");
+		logger(GRU_FATAL, "Unable to allocate memory for saving the argument name");
 	}
 }
 void bmic_op_arg_set_description(bmic_op_arg_t *arg, const char *description) {
@@ -57,7 +57,7 @@ void bmic_op_arg_set_description(bmic_op_arg_t *arg, const char *description) {
 
 	if (asprintf(&arg->description, "%s", description) == -1) {
 		logger_t logger = gru_logger_get();
-		logger(FATAL, "Unable to allocate memory for saving the argument description");
+		logger(GRU_FATAL, "Unable to allocate memory for saving the argument description");
 	}
 }
 
@@ -66,6 +66,6 @@ void bmic_op_arg_set_type(bmic_op_arg_t *arg, const char *type) {
 
 	if (asprintf(&arg->type, "%s", type) == -1) {
 		logger_t logger = gru_logger_get();
-		logger(FATAL, "Unable to allocate memory for saving the argument typename");
+		logger(GRU_FATAL, "Unable to allocate memory for saving the argument typename");
 	}
 }

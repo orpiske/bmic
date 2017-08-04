@@ -62,7 +62,7 @@ void bmic_op_info_set_name(bmic_op_info_t *op, const char *name) {
 
 	if (asprintf(&op->name, "%s", name) == -1) {
 		logger_t logger = gru_logger_get();
-		logger(FATAL, "Unable to allocate memory for saving the operation name\n");
+		logger(GRU_FATAL, "Unable to allocate memory for saving the operation name\n");
 	}
 }
 
@@ -73,6 +73,6 @@ void bmic_op_info_add_signature(bmic_op_info_t *op, const bmic_op_sig_t *sig) {
 	if (gru_list_append(op->signature, sig) == NULL) {
 		logger_t logger = gru_logger_get();
 
-		logger(FATAL, "Unable to add new argument\n");
+		logger(GRU_FATAL, "Unable to add new argument\n");
 	}
 }

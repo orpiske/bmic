@@ -23,31 +23,31 @@ void bmic_product_register(gru_status_t *status) {
 		bmic_product_registry_add(artemis, status);
 
 		if (gru_status_error(status)) {
-			logger(ERROR, "Unable to register Artemis management API interface");
+			logger(GRU_ERROR, "Unable to register Artemis management API interface");
 			return;
 		}
 	} else {
-		logger(ERROR, "Unable to create a new Artemis management API interface");
+		logger(GRU_ERROR, "Unable to create a new Artemis management API interface");
 	}
 
 	bmic_api_interface_t *activemq = bmic_activemq_product(status);
 	if (activemq) {
 		bmic_product_registry_add(activemq, status);
 		if (gru_status_error(status)) {
-			logger(ERROR, "Unable to register Artemis management API interface");
+			logger(GRU_ERROR, "Unable to register Artemis management API interface");
 		}
 	} else {
-		logger(ERROR, "Unable to create a new ActiveMQ management API interface");
+		logger(GRU_ERROR, "Unable to create a new ActiveMQ management API interface");
 	}
 
 	bmic_api_interface_t *jamq6 = bmic_jamq6_product(status);
 	if (jamq6) {
 		bmic_product_registry_add(jamq6, status);
 		if (gru_status_error(status)) {
-			logger(ERROR, "Unable to register JBoss A-MQ 6 management API interface");
+			logger(GRU_ERROR, "Unable to register JBoss A-MQ 6 management API interface");
 		}
 	} else {
-		logger(ERROR, "Unable to create a new JBoss A-MQ 6 management API interface");
+		logger(GRU_ERROR, "Unable to create a new JBoss A-MQ 6 management API interface");
 	}
 }
 
@@ -56,7 +56,7 @@ static void bmic_product_unregister_ex(const void *nodedata, void *data) {
 
 	logger_t logger = gru_logger_get();
 
-	logger(DEBUG, "Unregistering: %s", product->name);
+	logger(GRU_DEBUG, "Unregistering: %s", product->name);
 	bmic_api_interface_destroy(&product);
 }
 

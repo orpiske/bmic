@@ -150,14 +150,14 @@ const bmic_object_t *bmic_artemis_try_load(const bmic_object_t *root) {
 	const bmic_object_t *ret = NULL;
 	logger_t logger = gru_logger_get();
 
-	logger(DEBUG, "Trying to load 2.0.x capabilities");
+	logger(GRU_DEBUG, "Trying to load 2.0.x capabilities");
 	ret = bmic_object_find_regex(root, ARTEMIS_CAPABILITIES_KEY_V20_REGEX, 
 		REG_SEARCH_NAME);
 	if (ret) {
 		return ret;
 	}
 
-	logger(DEBUG, "Artemis 2.0.x capabilities not found");
+	logger(GRU_DEBUG, "Artemis 2.0.x capabilities not found");
 	return ret;
 }
 
@@ -188,7 +188,7 @@ const bmic_exchange_t *bmic_artemis_load_capabilities(
 	const bmic_object_t *capabilities = bmic_artemis_try_load(root);
 
 	if (!capabilities) {
-		logger(DEBUG, "Capabilities not found");
+		logger(GRU_DEBUG, "Capabilities not found");
 		gru_status_set(status, GRU_FAILURE, "Capabilities not found");
 		
 		bmic_object_destroy(&root);
@@ -196,7 +196,7 @@ const bmic_exchange_t *bmic_artemis_load_capabilities(
 		goto err_exit;
 	} 
 	
-	logger(DEBUG, "Successfully loaded capabilities");
+	logger(GRU_DEBUG, "Successfully loaded capabilities");
 	
 	bmic_data_release(&reply);
 
@@ -270,7 +270,7 @@ static void bmic_artemis_translate_queue_list(const void *nodedata, void *payloa
 	bmic_payload_add_attr_t *pl = (bmic_payload_add_attr_t *) payload;
 	logger_t logger = gru_logger_get();
 
-	logger(INFO, "Processing node %s [%s]", nodeobj->name, nodeobj->path);
+	logger(GRU_INFO, "Processing node %s [%s]", nodeobj->name, nodeobj->path);
 
 	if (nodeobj->type == BMIC_STRING) {
 		const char *name = nodeobj->data.str;
@@ -279,7 +279,7 @@ static void bmic_artemis_translate_queue_list(const void *nodedata, void *payloa
 			gru_list_append(pl->list, strdup(name));
 		}
 	} else {
-		logger(WARNING, "Invalid node type for %s: %d", nodeobj->name, nodeobj->type);
+		logger(GRU_WARNING, "Invalid node type for %s: %d", nodeobj->name, nodeobj->type);
 	}
 }
 
@@ -409,7 +409,7 @@ static int64_t bmic_artemis_queue_stat_reader(bmic_handle_t *handle,
 
 	logger_t logger = gru_logger_get();
 	if (!attribute) {
-		logger(ERROR,
+		logger(GRU_ERROR,
 			"Unavailable response for '%s' queue property for queue '%s'",
 			attr_name,
 			queue);
@@ -429,7 +429,7 @@ static int64_t bmic_artemis_queue_stat_reader(bmic_handle_t *handle,
 	if (attribute->data_ptr && attribute->data_ptr->type == BMIC_INTEGER) {
 		ret = attribute->data_ptr->data.number;
 	} else {
-		logger(ERROR,
+		logger(GRU_ERROR,
 			"Invalid data pointer for the '%s' property for queue '%s'",
 			attr_name,
 			queue);
@@ -506,7 +506,7 @@ bool bmic_artemis_queue_purge(bmic_handle_t *handle, const bmic_exchange_t *cap,
 	if (!operation) {
 		logger_t logger = gru_logger_get();
 
-		logger(ERROR, "Queue operation not found for queue %s", name);
+		logger(GRU_ERROR, "Queue operation not found for queue %s", name);
 
 		return false;
 	}
@@ -583,7 +583,7 @@ bool bmic_artemis_queue_reset(bmic_handle_t *handle, const bmic_exchange_t *cap,
 	if (!operation) {
 		logger_t logger = gru_logger_get();
 
-		logger(ERROR, "Queue operation not found for queue %s", name);
+		logger(GRU_ERROR, "Queue operation not found for queue %s", name);
 
 		return false;
 	}
