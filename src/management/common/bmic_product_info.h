@@ -25,6 +25,10 @@ typedef struct bmic_product_info_t_ {
 	char version[16];
 } bmic_product_info_t;
 
+static inline void bmic_product_info_cleanup(bmic_product_info_t **ptr) {
+	gru_dealloc((void **) ptr);
+}
+
 #ifdef __cplusplus
 }
 #endif
