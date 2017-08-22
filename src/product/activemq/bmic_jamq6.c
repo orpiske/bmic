@@ -84,7 +84,7 @@ bmic_product_info_t *bmic_jamq6_product_info(
 			ACTIVEMQ_CAPABILITIES_KEY_REGEX);
 
 		if (ex && ex->data_ptr->type == BMIC_STRING) {
-			ret = gru_alloc(sizeof(bmic_api_interface_t), status);
+			ret = gru_alloc(sizeof(bmic_product_info_t), status);
 			strlcpy(ret->version, "Unknown", sizeof(ret->version));
 			strlcpy(ret->name, "JBoss A-MQ6", sizeof(ret->name));
 

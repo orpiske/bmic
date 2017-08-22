@@ -135,7 +135,7 @@ bmic_product_info_t *bmic_artemis_product_info(
 	}
 
 	if (ex->data_ptr->type == BMIC_STRING) {
-		bmic_product_info_t *ret = gru_alloc(sizeof(bmic_api_interface_t), status);
+		bmic_product_info_t *ret = gru_alloc(sizeof(bmic_product_info_t), status);
 		strlcpy(ret->version, ex->data_ptr->data.str, sizeof(ret->version));
 		strlcpy(ret->name, ARTEMIS_PRODUCT_NAME_PRETTY, sizeof(ret->name));
 
