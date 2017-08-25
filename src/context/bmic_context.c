@@ -42,7 +42,7 @@ void bmic_log_initialization() {
 		log_level = gru_logger_get_level(log_level_str);
 	}
 
-	gru_logger_set_mininum(log_level);
+	gru_logger_set_minimum(log_level);
 	gru_logger_set(bmic_logger_default_printer);
 
 	log_initialized = true;
