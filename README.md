@@ -7,6 +7,14 @@ Linux Build Status: [![Linux Build Status](https://travis-ci.org/orpiske/bmic.sv
 
 Coverity Scan: [![Coverity Scan Build Status](https://scan.coverity.com/projects/10840/badge.svg)](https://scan.coverity.com/projects/orpiske-bmic)
 
+Packaging Status
+----
+Fedora (GRU Testing): [![Fedora COPR (Testing Repo) Status](https://copr.fedorainfracloud.org/coprs/orpiske/orp-tools-testing/package/bmic/status_image/last_build.png)](https://copr.fedorainfracloud.org/coprs/orpiske/orp-tools-testing/package/bmic/)
+
+Fedora (GRU Stable): [![Fedora COPR (Stable Repo) Status](https://copr.fedorainfracloud.org/coprs/orpiske/orp-tools-stable/package/bmic/status_image/last_build.png)](https://copr.fedorainfracloud.org/coprs/orpiske/orp-tools-stable/package/bmic/)
+
+
+
 Introduction:
 ----
 
