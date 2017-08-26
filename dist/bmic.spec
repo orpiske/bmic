@@ -29,13 +29,20 @@ Requires:           %{name}%{?_isa} = %{version}-%{release}
 %description devel
 Development packages for the BMIC
 
+%package devel-doc
+Summary:            Broker Management Interface Client (BMIC) development kit documentation
+BuildArch:          noarch
+
+%description devel-doc
+Development documentation for the BMIC library
+
 %prep
 %autosetup -n bmic-%{version}
 
 %build
 mkdir build && cd build
 %cmake -DBUILD_WITH_DOCUMENTATION=ON -DCMAKE_USER_C_FLAGS="-fPIC" ..
-%make_build
+%make_build all documentation
 
 %install
 cd build
@@ -59,10 +66,15 @@ cd build
 
 %postun devel -p /sbin/ldconfig
 
+%files devel-doc
+%license LICENSE COPYING
+%{_datadir}/*
+
 
 %changelog
 * Sat Aug 26 2017 Otavio R. Piske <angusyoung@gmail.com> - 0.0.2-3
 - Adjusted to match fedora packaging guidelines
+- Enable documentation package
 
 * Thu Jul 27 2017 Otavio R. Piske <angusyoung@gmail.com> - 0.0.2-2
 - Updated package to comply with Fedora packaging guidelines
