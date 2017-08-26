@@ -1,4 +1,7 @@
 # Debug info package generation currently breaks the RPM build
+%global _enable_debug_package 0
+%global debug_package %{nil}
+
 Summary:            Broker Management Interface Client (BMIC)
 Name:               bmic
 Version:            0.0.2
