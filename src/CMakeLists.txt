@@ -82,6 +82,14 @@ target_link_libraries(
 	${GRU_LIB}
 )
 
+SET_TARGET_PROPERTIES(
+		bmic-base-${BMIC_VERSION_MAJOR}
+		bmic-management-${BMIC_VERSION_MAJOR}
+		bmic-product-${BMIC_VERSION_MAJOR}
+		PROPERTIES
+		VERSION ${BMIC_VERSION}
+		SOVERSION ${BMIC_VERSION_MAJOR})
+
 install(
 	DIRECTORY product/common product/activemq product/artemis product/complements/java
 	DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}-${BMIC_VERSION_MAJOR}/product
