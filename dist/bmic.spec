@@ -1,13 +1,9 @@
 # Debug info package generation currently breaks the RPM build
-%global _enable_debug_package 0
-%global debug_package %{nil}
-
 Summary:            Broker Management Interface Client (BMIC)
 Name:               bmic
 Version:            0.0.2
-Release:            2%{?dist}
+Release:            3%{?dist}
 License:            Apache-2.0
-Group:              Development/Tools
 Source:             bmic-%{version}.tar.gz
 URL:                https://github.com/orpiske/bmic
 BuildRequires:      cmake
@@ -15,11 +11,7 @@ BuildRequires:      make
 BuildRequires:      gcc
 BuildRequires:      json-c-devel
 BuildRequires:      curl-devel
-BuildRequires:      gru
 BuildRequires:      gru-devel
-Requires:           json-c
-Requires:           curl
-Requires:           gru
 
 
 %description
@@ -32,8 +24,7 @@ Summary:            Broker Management Interface Client (BMIC) development kit
 Requires:           json-c-devel
 Requires:           curl-devel
 Requires:           gru-devel
-Requires:           bmic
-Group:              Development/Libraries
+Requires:           %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
 Development packages for the BMIC
@@ -44,23 +35,35 @@ Development packages for the BMIC
 %build
 mkdir build && cd build
 %cmake -DBUILD_WITH_DOCUMENTATION=ON -DCMAKE_USER_C_FLAGS="-fPIC" ..
-make all documentation
+%make_build
 
 %install
 cd build
-make install DESTDIR=%{buildroot}
+%make_install
 
 %files
-%doc AUTHORS README.md LICENSE COPYING
+%doc AUTHORS README.md
+%license LICENSE COPYING
 %{_bindir}/*
-%{_libdir}/*
+%{_libdir}/*.so.*
 
+%post -p /sbin/ldconfig
+
+%postun -p /sbin/ldconfig
 
 %files devel
 %{_includedir}/*
+%{_libdir}/*.so
+
+%post devel -p /sbin/ldconfig
+
+%postun devel -p /sbin/ldconfig
 
 
 %changelog
+* Sat Aug 26 2017 Otavio R. Piske <angusyoung@gmail.com> - 0.0.2-3
+- Adjusted to match fedora packaging guidelines
+
 * Thu Jul 27 2017 Otavio R. Piske <angusyoung@gmail.com> - 0.0.2-2
 - Updated package to comply with Fedora packaging guidelines
 
