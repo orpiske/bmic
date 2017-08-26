@@ -24,6 +24,38 @@ Apache Artemis, JBoss A-MQ 6 and JBoss A-MQ 7.
 
 This is a work in progress.
 
+Installation:
+----
+
+**Testing**
+
+1. Enable my testing COPR.
+
+```dnf copr enable orpiske/orp-tools-testing```
+
+2. Install the runtime only:
+```dnf install -y bmic```
+
+3. (Alternative) Install the development packages: 
+```dnf install -y bmic bmic-devel bmic-devel-doc```
+
+Note: the testing packages are the **recommended** packages for this project.
+
+
+**Stable**
+
+1. Enable my testing COPR.
+
+```dnf copr enable orpiske/orpiske/orp-tools-stable ```
+
+2. Install the runtime only:
+```dnf install -y bmic```
+
+3. (Alternative) Install the development packages: 
+```dnf install -y bmic bmic-devel bmic-devel-doc```
+
+Note: at the moment, they are outdated and do not support latest versions of Apache Artemis.
+
 Dependencies:
 ----
 
@@ -32,6 +64,13 @@ Runtime/Compilation:
 * gcc or clang
 * [gru](https://github.com/orpiske/gru)
 * [json-c](https://github.com/json-c/json-c)
+
+
+Limitations:
+----
+
+Does not fully support clusters. Commands may need to be send to each individual node on the 
+cluster.
 
 
 Usage Example:
@@ -45,6 +84,34 @@ The product name is artemis
 The API version is artemis
 The product version is: 2.0.0.amq-70000
 ```
+
+Listing queues:
+
+```
+bmic queue -l -u admin -p admin -s localhost
+Queue name: jms.queue.jms.queue.cli2.test.notcore
+Queue name: jms.queue.DLQ
+Queue name: jms.queue.ExpiryQueue
+Queue name: test.performance.queue
+Queue name: jms.queue.cli1.test.notcore
+Queue name: jms.queue.cli2.test.notcore
+```
+
+Creating queues:
+```
+./bmic queue -c -n new.queue -u admin -p admin -s localhost
+```
+
+Deleting queues:
+```
+./bmic queue -d -n new.queue -u admin -p admin -s localhost
+```
+
+Purging queues:
+```
+./bmic queue -n new.queue -u admin -p admin -s localhost --purge
+```
+
 
 Displaying Core Capabilities:
 ```
@@ -134,6 +201,7 @@ Capability Value
                         JournalType ASY
 ```
 
+
 You can also read individual capabilities/attributes: 
 ```
 ./bmic capabilities -r LargeMessagesDirectory -u admin -p admin -s localhost       
@@ -146,28 +214,6 @@ From queues too:
 ```
 bmic queue -r -a MessageCount -n test.performance.queue -u admin -p admin -s localhost
                        MessageCount 14
-```
-
-Listing queues:
-
-```
-bmic queue -l -u admin -p admin -s localhost
-Queue name: jms.queue.jms.queue.cli2.test.notcore
-Queue name: jms.queue.DLQ
-Queue name: jms.queue.ExpiryQueue
-Queue name: test.performance.queue
-Queue name: jms.queue.cli1.test.notcore
-Queue name: jms.queue.cli2.test.notcore
-```
-
-Creating queues:
-```
-./bmic queue -c -n new.queue -u admin -p admin -s localhost
-```
-
-Deleting queues:
-```
-./bmic queue -d -n new.queue -u admin -p admin -s localhost
 ```
 
 
