@@ -11,6 +11,8 @@ Packaging Status
 ----
 Fedora (GRU Testing): [![Fedora COPR (Testing Repo) Status](https://copr.fedorainfracloud.org/coprs/orpiske/orp-tools-testing/package/bmic/status_image/last_build.png)](https://copr.fedorainfracloud.org/coprs/orpiske/orp-tools-testing/package/bmic/)
 
+Fedora (GRU Testing Legacy): [![Fedora COPR (Testing Repo) Status](https://copr.fedorainfracloud.org/coprs/orpiske/orp-tools-testing-legacy/package/bmic/status_image/last_build.png)](https://copr.fedorainfracloud.org/coprs/orpiske/orp-tools-testing-legacy/package/bmic/)
+
 Fedora (GRU Stable): [![Fedora COPR (Stable Repo) Status](https://copr.fedorainfracloud.org/coprs/orpiske/orp-tools-stable/package/bmic/status_image/last_build.png)](https://copr.fedorainfracloud.org/coprs/orpiske/orp-tools-stable/package/bmic/)
 
 
@@ -27,6 +29,9 @@ This is a work in progress.
 Installation:
 ----
 
+The code can be installed via Fedora COPR. Packages are available for CentOS 6, 7, Fedora 25 
+or greater and RHEL 6 and 7. For CentOS 6 and RHEL 6, please use the legacy repos (check the notes below).
+
 **Testing**
 
 1. Enable my testing COPR.
@@ -39,8 +44,9 @@ Installation:
 3. (Alternative) Install the development packages: 
 ```dnf install -y bmic bmic-devel bmic-devel-doc```
 
-Note: the testing packages are the **recommended** packages for this project.
+**Note**: the testing packages are the **recommended** packages for this project.
 
+**Note**: for RHEL 6 or CentOS 6, use the orp-tools-testing-legacy repository.
 
 **Stable**
 
