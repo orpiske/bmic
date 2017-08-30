@@ -5,7 +5,7 @@
 Summary:            Broker Management Interface Client (BMIC)
 Name:               bmic
 Version:            0.0.2
-Release:            3%{?dist}
+Release:            4%{?dist}
 License:            Apache-2.0
 Source:             bmic-%{version}.tar.gz
 URL:                https://github.com/orpiske/bmic
@@ -75,6 +75,9 @@ cd build
 
 
 %changelog
+* Wed Aug 30 2017 Otavio R. Piske <angusyoung@gmail.com> - 0.0.2-4
+- Fixed mismatch between this package version and the SO version
+
 * Sat Aug 26 2017 Otavio R. Piske <angusyoung@gmail.com> - 0.0.2-3
 - Adjusted to match fedora packaging guidelines
 - Enable documentation package
