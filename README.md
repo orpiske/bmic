@@ -26,6 +26,13 @@ Apache Artemis, JBoss A-MQ 6 and JBoss A-MQ 7.
 
 This is a work in progress.
 
+**How does it look like?**
+
+Here's a sample screenshot of one of its feature, a top-like view of ActiveMQ Artemis 2.4 broker.
+
+![Eden](doc/bmic-top.png)
+
+
 Installation:
 ----
 
@@ -77,6 +84,10 @@ Limitations:
 
 Does not fully support clusters. Commands may need to be send to each individual node on the 
 cluster.
+
+It is also necessary to pay attention providing correct permissions to the users accessing the console. Due to the 
+ever-changing management APIs, support for newer versions of the brokers is likely to be broken or limited for some 
+time. 
 
 
 Usage Example:
