@@ -30,6 +30,18 @@ void bmic_product_register(gru_status_t *status) {
 		logger(GRU_ERROR, "Unable to create a new Artemis management API interface");
 	}
 
+	bmic_api_interface_t *artemis24 = bmic_artemis24_product(status);
+	if (artemis) {
+		bmic_product_registry_add(artemis24, status);
+
+		if (gru_status_error(status)) {
+			logger(GRU_ERROR, "Unable to register Artemis 2.4 management API interface");
+			return;
+		}
+	} else {
+		logger(GRU_ERROR, "Unable to create a new Artemis 2.4 management API interface");
+	}
+
 	bmic_api_interface_t *activemq = bmic_activemq_product(status);
 	if (activemq) {
 		bmic_product_registry_add(activemq, status);

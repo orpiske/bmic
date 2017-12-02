@@ -5,7 +5,7 @@
 Summary:            Broker Management Interface Client (BMIC)
 Name:               bmic
 Version:            0.0.2
-Release:            4%{?dist}
+Release:            5%{?dist}
 License:            Apache-2.0
 Source:             bmic-%{version}.tar.gz
 URL:                https://github.com/orpiske/bmic
@@ -75,6 +75,9 @@ cd build
 
 
 %changelog
+* Sat Dec 02 2017 Otavio R. Piske <angusyoung@gmail.com> - 0.0.2-5
+- Added support for Apache Artemis 2.4
+
 * Wed Aug 30 2017 Otavio R. Piske <angusyoung@gmail.com> - 0.0.2-4
 - Fixed mismatch between this package version and the SO version
 

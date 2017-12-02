@@ -78,6 +78,9 @@ const char *bmic_artemis_base_url(const bmic_discovery_hint_t *hint) {
 			hint, ARTEMIS_BASE_URL_HINT_URL, ARTEMIS_BASE_URL_HINT_ADDRESSING, 8161);
 	}
 
+    logger_t logger = gru_logger_get();
+    logger(GRU_DEBUG, "Artemis base URL is %s", artemis_base_url);
+
 	return artemis_base_url;
 }
 

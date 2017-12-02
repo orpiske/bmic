@@ -13,26 +13,24 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-#ifndef BMIC_PRODUCT_REGISTER_H
-#define BMIC_PRODUCT_REGISTER_H
+#ifndef BMIC_ARTEMIS24_DEFS_H
+#define BMIC_ARTEMIS24_DEFS_H
 
-#include <log/gru_logger.h>
+#define JAMQ6_PRODUCT_NAME "jamq6"
+#define JAMQ6_API_VERSION "6.x.x"
 
-#include "management/common/bmic_product.h"
-#include "product/activemq/bmic_activemq.h"
-#include "product/activemq/bmic_jamq6.h"
-#include "product/artemis/bmic_artemis.h"
-#include "product/artemis/bmic_artemis24.h"
+/**
+ * Base URLs must not have the '/' char at the end
+ */
+#define ARTEMIS24_BASE_URL_HINT_URL "%s/console/jolokia"
+#define ARTEMIS24_BASE_URL_HINT_ADDRESSING "http://%s:%i/console/jolokia"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void bmic_product_register(gru_status_t *status);
-void bmic_product_unregister();
-
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* BMIC_PRODUCT_REGISTER_H */
+#endif /* BMIC_ARTEMIS24_DEFS_H */

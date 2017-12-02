@@ -35,7 +35,7 @@ static bool bmic_try_init(
 		return false;
 	}
 
-	logger(GRU_DEBUG, "Trying to load product capabilities");
+	logger(GRU_DEBUG, "Trying to load product capabilities for %s", api->name);
 	const bmic_exchange_t *cap = api->capabilities_load(handle, &status);
 	if (!cap) {
 		logger(GRU_DEBUG,
